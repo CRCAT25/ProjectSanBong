@@ -1,6 +1,8 @@
+import React from "react";
+import { OrderField } from "./OrderField";
 const Landing = () =>{
     return (
-        <h1> Landing </h1>
+        <OrderField />
     )
 };
 
