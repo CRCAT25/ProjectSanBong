@@ -1,41 +1,31 @@
-@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
 body {
   margin: 0;
   line-height: normal;
 }
 :root {
   /* fonts */
-  --font-poppins: Poppins;
   --font-inter: Inter;
-  --font-rajdhani: Rajdhani;
+  --font-poppins: Poppins;
 
   /* font sizes */
-  --font-size-11xl: 30px;
-  --font-size-xl: 20px;
   --font-size-lgi-6: 19.6px;
   --font-size-13xl: 32px;
   --font-size-3xl: 22px;
+  --font-size-xl: 20px;
   --font-size-lg: 18px;
-  --font-size-41xl: 60px;
-  --font-size-4xl: 23px;
 
   /* Colors */
-  --color-black: #000;
-  --color-gainsboro-100: #d9d9d9;
-  --color-white: #fff;
   --color-green: #379e13;
-  --color-gold: #ffeb37;
+  --color-black: #000;
   --color-darkgreen: #2b790f;
-  --color-darkolivegreen: #667b3d;
-  --color-gray-100: #222;
-  --color-gray-200: #1e1e1e;
-  --color-mintcream: #fafff9;
+  --color-white: #fff;
+  --color-gray: #1e1e1e;
+  --color-gainsboro: #d9d9d9;
+  --color-gold: #ffeb37;
 
   /* Border radiuses */
   --br-mini: 15px;
   --br-3xs: 10px;
-  --br-31xl: 50px;
-  --br-11xl: 30px;
 }
