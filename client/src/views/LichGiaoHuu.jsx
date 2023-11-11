@@ -17,17 +17,16 @@ const LichGiaoHuu = () =>{
         </div>
         <div className="ChiTiTLCh" >
           <div class="CacCS"></div>
-          <div class="XacNhN">
-            <div class="Rectangle441"></div>
-            <div class="ThamGia">Tham gia</div>
-          </div>
           <div class="Name">Nguyễn Xuân Lộc</div>
           <div class="PhoneNumber">1234567890</div>
           <div class="Location">Sân Huy Hoàng<br/>D/c: 3123, Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân</div>
           <div class="FieldId">Sân 01</div>
           <div class="DateTime">T7 31/12/2023<br/>19h00 - 21h00 </div>
+          <div class="XacNhN">
+            <div class="Rectangle441"></div>
+            <div class="ThamGia">Tham gia</div>
+          </div>
         </div>
-        
         <div class="scroll"></div>      
       </div>
     </div>
