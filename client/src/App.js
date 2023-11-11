@@ -4,6 +4,7 @@ import './App.css';
 import {
   Landing,
   LichGiaoHuu,
+  FieldManage
 
 } from "./views"
 
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />}/>
         <Route path="/LichGiaoHuu" element={<LichGiaoHuu />}/>
+        <Route path="/FieldManage" element={<FieldManage />}/>
       </Routes>
     </BrowserRouter>
   );
