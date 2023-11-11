@@ -1,132 +1,36 @@
+import "../css/LichGiaoHuu.css"
 const LichGiaoHuu = () =>{
     return (
-        <div className="tham-gia-giao-hu">
-        <div className="bng-lch">
-          <img className="others-say-icon" alt="" src="/others-say@2x.png" />
-          <div className="cac-c-s" />
-          <b className="i">LỊCH GIAO HỮU</b>
-          <div className="tittle">
-            <div className="tittle-child" />
-            <b className="tn">Tên</b>
-            <b className="st">SĐT</b>
-            <b className="a-im">Địa điểm</b>
-            <b className="m-sn">Mã sân</b>
-            <b className="thi-gian">Thời gian</b>
-            <b className="xc-nhn">Xác nhận</b>
-          </div>
-          <div className="chi-tit-lch">
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="xac-nhn">
-              <div className="xac-nhn-child" />
-              <div className="tham-gia">Tham gia</div>
-            </div>
-            <b className="nguyn-xun-lc">Nguyễn Xuân Lộc</b>
-            <div className="div">1234567890</div>
-            <div className="sn-huy-hong-container">
-              <p className="tm-sn-bng">Sân Huy Hoàng</p>
-              <p className="tm-sn-bng">
-                D/c: 3123, Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân
-              </p>
-            </div>
-            <div className="sn-01">Sân 01</div>
-            <div className="t7-31122023-19h00-container">
-              <p className="tm-sn-bng">T7 31/12/2023</p>
-              <p className="tm-sn-bng">{`19h00 - 21h00 `}</p>
-            </div>
-          </div>
-          <div className="chi-tit-lch1">
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="xac-nhn">
-              <div className="xac-nhn-child" />
-              <div className="tham-gia">Tham gia</div>
-            </div>
-            <b className="nguyn-xun-lc">Nguyễn Xuân Lộc</b>
-            <div className="div">1234567890</div>
-            <div className="sn-huy-hong-container">
-              <p className="tm-sn-bng">Sân Huy Hoàng</p>
-              <p className="tm-sn-bng">
-                D/c: 3123, Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân
-              </p>
-            </div>
-            <div className="sn-01">Sân 01</div>
-            <div className="t7-31122023-19h00-container">
-              <p className="tm-sn-bng">T7 31/12/2023</p>
-              <p className="tm-sn-bng">{`19h00 - 21h00 `}</p>
-            </div>
-          </div>
-          <div className="chi-tit-lch2">
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="xac-nhn">
-              <div className="xac-nhn-child" />
-              <div className="tham-gia">Tham gia</div>
-            </div>
-            <b className="nguyn-xun-lc">Nguyễn Xuân Lộc</b>
-            <div className="div">1234567890</div>
-            <div className="sn-huy-hong-container">
-              <p className="tm-sn-bng">Sân Huy Hoàng</p>
-              <p className="tm-sn-bng">
-                D/c: 3123, Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân
-              </p>
-            </div>
-            <div className="sn-01">Sân 01</div>
-            <div className="t7-31122023-19h00-container">
-              <p className="tm-sn-bng">T7 31/12/2023</p>
-              <p className="tm-sn-bng">{`19h00 - 21h00 `}</p>
-            </div>
-          </div>
-          <div className="chi-tit-lch3">
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="xac-nhn">
-              <div className="xac-nhn-child" />
-              <div className="tham-gia">Tham gia</div>
-            </div>
-            <b className="nguyn-xun-lc">Nguyễn Xuân Lộc</b>
-            <div className="div">1234567890</div>
-            <div className="sn-huy-hong-container">
-              <p className="tm-sn-bng">Sân Huy Hoàng</p>
-              <p className="tm-sn-bng">
-                D/c: 3123, Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân
-              </p>
-            </div>
-            <div className="sn-01">Sân 01</div>
-            <div className="t7-31122023-19h00-container">
-              <p className="tm-sn-bng">T7 31/12/2023</p>
-              <p className="tm-sn-bng">{`19h00 - 21h00 `}</p>
-            </div>
-          </div>
-          <div className="chi-tit-lch4">
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="cac-c-s1" />
-            <div className="xac-nhn">
-              <div className="xac-nhn-child" />
-              <div className="tham-gia">Tham gia</div>
-            </div>
-            <b className="nguyn-xun-lc">Nguyễn Xuân Lộc</b>
-            <div className="div">1234567890</div>
-            <div className="sn-huy-hong-container">
-              <p className="tm-sn-bng">Sân Huy Hoàng</p>
-              <p className="tm-sn-bng">
-                D/c: 3123, Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân
-              </p>
-            </div>
-            <div className="sn-01">Sân 01</div>
-            <div className="t7-31122023-19h00-container">
-              <p className="tm-sn-bng">T7 31/12/2023</p>
-              <p className="tm-sn-bng">{`19h00 - 21h00 `}</p>
-            </div>
-          </div>
-          <img className="bng-lch-child" alt="" src="/rectangle-444.svg" />
+      <div className="ThamGiaGiaoHU" >
+      <div className="BNgLCh" >
+        <img className="OthersSay" />
+        <div className="CacCS"  />
+        <div className="Topic">LỊCH GIAO HỮU</div>
+        <div class="Tittle">
+          <div class="TittleBackGround"></div>
+          <div class="TN">Tên</div>
+          <div class="ST">SĐT</div>
+          <div class="AIM">Địa điểm</div>
+          <div class="MSN">Mã sân</div>
+          <div class="ThIGian">Thời gian</div>
+          <div class="XCNhN">Xác nhận</div>
         </div>
+        <div className="ChiTiTLCh" >
+          <div class="CacCS"></div>
+          <div class="XacNhN">
+            <div class="Rectangle441"></div>
+            <div class="ThamGia">Tham gia</div>
+          </div>
+          <div class="Name">Nguyễn Xuân Lộc</div>
+          <div class="PhoneNumber">1234567890</div>
+          <div class="Location">Sân Huy Hoàng<br/>D/c: 3123, Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân</div>
+          <div class="FieldId">Sân 01</div>
+          <div class="DateTime">T7 31/12/2023<br/>19h00 - 21h00 </div>
+        </div>
+        
+        <div class="scroll"></div>      
       </div>
+    </div>
     )
 };
 
