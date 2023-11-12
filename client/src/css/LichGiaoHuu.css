@@ -1,6 +1,6 @@
 .ThamGiaGiaoHU {
     width: 100%;
-    background: #DDFCD2; 
+    background: url("../../public/assets/bgLichGH.png"); 
     align-items: center; 
     display: flex;
     flex-direction: column;
@@ -11,8 +11,9 @@
     width: 80%;
     text-align: center;
     color: #1E1E1E; 
-    font-size: 60px; 
+    font-size: 48px; 
     font-weight: 700; 
+    margin: 30px 0px;
     word-wrap: break-word        
 } 
 
@@ -23,7 +24,7 @@
     align-items: center;  
     background-color: #FAFFF9;
     border-radius: 15px;
-    margin-bottom: 100px;
+    margin-bottom: 30px;
     margin-top: 12px;
 }
 

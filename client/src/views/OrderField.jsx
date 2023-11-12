@@ -1,139 +1,171 @@
 import React from "react";
 import  "../css/OrderField.css"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faLocationDot, 
+    faChevronDown, 
+    faMagnifyingGlass,
+    faCalendarDays,
+    faCheck
+} from "@fortawesome/free-solid-svg-icons"
+
+const Icon24px = ({classIcon}) => {
+    const iconSize = {
+        width: "24px",
+        height: "24px"
+    };
+    return(
+        <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
+    )
+}
+
+const IconCheck = ({classIcon}) => {
+    const iconSize = {
+        width: "20px",
+        height: "20px",
+        color: "#fff"
+    };
+    return(
+        <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
+    )
+}
+
 export const OrderField = () => {
   return (
-    <div className="t-sn">
-        <div className="datsanbong" />
-        <div className="colorblock6" />
-        <div className="colorblock5" />
-        <div className="colorblock4" />
-        <img className="colorblock3-icon" alt="" src="/colorblock3.svg" />
-        <div className="colorblock2" />
-        <img className="colorblock1-icon" alt="" src="/colorblock1.svg" />
-        <div className="titlefunction">ĐẶT SÂN</div>
-        <div className="groupdetailfield">
-          <div className="boxdetailfield" />
-          <div className="a-ch-32-container">
-            <span className="a-ch-32-container1">
-              <p className="tm-sn-bng">
-                <span className="span">Địa chỉ: 32</span>
-                <span> Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân</span>
-                <span className="span">{` `}</span>
-              </p>
-              <p className="tm-sn-bng">
-                <span className="span">{`SĐT: `}</span>
-                <span>1234567890</span>
-              </p>
-            </span>
-          </div>
-          <img className="img-c-s" alt="" src="/img-c-s@2x.png" />
-          <div className="m-sn-1">
-            <div className="m-sn-1-child" />
-            <div className="sn-s-1">Sân số 1</div>
-          </div>
-          <div className="m-sn1">
-            <div className="m-sn-child" />
-            <div className="sn-s-1">Sân số 2</div>
-          </div>
-          <div className="lc-sn">
-            <img className="lc-sn-child" alt="" src="/rectangle-429.svg" />
-            <div className="lc-loi-sn">Lọc loại sân</div>
-            <img
-              className="expand-arrow-icon"
-              alt=""
-              src="/expand-arrow@2x.png"
-            />
-          </div>
-          <div className="lc-sn1">
-            <img className="lc-sn-item" alt="" src="/rectangle-4291.svg" />
-            <div className="t7-31102023">T7 31/10/2023</div>
-          </div>
-          <img className="date-icon" alt="" src="/date.svg" />
-          <b className="ngy-t-sn">Ngày đặt sân:</b>
-          <div className="loi-sn">Loại sân:</div>
-          <div className="khung-gi-ca-sn">
-            <div className="khung-gi-ca-sn-child" />
-            <div className="div5">21:00 - 23:00</div>
-          </div>
-          <div className="khung-gi-ca-sn1">
-            <div className="khung-gi-ca-sn-child" />
-            <div className="div5">19:00 - 21:00</div>
-          </div>
-          <div className="khung-gi-ca-sn2">
-            <div className="khung-gi-ca-sn-child" />
-            <div className="div5">17:00 - 19:00</div>
-          </div>
-          <div className="khung-gi-ca-sn3">
-            <div className="khung-gi-ca-sn-child" />
-            <div className="div5">15:00 - 17:00</div>
-          </div>
-          <div className="khung-gi-ca-sn4">
-            <div className="khung-gi-ca-sn-child" />
-            <div className="div5">5:00 - 7:00</div>
-          </div>
-          <div className="khung-gi-ca-sn5">
-            <div className="khung-gi-ca-sn-child" />
-            <div className="div5">7:00 - 9:00</div>
-          </div>
-          <div className="khung-gi-ca-sn6">
-            <div className="khung-gi-ca-sn-child" />
-            <div className="div5">9:00 - 11:00</div>
-          </div>
-          <div className="khung-gi-ca-sn7">
-            <div className="khung-gi-ca-sn-child" />
-            <div className="div5">13:00 - 15:00</div>
-          </div>
-          <div className="tm-tnh">Tạm tính:</div>
-          <div className="titlefieldname">Sân huy hoàng</div>
-          <div className="groupdetailfield-child" />
-          <img
-            className="imgdetailfield-icon"
-            alt=""
-            src="/imgdetailfield@2x.png"
-          />
-          <div className="c-sn">Cỡ sân:</div>
-          <div className="chi-tit-sn">Chi tiết sân bóng:</div>
-          <div className="button-parent">
-            <div className="button2" />
-            <div className="xc-nhn1">Xác nhận</div>
-          </div>
-          <div className="checkbox">
-            <div className="checkbox1" />
-            <b className="cho-php-ngi">
-              Cho phép người khác tham gia đá giao hữu
-            </b>
-          </div>
+    <div className="w-[80%] mx-auto mt-5">
+        <div className="grid grid-cols-12">
+            <div className="h-[3px] lineCustom col-span-5 rotate-180 mt-[59px]"></div>
+            <div className="text-[48px] font-[600] my-6 text-center col-span-2 text-[#30691b]">ĐẶT SÂN</div>
+            <div className="h-[3px] lineCustom col-span-5 mt-[59px]"></div>
         </div>
-        <div className="groupsearch">
-          <div className="tn-cc-c-s-2">
-            <div className="khungcoso2" />
-            <img className="imgcs2-icon" alt="" src="/imgcs2@2x.png" />
-            <div className="c-s-sn">Cơ sở sân 2</div>
-          </div>
-          <div className="tn-cc-c-s">
-            <div className="khungcoso2" />
-            <img className="imgcs2-icon" alt="" src="/imgcs1@2x.png" />
-            <div className="c-s-sn1">Cơ sở sân 1</div>
-          </div>
-          <img className="scrollbar-icon" alt="" src="/scrollbar.svg" />
-          <div className="searchbox">
-            <div className="khungsearch" />
-            <img className="search-icon1" alt="" src="/search1.svg" />
-            <div className="tm-kim-tn">Tìm kiếm tên cơ sở....</div>
-          </div>
-          <div className="title-v-tr">Vị trí:</div>
-          <div className="vector-parent">
-            <img className="group-child" alt="" src="/rectangle-4292.svg" />
-            <div className="h-ch-minh">Hồ Chí Minh</div>
-            <img
-              className="expand-arrow-icon1"
-              alt=""
-              src="/expand-arrow1@2x.png"
-            />
-          </div>
-          <img className="pin-icon1" alt="" src="/pin1.svg" />
-          <div className="boxsearch" />
+        
+        <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-4 border-[#379E13] border-[3px] rounded-[10px] p-5">
+                <div className="flex justify-between">
+                    <div className="text-[24px] justify-center flex flex-col">Vị trí:</div>
+                    <div className="border-2 border-[#000] py-2 px-4 rounded-[10px] cursor-pointer">
+                        <Icon24px classIcon={faLocationDot}/>
+                        <span className="text-[24px] mx-4">Hồ Chí Minh</span>
+                        <Icon24px classIcon={faChevronDown}/>
+                    </div>
+                </div>
+
+                <div className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-2 mb-10">
+                    <div className="text-[18px] justify-center flex flex-col text-[#776F6F]">Tìm kiếm tên cơ sở...</div>
+                    <div className="py-2 pr-[10px]">
+                        <Icon24px classIcon={faMagnifyingGlass}/>
+                    </div>
+                </div>
+
+                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
+                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
+                </div>
+
+                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
+                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
+                </div>
+
+                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
+                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
+                </div>
+
+                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
+                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
+                </div>
+            </div>
+
+
+
+            <div className="col-span-8 border-[#379E13] border-[3px] rounded-[10px] p-5 relative">
+                <div className="flex gap-6">
+                    <img className="w-[240px] h-[240px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                    <div className="block w-full">
+                        <div className="text-[32px] font-[600] mb-2">Sân Huy Hoàng</div>
+
+                        <div className="text-[20px] mt-1">
+                            <span className="font-[600]">Địa chỉ:</span>
+                            <span className="font-[400] ml-3">32 Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân </span>
+                        </div>
+
+                        <div className="text-[20px] mt-1">
+                            <span className="font-[600]">Số điện thoại:</span>
+                            <span className="font-[400] ml-3">08128782993 </span>
+                        </div>
+
+                        <div className="text-[20px] mt-5 flex justify-between">
+                            <span className="font-[600] justify-center flex flex-col">Ngày đặt sân:</span>
+                            <div className="flex gap-4">
+                                <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer">
+                                    <span className="text-[20px] mx-4">T7 31/10/2023</span>
+                                </div>
+                                <div className="border-2 border-[#379E13] py-1 px-2 rounded-[10px] cursor-pointer">
+                                    <Icon24px classIcon={faCalendarDays}/>
+                                </div>
+                                <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer">
+                                    <span className="text-[20px] mx-4">Lọc loại sân</span>
+                                    <Icon24px classIcon={faChevronDown}/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-10 mt-5 gap-3">
+                            <div className="col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 1</div>
+                            <div className="col-span-2 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 2</div>
+                            <div className="col-span-2 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-[50px] relative">
+                    <div className="text-[24px] text-[#2B790F]">Chi tiết sân bóng:</div>
+                    <div className="w-full h-[3px] lineCustom"></div>
+                    <div className="mt-4 flex gap-6">
+                        <img className="w-[300px] h-[300px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+
+                        <div className="w-full">
+                            <div className="text-[20px] mt-1">
+                                <span className="font-[600]">Cỡ sân:</span>
+                                <span className="font-[400] ml-3">100m<sup>2</sup></span>
+                            </div>
+
+                            <div className="text-[20px] mt-1">
+                                <span className="font-[600]">Loại sân:</span>
+                                <span className="font-[400] ml-3">VIP</span>
+                            </div>
+
+                            <div className="mt-7 w-full gap-3 grid grid-cols-12">
+                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">5:00 - 7:00</div>                          
+                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">7:00 - 9:00</div>                          
+                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">9:00 - 11:00</div>                          
+                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">11:00 - 13:00</div>                          
+                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">13:00 - 15:00</div>                          
+                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">15:00 - 17:00</div>                          
+                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">17:00 - 19:00</div>                          
+                            </div>
+
+                            <div className="absolute flex gap-3 bottom-0">
+                                <div className="w-[30px] h-[30px] bg-[#2AB514] border-[2px] border-[#2AB514] rounded-[5px] cursor-pointer p-1">
+                                    <IconCheck classIcon={faCheck}/>
+                                </div>
+
+                                <div className="flex flex-col justify-center font-[600]">Cho phép người khác tham gia giao hữu</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
+                <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]">900.000</div>
+                <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]">Xác nhận</button>
+
+            </div>
         </div>
-      </div>
+    
+    
+  </div>
   )
 }

@@ -1,7 +1,7 @@
 import "../css/LichGiaoHuu.css"
 const LichGiaoHuu = () =>{
     return (
-      <div className="ThamGiaGiaoHU" >
+      <div className="ThamGiaGiaoHU my-[80px]" >
         <div className="Topic mb-3">LỊCH GIAO HỮU</div>
         <div className="BNgLCh text-center p-3" >
           <div class="grid grid-cols-7 w-full bg-[#D4D4D4] rounded-[10px]">
