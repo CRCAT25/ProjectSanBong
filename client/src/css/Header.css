@@ -1,0 +1,5 @@
+.bgHeader{
+    background: url(../../public/assets/bgHeader.png);
+    object-fit: cover;
+    background-repeat: no-repeat;
+}
