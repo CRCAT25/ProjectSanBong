@@ -1,6 +1,5 @@
 .ThamGiaGiaoHU {
-    width: 1917px;
-    height: 1106px; 
+    width: 100%;
     background: #DDFCD2; 
     align-items: center; 
     display: flex;
@@ -10,8 +9,6 @@
 
 .Topic {
     width: 80%;
-    height: 10%;
-    margin-top: 3%;
     text-align: center;
     color: #1E1E1E; 
     font-size: 60px; 
@@ -21,13 +18,13 @@
 
 .BNgLCh {
     width: 80%;
-    height:80%;
-    margin-bottom: 5%;
     display: flex;
     flex-direction: column;
     align-items: center;  
     background-color: #FAFFF9;
     border-radius: 15px;
+    margin-bottom: 100px;
+    margin-top: 12px;
 }
 
 .Tittle {
