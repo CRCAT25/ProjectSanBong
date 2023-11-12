@@ -1,8 +1,7 @@
-import logo from './logo.svg';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
 import {
-  Landing,
+  Home,
   LichGiaoHuu,
   FieldManage,
   Admin
@@ -13,7 +12,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />}/>
+        <Route path="/*" element={<Home />}/>
         <Route path="/LichGiaoHuu" element={<LichGiaoHuu />}/>
         <Route path="/FieldManage" element={<FieldManage />}/>
         <Route path="/admin" element={<Admin />}/>
