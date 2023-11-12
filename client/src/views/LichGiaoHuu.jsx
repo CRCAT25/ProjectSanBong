@@ -1,16 +1,16 @@
 import "../css/LichGiaoHuu.css"
 const LichGiaoHuu = () =>{
     return (
-      <div className="ThamGiaGiaoHU mt-[80px]" >
-        <div className="Topic">LỊCH GIAO HỮU</div>
-        <div className="BNgLCh text-center" >
-          <div class="grid grid-cols-12 w-full">
-              <div class="col-span-2 px-5">Tên</div>
-              <div class="col-span-2 px-5">SĐT</div>
-              <div class="col-span-2 px-5">Địa điểm</div>
-              <div class="col-span-2 px-5">Mã sân</div>
-              <div class="col-span-2 px-5">Thời gian</div>
-              <div class="col-span-2 px-5">Xác nhận</div>
+      <div className="ThamGiaGiaoHU my-[80px]" >
+        <div className="Topic mb-3">LỊCH GIAO HỮU</div>
+        <div className="BNgLCh text-center p-3" >
+          <div class="grid grid-cols-7 w-full bg-[#D4D4D4] rounded-[10px]">
+              <div class="col-span-1 px-5 text-[28px] font-bold h-[60px] flex flex-col justify-center">Tên</div>
+              <div class="col-span-1 px-5 text-[28px] font-bold h-[60px] flex flex-col justify-center">SĐT</div>
+              <div class="col-span-2 px-5 text-[28px] font-bold h-[60px] flex flex-col justify-center">Địa điểm</div>
+              <div class="col-span-1 px-5 text-[28px] font-bold h-[60px] flex flex-col justify-center">Mã sân</div>
+              <div class="col-span-1 px-5 text-[28px] font-bold h-[60px] flex flex-col justify-center">Thời gian</div>
+              <div class="col-span-1 px-5 text-[28px] font-bold h-[60px] flex flex-col justify-center">Xác nhận</div>
           </div>
 
 

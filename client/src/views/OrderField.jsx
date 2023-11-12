@@ -31,7 +31,7 @@ const IconCheck = ({classIcon}) => {
 
 export const OrderField = () => {
   return (
-    <div className="w-[80%] mx-auto">
+    <div className="w-[80%] mx-auto mt-5">
         <div className="grid grid-cols-12">
             <div className="h-[3px] lineCustom col-span-5 rotate-180 mt-[59px]"></div>
             <div className="text-[48px] font-[600] my-6 text-center col-span-2 text-[#30691b]">ĐẶT SÂN</div>
@@ -160,7 +160,7 @@ export const OrderField = () => {
 
                 <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
                 <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]">900.000</div>
-                <button className="buttonXacNhan absolute bottom-5 right-5 text-[28px]">Xác nhận</button>
+                <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]">Xác nhận</button>
 
             </div>
         </div>

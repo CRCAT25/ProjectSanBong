@@ -4,8 +4,9 @@ import {
   Home,
   LichGiaoHuu,
   FieldManage,
-  Admin
-
+  Admin,
+  Header,
+  Footer
 } from "./views"
 
 function App() {
@@ -16,6 +17,8 @@ function App() {
         <Route path="/LichGiaoHuu" element={<LichGiaoHuu />}/>
         <Route path="/FieldManage" element={<FieldManage />}/>
         <Route path="/admin" element={<Admin />}/>
+        <Route path="/Header" element={<Header />}/>
+        <Route path="/Footer" element={<Footer />}/>
 
       </Routes>
     </BrowserRouter>
