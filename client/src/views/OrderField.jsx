@@ -29,11 +29,6 @@ const IconCheck = ({classIcon}) => {
     )
 }
 
-const showCoSo = (idCoso) {
-    CDatSan.GetInfoSanBong(idCoso);
-    GetIn
-}
-
 export const OrderField = () => {
   return (
     <div className="w-[80%] mx-auto mt-5">
