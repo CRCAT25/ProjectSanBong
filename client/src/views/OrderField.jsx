@@ -7,7 +7,7 @@ import {faLocationDot,
     faCalendarDays,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
-
+import CDatSan from "../controllers/CDatSan";
 const Icon24px = ({classIcon}) => {
     const iconSize = {
         width: "24px",
@@ -58,7 +58,7 @@ export const OrderField = () => {
 
                 <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
                     <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
+                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">Cơ sở sân 1</span>
                 </div>
 
                 <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
