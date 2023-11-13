@@ -6,7 +6,8 @@ import {
   FieldManage,
   Admin,
   Header,
-  Footer
+  Footer,
+  FormHoanTien
 } from "./views"
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
         <Route path="/admin" element={<Admin />}/>
         <Route path="/Header" element={<Header />}/>
         <Route path="/Footer" element={<Footer />}/>
-
+        <Route path="/FormHoanTien" element={<FormHoanTien/>}/>
       </Routes>
     </BrowserRouter>
   );
