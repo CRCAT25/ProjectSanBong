@@ -1,577 +1,395 @@
-
 import "../css/FieldManager.css";
-const FieldManage = () =>{
-    return (
-        <div>
-          <div className="qun-l">
-      <div className="landing">
-        <div className="landiing-main">
+const FieldManage = () => {
+  return (
+        <div className="landing-fAj" id="257:562">
+          <div className="qun-l-sn-dgX" id="257:798">
+            <p className="main-advertise-letter-fNK" id="257:861">
+              QUẢN LÝ SÂN
+            </p>
+            <div className="group-289721-jNB" id="409:239">
+              <div className="auto-group-9pu3-fmd" id="Wa15WRasqVvDXdss4P9pU3">
+                <div className="nhp-tn-sn-zZ1" id="257:799">
+                  <div className="tn-sn--vxT" id="257:802">
+                    Tên sân:
+                  </div>
+                  <input className="auto-group-1jl7-TBh" id="Wa15ekgLDPSUrvQVNo1jL7" placeholder="Tên sân">
+                  </input>
+                </div>
+                <div className="chn-loi-sn-Ji7" id="257:803">
+                  <div className="loi-sn--RXq" id="257:806">
+                    Loại sân:
+                  </div>
+                  <div className="auto-group-xrjf-hkF" id="Wa1675FotPrCMP7b6jXrJF">
+                    <select name="cars"className="selectLoaiS">
+                      <option value="volvo">Volvo</option>
+                      <option value="saab">Saab</option>
+                      <option value="opel">Opel</option>
+                      <option value="audi">Audi</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="nhp-gi-bUF" id="257:811">
+                  <div className="n-gi--LRq" id="257:814">
+                    Đơn giá:
+                  </div>
+                  <input placeholder ="Đơn giá"  className="auto-group-6ywm-4sd" id="Wa16GQKbfnkeocz8Vg6Ywm">
+                  </input>
+                </div>
+              </div>
+              <div className="chn-nh-u7Z" id="257:808">
+                <div className="nh--pEX" id="257:810">
+                  Ảnh:
+                </div>
+                <div className="auto-group-bp27-YwD" id="Wa16pPQJdzzne9yQzcbp27">
+                  <img
+                    className="imgboxfill-tkB"
+                    src="https://via.placeholder.com/1920x839"
+                    id="409:240"
+                  />
+                </div>
+              </div>
+              <div className="auto-group-hhjs-nKm" id="Wa16MefrYhWfBdYBexHhJs">
+                <button className="btnThemSan" id="257:815">
+                  Thêm
+                </button>
+                <button className="btnCapNhatSan" id="257:818">
+                  Cập nhật
+                </button>
+                <button className="btXoaSan" id="257:821">
+                  Xóa
+                </button>
+              </div>
+            </div>
+            <div className="danh-sch-sn-H3Z" id="257:824">
+              Danh sách sân
+            </div>
+            <div className="sn-XTh" id="257:844">
+              <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
+                  <div className="tn-sn-input-J75" id="257:849">
+                    <div className="tenSan">Tên sân</div>
+                  </div>
+                  <div className="tn-sn-input-Mr3" id="257:852">
+                  <div className="loaiSan">Loại sân</div>    
+                  </div>
+                  <div className="tn-sn-input-J91" id="257:855">
+                  <div className="donGia">Đơn giá</div> 
+                  </div>
+              </div>
+              <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
+                <img
+                  className="imgSan"
+                  src="https://via.placeholder.com/1920x839"
+                  id="257:863"
+                />
+                <img
+                  className="imgSan"
+                  src="https://via.placeholder.com/1920x839"
+                  id="260:1081"
+                />
+              </div>
+              <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
+              <button class="btn">
+                <i class="fa fa-edit fa-3x"></i>
+                </button>
+              <button class="btn">
+                <i class="fa fa-trash fa-3x"></i>
+                </button>
+              </div>
+            </div>
+          </div>
           <img
-            className="landing-img2-icon"
-            alt=""
-            src="/landing-img2@2x.png"
+            className="screenshot121-1-YXm"
+            src="https://via.placeholder.com/1920x839"
+            id="257:748"
           />
-          <div className="landing-mask" />
-          <div className="get-started">
-            <div
-              className="button"
-              color="primary"
-              variant="contained"
-            />
-            <b className="thm-sn-ngay">Thêm sân ngay</b>
-          </div>
-          <div className="now-manage-your-container">
-            <p className="now-manage-your">{`Now, manage your `}</p>
-            <p className="now-manage-your">fields here.</p>
-          </div>
-          <div className="sign-in">Sign in</div>
-          <b className="sign-in1">Quản lý sân</b>
-          <b className="sign-in2">Quản lý lịch sân</b>
-          <div className="sign-up">
-            <div className="button1" />
-            <b className="sign-up1">Sign up</b>
-          </div>
-          <div className="landiing-main-child" />
-          <img className="landiing-main-item" alt="" src="/rectangle-1.svg" />
-        </div>
-        <div className="qun-l-sn">
-          <div className="nhp-tn-sn-parent">
-            <div className="nhp-tn-sn">
-              <div className="nhp-tn-sn-child" />
-              <div className="tn-sn">Tên sân</div>
-              <div className="tn-sn1">Tên sân:</div>
-            </div>
-            <div className="chn-loi-sn">
-              <div className="chn-loi-sn-child" />
-              <div className="tn-sn">Loại sân</div>
-              <div className="loi-sn1">Loại sân:</div>
-              <img
-                className="expand-arrow-icon"
-                alt=""
-                src="/expand-arrow@2x.png"
-              />
-            </div>
-            <div className="chn-nh">
-              <div className="chn-nh-child" />
-              <div className="nh">Ảnh:</div>
-              <img
-                className="img-box-fill-icon1"
-                alt=""
-                src="/img-box-fill1.svg"
-              />
-            </div>
-            <div className="nhp-gi">
-              <div className="chn-loi-sn-child" />
-              <div className="tn-sn">Giá tiền</div>
-              <div className="n-gi">Đơn giá:</div>
-            </div>
-            <div className="nt-thm">
-              <div className="nt-thm-child" />
-              <div className="thm">Thêm</div>
-            </div>
-            <div className="nt-cp-nht">
-              <div className="nt-thm-child" />
-              <div className="thm">Cập nhật</div>
-            </div>
-            <div className="nt-xa">
-              <div className="nt-thm-child" />
-              <div className="thm">Xóa</div>
-            </div>
-          </div>
-          <div className="danh-sch-sn">
-            <div className="cac-c-s" />
-            <b className="danh-sch-sn1">Danh sách sân</b>
-          </div>
-          <div className="sn">
-            <div className="cac-c-s1" />
-            <img className="sn-child" alt="" src="/rectangle-4323.svg" />
-            <div className="tn-sn-input">
-              <div className="tn-sn-input-child" />
-              <div className="tn-sn2">Tên sân</div>
-            </div>
-            <div className="tn-sn-input1">
-              <div className="tn-sn-input-item" />
-              <div className="tn-sn2">Loại sân</div>
-            </div>
-            <div className="tn-sn-input2">
-              <div className="tn-sn-input-inner" />
-              <div className="tn-sn2">Giá tiền</div>
-            </div>
-            <img className="sn-item" alt="" src="/group-289647.svg" />
-            <img className="sn-inner" alt="" src="/group-289648.svg" />
-            <img className="editbutton-icon" alt="" src="/editbutton.svg" />
-            <img className="editbutton-icon1" alt="" src="/editbutton1.svg" />
-          </div>
-          <div className="sn1">
-            <div className="cac-c-s2" />
-            <div className="tn-sn-input3">
-              <div className="tn-sn-input-child" />
-              <div className="tn-sn2">Tên sân</div>
-            </div>
-            <div className="tn-sn-input4">
-              <div className="tn-sn-input-item" />
-              <div className="tn-sn2">Loại sân</div>
-            </div>
-            <div className="tn-sn-input5">
-              <div className="tn-sn-input-inner" />
-              <div className="tn-sn2">Giá tiền</div>
-            </div>
-            <img className="group-icon" alt="" src="/group-289647.svg" />
-            <img className="sn-child1" alt="" src="/group-289648.svg" />
-            <img className="editbutton-icon2" alt="" src="/editbutton.svg" />
-            <img className="editbutton-icon3" alt="" src="/editbutton1.svg" />
-          </div>
-          <div className="main-advertise-letter">QUẢN LÝ SÂN</div>
-        </div>
-        <img
-          className="screenshot-121-1-icon"
-          alt=""
-          src="/screenshot-121-1@2x.png"
-        />
-        <img className="ball2-icon" alt="" src="/ball2@2x.png" />
-        <img className="football-icon" alt="" src="/football@2x.png" />
-        <div className="nhp-tn-sn-group">
-          <div className="nhp-tn-sn1">
-            <div className="nhp-tn-sn-item" />
-            <div className="tn-khch">Tên khách</div>
-            <div className="tn">{`Tên: `}</div>
-          </div>
-          <div className="nhp-tn-sn2">
-            <div className="nhp-tn-sn-item" />
-            <div className="tn-khch">Tên sân</div>
-            <div className="loi">Tên:</div>
-            <img
-              className="expand-arrow-icon1"
-              alt=""
-              src="/expand-arrow1@2x.png"
-            />
-          </div>
-          <div className="nhp-tn-sn3">
-            <div className="nhp-tn-sn-child1" />
-            <div className="div">14:00 - 17:00</div>
-            <div className="khung-gi">Khung giờ:</div>
-            <img
-              className="expand-arrow-icon2"
-              alt=""
-              src="/expand-arrow2@2x.png"
-            />
-          </div>
-          <div className="nhp-tn-sn4">
-            <div className="nhp-tn-sn-item" />
-            <div className="tn-khch">Loại sân</div>
-            <div className="loi">Loại:</div>
-            <img
-              className="expand-arrow-icon1"
-              alt=""
-              src="/expand-arrow1@2x.png"
-            />
-          </div>
-          <div className="nhp-tn-sn5">
-            <div className="nhp-tn-sn-child3" />
-            <div className="t7-31102023">T7 31/10/2023</div>
-            <div className="ngy">Ngày:</div>
-            <img className="date-range-icon1" alt="" src="/date-range1.svg" />
-          </div>
-          <b className="thng-tin-khch">Thông tin khách hàng</b>
-          <b className="thng-tin-sn">Thông tin sân</b>
-          <div className="chn-loi-sn1">
-            <div className="chn-loi-sn-item" />
-            <div className="s-in-thoi">Số điện thoại</div>
-            <div className="s-in-thoi1">Số điện thoại:</div>
-          </div>
-          <div className="nt-thm1">
-            <div className="nt-thm-item" />
-            <div className="nt-thm-item" />
-            <div className="thm1">Thêm</div>
-          </div>
-          <div className="nt-cp-nht1">
-            <div className="nt-thm-item" />
-            <div className="thm1">Cập nhật</div>
-          </div>
-          <div className="nt-xa1">
-            <div className="nt-thm-item" />
-            <div className="thm1">Xóa</div>
-          </div>
-          <div className="main-advertise-letter1">QUẢN LÝ LỊCH SÂN</div>
-          <div className="nhp-tn-sn6">
-            <div className="nhp-tn-sn-child4" />
-            <div className="c">Có</div>
-            <div className="cho-php-giao">Cho phép giao hữu</div>
-          </div>
-          <div className="group-parent">
-            <div className="rectangle-parent">
-              <div className="group-child" />
-              <div className="group-item" />
-              <div className="group-inner" />
-              <div className="group-child1" />
-              <div className="group-child2" />
-              <div className="group-child3" />
-              <div className="group-child3" />
-              <div className="group-child5" />
-              <b className="b">8:00 - 10:00</b>
-              <b className="b1">8:00 - 10:00</b>
-              <b className="b2">8:00 - 10:00</b>
-              <b className="b3">8:00 - 10:00</b>
-              <b className="b4">8:00 - 10:00</b>
-              <b className="b5">8:00 - 10:00</b>
-              <b className="b6">8:00 - 10:00</b>
-            </div>
-            <div className="ch-thch">
-              <div className="ch-thch-child" />
-              <div className="ch-thch-item" />
-              <div className="ch-thch-inner" />
-              <div className="ellipse-div" />
-              <div className="ch-thch-child1" />
-              <div className="c-nhn-to">Cỏ nhân tạo</div>
-              <div className="trng">Trống</div>
-              <div className="t">Đã đặt</div>
-              <div className="hon-thnh">Hoàn thành</div>
-              <div className="c-t-nhin">Cỏ tự nhiên</div>
-              <div className="ch-thch-child2" />
-            </div>
-            <div className="group-child6" />
-            <div className="ds-sn">
-              <div className="rectangle-group">
-                <div className="group-child7" />
-                <b className="sn-2">Sân 2</b>
-              </div>
-              <div className="rectangle-container">
-                <div className="group-child7" />
-                <b className="sn-2">Sân 4</b>
-              </div>
-              <div className="group-div">
-                <div className="group-child9" />
-                <b className="sn-3">Sân 3</b>
-              </div>
-              <div className="rectangle-parent1">
-                <div className="group-child9" />
-                <b className="sn-3">Sân 5</b>
-              </div>
-              <div className="rectangle-parent2">
-                <div className="group-child11" />
-                <div className="group-child11" />
-                <b className="sn-1">Sân 1</b>
-                <b className="sn-21">Sân 2</b>
-                <b className="sn-41">Sân 4</b>
-              </div>
-            </div>
-            <img className="group-child13" alt="" src="/group-289676.svg" />
-            <img className="group-child14" alt="" src="/group-289677.svg" />
-            <img className="group-child15" alt="" src="/group-289678.svg" />
-            <img className="group-child16" alt="" src="/group-289678.svg" />
-            <img className="group-child17" alt="" src="/group-289678.svg" />
-            <div className="rectangle-parent3">
-              <div className="group-child18" />
-              <div className="div1">4</div>
-              <img className="polygon-icon" alt="" src="/polygon-2.svg" />
-              <img className="group-child19" alt="" src="/polygon-3.svg" />
-              <div className="group-child20" />
-              <div className="thng-10">Tháng 10</div>
-              <div className="vector-parent">
-                <img
-                  className="rectangle-icon"
-                  alt=""
-                  src="/rectangle-429.svg"
-                />
-                <div className="lc-loi-sn">Lọc loại sân</div>
-                <img
-                  className="expand-arrow-icon4"
-                  alt=""
-                  src="/expand-arrow3@2x.png"
-                />
-              </div>
-            </div>
-            <img className="group-child21" alt="" src="/rectangle-444.svg" />
-          </div>
-        </div>
-      </div>
-    </div>
-    {/* <div className="qun-l">
-      <div className="landing">
-        <div className="landiing-main">
           <img
-            className="landing-img2-icon"
-            alt=""
-            src="/landing-img2@2x.png"
+            className="ball2-Tej"
+            src="https://via.placeholder.com/1920x839"
+            id="257:750"
           />
-          <div className="landing-mask" />
-          <div className="get-started">
-            <div
-              className="button"
-              sx={{ width: 300 }}
-              color="primary"
-              variant="contained"
-            />
-            <b className="thm-sn-ngay">Thêm sân ngay</b>
-          </div>
-          <div className="now-manage-your-container">
-            <p className="now-manage-your">{`Now, manage your `}</p>
-            <p className="now-manage-your">fields here.</p>
-          </div>
-          <div className="sign-in">Sign in</div>
-          <b className="sign-in1">Quản lý sân</b>
-          <b className="sign-in2">Quản lý lịch sân</b>
-          <div className="sign-up">
-            <div className="button1" />
-            <b className="sign-up1">Sign up</b>
-          </div>
-          <div className="landiing-main-child" />
-          <img className="landiing-main-item" alt="" src="/rectangle-1.svg" />
-        </div>
-        <div className="qun-l-sn">
-          <div className="nhp-tn-sn-parent">
-            <div className="nhp-tn-sn">
-              <div className="nhp-tn-sn-child" />
-              <div className="tn-sn">Tên sân</div>
-              <div className="tn-sn1">Tên sân:</div>
-            </div>
-            <div className="chn-loi-sn">
-              <div className="chn-loi-sn-child" />
-              <div className="tn-sn">Loại sân</div>
-              <div className="loi-sn1">Loại sân:</div>
-              <img
-                className="expand-arrow-icon"
-                alt=""
-                src="/expand-arrow@2x.png"
-              />
-            </div>
-            <div className="chn-nh">
-              <div className="chn-nh-child" />
-              <div className="nh">Ảnh:</div>
-              <img
-                className="img-box-fill-icon1"
-                alt=""
-                src="/img-box-fill1.svg"
-              />
-            </div>
-            <div className="nhp-gi">
-              <div className="chn-loi-sn-child" />
-              <div className="tn-sn">Giá tiền</div>
-              <div className="n-gi">Đơn giá:</div>
-            </div>
-            <div className="nt-thm">
-              <div className="nt-thm-child" />
-              <div className="thm">Thêm</div>
-            </div>
-            <div className="nt-cp-nht">
-              <div className="nt-thm-child" />
-              <div className="thm">Cập nhật</div>
-            </div>
-            <div className="nt-xa">
-              <div className="nt-thm-child" />
-              <div className="thm">Xóa</div>
-            </div>
-          </div>
-          <div className="danh-sch-sn">
-            <div className="cac-c-s" />
-            <b className="danh-sch-sn1">Danh sách sân</b>
-          </div>
-          <div className="sn">
-            <div className="cac-c-s1" />
-            <img className="sn-child" alt="" src="/rectangle-4323.svg" />
-            <div className="tn-sn-input">
-              <div className="tn-sn-input-child" />
-              <div className="tn-sn2">Tên sân</div>
-            </div>
-            <div className="tn-sn-input1">
-              <div className="tn-sn-input-item" />
-              <div className="tn-sn2">Loại sân</div>
-            </div>
-            <div className="tn-sn-input2">
-              <div className="tn-sn-input-inner" />
-              <div className="tn-sn2">Giá tiền</div>
-            </div>
-            <img className="sn-item" alt="" src="/group-289647.svg" />
-            <img className="sn-inner" alt="" src="/group-289648.svg" />
-            <img className="editbutton-icon" alt="" src="/editbutton.svg" />
-            <img className="editbutton-icon1" alt="" src="/editbutton1.svg" />
-          </div>
-          <div className="sn1">
-            <div className="cac-c-s2" />
-            <div className="tn-sn-input3">
-              <div className="tn-sn-input-child" />
-              <div className="tn-sn2">Tên sân</div>
-            </div>
-            <div className="tn-sn-input4">
-              <div className="tn-sn-input-item" />
-              <div className="tn-sn2">Loại sân</div>
-            </div>
-            <div className="tn-sn-input5">
-              <div className="tn-sn-input-inner" />
-              <div className="tn-sn2">Giá tiền</div>
-            </div>
-            <img className="group-icon" alt="" src="/group-289647.svg" />
-            <img className="sn-child1" alt="" src="/group-289648.svg" />
-            <img className="editbutton-icon2" alt="" src="/editbutton.svg" />
-            <img className="editbutton-icon3" alt="" src="/editbutton1.svg" />
-          </div>
-          <div className="main-advertise-letter">QUẢN LÝ SÂN</div>
-        </div>
-        <img
-          className="screenshot-121-1-icon"
-          alt=""
-          src="/screenshot-121-1@2x.png"
-        />
-        <img className="ball2-icon" alt="" src="/ball2@2x.png" />
-        <img className="football-icon" alt="" src="/football@2x.png" />
-        <div className="nhp-tn-sn-group">
-          <div className="nhp-tn-sn1">
-            <div className="nhp-tn-sn-item" />
-            <div className="tn-khch">Tên khách</div>
-            <div className="tn">{`Tên: `}</div>
-          </div>
-          <div className="nhp-tn-sn2">
-            <div className="nhp-tn-sn-item" />
-            <div className="tn-khch">Tên sân</div>
-            <div className="loi">Tên:</div>
-            <img
-              className="expand-arrow-icon1"
-              alt=""
-              src="/expand-arrow1@2x.png"
-            />
-          </div>
-          <div className="nhp-tn-sn3">
-            <div className="nhp-tn-sn-child1" />
-            <div className="div">14:00 - 17:00</div>
-            <div className="khung-gi">Khung giờ:</div>
-            <img
-              className="expand-arrow-icon2"
-              alt=""
-              src="/expand-arrow2@2x.png"
-            />
-          </div>
-          <div className="nhp-tn-sn4">
-            <div className="nhp-tn-sn-item" />
-            <div className="tn-khch">Loại sân</div>
-            <div className="loi">Loại:</div>
-            <img
-              className="expand-arrow-icon1"
-              alt=""
-              src="/expand-arrow1@2x.png"
-            />
-          </div>
-          <div className="nhp-tn-sn5">
-            <div className="nhp-tn-sn-child3" />
-            <div className="t7-31102023">T7 31/10/2023</div>
-            <div className="ngy">Ngày:</div>
-            <img className="date-range-icon1" alt="" src="/date-range1.svg" />
-          </div>
-          <b className="thng-tin-khch">Thông tin khách hàng</b>
-          <b className="thng-tin-sn">Thông tin sân</b>
-          <div className="chn-loi-sn1">
-            <div className="chn-loi-sn-item" />
-            <div className="s-in-thoi">Số điện thoại</div>
-            <div className="s-in-thoi1">Số điện thoại:</div>
-          </div>
-          <div className="nt-thm1">
-            <div className="nt-thm-item" />
-            <div className="nt-thm-item" />
-            <div className="thm1">Thêm</div>
-          </div>
-          <div className="nt-cp-nht1">
-            <div className="nt-thm-item" />
-            <div className="thm1">Cập nhật</div>
-          </div>
-          <div className="nt-xa1">
-            <div className="nt-thm-item" />
-            <div className="thm1">Xóa</div>
-          </div>
-          <div className="main-advertise-letter1">QUẢN LÝ LỊCH SÂN</div>
-          <div className="nhp-tn-sn6">
-            <div className="nhp-tn-sn-child4" />
-            <div className="c">Có</div>
-            <div className="cho-php-giao">Cho phép giao hữu</div>
-          </div>
-          <div className="group-parent">
-            <div className="rectangle-parent">
-              <div className="group-child" />
-              <div className="group-item" />
-              <div className="group-inner" />
-              <div className="group-child1" />
-              <div className="group-child2" />
-              <div className="group-child3" />
-              <div className="group-child3" />
-              <div className="group-child5" />
-              <b className="b">8:00 - 10:00</b>
-              <b className="b1">8:00 - 10:00</b>
-              <b className="b2">8:00 - 10:00</b>
-              <b className="b3">8:00 - 10:00</b>
-              <b className="b4">8:00 - 10:00</b>
-              <b className="b5">8:00 - 10:00</b>
-              <b className="b6">8:00 - 10:00</b>
-            </div>
-            <div className="ch-thch">
-              <div className="ch-thch-child" />
-              <div className="ch-thch-item" />
-              <div className="ch-thch-inner" />
-              <div className="ellipse-div" />
-              <div className="ch-thch-child1" />
-              <div className="c-nhn-to">Cỏ nhân tạo</div>
-              <div className="trng">Trống</div>
-              <div className="t">Đã đặt</div>
-              <div className="hon-thnh">Hoàn thành</div>
-              <div className="c-t-nhin">Cỏ tự nhiên</div>
-              <div className="ch-thch-child2" />
-            </div>
-            <div className="group-child6" />
-            <div className="ds-sn">
-              <div className="rectangle-group">
-                <div className="group-child7" />
-                <b className="sn-2">Sân 2</b>
+          <img
+            className="football-bF9"
+            src="https://via.placeholder.com/1920x839"
+            id="257:749"
+          />
+            <div className="auto-group-hdgw-1Js" id="Wa1AzrGdhotxoxgfMXhdgw">
+              <p className="main-advertise-letter-XHD" id="257:945">
+                QUẢN LÝ LỊCH SÂN
+              </p>
+              <p className="thng-tin-khch-hng-RtP" id="257:894">
+                Thông tin khách hàng
+              </p>
+              <div className="auto-group-jx7d-jPH" id="Wa19Bjd7ahVU2wjvJrjx7d">
+                <div className="nhp-tn-sn-p9q" id="257:870">
+                  <div className="tn--jnb" id="257:873">
+                    Tên:
+                  </div>
+                  <div className="auto-group-veaw-32b" id="Wa19NeUbkp5tm2aAF8vEaw">
+                    <div className="tenKhach">Tên khách</div>
+                  </div>
+                </div>
+                <div className="chn-loi-sn-ofy" id="257:896">
+                  <div className="s-in-thoi--wGP" id="257:899">
+                    Số điện thoại:
+                  </div>
+                  <div className="auto-group-xznk-duu" id="Wa19VowLAGzbnXsDdvxZNK">
+                    <div className="soDT">Số điện thoại</div>
+                  </div>
+                </div>
               </div>
-              <div className="rectangle-container">
-                <div className="group-child7" />
-                <b className="sn-2">Sân 4</b>
+              <div className="thng-tin-sn-rXm" id="257:895">
+                Thông tin sân
               </div>
-              <div className="group-div">
-                <div className="group-child9" />
-                <b className="sn-3">Sân 3</b>
+              <div className="auto-group-evfy-kt3" id="Wa19cUQtrzDDFZVKVTeVFy">
+                <div className="nhp-tn-sn-dB9" id="257:884">
+                  <div className="loi--xUK" id="257:887">
+                    Loại:
+                  </div>
+                  <select name="cars"className="selectLoaiLS">
+                      <option value="volvo">Volvo</option>
+                      <option value="saab">Saab</option>
+                      <option value="opel">Opel</option>
+                      <option value="audi">Audi</option>
+                    </select>
+                </div>
+                <div className="nhp-tn-sn-wjZ" id="257:889">
+                  <div className="ngy--sNK" id="257:892">
+                    Ngày:
+                  </div>
+                  <div className="auto-group-efjs-9qd" id="Wa19yo8hWThy9FUqpkefJs">
+                    <input type="date" className="t7-31-10-2023-1cw" id="257:891">
+                    </input>
+                  </div>
+                </div>
               </div>
-              <div className="rectangle-parent1">
-                <div className="group-child9" />
-                <b className="sn-3">Sân 5</b>
+              <div className="auto-group-fpes-Zns" id="Wa1A73RdCPEMmAij96FPEs">
+                <div className="nhp-tn-sn-Srf" id="257:874">
+                  <div className="tn--9FH" id="257:877">
+                    Tên:
+                  </div>
+                  <select name="cars"className="selectTenLS">
+                      <option value="volvo">Volvo</option>
+                      <option value="saab">Saab</option>
+                      <option value="opel">Opel</option>
+                      <option value="audi">Audi</option>
+                    </select>
+                </div>
+                <div className="nhp-tn-sn-9o1" id="257:879">
+                  <div className="khung-gi--JA7" id="257:882">
+                    Khung giờ:
+                  </div>
+                  <select name="cars"className="selectKhungGio">
+                      <option value="volvo">Volvo</option>
+                      <option value="saab">Saab</option>
+                      <option value="opel">Opel</option>
+                      <option value="audi">Audi</option>
+                    </select>
+                </div>
+                <div className="nhp-tn-sn-vKu" id="257:946">
+                  <div className="cho-php-giao-hu-TKq" id="257:949">
+                    Cho phép giao hữu
+                  </div>
+                  <select name="cars"className="selectGH">
+                      <option value="volvo">Volvo</option>
+                      <option value="saab">Saab</option>
+                      <option value="opel">Opel</option>
+                      <option value="audi">Audi</option>
+                    </select>
+                </div>
               </div>
-              <div className="rectangle-parent2">
-                <div className="group-child11" />
-                <div className="group-child11" />
-                <b className="sn-1">Sân 1</b>
-                <b className="sn-21">Sân 2</b>
-                <b className="sn-41">Sân 4</b>
+              <div className="auto-group-hhjs-nKm" id="Wa1AjrhcdDA61eXwBb9nwD">
+                <div className="btnThemLich" id="257:900">
+                  Thêm
+                </div>
+                <div className="btnCapNhatLich" id="257:939">
+                  Cập nhật
+                </div>
+                <div className="btnXoaLich" id="257:942">
+                  Xóa
+                </div>
               </div>
             </div>
-            <img className="group-child13" alt="" src="/group-289676.svg" />
-            <img className="group-child14" alt="" src="/group-289677.svg" />
-            <img className="group-child15" alt="" src="/group-289678.svg" />
-            <img className="group-child16" alt="" src="/group-289678.svg" />
-            <img className="group-child17" alt="" src="/group-289678.svg" />
-            <div className="rectangle-parent3">
-              <div className="group-child18" />
-              <div className="div1">4</div>
-              <img className="polygon-icon" alt="" src="/polygon-2.svg" />
-              <img className="group-child19" alt="" src="/polygon-3.svg" />
-              <div className="group-child20" />
-              <div className="thng-10">Tháng 10</div>
-              <div className="vector-parent">
+            <div className="group-289693-7qd" id="293:673">
+              <div className="group-289658-51m" id="293:328">
+                <div className="auto-group-ootz-nwm" id="Wa1Fuxaa4Znem9NxP2ooTZ">
+                  8:00 - 10:00
+                </div>
+                <div className="auto-group-g8kj-qf9" id="Wa1G2HjMdSYXrXDkYPG8kj">
+                  8:00 - 10:00
+                </div>
+                <div className="auto-group-tsyd-sLw" id="Wa1G7TFRDtgre7pyn7tsyD">
+                  8:00 - 10:00
+                </div>
+                <div className="auto-group-jdsb-uYX" id="Wa1GCCcWQ3kmTei5Q8jdSb">
+                  8:00 - 10:00
+                </div>
+                <div className="auto-group-tacj-Nh1" id="Wa1GGnKD1HbK6MhXB4Tacj">
+                  8:00 - 10:00
+                </div>
+                <div className="auto-group-siiw-qqV" id="Wa1GNSpSJVRjSRyhx4Siiw">
+                  8:00 - 10:00
+                </div>
+                <div className="auto-group-j53h-FeK" id="Wa1GT7MLCBsxfYuyeXj53h">
+                  8:00 - 10:00
+                </div>
+              </div>
+              <div className="auto-group-rifm-GJX" id="Wa1CodbNh5qjDKr6i2Rifm">
+                <div className="group-289691-oZM" id="293:670">
+                  <div className="thng-10-WTm" id="298:311">
+                    Tháng 10
+                  </div>
+                  <div className="auto-group-gx3d-1vK" id="Wa1FME27YE1NattEaCGx3d">
+                    <img
+                      className="polygon-3-9Wj"
+                      src="https://via.placeholder.com/1920x839"
+                      id="298:308"
+                    />
+                    <div
+                      className="auto-group-vgkk-VKh"
+                      id="Wa1FTDr7yGJXJcwj3NVgkK"
+                    >
+                      <div className="item-4-cfD" id="298:306">
+                        4
+                      </div>
+                      <div className="rectangle-4321-Tvj" id="298:310"></div>
+                    </div>
+                    <img
+                      className="polygon-2-ni7"
+                      src="https://via.placeholder.com/1920x839"
+                      id="298:307"
+                    />
+                  </div>
+                  <div className="group-289692-Kxw" id="293:672">
+                    <div className="lc-loi-sn-Eq1" id="293:543">
+                      Lọc loại sân
+                    </div>
+                    <img
+                      className="expand-arrow-kHZ"
+                      src="https://via.placeholder.com/1920x839"
+                      id="293:544"
+                    />
+                  </div>
+                </div>
+                <div className="auto-group-kpmu-omd" id="Wa1D1TazzFCfTx5RoHkPmu">
+                  <div className="auto-group-rtif-XxX" id="Wa1DAxKBLZLV71qd3KRtif">
+                    <div className="ds-sn-4Bm" id="293:576">
+                      <div
+                        className="auto-group-n9eb-y3q"
+                        id="Wa1DQN6W2SPPdV2efvN9eb"
+                      >
+                        <div className="group-289685-WJf" id="293:563">
+                          <div className="rectangle-4317-1FR" id="293:552"></div>
+                          <div className="sn-2-XzT" id="293:553">
+                            Sân 2
+                          </div>
+                        </div>
+                        <div className="group-289690-epB" id="293:667">
+                          <div className="rectangle-4317-xZy" id="293:668"></div>
+                          <div className="sn-4-tiX" id="293:669">
+                            Sân 4
+                          </div>
+                        </div>
+                        <div className="group-289687-pcB" id="293:567">
+                          Sân 3
+                        </div>
+                        <div className="group-289688-2y9" id="293:570">
+                          <div
+                            className="auto-group-bbrb-YAo"
+                            id="Wa1DfcA6xQyKD31rcVbBrB"
+                          >
+                            Sân 1
+                          </div>
+                          <div className="sn-2-osR" id="415:441">
+                            Sân 2
+                          </div>
+                          <div className="sn-4-L6f" id="415:442">
+                            Sân 4
+                          </div>
+                        </div>
+                      </div>
+                      <div className="group-289689-FjR" id="293:573">
+                        Sân 5
+                      </div>
+                    </div>
+                    <img
+                      className="group-289676-WvF"
+                      src="https://via.placeholder.com/1920x839"
+                      id="293:455"
+                    />
+                    <img
+                      className="group-289677-DJs"
+                      src="https://via.placeholder.com/1920x839"
+                      id="298:329"
+                    />
+                    <img
+                      className="group-289678-LeP"
+                      src="https://via.placeholder.com/1920x839"
+                      id="298:338"
+                    />
+                    <img
+                      className="group-289679-seK"
+                      src="https://via.placeholder.com/1920x839"
+                      id="298:347"
+                    />
+                    <img
+                      className="group-289680-c67"
+                      src="https://via.placeholder.com/1920x839"
+                      id="298:356"
+                    />
+                  </div>
+                  <img
+                    className="rectangle-444-8q9"
+                    src="https://via.placeholder.com/1920x839"
+                    id="293:547"
+                  />
+                </div>
+              </div>
+              <div className="ch-thch-3hD" id="293:531">
+                <div className="auto-group-zg8b-Kud" id="Wa1GnmTFAV54gyzyWwZG8B">
+                  <div className="rectangle-4318-587" id="293:524"></div>
+                  <div className="rectangle-4319-kk3" id="293:532"></div>
+                </div>
+                <div className="auto-group-lpyv-fs1" id="Wa1Gtr7Ssyyu181HufLPyV">
+                  <p className="c-nhn-to-oiK" id="293:529">
+                    Cỏ nhân tạo
+                  </p>
+                  <p className="c-t-nhin-LCT" id="293:530">
+                    Cỏ tự nhiên
+                  </p>
+                </div>
+                <div className="auto-group-ky5h-U3m" id="Wa1GzWcgBBpKMCHUgfKY5h">
+                  <img
+                    className="ellipse-237-1ZV"
+                    src="https://via.placeholder.com/1920x839"
+                    id="293:526"
+                  />
+                  <img
+                    className="ellipse-238-kGB"
+                    src="https://via.placeholder.com/1920x839"
+                    id="293:527"
+                  />
+                </div>
+                <div className="auto-group-quzw-tdH" id="Wa1H5WUMCijGwy145JqUzw">
+                  <p className="trng-RNK" id="293:533">
+                    Trống
+                  </p>
+                  <p className="t-Mmm" id="293:534">
+                    Đã đặt
+                  </p>
+                </div>
                 <img
-                  className="rectangle-icon"
-                  alt=""
-                  src="/rectangle-429.svg"
+                  className="ellipse-239-Tpo"
+                  src="https://via.placeholder.com/1920x839"
+                  id="293:528"
                 />
-                <div className="lc-loi-sn">Lọc loại sân</div>
-                <img
-                  className="expand-arrow-icon4"
-                  alt=""
-                  src="/expand-arrow3@2x.png"
-                />
-              </div>
+                <p classNameName="hon-thnh-BF1" id="293:535">
+                  Hoàn thành
+                </p>
+              </div>              
             </div>
-            <img className="group-child21" alt="" src="/rectangle-444.svg" />
           </div>
-        </div>
-      </div>
-    </div> */}
-        </div>
-    )
+    
+  );
 };
 
 export default FieldManage;
