@@ -3,6 +3,8 @@ import "../css/Header.css"
 import "../css/OrderField.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faBell} from "@fortawesome/free-solid-svg-icons"
+import { useNavigate } from "react-router-dom";
+import FormLogin from './FormLogin'
 
 const Icon24px = ({classIcon}) => {
     const iconSize = {
@@ -15,7 +17,16 @@ const Icon24px = ({classIcon}) => {
     )
 }
 
+
 export default function Header() {
+    const navigate = useNavigate();
+
+    const OpenFormLogin = () => {
+        var formLogin = document.getElementById('formLogin');
+        // formLogin.classList.toggle('hidden');
+        formLogin.style.opacity = "10"
+        formLogin.style.top = "24%"
+    }
   return (
     <div className='w-full bgHeader h-[839px] relative'>
         <div className='bg-[#000] opacity-50 h-[839px] w-full absolute z-1'></div>
@@ -33,7 +44,7 @@ export default function Header() {
                     <button className='buttonXacNhan w-[130px] h-[40px]'>Sign up</button>
                 </li>
                 <li>
-                    <button className='w-[130px] h-[40px]'>Sign in</button>
+                    <button className='w-[130px] h-[40px]' onClick={OpenFormLogin}>Sign in</button>
                 </li>
             </ul>
         </nav>
@@ -41,6 +52,7 @@ export default function Header() {
         <button className='ml-[10%] top-[60%] absolute text-[20px] font-[400] z-100 buttonXacNhan px-8 py-2'>Đặt sân ngay</button>
         <img className='absolute z-100 w-[220px] bottom-[-150px]' src="../assets/football1.png" alt="" />
         <img className='absolute z-100 w-[170px] bottom-[-140px] right-0' src="../assets/ball2.png" alt="" />
+        <div id="formLogin" className='top-1/2 duration-300 relative z-1000 opacity-0'><FormLogin/></div>  
     </div>
   )
 }
