@@ -8,7 +8,7 @@ import {
   Header,
   Footer,
   FormHoanTien,
-  FormLogin
+  FormLogin,
   FormHoaDon,
   FormInfoCaNhan
 } from "./views"
