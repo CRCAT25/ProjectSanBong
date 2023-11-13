@@ -12,16 +12,11 @@ import "../css/Admintest.css"
   return (
     <div>
       <div className="w-full h-[96px] px-[60px] fixed z-50 top-0 bg-white">
-        <div className="flex item-center justify-between  py-[8px]">
-          <div className="flex item-center gap-3">
-            <button id="tablink" className={`tablink ${activeTab === 'hotel' ? 'active' : ''}`} data-electronic="hotel" onClick={() => openTab('hotel')}>Hotel</button>
-            <button id="tablink" className={`tablink ${activeTab === 'phong' ? 'active' : ''}`} data-electronic="phong" onClick={() => openTab('phong')}>Phòng</button>
+      <div className=" item-center justify-center  py-[8px] w-[100%]">
+          <div className="flex gap-3 justify-center ">
             <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''}`} data-electronic="khachhang" onClick={() => openTab('khachhang')}>Khách hàng</button>
             <button id="tablink" className={`tablink ${activeTab === 'partner' ? 'active' : ''}`} data-electronic="partner" onClick={() => openTab('partner')}>Partner</button>
             <button id="tablink" className={`tablink ${activeTab === 'doanhthu' ? 'active' : ''}`} data-electronic="doanhthu" onClick={() => openTab('doanhthu')}>Doanh Thu</button>
-            <button id="tablink" className={`tablink ${activeTab === 'comment' ? 'active' : ''}`} data-electronic="comment" onClick={() => openTab('comment')}>Đánh giá</button>
-            <button id="tablink" className={`tablink ${activeTab === 'video' ? 'active' : ''}`} data-electronic="video" onClick={() => openTab('video')}>Video</button>
-
 
             {/* {tenkh ? (
               <div className="flex items-center">
@@ -61,23 +56,31 @@ import "../css/Admintest.css"
       <div class="wrapper_tabcontent font-bold">
         {/* khachhang */}
         <div id="khachhang" className={`tabcontent ${activeTab === 'khachhang' ? 'active' : ''}`}>
-          <h3 id="searchkh">Tìm email hoặc số điện thoại:</h3>
-          <input type="text" class="input_searchemailso" id="rssearch"></input>
-          <button id="Submit" class="submit_searchtenso"></button>
-          <h2 class="tkh">Tên khách hàng:</h2>
-          <h2 class="email">Email:</h2>
-          <h2 class="sdt">Số điện thoại:</h2>
-          <h2 class="mk">Mật khẩu:</h2>
-          <h2 class="role">Quyền hạn:</h2>
-          <input type="text" class="iptkh" ></input>
-          <input type="text" class="ipsdt" ></input>
-          <input type="text" class="ipemail" ></input>
-          <input type="text" class="ipmk" ></input>
-          <input type="number" class="iprole" id="myNumberam" onchange="limitNumberam()" min="0" max="1"></input>
-          <div id="buttonn">
-            <button id="btnaddkh" >Thêm</button>
-            <button id="btneditkh" >Sửa</button>
+        <div id="divphanquyen" className="flex">
+            <h3 id="phanquyen">Phân quyền:</h3>
+            <input type="text" class="optionphanquyen" id=""></input>
           </div>
+          <div id="divsearchtk" className="flex">
+            <h3 id="searchtk">Tìm email hoặc số điện thoại:</h3>
+            <input type="text" class="input_searchemailso" id="rssearch"></input>
+            <button id="Submit" class="submit_searchtenso"></button>
+          </div>
+          {/* <div id="formplayer">
+            <h2 class="tkh">Tên khách hàng:</h2>
+            <h2 class="email">Email:</h2>
+            <h2 class="sdt">Số điện thoại:</h2>
+            <h2 class="mk">Mật khẩu:</h2>
+            <h2 class="role">Quyền hạn:</h2>
+            <input type="text" class="iptkh" ></input>
+            <input type="text" class="ipsdt" ></input>
+            <input type="text" class="ipemail" ></input>
+            <input type="text" class="ipmk" ></input>
+            <input type="number" class="iprole" id="myNumberam" onchange="limitNumberam()" min="0" max="1"></input>
+            <div id="buttonn">
+              <button id="btnaddkh" >Thêm</button>
+              <button id="btneditkh" >Sửa</button>
+            </div>
+          </div> */}
           <div class="tbkh">
             <div id="trsp1">
               <div id="thsp1">
