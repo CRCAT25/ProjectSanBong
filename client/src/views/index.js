@@ -6,3 +6,4 @@ export {default as Admin } from "./Admin";
 export {default as Footer } from "./Footer";
 export {default as FormHoanTien } from "./FormHoanTien";
 export {default as FormHoaDon } from "./FormHoaDon";
+export {default as FormInfoCaNhan } from "./FormInfoCaNhan";
