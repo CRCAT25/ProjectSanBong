@@ -2,16 +2,15 @@
 
 .landing-fAj {
   background-color: #DFFFD3;
-  height: 2000px;
+  height: fit-content;
   width: 100%;
   padding: 0;
   margin-top: -15px;
 }
-.qun-l-sn-dgX{
-  width: 80%;
+.qun-l-sn-dgX, .auto-group-hdgw-1Js, .group-289693-7qd{
+  width: 100%;
   height: fit-content;
   padding: 40px 10% 40px 10%;
-  background-color: antiquewhite;
 }
 .main-advertise-letter-fNK{
   width: 100%;
@@ -34,18 +33,19 @@
 .s-in-thoi--wGP, .khung-gi--JA7, .cho-php-giao-hu-TKq{
   margin-left: 25px;
   width: fit-content;
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 600;
 }
-.auto-group-1jl7-TBh, .auto-group-6ywm-4sd{
-  height: 30px;
+.auto-group-1jl7-TBh, .auto-group-6ywm-4sd, .auto-group-veaw-32b, .auto-group-xznk-duu{
+  background-color: white;
+  height: 72px;
   padding: 20px;
   font-size: 20px;
   border-radius: 10px; 
   border: 1px #52C41A solid;
   width: 458px;
 }
-.selectLoaiS, .selectLoaiLS, .selectKhungGio, .selectTenLS{
+.selectLoaiS, .selectLoaiLS, .selectKhungGio, .selectTenLS, .ngayLS, .selectGH{
   width: 500px;
   height: 72px;
   padding: 20px;
@@ -93,10 +93,12 @@
   background-color: #9BCE89;
   font-size: 30px;
   padding: 20px;
+  text-align: center;
   border-radius: 10px;
   border: #9BCE89 solid 1px;
 }
-.nt-thm-88j:hover, .nt-cp-nht-nDH:hover, .nt-xa-qBZ:hover{
+.btnThemSan:hover, .btnCapNhatSan:hover, .btXoaSan:hover,
+.btnThemLich:hover, .btnCapNhatLich:hover, .btnXoaLich:hover{
   background-color: #2B790F;
   color: white;
   cursor: pointer;
@@ -114,7 +116,7 @@
 }
 .sn-XTh{
   background-color: #2B790F;
-  width: 90%;
+  width: 100%;
   height: 300px;
   padding: 40px 5% 40px 5%;
   margin: 20px 0 20px 0;
@@ -162,20 +164,10 @@
   
 }
 .btn{
-  width: 100%;
-  height: 100px;
-  border-radius: 30px;
-  align-content: center;
-}
-.fa-edi{
   width: 50px;
   height: 50px;
-}
-.auto-group-hdgw-1Js{
-  width: 80%;
-  height: fit-content;
-  padding: 40px 10% 40px 10%;
-  background-color: bisque;
+  border-radius: 6px;
+  background-color: white;
 }
 .main-advertise-letter-XHD{
   width: 100%;
@@ -193,13 +185,52 @@
   line-height: normal;
   margin-left: 5%;
 }
-.auto-group-jx7d-jPH{
-  background-color: wheat;
+.auto-group-jx7d-jPH, .auto-group-evfy-kt3, .auto-group-fpes-Zns{
   display:  flex;
   width: 85%;
   margin: 0 7.5% 0 7.5%;
+  justify-content: space-between;
+}
+.nhp-tn-sn-p9q, .chn-loi-sn-ofy, .nhp-tn-sn-dB9, .nhp-tn-sn-wjZ, .nhp-tn-sn-Srf, .groupkhGHuu, .nhp-tn-sn-9o1{
+  width: 45%;
+}
+.nhp-tn-sn-vKu{
+  width: 50%;
+}
+.auto-group-veaw-32b, .auto-group-xznk-duu, .selectLoaiLS, .ngayLS, .selectTenLS{
+  width: 100%;
+}
+.selectKhungGio, .selectGH{
+  width: 100%;
+}
+.tenKhach, .soDT{
+  color: gray;
 }
 
+.groupkhGHuu{
+  display: flex;
+  justify-content: space-between;
+}
+.group-289658-51m{
+  display: flex;
+  justify-content: space-evenly;
+  width: 1000px;
+  
+}
+.auto-group-rifm-GJX{
+  display: flex;
+  justify-content: space-between;
+}
+.group-289691-oZM{
+  background-color: #2B790F;
+  width: 25%;
+  height: 400px;
+}
+.auto-group-kpmu-omd{
+  width: 70%;
+  background-color: white;
+  height: 400px;
+}
 img{
   width: 400px;
 }
