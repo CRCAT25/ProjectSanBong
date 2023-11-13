@@ -1,5 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
 
  const Admin = () => {
 
@@ -8,6 +10,17 @@ import "../css/Admintest.css"
   const openTab = (tab) => {
     setActiveTab(tab);
   };
+
+  const Icon18px = ({classIcon}) => {
+    const iconSize = {
+        width: "18px",
+        height: "18px",
+        color: "#black",
+    };
+    return(
+        <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
+    )
+}
 
   return (
     <div>
@@ -63,24 +76,51 @@ import "../css/Admintest.css"
           <div id="divsearchtk" className="flex">
             <h3 id="searchtk">Tìm email hoặc số điện thoại:</h3>
             <input type="text" class="input_searchemailso" id="rssearch"></input>
-            <button id="Submit" class="submit_searchtenso"></button>
+            <button id="Submit" class="submit_searchtenso"><Icon18px classIcon={faMagnifyingGlass}/></button>
           </div>
-          {/* <div id="formplayer">
-            <h2 class="tkh">Tên khách hàng:</h2>
+          <div id="" className=" w-[50%] mx-auto">
+            <div className="w-full grid grid-cols-2 gap-[100px]">
+              <div className="col-span-1 flex justify-between px-8">
+                <div>Tên khách hàng:</div>
+                <input type="text" class="iptkh" ></input>
+              </div>
+              <div className="col-span-1 flex justify-between">
+                <div>Tên khách hàng:</div>
+                <input type="text" class="iptkh" ></input>
+              </div>
+            </div>
+
+            <div className="w-full mt-10">
+              <div className="flex">
+                <div>Tên khách hàng:</div>
+                <input type="text" class="iptkh" ></input>
+              </div>
+            </div>
+
+            <div className="w-full grid grid-cols-2 gap-[100px] mt-10">
+              <div className="col-span-1 flex justify-between">
+                <div>Tên khách hàng:</div>
+                <input type="text" class="iptkh" ></input>
+              </div>
+              <div className="col-span-1 flex justify-between">
+                <div>Tên khách hàng:</div>
+                <input type="text" class="iptkh" ></input>
+              </div>
+            </div>
+            {/* <h2 class="tkh">Tên khách hàng:</h2>
             <h2 class="email">Email:</h2>
             <h2 class="sdt">Số điện thoại:</h2>
+            <h2 class="namsinh">Năm sinh:</h2>
             <h2 class="mk">Mật khẩu:</h2>
-            <h2 class="role">Quyền hạn:</h2>
             <input type="text" class="iptkh" ></input>
             <input type="text" class="ipsdt" ></input>
             <input type="text" class="ipemail" ></input>
             <input type="text" class="ipmk" ></input>
-            <input type="number" class="iprole" id="myNumberam" onchange="limitNumberam()" min="0" max="1"></input>
             <div id="buttonn">
               <button id="btnaddkh" >Thêm</button>
               <button id="btneditkh" >Sửa</button>
-            </div>
-          </div> */}
+            </div> */}
+          </div>
           <div class="tbkh">
             <div id="trsp1">
               <div id="thsp1">

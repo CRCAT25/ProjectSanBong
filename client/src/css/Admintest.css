@@ -3,6 +3,7 @@ body {
     width: auto;
     margin: 0;
     background-color: white;
+    font-family: Poppins', sans-serif';
 }
 
 #login {
@@ -1036,28 +1037,30 @@ th {
 
 .input_searchemailso {
     padding: 10px;
-    width: 200px !important;
-    height: 50px !important;
+    margin-left: 10px;
+    margin-top: -5px;
+    width: 206.77px !important;
+    height: 40px !important;
     background: none;
-    border: 3px solid #FF3366 !important;
-    border-radius: 50px !important;
+    border: 3px solid #88F660 !important;
+    border-radius: 10px !important;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     font-size: 15px !important;
     color: #1e1d1d !important;
     outline: none;
-    transition: .5s;
-    transform: translate(980px, 0px);
     text-align: center;
 }
 
 .submit_searchtenso {
     padding: 10px;
-    width: 50px;
-    height: 50px;
+    margin-top: -8px;
+    margin-left: 10px;
+    width: 45px;
+    height: 45px;
     background: none;
-    border: 3px solid #FF3366 !important;
+    border: 3px solid #88F660 !important;
     border-radius: 50px !important;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
@@ -1066,7 +1069,6 @@ th {
     color: #1e1d1d !important;
     outline: none;
     transition: .5s;
-    transform: translate(990px, 0px);
 
 }
 
@@ -1107,12 +1109,12 @@ th {
 .optionphanquyen {
     padding: 10px;
     margin-left: 10px;
-    margin-top: -10px;
-    width: 200px !important;
-    height: 50px !important;
+    margin-top: -5px;
+    width: 206.77px !important;
+    height: 40px !important;
     background: none;
-    border: 3px solid #FF3366 !important;
-    border-radius: 50px !important;
+    border: 3px solid #88F660 !important;
+    border-radius: 10px !important;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
@@ -1123,40 +1125,62 @@ th {
 }
 
 #khachhang{
-    border: #fac2d0 solid 2px;
+    border: #ffffff solid 2px;
 }
 #divphanquyen{
-    margin-top: 100px;
+    margin: auto;
+    margin-top: 20px;
     font-size: 18px;
-    justify-content: center;
-    width: 100%;
+  
+    width: 40%;
 }
+
 #divsearchtk{
-    /* margin-top: 200px; */
+    margin:auto;
+    margin-top: 30px;
     font-size: 18px;
-    justify-content: center;
-    width: 100%;
-    background-color: #e76565;
+    width: 40%;
 }
 #phanquyen{
     font-size: 18px;
+    text-align: right;
+    width: 45%;
+    margin-right: 10px;
+
 }
 #searchtk {
+    width: 45%;
+    text-align: right;
+    margin-right: 10px;
 }
 
+#formplayer{
+    border: #88F660 solid 4px;
+    height: 352.49px;
+    width: 1035.82px;
+    margin: auto;
+    margin-top: 30px;
+    border-radius: 10px;
+}
 
 
 
 .iptkh {
-    transform: translate(500px, 80px);
+    padding: 10px;
+    margin-left: 10px;
+    margin-top: -5px;
+    width: 206.77px !important;
     height: 40px !important;
-    width: 11%;
-    border-radius: 20px !important;
-    position: absolute;
-    border: 3px solid #FF3366 !important;
-    text-align: center;
+    background: none;
+    border: 3px solid #88F660 !important;
+    border-radius: 10px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
     font-weight: bold;
+    font-size: 15px !important;
+    color: #1e1d1d !important;
     outline: none;
+    text-align: center;
     
 }
 
@@ -1202,7 +1226,7 @@ th {
     border: 3px solid #FF3366 !important;
     width: 11%;
     border-radius: 20px !important;
-    position: absolute;
+    /* position: absolute; */
     text-align: center;
     font-weight: bold;
     outline: none;
@@ -1210,39 +1234,39 @@ th {
 }
 
 .sdt {
-    transform: translate(616px, 105px);
-    position: absolute;
+    /* transform: translate(616px, 105px);
+    position: absolute; */
     font-size: 18px;
 
 
 }
 
 .tkh {
-    transform: translate(602px, 35px);
-    position: absolute;
+    /* transform: translate(602px, 35px);
+    position: absolute; */
     font-size: 18px;
 
 
 }
 
 .mk {
-    transform: translate(1000px, 105px);
-    position: absolute;
+    /* transform: translate(1000px, 105px);
+    position: absolute; */
     font-size: 18px;
 
 
 }
 
 .email {
-    transform: translate(1040px, 38px);
-    position: absolute;
+    /* transform: translate(1040px, 38px);
+    position: absolute; */
     font-size: 18px;
 
 }
 
-.role {
-    transform: translate(630px, 172px);
-    position: absolute;
+.namsinh {
+    /* transform: translate(630px, 172px);
+    position: absolute; */
     font-size: 18px;
 
 }
