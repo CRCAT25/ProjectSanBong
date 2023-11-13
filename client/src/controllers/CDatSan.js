@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
+import FootballField from "../models/FootballField";
 
 const GetInfoCoSo = (idCoSo) =>{
     const[coSo, setCoSo] = useState('');
@@ -19,10 +20,13 @@ const GetAllSanFromCoSo = (idCoSo) =>{
         axios.post('',{
             idCoSo: idCoSo
         }).then(res => {
-            setSanBongs(res.data)
+            setSanBongs(res.data.map(sanbong => new FootballField(sanbong.idSan, sanbong.idTaiKhoan, sanbong.idLoaiSan, sanbong.tenSan, sanbong.giaTien, sanbong.trangThai)))
             return sanBongs
         })
     })
 }
 
-export default CDatSan
+export{
+    GetInfoCoSo, 
+    GetAllSanFromCoSo
+} 
