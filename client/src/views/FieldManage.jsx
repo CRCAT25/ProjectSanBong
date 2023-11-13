@@ -89,29 +89,14 @@ const FieldManage = () => {
               </div>
               <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
               <button class="btn">
-                <i class="fa fa-edit fa-3x"></i>
+                <i class="fa fa-edit fa-2x"></i>
                 </button>
               <button class="btn">
-                <i class="fa fa-trash fa-3x"></i>
+                <i class="fa fa-trash fa-2x"></i>
                 </button>
               </div>
             </div>
           </div>
-          <img
-            className="screenshot121-1-YXm"
-            src="https://via.placeholder.com/1920x839"
-            id="257:748"
-          />
-          <img
-            className="ball2-Tej"
-            src="https://via.placeholder.com/1920x839"
-            id="257:750"
-          />
-          <img
-            className="football-bF9"
-            src="https://via.placeholder.com/1920x839"
-            id="257:749"
-          />
             <div className="auto-group-hdgw-1Js" id="Wa1AzrGdhotxoxgfMXhdgw">
               <p className="main-advertise-letter-XHD" id="257:945">
                 QUẢN LÝ LỊCH SÂN
@@ -157,7 +142,7 @@ const FieldManage = () => {
                     Ngày:
                   </div>
                   <div className="auto-group-efjs-9qd" id="Wa19yo8hWThy9FUqpkefJs">
-                    <input type="date" className="t7-31-10-2023-1cw" id="257:891">
+                    <input type="date" className="ngayLS" id="257:891">
                     </input>
                   </div>
                 </div>
@@ -174,6 +159,7 @@ const FieldManage = () => {
                       <option value="audi">Audi</option>
                     </select>
                 </div>
+                <div className="groupkhGHuu">
                 <div className="nhp-tn-sn-9o1" id="257:879">
                   <div className="khung-gi--JA7" id="257:882">
                     Khung giờ:
@@ -195,6 +181,7 @@ const FieldManage = () => {
                       <option value="opel">Opel</option>
                       <option value="audi">Audi</option>
                     </select>
+                </div>
                 </div>
               </div>
               <div className="auto-group-hhjs-nKm" id="Wa1AjrhcdDA61eXwBb9nwD">
