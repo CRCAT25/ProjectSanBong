@@ -10,7 +10,8 @@ import {
   FormHoanTien,
   FormLogin,
   FormHoaDon,
-  FormInfoCaNhan
+  FormInfoCaNhan,
+  FormLichSu
 } from "./views"
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/FormLogin" element={<FormLogin/>}/>
         <Route path="/FormHoaDon" element={<FormHoaDon/>}/>
         <Route path="/FormInfoCaNhan" element={<FormInfoCaNhan/>}/>
+        <Route path="/FormLichSu" element={<FormLichSu/>}/>
 
       </Routes>
     </BrowserRouter>
