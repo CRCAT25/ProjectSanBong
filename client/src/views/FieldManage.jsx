@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronLeft,
-  faImage
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 const FieldManage = () => {
   return (
@@ -53,10 +53,7 @@ const FieldManage = () => {
               Ảnh:
             </div>
             <div className="auto-group-bp27-YwD" id="Wa16pPQJdzzne9yQzcbp27">
-            <FontAwesomeIcon
-                icon={faImage}
-                size="2x"
-              />
+              <FontAwesomeIcon icon={faImage} size="2x" />
             </div>
           </div>
           <div className="auto-group-hhjs-nKm" id="Wa16MefrYhWfBdYBexHhJs">
@@ -75,75 +72,75 @@ const FieldManage = () => {
           Danh sách sân
         </div>
         <div className="scrollContainerSan">
-        <div className="sn-XTh" id="257:844">
-          <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
-            <div className="tn-sn-input-J75" id="257:849">
-              <div className="tenSan">Tên sân</div>
+          <div className="sn-XTh" id="257:844">
+            <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
+              <div className="tn-sn-input-J75" id="257:849">
+                <div className="tenSan">Tên sân</div>
+              </div>
+              <div className="tn-sn-input-Mr3" id="257:852">
+                <div className="loaiSan">Loại sân</div>
+              </div>
+              <div className="tn-sn-input-J91" id="257:855">
+                <div className="donGia">Đơn giá</div>
+              </div>
             </div>
-            <div className="tn-sn-input-Mr3" id="257:852">
-              <div className="loaiSan">Loại sân</div>
+            <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
+              <img
+                className="imgSan"
+                src="https://via.placeholder.com/1920x839"
+                id="257:863"
+              />
+              <img
+                className="imgSan"
+                src="https://via.placeholder.com/1920x839"
+                id="260:1081"
+              />
             </div>
-            <div className="tn-sn-input-J91" id="257:855">
-              <div className="donGia">Đơn giá</div>
-            </div>
-          </div>
-          <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
-            <img
-              className="imgSan"
-              src="https://via.placeholder.com/1920x839"
-              id="257:863"
-            />
-            <img
-              className="imgSan"
-              src="https://via.placeholder.com/1920x839"
-              id="260:1081"
-            />
-          </div>
-          <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-            <button class="btn">
-              <i class="fa fa-edit fa-2x"></i>
-            </button>
-            <button class="btn">
-              <i class="fa fa-trash fa-2x"></i>
-            </button>
-          </div>
-        </div>
-        <div className="sn-XTh" id="257:844">
-          <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
-            <div className="tn-sn-input-J75" id="257:849">
-              <div className="tenSan">Tên sân</div>
-            </div>
-            <div className="tn-sn-input-Mr3" id="257:852">
-              <div className="loaiSan">Loại sân</div>
-            </div>
-            <div className="tn-sn-input-J91" id="257:855">
-              <div className="donGia">Đơn giá</div>
+            <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
+              <button class="btn">
+                <i class="fa fa-edit fa-2x"></i>
+              </button>
+              <button class="btn">
+                <i class="fa fa-trash fa-2x"></i>
+              </button>
             </div>
           </div>
-          <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
-            <img
-              className="imgSan"
-              src="https://via.placeholder.com/1920x839"
-              id="257:863"
-            />
-            <img
-              className="imgSan"
-              src="https://via.placeholder.com/1920x839"
-              id="260:1081"
-            />
+          <div className="sn-XTh" id="257:844">
+            <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
+              <div className="tn-sn-input-J75" id="257:849">
+                <div className="tenSan">Tên sân</div>
+              </div>
+              <div className="tn-sn-input-Mr3" id="257:852">
+                <div className="loaiSan">Loại sân</div>
+              </div>
+              <div className="tn-sn-input-J91" id="257:855">
+                <div className="donGia">Đơn giá</div>
+              </div>
+            </div>
+            <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
+              <img
+                className="imgSan"
+                src="https://via.placeholder.com/1920x839"
+                id="257:863"
+              />
+              <img
+                className="imgSan"
+                src="https://via.placeholder.com/1920x839"
+                id="260:1081"
+              />
+            </div>
+            <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
+              <button class="btn">
+                <i class="fa fa-edit fa-2x"></i>
+              </button>
+              <button class="btn">
+                <i class="fa fa-trash fa-2x"></i>
+              </button>
+            </div>
           </div>
-          <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-            <button class="btn">
-              <i class="fa fa-edit fa-2x"></i>
-            </button>
-            <button class="btn">
-              <i class="fa fa-trash fa-2x"></i>
-            </button>
-          </div>
-        </div>
         </div>
       </div>
-      <hr />
+      <hr className="divideLine"/>
       <div className="auto-group-hdgw-1Js" id="Wa1AzrGdhotxoxgfMXhdgw">
         <p className="main-advertise-letter-XHD" id="257:945">
           QUẢN LÝ LỊCH SÂN
@@ -296,71 +293,78 @@ const FieldManage = () => {
           </div>
           <div className="auto-group-kpmu-omd" id="Wa1D1TazzFCfTx5RoHkPmu">
             <div className="rowSan">
-              <div className="tenSanLS"><div>San 1</div>
-            </div>
-            <div className="schedule">
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <hr className="line"/>
-            </div>
-            </div>
-            <div className="rowSan">
-              <div className="tenSanLS"><div>San 1</div>
-            </div>
-            <div className="schedule">
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <hr className="line"/>
-            </div>
-            </div><div className="rowSan">
-              <div className="tenSanLS"><div>San 1</div>
-            </div>
-            <div className="schedule">
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <hr className="line"/>
-            </div>
-            </div><div className="rowSan">
-              <div className="tenSanLS"><div>San 1</div>
-            </div>
-            <div className="schedule">
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <hr className="line"/>
-            </div>
+              <div className="tenSanLS">
+                <div>San 1</div>
+              </div>
+              <div className="schedule">
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <hr className="line" />
+              </div>
             </div>
             <div className="rowSan">
-              <div className="tenSanLS"><div>San 1</div>
+              <div className="tenSanLS">
+                <div>San 1</div>
+              </div>
+              <div className="schedule">
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <hr className="line" />
+              </div>
             </div>
-            <div className="schedule">
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <div className="date"></div>
-              <hr className="line"/>
+            <div className="rowSan">
+              <div className="tenSanLS">
+                <div>San 1</div>
+              </div>
+              <div className="schedule">
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <hr className="line" />
+              </div>
             </div>
+            <div className="rowSan">
+              <div className="tenSanLS">
+                <div>San 1</div>
+              </div>
+              <div className="schedule">
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <hr className="line" />
+              </div>
+            </div>
+            <div className="rowSan">
+              <div className="tenSanLS">
+                <div>San 1</div>
+              </div>
+              <div className="schedule">
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <div className="date"></div>
+                <hr className="line" />
+              </div>
             </div>
           </div>
         </div>
-        <div className="ch-thch-3hD" id="293:531">
+        {/* <div className="ch-thch-3hD" id="293:531">
           <div className="ttlLS">Loại sân</div>
           <div className="groupLC">
             <div className="auto-group-zg8b-Kud" id="Wa1GnmTFAV54gyzyWwZG8B">
@@ -368,40 +372,37 @@ const FieldManage = () => {
               <p className="c-nhn-to-oiK" id="293:529">
                 Cỏ nhân tạo
               </p>
-              
             </div>
             <div className="auto-group-lpyv-fs1" id="Wa1Gtr7Ssyyu181HufLPyV">
-            <div className="rectangle-4319-kk3" id="293:532"></div>
+              <div className="rectangle-4319-kk3" id="293:532"></div>
               <p className="c-t-nhin-LCT" id="293:530">
                 Cỏ tự nhiên
               </p>
             </div>
           </div>
-          <hr className="line1"/>
+          <hr className="line1" />
           <div className="ttlLS">Trạng thái</div>
           <div className=" groupStatus">
-          <div className="auto-group-ky5h-U3m" id="Wa1GzWcgBBpKMCHUgfKY5h">
-            <div className="rectangle-4319-kk2"></div>
-            <p className="trng-RNK" id="293:533">
-              Trống
-            </p>
+            <div className="auto-group-ky5h-U3m" id="Wa1GzWcgBBpKMCHUgfKY5h">
+              <div className="rectangle-4319-kk2"></div>
+              <p className="trng-RNK" id="293:533">
+                Trống
+              </p>
+            </div>
+            <div className="auto-group-quzw-tdH" id="Wa1H5WUMCijGwy145JqUzw">
+              <div className="rectangle-4319-kk4"></div>
+              <p className="t-Mmm" id="293:534">
+                Đã đặt
+              </p>
+            </div>
+            <div>
+              <div className="rectangle-4319-kk8"></div>
+              <p classNameName="hon-thnh-BF1" id="293:535">
+                Hoàn thành
+              </p>
+            </div>
           </div>
-          <div className="auto-group-quzw-tdH" id="Wa1H5WUMCijGwy145JqUzw">
-            <div className="rectangle-4319-kk4"></div>
-            <p className="t-Mmm" id="293:534">
-              Đã đặt
-            </p>
-          </div>
-          <div>
-            <div className="rectangle-4319-kk8"></div>
-            <p classNameName="hon-thnh-BF1" id="293:535">
-            Hoàn thành
-          </p>
-          </div>
-          
-          </div>
-          
-        </div>
+        </div> */}
       </div>
     </div>
   );
