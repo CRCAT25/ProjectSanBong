@@ -20,11 +20,9 @@ const Icon24px = ({classIcon}) => {
 }
 
 const FormHoanTien = () => {
-    const[bank,selectedBank] = useState();
     let kq = [];
-
-    function test () {
-        const a = async () => {
+    function getNganHang () {
+        const nganHang = async () => {
             let vietQR = new VietQR({
                 clientID: '7d8635e1-1751-455a-bacb-5b23ff254943',
                 apiKey: '54c2ad4f-9485-445e-b9e0-5593699ab26b',
@@ -39,17 +37,12 @@ const FormHoanTien = () => {
                 document.querySelector("#idBank").innerHTML = row
             }).catch((err)=>{});
         }
-        a();
+        nganHang();
         // alert(kq)
     }
     useEffect(()=>{
-        test();
+        getNganHang();
     },[])
-
-
-
-    
-
   return (
     <div className='w-[40%] mx-auto h-auto p-[30px] bg-[#DDFCD2] my-[10%]'>
         <div className='text-center text-[30px] font-[600] text-[#2B790F]'>HOÀN TIỀN</div>
