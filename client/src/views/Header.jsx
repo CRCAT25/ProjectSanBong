@@ -5,6 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faBell, faXmark} from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router-dom";
 import FormLogin from './FormLogin'
+import FormSignUp from './FormSignUp'
 
 const Icon24px = ({classIcon}) => {
     const iconSize = {
@@ -34,11 +35,11 @@ export default function Header() {
 
     const OpenFormLogin = () => {
         var bgCus = document.getElementsByClassName('bgCus')[0];
-        bgCus.style.opacity = "0.6"
         var formLogin = document.getElementById('formLogin');
-        // formLogin.classList.toggle('hidden');
         formLogin.style.opacity = "10"
         formLogin.style.top = "24%"
+        CloseFormSignUp()
+        bgCus.style.opacity = "0.6"
     }
 
     const CloseFormLogin = () => {
@@ -49,11 +50,30 @@ export default function Header() {
         formLogin.style.top = "-100%";
     }
 
+    const OpenFormSignUp = () => {
+        var bgCus = document.getElementsByClassName('bgCus')[0];
+        var formSignUp = document.getElementById('formSignUp');
+        formSignUp.style.opacity = "10"
+        formSignUp.style.top = "-60%"
+        CloseFormLogin()
+        bgCus.style.opacity = "0.6"
+    }
+
+    const CloseFormSignUp = () => {
+        var bgCus = document.getElementsByClassName('bgCus')[0];
+        bgCus.style.opacity = "0.1";
+        var formSignUp = document.getElementById('formSignUp');
+        formSignUp.style.opacity = "0";
+        formSignUp.style.top = "-100%";
+    }
+
     useEffect(() => {
         var bgCus = document.getElementsByClassName('bgCus')[0];
         bgCus.addEventListener('click', CloseFormLogin);
+        bgCus.addEventListener('click', CloseFormSignUp);
         var iconClose = document.getElementsByClassName('iconClose')[0];
         iconClose.addEventListener('click', CloseFormLogin);
+
 
         // Cleanup the event listener when the component unmounts
         return () => {
@@ -76,7 +96,7 @@ export default function Header() {
                     <Icon24px classIcon={faBell}/>
                 </li>
                 <li>
-                    <button className='buttonXacNhan w-[130px] h-[40px]'>Sign up</button>
+                    <button className='buttonXacNhan w-[130px] h-[40px]' onClick={OpenFormSignUp}>Sign up</button>
                 </li>
                 <li>
                     <button className='w-[130px] h-[40px]' onClick={OpenFormLogin}>Sign in</button>
@@ -90,6 +110,10 @@ export default function Header() {
         <div id="formLogin" className='top-[-100%] duration-300 relative z-1000 opacity-0 w-[50%] mx-auto'>
             <FormLogin/>
             <div className='absolute top-1 right-1 cursor-pointer iconClose'><IconClose/></div>
+        </div>  
+        <div id="formSignUp" className='top-[-100%] duration-300 relative z-1000 opacity-0 w-[30%] mx-auto'>
+            <FormSignUp/>
+            <button className='absolute bottom-6 text-[#4D74FF] cursor-pointer w-full flex justify-center mt-[1px]' onClick={OpenFormLogin}>Đã có tài khoản</button>
         </div>  
     </div>
   )

@@ -23,7 +23,7 @@ const Icon24px = ({classIcon, top}) => {
 
 const FormLogin = () => {
   return (
-    <div className='main mx-auto grid grid-cols-5'>
+    <div className='mx-auto grid grid-cols-5 relative'>
         <div className="col-span-2">
             <img className='rounded-l-[10px]' src="../assets/imgLogin.png" alt="" />
         </div>
