@@ -1,16 +1,16 @@
 import axios from "axios";
 import Account from "./Account";
 class CoSoSan extends Account{
-    constructor(idAccount, idPhanQuyen, ten, email, soDienThoai, tenCoSo, diaChiCoSo, nganHang, sTK, matKhau, xacThuc){
-        super(idAccount, idPhanQuyen, ten, email, soDienThoai, nganHang, sTK, matKhau, xacThuc)
-        this.TenCoSo = tenCoSo;
+    constructor(idAccount, idPhanQuyen, tenCoSo, email, soDienThoai, diaChiCoSo, nganHang, sTK, anh, matKhau, xacThuc){
+        super(idAccount, idPhanQuyen, tenCoSo, email, soDienThoai, nganHang, sTK, matKhau, xacThuc)
         this.DiaChiCoSo = diaChiCoSo;
+        this.Anh = anh;
     }
     GetAllCoSo() {
-        axios.post("http://localhost:8081/getAllCoSo", {})
+        return axios.post("http://localhost:8081/getAllCoSo", {})
             .then(response => {
                 const listCoSo = this.initCoSo(response.data);
-                console.log(response.data);
+                return listCoSo
                 // Do something with listCoSo if needed
             })
             .catch(error => {
@@ -23,7 +23,7 @@ class CoSoSan extends Account{
         })
         .then(response => {
             const listCoSo = this.initCoSo(response.data);
-            console.log(response.data)
+            console.log(listCoSo)
             return listCoSo;
         })
         .catch(error => {
@@ -34,7 +34,7 @@ class CoSoSan extends Account{
     initCoSo(listCoSo){
         const coSoList = [];
         listCoSo.forEach(coso => {
-            const itemCoSo = new CoSoSan(coso.idAccount, coso.idPhanQuyen, coso.ten, coso.email, coso.soDienThoai, coso.tenCoSo, coso.diaChiCoSo, coso.nganHang, coso.sTK, coso.matKhau, coso.xacThuc);
+            const itemCoSo = new CoSoSan(coso.IDTaiKhoan, coso.IDPhanQuyen, coso.Ten, coso.Email, coso.SoDienThoai, coso.DiaChiCoSo, coso.NganHang, coso.STK, coso.Anh, coso.MatKhau, coso.XacThuc);
             coSoList.push(itemCoSo);
         });
         return coSoList

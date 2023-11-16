@@ -104,9 +104,12 @@ export const OrderField = () => {
     }
     const[coSo, setCoSo] = useState([]);
     
-
-    const GetCoSo = () =>{
-        console.log(getAllCoSo())
+    const GetCoSo = async () =>{
+        let listCoso
+        listCoso = await getAllCoSo()
+        setCoSo(listCoso)
+        console.log(listCoso)
+        console.log(coSo)
     }
     
 
@@ -133,26 +136,15 @@ export const OrderField = () => {
                     <div className="absolute right-4  top-[32px] cursor-pointer" onClick={GetCoSo}> <Icon24px classIcon={faMagnifyingGlass}/> </div>
                 </div>
                 
+                {/* {coSo.map((data, i) => (
+                    <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex " key={i}>
+                        <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                        <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">{data.Ten}</span>
+                    </div>
+                ))} */}
+                
+                
 
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">Cơ sở sân 1</span>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
-                </div>
             </div>
 
 

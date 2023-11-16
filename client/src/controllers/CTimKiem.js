@@ -17,10 +17,11 @@ const TimKiemSanBong = (tenCoSo, diaChiCoSo) =>{
     });
 }
 
-const getAllCoSo = () =>{
-
-   const cosoSan = new CoSoSan();
-   cosoSan.GetAllCoSo()
+const getAllCoSo = async () =>{
+   const cosoSan = new CoSoSan()
+   let listCoso
+   listCoso = await cosoSan.GetAllCoSo()
+   return listCoso
    
 }
 
