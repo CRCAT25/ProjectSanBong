@@ -51,7 +51,8 @@ var callAPI = (api) => {
             renderData(response.data, "cityLocation");
         });
 }
-callAPI(host);
+
+
 
 var renderData = (array, select) => {
     let row = ' <option disable value="">Chọn thành phố</option>';
@@ -59,6 +60,8 @@ var renderData = (array, select) => {
         row += `<option data-id="${tinhthanh.code}" value="${tinhthanh.name}">${tinhthanh.name}</option>`
     });
     document.querySelector("#" + select).innerHTML = row
+    // const tkhText = document.querySelector(`.tkh-${id}`).textContent;
+
 }
 
 
@@ -81,6 +84,10 @@ export const OrderField = () => {
     // setSelectedDate(selectedDate.)
     
     }
+    useEffect(() => {
+        callAPI(host);
+      }, []);
+
     const handleChangeCalendar = (date) =>{
         const formattedDate = date.toLocaleDateString("vi-VN", {
             weekday: "short", // Abbreviated weekday name (e.g., "Mon")

@@ -28,7 +28,8 @@ import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
       <div className=" item-center justify-center  py-[8px] w-[100%]">
           <div className="flex gap-3 justify-center ">
             <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''}`} data-electronic="khachhang" onClick={() => openTab('khachhang')}>Khách hàng</button>
-            <button id="tablink" className={`tablink ${activeTab === 'partner' ? 'active' : ''}`} data-electronic="partner" onClick={() => openTab('partner')}>Partner</button>
+            <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso')}>Partner</button>
+            <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin')}>Admin</button>
             <button id="tablink" className={`tablink ${activeTab === 'doanhthu' ? 'active' : ''}`} data-electronic="doanhthu" onClick={() => openTab('doanhthu')}>Doanh Thu</button>
 
             {/* {tenkh ? (
@@ -165,7 +166,7 @@ import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
         </div>
 
         {/* partner */}
-        <div id="partner" className={`tabcontent ${activeTab === 'partner' ? 'active' : ''}`}>
+        <div id="coso" className={`tabcontent ${activeTab === 'coso' ? 'active' : ''}`}>
           <h3 id="searchpartner">Tìm email hoặc số điện thoại:</h3>
           <input type="text" class="input_searchemailsopart" id="rssearch" ></input>
           <button id="Submit" class="submit_searchtensopart">Search</button>
