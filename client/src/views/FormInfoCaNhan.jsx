@@ -12,10 +12,9 @@ const Icon24px = ({classIcon}) => {
         <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
     )
 }
-
 const FormInfoCaNhan = () => {
   return (
-    <div className='w-[80%] mx-auto bg-[#379E13] h-[500px] rounded-[10px] my-[10%]'>
+    <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>
         <div className='mx-auto w-auto font-[600] text-[36px] text-center text-white p-10'>THÔNG TIN CÁ NHÂN</div>
         <div className='grid grid-cols-9 mx-5 '>
             <div className='col-span-2 h-[230px] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center'>
@@ -25,7 +24,7 @@ const FormInfoCaNhan = () => {
                 <div className='grid grid-rows-2 w-[100%] h-[50%]'>
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5  flex justify-between'>
-                            <div className='w-[30%] text-[19px] h-[auto] my-    auto text-white'>Họ tên:</div>
+                            <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Họ tên:</div>
                             <input className='w-[70%] h-[50px] bg-[#D9D9D9] rounded-[5px]' type="text" />
                         </div>
                     </div>
