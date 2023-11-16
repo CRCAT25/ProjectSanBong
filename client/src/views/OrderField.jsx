@@ -8,12 +8,14 @@ import axios from "axios";
 import {faLocationDot, 
     faChevronDown, 
     faMagnifyingGlass,
-    faCalendarDays,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
 import CDatSan, { GetAllSanFromCoSo, GetInfoCoSo } from "../controllers/CDatSan";
 import { useEffect } from "react";
 import { useRef } from "react";
+import "../controllers/CTimKiem";
+import { TimKiemSanBong, getAllCoSo } from "../controllers/CTimKiem";
+import CoSoSan from "../models/CoSoSan";
 const Icon24px = ({classIcon}) => {
     const iconSize = {
         width: "24px",
@@ -43,6 +45,8 @@ const ShowCoSo = (idCoso) => {
 
 
 
+
+/*                           CITY API                            */
 const host = 'https://provinces.open-api.vn/api/?depth=1';
 
 var callAPI = (api) => {
@@ -62,7 +66,7 @@ var renderData = (array, select) => {
 
 }
 
-
+/*                                                        */
 export const OrderField = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
@@ -96,6 +100,12 @@ export const OrderField = () => {
         setTextofDate(formattedDate);
         handleCalendarClick();
     }
+    const[coSo, setCoSo] = useState([]);
+    
+
+    const GetCoSo = () =>{
+        console.log(getAllCoSo())
+    }
     
 
     // Update the state variable textofDate with the formatted date
@@ -118,7 +128,7 @@ export const OrderField = () => {
                 </div>
                 <div className="flex relative">
                     <input className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-3 pr-12 mb-3 w-[470px]" placeholder="Tìm kiếm tên cơ sở ..." />
-                    <div className="absolute right-4  top-[32px]"> <Icon24px classIcon={faMagnifyingGlass}/> </div>
+                    <div className="absolute right-4  top-[32px] cursor-pointer" onClick={GetCoSo}> <Icon24px classIcon={faMagnifyingGlass}/> </div>
                 </div>
                 
 
