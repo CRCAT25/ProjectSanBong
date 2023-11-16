@@ -2,17 +2,17 @@ import { useEffect, useState } from "react"
 import axios from 'axios'
 import FootballField from "../models/FootballField";
 
-// const GetInfoCoSo = (idCoSo) =>{
-//     const[coSo, setCoSo] = useState('');
-//     useEffect(() =>{
-//         axios.post('',{
-//             idCoSo: idCoSo
-//         }).then(res => {
-//             setCoSo(res.data)
-//             return coSo
-//         })
-//     })
-// }
+const GetInfoCoSo = (idCoSo) =>{
+    const[coSo, setCoSo] = useState('');
+    useEffect(() =>{
+        axios.post('',{
+            idCoSo: idCoSo
+        }).then(res => {
+            setCoSo(res.data)
+            return coSo
+        })
+    })
+}
 
 const GetAllSanFromCoSo = (idCoSo) =>{
     const[sanBongs, setSanBongs] = useState([]);
