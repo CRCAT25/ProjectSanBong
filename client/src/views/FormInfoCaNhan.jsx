@@ -12,10 +12,9 @@ const Icon24px = ({classIcon}) => {
         <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
     )
 }
-
 const FormInfoCaNhan = () => {
   return (
-    <div className='w-[80%] mx-auto bg-[#379E13] h-[500px] rounded-[10px] my-[10%]'>
+    <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>
         <div className='mx-auto w-auto font-[600] text-[36px] text-center text-white p-10'>THÔNG TIN CÁ NHÂN</div>
         <div className='grid grid-cols-9 mx-5 '>
             <div className='col-span-2 h-[230px] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center'>
