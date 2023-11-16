@@ -23,7 +23,7 @@ const Icon24px = ({classIcon, top}) => {
 
 const FormLogin = () => {
   return (
-    <div className='main w-[50%] mx-auto grid grid-cols-5'>
+    <div className='main mx-auto grid grid-cols-5'>
         <div className="col-span-2">
             <img className='rounded-l-[10px]' src="../assets/imgLogin.png" alt="" />
         </div>
@@ -38,9 +38,7 @@ const FormLogin = () => {
             <div className='absolute top-[76%] left-1/2 translate-x-[-50%] w-[75%] text-[18px] flex justify-between'>
                 <a className='text-[#4D74FF] cursor-pointer'>Quên mật khẩu ?</a>
                 <a className=' cursor-pointer'>Tạo tài khoản</a>
-            </div>
-
-            
+            </div>            
         </div>
     </div>
   )
