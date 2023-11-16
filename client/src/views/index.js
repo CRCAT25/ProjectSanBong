@@ -8,3 +8,4 @@ export {default as FormHoanTien } from "./FormHoanTien";
 export {default as FormLogin } from "./FormLogin";
 export {default as FormHoaDon } from "./FormHoaDon";
 export {default as FormInfoCaNhan } from "./FormInfoCaNhan";
+export {default as FormLichSu } from "./FormLichSu";
