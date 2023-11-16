@@ -1,9 +1,11 @@
 const express = require("express");
 const mysql = require("mysql");
 const app = express();
+const cors = require("cors");
 const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+app.use(cors());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -12,12 +14,11 @@ const db = mysql.createConnection({
 });
 
 app.post("/getAllCoSo", (req, res) => {
-    console.log("hahahaha!");    
-    const sql = "select * from taikhoan";
-    db.query(sql, (err, data) => {
-        res.json(data)
-    });
+  const sql = "SELECT * FROM taikhoan"; // Assuming 'coso' is the correct table name
+  db.query(sql, (err, data) => {
+      res.json(data);
   });
+});
 
 app.post("/getCoSoBySearch", (req, res) => {
     const tenCoSo = req.body.tenCoSo;

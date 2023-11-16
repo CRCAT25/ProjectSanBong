@@ -106,7 +106,7 @@ export const OrderField = () => {
     
 
     const GetCoSo = () =>{
-        alert(getAllCoSo())
+        console.log(getAllCoSo())
     }
     
 

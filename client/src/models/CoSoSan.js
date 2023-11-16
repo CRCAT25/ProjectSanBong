@@ -7,13 +7,11 @@ class CoSoSan extends Account{
         this.DiaChiCoSo = diaChiCoSo;
     }
     GetAllCoSo() {
-        alert("askd")
-        axios.post("https://localhost:8081/getAllCoSo", {})
+        axios.post("http://localhost:8081/getAllCoSo", {})
             .then(response => {
-                // const listCoSo = this.initCoSo(response.data);
-                // console.log(response.data);
-                // return listCoSo;
-                console.log("no")
+                const listCoSo = this.initCoSo(response.data);
+                console.log(response.data);
+                // Do something with listCoSo if needed
             })
             .catch(error => {
                 console.error(error);
