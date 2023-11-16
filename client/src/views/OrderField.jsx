@@ -52,8 +52,6 @@ var callAPI = (api) => {
         });
 }
 
-
-
 var renderData = (array, select) => {
     let row = ' <option disable value="">Chọn thành phố</option>';
     array.forEach(tinhthanh => {

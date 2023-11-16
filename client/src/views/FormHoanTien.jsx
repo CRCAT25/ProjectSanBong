@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faAddressBook
 } from "@fortawesome/free-solid-svg-icons"
+import {VietQR} from 'vietqr';
+import axios from 'axios';
+
+// const host = 'https://api.vietqr.io/v2/banks';
+
+
 
 const Icon24px = ({classIcon}) => {
     const iconSize = {
@@ -14,6 +20,36 @@ const Icon24px = ({classIcon}) => {
 }
 
 const FormHoanTien = () => {
+    const[bank,selectedBank] = useState();
+    let kq = [];
+
+    function test () {
+        const a = async () => {
+            let vietQR = new VietQR({
+                clientID: '7d8635e1-1751-455a-bacb-5b23ff254943',
+                apiKey: '54c2ad4f-9485-445e-b9e0-5593699ab26b',
+            });
+            // list banks are supported create QR code by Vietqr
+            await vietQR.getBanks().then((banks)=>{
+                let row = ' <option disable value="">Chọn ngân hàng</option>';
+                banks.data.forEach(nghg => {
+                    row += `<option value="${nghg.code}">${nghg.code} - ${nghg.shortName}</option>`
+                });
+                
+                document.querySelector("#idBank").innerHTML = row
+            }).catch((err)=>{});
+        }
+        a();
+        // alert(kq)
+    }
+    useEffect(()=>{
+        test();
+    },[])
+
+
+
+    
+
   return (
     <div className='w-[40%] mx-auto h-auto p-[30px] bg-[#DDFCD2] my-[10%]'>
         <div className='text-center text-[30px] font-[600] text-[#2B790F]'>HOÀN TIỀN</div>
@@ -23,7 +59,8 @@ const FormHoanTien = () => {
             <Icon24px classIcon={faAddressBook}/>
             </div>
         </div>
-        <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Ngân Hàng'></input>
+        <select id='idBank' className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]' >
+        </select>   
         <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Số Tài Khoản'></input>
         <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Tên Tài Khoản'></input>
         <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Số tiền'></input>
