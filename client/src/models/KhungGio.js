@@ -15,6 +15,16 @@ class KhungGio{
                 console.error(error);
             });
     }
+    // GetKhungGioByDay(day) {
+    //     return axios.post("http://localhost:8081/GetKhungGioByDay",{})
+    //         .then(response => {
+    //             const list = this.initKhungGio(response.data);
+    //             return list
+    //         })
+    //         .catch(error => {
+    //             console.error(error);
+    //         });
+    // }
     initKhungGio(list){
         const resultList = [];
         list.forEach(khungGio => {
@@ -23,6 +33,14 @@ class KhungGio{
         });
         
         return resultList
+    }
+    getKhungGioById(idKhungGio){
+        return this.getAllKhungGio()
+            .then(allKhungGio => allKhungGio.find(khungGio => khungGio.IdKhungGio === idKhungGio))
+            .catch(error => {
+                console.error(error);
+            });
+        
     }
 }
 export default KhungGio

@@ -4,16 +4,16 @@ import CoSoSan from '../models/CoSoSan'
 
 const TimKiemSanBongC = async (tenCoSo, diaDiem) =>{
     const noCoSoMSG = "Có 0 cơ sở sân theo tiêu chí trên !"
-    checkInput = checkInput(tenCoSo, diaDiem);
+    const check = checkInput(tenCoSo, diaDiem);
     const cosoSan = new CoSoSan()
-    let listCoso
-    listCoso = await cosoSan.TimKiemSanBong(tenCoSo, diaDiem)
-    if(checkInput == false){
+    let listCoSo
+    listCoSo = await cosoSan.TimKiemSanBong(tenCoSo, diaDiem)
+    if(check == false){
         return getAllCoSo()
-    }else if(checkInput == true && listCoso.length == 0){
+    }else if(check == true && listCoSo.length == 0){
         return noCoSoMSG
-    }else if(checkInput == true && listCoso.length > 0){
-        return listCoso
+    }else if(check == true && listCoSo.length > 0){
+        return listCoSo
     }
 }
 
@@ -26,9 +26,8 @@ const getAllCoSo = async () =>{
 }
 
 const GetInfoCoSoSan = async (idCoSo) =>{
-  const cosoSan = new CoSoSan()
-  cosoSan = await cosoSan.GetInfoCoSoSan(idCoSo)
-  return cosoSan
+  const cosoSan = new CoSoSan() 
+  return await cosoSan.GetInfoCoSoSan(idCoSo)
 }
 
 const checkInput = (tenCoSo, diaDiem) =>{

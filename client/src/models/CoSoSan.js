@@ -36,7 +36,7 @@ class CoSoSan extends Account{
         return axios.post("http://localhost:8081/getInfoCoSo",{
                 idCoSo: idCoSo
             }).then(response => {
-                const itemCoSo = new CoSoSan(response.IDTaiKhoan, response.IDPhanQuyen, response.Ten, response.Email, response.SoDienThoai, response.DiaChiCoSo, response.NganHang, response.STK, response.Anh, response.MatKhau, response.XacThuc);
+                const itemCoSo = new CoSoSan(response.data[0].IDTaiKhoan, response.data[0].IDPhanQuyen, response.data[0].Ten, response.data[0].Email, response.data[0].SoDienThoai, response.data[0].DiaChiCoSo, response.data[0].NganHang, response.data[0].STK, response.data[0].Anh, response.data[0].MatKhau, response.data[0].XacThuc);
                 return itemCoSo
             })
             .catch(error => {
