@@ -80,7 +80,7 @@ export const OrderField = () => {
     }));
     const calendarRef = useRef();
     const handleCalendarClick = () =>{
-        setIsCalendarVisible(true);
+        setIsCalendarVisible(true); 
         if(isCalendarVisible){
             setIsCalendarVisible(false);
     }
