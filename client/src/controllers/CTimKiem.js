@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import CoSoSan from '../models/CoSoSan'
 
-const TimKiemSanBong = async (tenCoSo, diaDiem) =>{
+const TimKiemSanBongC = async (tenCoSo, diaDiem) =>{
     const noCoSoMSG = "Có 0 cơ sở sân theo tiêu chí trên !"
     checkInput = checkInput(tenCoSo, diaDiem);
     const cosoSan = new CoSoSan()
@@ -25,11 +25,18 @@ const getAllCoSo = async () =>{
    
 }
 
+const GetInfoCoSoSan = async (idCoSo) =>{
+  const cosoSan = new CoSoSan()
+  cosoSan = await cosoSan.GetInfoCoSoSan(idCoSo)
+  return cosoSan
+}
+
 const checkInput = (tenCoSo, diaDiem) =>{
     if(tenCoSo == "" && diaDiem == "") return false
     else return true
 }
 export {
-    TimKiemSanBong,
-    getAllCoSo
+    TimKiemSanBongC,
+    getAllCoSo,
+    GetInfoCoSoSan
 }

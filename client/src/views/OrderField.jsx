@@ -14,7 +14,7 @@ import CDatSan, { GetAllSanFromCoSo, GetInfoCoSo } from "../controllers/CDatSan"
 import { useEffect } from "react";
 import { useRef } from "react";
 import "../controllers/CTimKiem";
-import { TimKiemSanBong, getAllCoSo } from "../controllers/CTimKiem";
+import { TimKiemSanBong, getAllCoSo, TimKiemSanBongC, GetInfoCoSoSan } from "../controllers/CTimKiem";
 import CoSoSan from "../models/CoSoSan";
 const Icon24px = ({classIcon}) => {
     const iconSize = {
@@ -110,7 +110,7 @@ export const OrderField = () => {
         setCoSo(await getAllCoSo())
     }
     const TimKiemSanBong = async () => {
-        let result = await TimKiemSanBong(tenCoSoInput, diaDiemInput)
+        let result = await TimKiemSanBongC(tenCoSoInput, diaDiemInput)
         if(typeof result === 'string'){
             setCoSoMSG(result)
             setCoSoIsAString(true)
@@ -118,6 +118,11 @@ export const OrderField = () => {
             setCoSo(result)
             setCoSoIsAString(false)
         }
+    }
+
+    const[infoCoSo, setInfoCoSo] = useState(new CoSoSan)
+    const ChonCoSoSan = async (idCoso) => {
+        
     }
 
     const formatAddress = (diaChi) =>{
@@ -150,12 +155,12 @@ export const OrderField = () => {
                     <div className="absolute right-4  top-[32px] cursor-pointer" onClick={GetCoSo}> <Icon24px classIcon={faMagnifyingGlass}/> </div>
                 </div>
                 
-                {coSoIsAString === false ? coSo.map((data, i) => (
+                {coSoIsAString === true ? coSo.map((data, i) => (
                     <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex " key={i}>
                         <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
                         <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">{data.Ten}</span>
                     </div>
-                )) : "Khong thay"}
+                )) : (<div>{}</div>)}
                 
                 
 

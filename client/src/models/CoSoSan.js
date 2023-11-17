@@ -32,6 +32,18 @@ class CoSoSan extends Account{
         });
     }
 
+    GetInfoCoSoSan = (idCoSo) =>{
+        return axios.post("http://localhost:8081/getInfoCoSo",{
+                idCoSo: idCoSo
+            }).then(response => {
+                const itemCoSo = new CoSoSan(response.IDTaiKhoan, response.IDPhanQuyen, response.Ten, response.Email, response.SoDienThoai, response.DiaChiCoSo, response.NganHang, response.STK, response.Anh, response.MatKhau, response.XacThuc);
+                return itemCoSo
+            })
+            .catch(error => {
+            console.error(error);
+        })
+    }
+
     initCoSo(listCoSo){
         const coSoList = [];
         listCoSo.forEach(coso => {
