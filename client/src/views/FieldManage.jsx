@@ -5,7 +5,65 @@ import {
   faChevronLeft,
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
-const FieldManage = () => {
+import { useEffect } from "react";
+import { useState } from "react";
+import { getAllLoaiSan, getAllSanByTaiKhoan, getAllKhungGio} from "../controllers/CQuanLySan";
+
+
+
+const FieldManage =  () => {
+  const [getLoaiSans, setLoaiSans] = useState([]);
+  const [getSans, setSans] = useState([]);
+  const [getKhungGios, setKhungGios] = useState([]);
+
+  function getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    let month = today.getMonth() + 1; // Month is zero-based
+    let day = today.getDate();
+
+    // Add leading zero if month or day is a single digit
+    month = month < 10 ? `0${month}` : month;
+    day = day < 10 ? `0${day}` : day;
+
+    return `${year}-${month}-${day}`;
+  }
+
+  const handleDateChange = () =>{
+    document.getElementsByClassName("thng-10-WTm")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[1]+" / "+ document.getElementsByClassName("ngayLS")[0].value.split("-")[0]
+    document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
+  };
+  const changeDate = (daysToAdd) =>{
+    var currentDate = new Date(document.getElementsByClassName("ngayLS")[0].value);
+
+      // Increase the date by 1 day
+      currentDate.setDate(currentDate.getDate() + daysToAdd);
+
+      // Format the increased date and set it back to the input
+      var year = currentDate.getFullYear();
+      var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+      var day = currentDate.getDate().toString().padStart(2, '0');
+      document.getElementsByClassName("ngayLS")[0].value = `${year}-${month}-${day}`;
+    // if(document.getElementsByClassName("ngayLS").length > 0)
+    // document.getElementsByClassName("ngayLS")[0].value = document.getElementsByClassName("ngayLS")[0].value.Date
+      handleDateChange()
+  }
+  useEffect(() => {
+    GetLoaiSans()
+    document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
+    handleDateChange()
+    // GetKhungGios()
+    // GetAllSansByTaiKhoan("1")
+  }, []);
+  const GetLoaiSans = async () =>{
+    setLoaiSans(await getAllLoaiSan())
+  }
+  const GetKhungGios = async () =>{
+    setKhungGios(await getAllKhungGio())
+  }
+  const GetAllSansByTaiKhoan = async (IDTaiKhoan) =>{
+    setSans(await getAllSanByTaiKhoan(IDTaiKhoan))
+  }
   return (
     <div className="landing-fAj" id="257:562">
       <div className="qun-l-sn-dgX" id="257:798">
@@ -29,11 +87,13 @@ const FieldManage = () => {
                 Loại sân:
               </div>
               <div className="auto-group-xrjf-hkF" id="Wa1675FotPrCMP7b6jXrJF">
-                <select name="cars" className="selectLoaiS">
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="opel">Opel</option>
-                  <option value="audi">Audi</option>
+                <select  className="selectLoaiS">
+                <option value="none">--Loại sân--</option>
+                  {
+                    getLoaiSans.map((loaiSan, i) => (
+                      <option value={loaiSan.IdLoaiSan} >{loaiSan.TenLoaiSan}</option>
+                    ))
+                  }
                 </select>
               </div>
             </div>
@@ -170,48 +230,42 @@ const FieldManage = () => {
           Thông tin sân
         </div>
         <div className="auto-group-evfy-kt3" id="Wa19cUQtrzDDFZVKVTeVFy">
-          <div className="nhp-tn-sn-dB9" id="257:884">
-            <div className="loi--xUK" id="257:887">
-              Loại:
-            </div>
-            <select name="cars" className="selectLoaiLS">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="opel">Opel</option>
-              <option value="audi">Audi</option>
-            </select>
-          </div>
           <div className="nhp-tn-sn-wjZ" id="257:889">
             <div className="ngy--sNK" id="257:892">
               Ngày:
             </div>
             <div className="auto-group-efjs-9qd" id="Wa19yo8hWThy9FUqpkefJs">
-              <input type="date" className="ngayLS" id="257:891"></input>
+              <input type="date" className="ngayLS" id="257:891" onChange={handleDateChange}
+        min={getCurrentDate()}></input>
             </div>
           </div>
-        </div>
-        <div className="auto-group-fpes-Zns" id="Wa1A73RdCPEMmAij96FPEs">
           <div className="nhp-tn-sn-Srf" id="257:874">
             <div className="tn--9FH" id="257:877">
               Tên:
             </div>
             <select name="cars" className="selectTenLS">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="opel">Opel</option>
-              <option value="audi">Audi</option>
+            <option value="none">--Sân--</option>
+                  {
+                    getSans.map((san, i) => (
+                      <option value={san.IdSan} >{san.TenSan}</option>
+                    ))
+                  }
             </select>
           </div>
-          <div className="groupkhGHuu">
+        </div>
+        <div className="auto-group-fpes-Zns" id="Wa1A73RdCPEMmAij96FPEs">
+        <div className="groupkhGHuu">
             <div className="nhp-tn-sn-9o1" id="257:879">
               <div className="khung-gi--JA7" id="257:882">
                 Khung giờ:
               </div>
               <select name="cars" className="selectKhungGio">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
+                <option value="none">--Khung giờ--</option>
+                {
+                    getKhungGios.map((khungGio, i) => (
+                      <option value={khungGio.IdKhungGio} >{khungGio.ThoiGian}</option>
+                    ))
+                  }
               </select>
             </div>
             <div className="nhp-tn-sn-vKu" id="257:946">
@@ -219,13 +273,20 @@ const FieldManage = () => {
                 Cho phép giao hữu
               </div>
               <select name="cars" className="selectGH">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
+                <option value="0">Không</option>
+                <option value="1">Có</option>
               </select>
             </div>
           </div>
+        <div className="nhp-tn-sn-dB9" id="257:884">
+          
+            <div className="loi--xUK" id="257:887">
+              Loại:
+            </div>
+            <div className="loaiSanLS">--Loại sân--</div>
+          </div>
+          
+          
         </div>
         <div className="auto-group-hhjs-nKm" id="Wa1AjrhcdDA61eXwBb9nwD">
           <div className="btnThemLich" id="257:900">
@@ -270,6 +331,7 @@ const FieldManage = () => {
                 className="chevronLeft"
                 icon={faChevronLeft}
                 size="2x"
+                onClick={()=>changeDate(-1)}
               />
               <div className="item-4-cfD" id="298:306">
                 4
@@ -278,15 +340,18 @@ const FieldManage = () => {
                 className="chevronRight"
                 icon={faChevronRight}
                 size="2x"
+                onClick={()=>changeDate(1)}
               />
             </div>
             <div className="group-289692-Kxw" id="293:672">
               <div className="lc-loi-sn-Eq1" id="293:543">
                 <select name="cars" className="selectLLS">
-                  <option value="volvo">Lọc loại sân</option>
-                  <option value="saab">Saab</option>
-                  <option value="opel">Opel</option>
-                  <option value="audi">Audi</option>
+                  <option value="none">Tất cả sân</option>
+                  {
+                    getLoaiSans.map((loaiSan, i) => (
+                      <option value={loaiSan.IdLoaiSan} >{loaiSan.TenLoaiSan}</option>
+                    ))
+                  }
                 </select>
               </div>
             </div>

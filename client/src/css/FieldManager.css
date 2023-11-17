@@ -44,7 +44,7 @@ select{
   font-size: 18px;
   font-weight: 600;
 }
-.auto-group-1jl7-TBh, .auto-group-6ywm-4sd, .auto-group-veaw-32b, .auto-group-xznk-duu{
+.auto-group-1jl7-TBh, .auto-group-6ywm-4sd, .auto-group-veaw-32b, .auto-group-xznk-duu, .loaiSanLS{
   background-color: white;
   height: 72px;
   padding: 20px;
@@ -218,8 +218,11 @@ background-color: lightcyan;
 .nhp-tn-sn-vKu{
   width: 50%;
 }
-.auto-group-veaw-32b, .auto-group-xznk-duu, .selectLoaiLS, .ngayLS, .selectTenLS{
+.auto-group-veaw-32b, .auto-group-xznk-duu, .selectLoaiLS, .ngayLS, .selectTenLS,.loaiSanLS{
   width: 100%;
+}
+.loaiSanLS{
+  text-align: center;
 }
 .selectKhungGio, .selectGH{
   width: 100%;
