@@ -10,7 +10,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "projectsanbong",
+  database: "projectdatsanbong",
 });
 
 /* TRUONG THIEN - Lấy All Cơ sở*/
@@ -79,6 +79,16 @@ app.post("/getAllKhungGio", (req, res) => {
   });
 });
 
+app.post("/loginUser", (req, res) => {
+  const userName = req.body.userName;
+  const passWord = req.body.passWord;
+
+  const sql = `SELECT * FROM taikhoan where SoDienThoai = "${userName}" and MatKhau = "${passWord}" and IDPhanQuyen = 1`; 
+  db.query(sql, (err, data) => {
+    console.log(data)
+    res.json(data)
+  });
+});
 
 
 

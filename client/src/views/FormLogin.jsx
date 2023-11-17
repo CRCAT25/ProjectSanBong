@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
     faUser, faKey
 } from "@fortawesome/free-solid-svg-icons"
 import "../css/OrderField.css"
 import Swal from 'sweetalert2'
+import { Login } from '../controllers/CDangNhap'
 
 // or via CommonJS
 
@@ -26,14 +27,30 @@ const Icon24px = ({ classIcon, top }) => {
 
 
 const FormLogin = () => {
-    const Login = () => {
-        Swal.fire({
-            title: "Đăng nhập thành công",
-            icon: "success"
-        });
-        setTimeout(() => {
-            Swal.close();
-        }, 1000);
+    const [userName, setUserName] = useState("");
+    const [passWord, setpassWord] = useState("");
+    const DangNhap = async () => {
+        console.log(passWord)
+        console.log(userName)
+        let result = await (Login(userName, passWord))
+        if(result == "co"){
+            Swal.fire({
+                title: "Đăng nhập thành công",
+                icon: "success"
+            });
+            setTimeout(() => {
+                Swal.close();
+            }, 1000);
+        }
+        else{
+            Swal.fire({
+                title: "Tài khoản không hợp lệ",
+                icon: "error"
+            });
+            setTimeout(() => {
+                Swal.close();
+            }, 1000);
+        }
     }
 
     return (
@@ -44,11 +61,11 @@ const FormLogin = () => {
 
             <div className="col-span-3 relative rounded-r-[10px] bg-white">
                 <div className='absolute top-[12%] left-1/2 translate-x-[-50%] text-[40px] font-[400] text-center'>Đăng nhập</div>
-                <input className='absolute bg-[#E9E9E9] top-[32%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' placeholder='Tên đăng nhập'></input>
+                <input onChange={(event)=>{setUserName(event.target.value)}} className='inputUserName absolute bg-[#E9E9E9] top-[32%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' placeholder='Tên đăng nhập'></input>
                 <Icon24px classIcon={faUser} top={"35.2%"} />
-                <input className='absolute bg-[#E9E9E9] top-[45%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' placeholder='Mật khẩu'></input>
+                <input  onChange={(event)=>{setpassWord(event.target.value)}} className='absolute bg-[#E9E9E9] top-[45%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' placeholder='Mật khẩu'></input>
                 <Icon24px classIcon={faKey} top={"48.2%"} />
-                <button onClick={Login} className='buttonLogin absolute top-[65%] text-[22px] left-1/2 translate-x-[-50%] rounded-[150px] cursor-pointer w-[75%] h-[60px] '>Đăng nhập</button>
+                <button onClick={DangNhap} className='buttonLogin absolute top-[65%] text-[22px] left-1/2 translate-x-[-50%] rounded-[150px] cursor-pointer w-[75%] h-[60px] '>Đăng nhập</button>
             </div>
         </div>
     )

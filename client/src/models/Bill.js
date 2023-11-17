@@ -1,3 +1,4 @@
+
 class Bill{
     constructor(idHoaDon, idTaiKhoan, idSan, idKhungGio, ngay, giaoHuu, idDoiThu, tongTien, thoiGianDat, trangThai){
         this.idHoaDon = idHoaDon;

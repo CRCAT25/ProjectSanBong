@@ -21,7 +21,6 @@ class LoaiSan {
             const item = new LoaiSan(loaisan.IdLoaiSan, loaisan.TenLoaiSan, loaisan.GiaTien);
             resultList.push(item);
         });
-        
         return resultList
     }
 }
