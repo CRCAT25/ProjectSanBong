@@ -5,7 +5,30 @@ import {
   faChevronLeft,
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
-const FieldManage = () => {
+import { useEffect } from "react";
+import { useState } from "react";
+import { getAllLoaiSan, getAllSanByTaiKhoan, getAllKhungGio} from "../controllers/CQuanLySan";
+
+
+
+const FieldManage =  () => {
+  const [getLoaiSans, setLoaiSans] = useState([]);
+  const [getSans, setSans] = useState([]);
+  const [getKhungGios, setKhungGios] = useState([]);
+  useEffect(() => {
+    GetLoaiSans()
+    GetKhungGios()
+    GetAllSansByTaiKhoan("1")
+  }, []);
+  const GetLoaiSans = async () =>{
+    setLoaiSans(await getAllLoaiSan())
+  }
+  const GetKhungGios = async () =>{
+    setKhungGios(await getAllKhungGio())
+  }
+  const GetAllSansByTaiKhoan = async (IDTaiKhoan) =>{
+    setSans(await getAllSanByTaiKhoan(IDTaiKhoan))
+  }
   return (
     <div className="landing-fAj" id="257:562">
       <div className="qun-l-sn-dgX" id="257:798">
@@ -29,11 +52,13 @@ const FieldManage = () => {
                 Loại sân:
               </div>
               <div className="auto-group-xrjf-hkF" id="Wa1675FotPrCMP7b6jXrJF">
-                <select name="cars" className="selectLoaiS">
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="opel">Opel</option>
-                  <option value="audi">Audi</option>
+                <select  className="selectLoaiS">
+                <option value="none">--Loại sân--</option>
+                  {
+                    getLoaiSans.map((loaiSan, i) => (
+                      <option value={loaiSan.IdLoaiSan} >{loaiSan.TenLoaiSan}</option>
+                    ))
+                  }
                 </select>
               </div>
             </div>
@@ -175,10 +200,12 @@ const FieldManage = () => {
               Loại:
             </div>
             <select name="cars" className="selectLoaiLS">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="opel">Opel</option>
-              <option value="audi">Audi</option>
+            <option value="none">--Loại sân--</option>
+                  {
+                    getLoaiSans.map((loaiSan, i) => (
+                      <option value={loaiSan.IdLoaiSan} >{loaiSan.TenLoaiSan}</option>
+                    ))
+                  }
             </select>
           </div>
           <div className="nhp-tn-sn-wjZ" id="257:889">
@@ -196,10 +223,12 @@ const FieldManage = () => {
               Tên:
             </div>
             <select name="cars" className="selectTenLS">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="opel">Opel</option>
-              <option value="audi">Audi</option>
+            <option value="none">--Sân--</option>
+                  {
+                    getSans.map((san, i) => (
+                      <option value={san.IdSan} >{san.TenSan}</option>
+                    ))
+                  }
             </select>
           </div>
           <div className="groupkhGHuu">
@@ -208,10 +237,12 @@ const FieldManage = () => {
                 Khung giờ:
               </div>
               <select name="cars" className="selectKhungGio">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
+                <option value="none">--Khung giờ--</option>
+                {
+                    getKhungGios.map((khungGio, i) => (
+                      <option value={khungGio.IdKhungGio} >{khungGio.ThoiGian}</option>
+                    ))
+                  }
               </select>
             </div>
             <div className="nhp-tn-sn-vKu" id="257:946">
@@ -219,10 +250,8 @@ const FieldManage = () => {
                 Cho phép giao hữu
               </div>
               <select name="cars" className="selectGH">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
+                <option value="0">Không</option>
+                <option value="1">Có</option>
               </select>
             </div>
           </div>
