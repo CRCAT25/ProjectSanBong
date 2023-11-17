@@ -101,10 +101,30 @@ export const OrderField = () => {
         handleCalendarClick();
     }
     const[coSo, setCoSo] = useState([])
-
+    const[coSoMSG, setCoSoMSG] = useState("")
+    const[coSoIsAString, setCoSoIsAString] = useState(false)
+    const[coSoByCate, setcoSoByCate] = useState([])
+    const[tenCoSoInput, setTenCoSoInput] = useState("")
+    const[diaDiemInput, setDiaDiemInput] = useState("")
     const GetCoSo = async () =>{
         setCoSo(await getAllCoSo())
     }
+    const TimKiemSanBong = async () => {
+        let result = await TimKiemSanBong(tenCoSoInput, diaDiemInput)
+        if(typeof result === 'string'){
+            setCoSoMSG(result)
+            setCoSoIsAString(true)
+        }else{
+            setCoSo(result)
+            setCoSoIsAString(false)
+        }
+    }
+
+    const formatAddress = (diaChi) =>{
+        alert(diaChi.split(', '))
+    }
+
+    
     
 
     // Update the state variable textofDate with the formatted date
@@ -121,21 +141,21 @@ export const OrderField = () => {
                 <div className="flex justify-between">
                     <div className="text-[24px] justify-center flex flex-col">Vị trí:</div>
                     <div className="relative left-[70px] top-2"><Icon24px classIcon={faLocationDot}/></div>
-                    <select id="cityLocation" className={`border-2 border-[#000] py-2 w-[300px] rounded-[10px] cursor-pointer justify-center text-center"`}> 
+                    <select id="cityLocation" className={`border-2 border-[#000] py-2 w-[300px] rounded-[10px] cursor-pointer justify-center text-center"`} onChange={setDiaDiemInput}> 
 
                     </select>
                 </div>
                 <div className="flex relative">
-                    <input className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-3 pr-12 mb-3 w-[470px]" placeholder="Tìm kiếm tên cơ sở ..." />
+                    <input className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-3 pr-12 mb-3 w-[470px]" onChange={setTenCoSoInput} placeholder="Tìm kiếm tên cơ sở ..." />
                     <div className="absolute right-4  top-[32px] cursor-pointer" onClick={GetCoSo}> <Icon24px classIcon={faMagnifyingGlass}/> </div>
                 </div>
                 
-                {coSo.map((data, i) => (
+                {coSoIsAString === false ? coSo.map((data, i) => (
                     <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex " key={i}>
                         <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
                         <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">{data.Ten}</span>
                     </div>
-                ))}
+                )) : "Khong thay"}
                 
                 
 

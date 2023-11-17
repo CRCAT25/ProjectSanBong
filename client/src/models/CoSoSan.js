@@ -18,16 +18,17 @@ class CoSoSan extends Account{
             });
     }
     
-    TimKiemSanBong(tenCoSo, diaChiCoSo) {
-        axios.post("http://localhost:8081/getAllCoSo", {
-        })
-        .then(response => {
-            const listCoSo = this.initCoSo(response.data);
-            console.log(listCoSo)
-            return listCoSo;
-        })
-        .catch(error => {
-        console.error(error);
+    TimKiemSanBong(tenCoSo, diaDiem) {
+        return axios.post("http://localhost:8081/getCoSoBySearch", {
+            tenCoSo : tenCoSo,
+            diaDiem : diaDiem
+            })
+            .then(response => {
+                const listCoSo = this.initCoSo(response.data);
+                return listCoSo
+            })
+            .catch(error => {
+            console.error(error);
         });
     }
 
