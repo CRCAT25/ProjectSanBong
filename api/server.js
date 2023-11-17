@@ -13,8 +13,9 @@ const db = mysql.createConnection({
   database: "projectsanbong",
 });
 
+/* TRUONG THIEN - Lấy All Cơ sở*/
 app.post("/getAllCoSo", (req, res) => {
-  const sql = "SELECT * FROM taikhoan"; // Assuming 'coso' is the correct table name
+  const sql = "SELECT * FROM taikhoan where IDPhanQuyen = 2";
   db.query(sql, (err, data) => {
       res.json(data);
   });
@@ -23,10 +24,18 @@ app.post("/getAllCoSo", (req, res) => {
 app.post("/getCoSoBySearch", (req, res) => {
     const tenCoSo = req.body.tenCoSo;
     const diaDiem = req.body.diaDiem;
-    const sql = `select * from taikhoan where DiaChiCoSo != null AND TenCoSo = ${tenCoSo} OR DiaDiem = ${diaDiem}`;
+    const sql = `select * from taikhoan where IDPhanQuyen = 2 AND TenCoSo = ${tenCoSo} OR DiaDiem = ${diaDiem}`;
     db.query(sql, (err, data) => {
         // console.log(data)
     });
+});
+
+app.post("/getInfoCoSo", (req, res) => {
+  const idCoSo = req.body.idCoSo;
+  const sql = `select * from taikhoan where IDTaiKhoan = ${idCoSo}`;
+  db.query(sql, (err, data) => {
+    res.json(data);
+  });
 });
 
 //Huỳnh Công Tấn  
@@ -46,6 +55,8 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
 
 
 
+/*************************/
 app.listen(8081, () => {
   console.log("Connected!");
 });
+
