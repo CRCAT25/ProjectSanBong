@@ -81,6 +81,12 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
       res.json(data);
   });
 });
+// app.post("/getKhungGioByDay", (req, res) => {
+//   const sql = "SELECT * FROM Khu WHERE IDTaiKhoan = ?"; 
+//   db.query(sql, [req.body.Day], (err, data) => {
+//       res.json(data);
+//   });
+// });
 app.post("/getAllKhungGio", (req, res) => {
   const sql = "SELECT * FROM khunggio"; 
   db.query(sql, (err, data) => {
