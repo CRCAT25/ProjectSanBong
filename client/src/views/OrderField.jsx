@@ -134,7 +134,7 @@ export const OrderField = () => {
 
     // Update the state variable textofDate with the formatted date
   return (
-    <div className="w-[80%] mx-auto mt-5">
+    <div className="w-[80%] mx-auto mt-5 orderField">
         <div className="grid grid-cols-12">
             <div className="h-[3px] lineCustom col-span-5 rotate-180 mt-[59px]"></div>
             <div className="text-[48px] font-[600] my-6 text-center col-span-2 text-[#30691b]">ĐẶT SÂN</div>
