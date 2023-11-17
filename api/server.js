@@ -10,7 +10,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "projectdatsanbong",
+  database: "projectsanbong",
 });
 
 /* TRUONG THIEN - Lấy All Cơ sở*/
@@ -26,7 +26,7 @@ app.post("/getCoSoBySearch", (req, res) => {
     const diaDiem = req.body.diaDiem;
     const sql = `select * from taikhoan where IDPhanQuyen = 2 AND TenCoSo = ${tenCoSo} OR DiaDiem = ${diaDiem}`;
     db.query(sql, (err, data) => {
-      res.json(data);
+        // console.log(data)
     });
 });
 
@@ -39,7 +39,7 @@ app.post("/getInfoCoSo", (req, res) => {
 });
 
 // Lấy lịch giao hữu cho Home
-app.post("/getLichGiaoHuuByHD",(req,res) =>{
+app.post("/getLichGiaoHuuByHD",(req,res) => {
   const idHD = req.body.idHD;
   const sql = `SELECT
                   tk1.Ten,tk1.SoDienThoai, tk2.Ten, tk2.DiaChiCoSo, sanbong.TenSan, hoadon.Ngay, khunggio.ThoiGian
@@ -58,6 +58,22 @@ app.post("/getLichGiaoHuuByHD",(req,res) =>{
     res.json(data);
   });
 })
+//Huỳnh Công Tấn  
+// Trang quản lý sân, quản lý lịch sân
+app.post("/getAllLoaiSan", (req, res) => {
+  const sql = "SELECT * FROM loaisan"; 
+  db.query(sql, (err, data) => {
+      res.json(data);
+  });
+});
+app.post("/getAllSanByTaiKhoan", (req, res) => {
+  const sql = "SELECT * FROM sanbong WHERE IDTaiKhoan = ?"; 
+  db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
+      res.json(data);
+  });
+});
+
+
 
 /*************************/
 app.listen(8081, () => {
