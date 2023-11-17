@@ -1,50 +1,82 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faMagnifyingGlass,faUser,faUserShield} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 
- const Admin = () => {
+const Admin = () => {
 
-  const [activeTab, setActiveTab] = useState('hotel');
+  const [activeTab, setActiveTab] = useState('khachhang');
+  const [index, setindex] = useState('0');
+  const [listtenmenu, setListtenmenu] = useState([]);
 
-  const openTab = (tab) => {
+
+  const openTab = (tab, index) => {
+    const buttonElement = document.getElementById('tablink');
     setActiveTab(tab);
+    // buttonElement.classList.remove('active');
+    // buttonElement.classList.add('active2');
+    changeclassname(index);
   };
+  function changeclassname(index) {
+    // alert(document.getElementsByClassName('tenmenu').length)
+    if (document.getElementsByClassName('tenmenu2').length > 0) {
+      document.getElementsByClassName('tenmenu2')[0].classList.remove('tenmenu2')
+    }
+    document.getElementsByClassName('tenmenu')[index].classList.add('tenmenu2')
+    // const buttonElement = document.getElementById('tenmenu');
+  };
+  // const changeClassName = (classNameToAdd, classNameToRemove) => {
+  //   const elements = document.getElementsByClassName(classNameToRemove);
+  //   const updatedList = Array.from(elements);
 
-  const Icon18px = ({classIcon}) => {
+  //   setListtenmenu(updatedList);
+
+  //   updatedList.forEach(element => {
+  //     element.classList.remove(classNameToRemove);
+  //     element.classList.add(classNameToAdd);
+  //   });
+  // };
+
+
+  const Icon18px = ({ classIcon }) => {
     const iconSize = {
-        width: "18px",
-        height: "18px",
-        color: "#black",
+      width: "18px",
+      height: "18px",
+      color: "#black",
     };
-    return(
-        <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
+    return (
+      <span><FontAwesomeIcon icon={classIcon} style={iconSize} /></span>
     )
-}
-const Icon19px = ({classIcon, width, height}) => {
-  const iconSize = {
+  }
+  const Iconpx = ({ classIcon, width, height, marginRight, marginLeft }) => {
+    const iconSize = {
       width: width,
       height: height,
       color: "#black",
-      marginRight: "15px",
-  };
-  return(
-      <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
-  )
-}
+      marginRight: marginRight,
+      marginLeft: marginLeft,
+
+    };
+    return (
+      <span><FontAwesomeIcon icon={classIcon} style={iconSize} /></span>
+    )
+  }
 
   return (
     <div>
       <div className="w-full h-[96px]  fixed  top-0 bg-white">
-      <div className=" item-center justify-center w-[100%]">
-          <div className=" gap-3 justify-center bg-[#E2EDFF] w-[300px] h-[500px]">
-            <div id="nameaccount" className="text-[25px] font-bold w-full text-center py-[20px]" >Lê Hữu Minh</div>
-            <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''}`} data-electronic="khachhang" onClick={() => openTab('khachhang')}><Icon19px classIcon={faUser} width={"19px"} height={"19px"}/>Khách hàng</button>
-            <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso')}><Icon19px classIcon={faUserShield} width={"19px"} height={"19px"}/>Partner</button>
-            <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin')}>Admin</button>
-            <button id="tablink" className={`tablink ${activeTab === 'doanhthu' ? 'active' : ''}`} data-electronic="doanhthu" onClick={() => openTab('doanhthu')}>Doanh Thu</button>
+        <div className="w-full grid grid-cols-12">
+          <div className="w-full col-span-2">
+            <div className=" item-center justify-center w-full">
+              <div className=" gap-3 justify-center bg-[#E2EDFF] h-[500px]">
+                <div id="nameaccount" className="text-[25px] font-bold w-full text-center py-[20px]" >Lê Hữu Minh</div>
+                <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''} `} data-electronic="khachhang" onClick={() => openTab('khachhang', 0)}><div id="tenmenu" className="tenmenu tenmenu2" ><Iconpx classIcon={faUser} width={"19px"} height={"19px"} marginRight={"15px"} marginLeft={"0px"} />Khách hàng</div></button>
+                <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso', 1)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserTie} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-40px"} />Partner</div></button>
+                <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin', 2)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserShield} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-65px"} />Admin</div></button>
+                <button id="tablink" className={`tablink ${activeTab === 'doanhthu' ? 'active' : ''}`} data-electronic="doanhthu" onClick={() => openTab('doanhthu', 3)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faChartColumn} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} />Doanh thu</div></button>
+                <button id="logout"><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faArrowRightFromBracket} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} />Đăng xuất</div></button>
 
-            {/* {tenkh ? (
+                {/* {tenkh ? (
               <div className="flex items-center">
                 <a id="atenkh" style={{ fontWeight: '600' }}>{tenkh}</a>
                 <button className="iconlogout"
@@ -76,173 +108,90 @@ const Icon19px = ({classIcon, width, height}) => {
                 </button>
               </React.Fragment>
             )} */}
-          </div>
-        </div>
-      </div>
-      <div class="wrapper_tabcontent font-bold">
-        {/* khachhang */}
-        <div id="khachhang" className={`tabcontent ${activeTab === 'khachhang' ? 'active' : ''}`}>
-        <div id="divphanquyen" className="flex">
-            <h3 id="phanquyen">Phân quyền:</h3>
-            <input type="text" class="optionphanquyen" id=""></input>
-          </div>
-          <div id="divsearchtk" className="flex">
-            <h3 id="searchtk">Tìm email hoặc số điện thoại:</h3>
-            <input type="text" class="input_searchemailso" id="rssearch"></input>
-            <button id="Submit" class="submit_searchtenso"><Icon18px classIcon={faMagnifyingGlass}/></button>
-          </div>
-          <div id="" className=" w-[50%] mx-auto">
-            <div className="w-full grid grid-cols-2 gap-[100px]">
-              <div className="col-span-1 flex justify-between px-8">
-                <div>Tên khách hàng:</div>
-                <input type="text" class="iptkh" ></input>
               </div>
-              <div className="col-span-1 flex justify-between">
-                <div>Tên khách hàng:</div>
-                <input type="text" class="iptkh" ></input>
+            </div>
+          </div>
+          <div className="w-full col-span-10">
+            <div class="wrapper_tabcontent font-bold">
+              {/* khachhang */}
+              <div id="khachhang" className={`tabcontent ${activeTab === 'khachhang' ? 'active' : ''}`}>
+
+                <div id="" className=" w-full mx-auto">
+                  <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
+                    <div className="col-span-4 flex justify-between">
+                      <div className="text-[20px] w-[30%] ">Tên cơ sở:</div>
+                      <input type="text" class="iptcs" ></input>
+                    </div>
+                    <div className="col-span-2 flex justify-between">
+                      <div className="text-[20px] ">Số điện thoại:</div>
+                      <input type="text" class="ipsdtcs" ></input>
+                    </div>
+                  </div>
+
+                  <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
+                    <div className="col-span-4 flex justify-between">
+                      <div className="text-[20px] w-[30%] ">Mật khẩu:</div>
+                      <input type="text" class="ipmkcs" ></input>
+                    </div>
+                    <div className="col-span-2 flex justify-between">
+                      <div className="text-[20px] ">Email:</div>
+                      <input type="text" class="ipemailcs" ></input>
+                    </div>
+                  </div>
+
+                  <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
+                    <div className="col-span-4 flex justify-between">
+                      <div className="text-[20px] w-[30%] ">Tỉnh thành phố:</div>
+                      <input type="text" class="iptinh" ></input>
+                    </div>
+                    <div className="col-span-2 flex justify-between">
+                      <div className="text-[20px] ">Ngân hàng:</div>
+                      <input type="text" class="ipnh" ></input>
+                    </div>
+                  </div>
+
+
+                  <div className="w-full grid grid-cols-6 mb-[30px]  px-[60px]">
+                    <div className="col-span-2 flex justify-between">
+                      <div className="text-[20px] w-[30%] ">Quận/ Huyện:</div>
+                      <input type="text" class="ipquan" ></input>
+                    </div>
+                    <div className="col-span-2 flex justify-between translate-x-[-50px]">
+                      <div className="text-[20px] w-[30%] ">Phường:</div>
+                      <input type="text" class="ipphuong" ></input>
+                    </div>
+                    <div className="col-span-2 flex justify-between">
+                      <div className="text-[20px] translate-x-[5px] ">Số tài khoản:</div>
+                      <input type="text" class="ipstk" ></input>
+                    </div>
+                  </div>
+
+                  <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
+                    <div className="col-span-4 flex justify-between">
+                      <div className="text-[20px] w-[30%]">Số nhà / Đường:</div>
+                      <input type="text" class="ipsonha" ></input>
+                    </div>
+
+                    <button id="btnthemcs" className="col-span-2 flex justify-between">Thêm</button>
+                  </div>
+
+
+                </div>
               </div>
             </div>
 
-            <div className="w-full mt-10">
-              <div className="flex">
-                <div>Tên khách hàng:</div>
-                <input type="text" class="iptkh" ></input>
-              </div>
-            </div>
 
-            <div className="w-full grid grid-cols-2 gap-[100px] mt-10">
-              <div className="col-span-1 flex justify-between">
-                <div>Tên khách hàng:</div>
-                <input type="text" class="iptkh" ></input>
-              </div>
-              <div className="col-span-1 flex justify-between">
-                <div>Tên khách hàng:</div>
-                <input type="text" class="iptkh" ></input>
-              </div>
+
+            {/* partner */}
+            <div id="coso" className={`tabcontent ${activeTab === 'coso' ? 'active' : ''}`}>
+              <h3 id="searchpartner">Tìm email hoặc số điện thoại:</h3>
+              <input type="text" class="input_searchemailsopart" id="rssearch" ></input>
+              <button id="Submit" class="submit_searchtensopart">Search</button>
+
             </div>
-            {/* <h2 class="tkh">Tên khách hàng:</h2>
-            <h2 class="email">Email:</h2>
-            <h2 class="sdt">Số điện thoại:</h2>
-            <h2 class="namsinh">Năm sinh:</h2>
-            <h2 class="mk">Mật khẩu:</h2>
-            <input type="text" class="iptkh" ></input>
-            <input type="text" class="ipsdt" ></input>
-            <input type="text" class="ipemail" ></input>
-            <input type="text" class="ipmk" ></input>
-            <div id="buttonn">
-              <button id="btnaddkh" >Thêm</button>
-              <button id="btneditkh" >Sửa</button>
-            </div> */}
-          </div>
-          <div class="tbkh">
-            <div id="trsp1">
-              <div id="thsp1">
-                <h3 id="h3id">ID</h3>
-                <h3 id="h3sdt">Số điện thoại</h3>
-                <h3 id="h3tkh">Tên khách hàng</h3>
-                <h3 id="h3email">Email</h3>
-                <h3 id="h3mk">Mật khẩu</h3>
-                <h3 id="h3am">Quyền hạn</h3>
-                <h3 id="h3veri">Xác thực</h3>
-              </div>
-            </div>
-            {/* <div id="showkh" style={{ overflow: "scroll" }}>
-              {users.length > 0 ? (
-                <ul>
-                  {users.map((user, i) => (
-                    <>
-                      <tr key={i} id="trkh">
-                        <th id="thid" className={`idkh-${user.User_id}`}>{user.User_id}</th>
-                        <th id="thten" className={`tkh-${user.User_id}`}>{user.User_Name}</th>
-                        <th id="themail" className={`emailkh-${user.User_id}`}>{user.User_Email}</th>
-                        <th id="thsdt" className={`phonekh-${user.User_id}`}>{user.User_Phone}</th>
-                        <th id="thmk" className={`mkkh-${user.User_id}`}>{user.User_Password}</th>
-                        {formattedDate(user.email_verified_at) !== "1/1/1970, 8:00 AM" ? (
-                          <th id="thtimeveri" className={`tvr-${user.User_id}`}>{formattedDate(user.email_verified_at)}</th>
-                        ) : (
-                          <th id="thtimeveri" className={`tvr-${user.User_id}`}>Chưa xác minh</th>
-                        )}
-                        <th id="throle" className={`rolekh-${user.User_id}`}>{user.Role}</th>
-                        <th id="thremovekh">
-                          <button id="buttoneditkh" onClick={() => onEditkh(user.User_id)}>Edit</button>
-                          <button id="buttonrekh" onClick={() => DeleteUser(user.User_id)}>✘</button>
-                        </th>
-                      </tr></>
-                  ))}
-                </ul>
-              ) : (
-                <p>No users found.</p>
-              )}
-            </div> */}
           </div>
         </div>
 
-        {/* partner */}
-        <div id="coso" className={`tabcontent ${activeTab === 'coso' ? 'active' : ''}`}>
-          <h3 id="searchpartner">Tìm email hoặc số điện thoại:</h3>
-          <input type="text" class="input_searchemailsopart" id="rssearch" ></input>
-          <button id="Submit" class="submit_searchtensopart">Search</button>
-
-          <div class="tbpartner">
-            <div id="trsp1">
-              <div id="thsp1">
-                <h3 id="h3idpartner">ID</h3>
-                <h3 id="h3tenpartner">Tên khách hàng</h3>
-                <h3 id="h3emailpartner">Email</h3>
-                <h3 id="h3sdtpartner">Số điện thoại</h3>
-                <h3 id="h3mkpartner">Mật khẩu</h3>
-                <h3 id="h3veripartner">Xác thực</h3>
-                <h3 id="h3cccdpartner">CCCD</h3>
-                <h3 id="h3gpkdpartner">Giấy phép</h3>
-              
-              </div>
-              <select name="" id="">
-                <option value=""><img src="" alt="" srcset="" /></option>
-              </select>
-            </div>
-            {/* <div id="showpartner" style={{ overflow: "scroll" }}>
-              {partners.length > 0 ? (
-                <ul>
-                  {partners.map((partner, i) => (
-                    formattedDate(partner.Partner_verified) !== "1/1/1970, 8:00 AM" && (
-                      <tr key={i} id="trkh">
-                        <th id="thidpartner" className={`idkh-${partner.Partner_id}`}>{partner.Partner_id}</th>
-                        <th id="thtenpartner" className={`tkh-${partner.Partner_id}`}>{partner.Partner_Name}</th>
-                        <th id="themailpartner" className={`emailkh-${partner.Partner_id}`}>{partner.Partner_Email}</th>
-                        <th id="thsdtpartner" className={`phonekh-${partner.Partner_id}`}>{partner.Partner_Phone}</th>
-                        <th id="thmkpartner" className={`mkkh-${partner.Partner_id}`}>{partner.Partner_Password}</th>
-                        <th id="thdcpartner" className={`tvr-${partner.Partner_id}`}>{formattedDate(partner.Partner_verified)}</th>
-                        <th id="thcccdpartner" className={`rolekh-${partner.Partner_id}`}
-                          onClick={() => handleImageCCCD(partner.Partner_id, partner.Partner_Name)}
-                        >Xem</th>
-                        <th id="thgpkdpartner" className={`rolekh-${partner.Partner_id}`}
-                          onClick={() => handleImageGPKD(partner.Partner_id, partner.Partner_Name)}
-                        >Xem</th>
-                        <th id="thremovepartner">
-                          {partner.status === 0 && (
-                            <div>
-                              <button id="buttoneditkh" onClick={() => StickPartner(partner.Partner_id, partner.Partner_Email)}>✓</button>
-                              <button id="buttonrekh" onClick={() => UnstickPartner(partner.Partner_id, partner.Partner_Email)}>✘</button>
-                            </div>
-                          )}
-                          {partner.status === 1 && (
-                            <button id="buttonrekh" onClick={() => UnstickPartner(partner.Partner_id, partner.Partner_Email)}>✘</button>
-                          )}
-                          {partner.status === 2 && (
-                            <button id="buttonrekh" onClick={() => StickPartner(partner.Partner_id, partner.Partner_Email)}>✓</button>
-                          )}
-                        </th>
-                      </tr>
-                    )
-                  ))}
-                </ul>
-              ) : (
-                <p>No partners found.</p>
-              )}
-            </div> */}
-          </div>
-        </div>
-          
       </div>
     </div>
   )

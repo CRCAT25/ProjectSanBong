@@ -12,9 +12,6 @@ body {
     font-weight: bold;
 }
 
-#logout {
-    transform: translate(390px, 0px);
-}
 
 #atenkh {
     display: block !important;
@@ -1091,25 +1088,45 @@ th {
     outline: none;
     cursor: pointer;
     width: 100%;
-    display: block;
-    padding: 1rem;
     font-size: 18px;
     text-transform: uppercase;
     font-weight: 600;
-    transition: 0.2s ease; 
-
+    transition: 0.2s ease;
+    padding: 1rem;
 }
-
-#tablink:active {
-    color: rgb(40, 78, 49);
-}
-
 #tablink:hover {
-    color: red;
     background-color: #ACE2F6;
-    padding-left: 50px;
-    
+    border-radius: 10px;
+
 }
+
+.tenmenu2{
+    /* color: red;
+    text-decoration: underline; */
+    transition: 0.2 ease;
+    background-color: #ACE2F6;
+    height: 50px;
+    padding-top: 13px;
+    border-radius: 10px;
+}
+#logout {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: 0.2s ease;
+    margin-top: 33%;
+    padding: 1rem;
+}
+#logout:hover {
+    background-color: #ACE2F6;
+    border-radius: 10px;
+
+}
+
 .optionphanquyen {
     padding: 10px;
     margin-left: 10px;
@@ -1127,6 +1144,7 @@ th {
     outline: none;
     text-align: center;
 }
+
 
 #khachhang{
     border: #ffffff solid 2px;
@@ -1170,74 +1188,186 @@ th {
     
 }
 
-
-
-.iptkh {
+.iptcs {
     padding: 10px;
-    margin-left: 10px;
     margin-top: -5px;
-    width: 206.77px !important;
-    height: 40px !important;
+    width: 96% !important;
+    height: 50px !important;
     background: none;
-    border: 3px solid #88F660 !important;
-    border-radius: 10px !important;
+    border-radius: 5px !important;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    font-size: 15px !important;
+    font-size: 18px !important;
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    
+    background-color: #D9D9D9;
+    margin-right: 19%;
+}
+.ipsdtcs {
+    padding: 10px;
+    margin-top: -5px;
+    width: 300px !important;
+    height: 50px !important;
+    background: none;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
+    outline: none;
+    text-align: center;
+    background-color: #D9D9D9;
 }
 
-.ipemail {
-    transform: translate(855px, 82px);
-    height: 40px !important;
-    width: 19%;
-    border-radius: 20px !important;
-    position: absolute;
-    border: 3px solid #FF3366 !important;
-    text-align: center;
+.ipmkcs {
+    padding: 10px;
+    margin-top: -5px;
+    width: 96% !important;
+    height: 50px !important;
+    background: none;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
     font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
     outline: none;
+    text-align: center;
+    background-color: #D9D9D9;
+    margin-right: 19%;
 }
 
-.ipsdt {
-    transform: translate(500px, 150px);
-    width: 11% !important;
-    height: 40px !important;
-    border-radius: 20px !important;
-    position: absolute;
-    border: 3px solid #FF3366 !important;
-    text-align: center;
+.ipemailcs {
+    padding: 10px;
+    margin-top: -5px;
+    width: 300px !important;
+    height: 50px !important;
+    background: none;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
     font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
     outline: none;
+    text-align: center;
+    background-color: #D9D9D9;
 }
 
-.ipmk {
-    transform: translate(855px, 150px);
-    height: 40px !important;
-    width: 19%;
-    border: 3px solid #FF3366 !important;
-    border-radius: 20px !important;
-    position: absolute;
-    text-align: center;
+.iptinh {
+    padding: 10px;
+    margin-top: -5px;
+    width: 96% !important;
+    height: 50px !important;
+    background: none;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
     font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
     outline: none;
+    text-align: center;
+    background-color: #D9D9D9;
+    margin-right: 19%;
 }
 
-.iprole {
-    transform: translate(500px, 217px);
-    height: 35px !important;
-    border: 3px solid #FF3366 !important;
-    width: 11%;
-    border-radius: 20px !important;
-    /* position: absolute; */
-    text-align: center;
+.ipnh {
+    padding: 10px;
+    margin-top: -5px;
+    width: 300px !important;
+    height: 50px !important;
+    background: none;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
     font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
     outline: none;
+    text-align: center;
+    background-color: #D9D9D9;
+}
+.ipquan {
+    padding: 10px;
+    margin-top: -5px;
+    width: 43% !important;
+    height: 50px !important;
+    background: none;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
+    outline: none;
+    text-align: center;
+    background-color: #D9D9D9;
+    margin-right: 19%;
+}
+.ipphuong {
+    padding: 10px;
+    margin-top: -5px;
+    width: 43% !important;
+    height: 50px !important;
+    background: none;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
+    outline: none;
+    text-align: center;
+    background-color: #D9D9D9;
+    margin-right: 29%;
+}
+.ipstk {
+    padding: 10px;
+    margin-top: -5px;
+    width: 300px !important;
+    height: 50px !important;
+    background: none;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
+    outline: none;
+    text-align: center;
+    background-color: #D9D9D9;
+}
+.ipsonha {
+    padding: 10px;
+    margin-top: -5px;
+    width: 96% !important;
+    height: 50px !important;
+    background: none;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
+    outline: none;
+    text-align: center;
+    background-color: #D9D9D9;
+    margin-right: 19%;
+}
 
+#btnthemcs{
+    width: 130px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    line-height: 50px;
+    border-radius: 5px;
+    color: #ffffff;
+    background-color: #3085D6;
 }
 
 .sdt {
