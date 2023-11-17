@@ -38,6 +38,27 @@ app.post("/getInfoCoSo", (req, res) => {
   });
 });
 
+// Lấy lịch giao hữu cho Home
+app.post("/getLichGiaoHuuByHD",(req,res) =>{
+  const idHD = req.body.idHD;
+  const sql = `SELECT
+                  tk1.Ten,tk1.SoDienThoai, tk2.Ten, tk2.DiaChiCoSo, sanbong.TenSan, hoadon.Ngay, khunggio.ThoiGian
+                FROM
+                  taikhoan as tk1, taikhoan as tk2, hoadon, sanbong, khunggio
+                WHERE
+                hoadon.GiaoHuu = 1
+                  AND hoadon.IDKhungGio = khunggio.IDKhungGio
+                  AND hoadon.idDoiThu IS NULL
+                  AND hoadon.TrangThai = 'Completed'
+                  AND DAY(hoadon.Ngay) > DAY(CURRENT_DATE)
+                  AND tk1.IDTaiKhoan = hoadon.IDTaiKhoan 
+                  AND sanbong.IDSan = hoadon.IDSan
+                  AND tk2.IDTaiKhoan = sanbong.IDTaiKhoan;`
+  db.query(sql, (err, data) => {
+    res.json(data);
+  });
+})
+
 /*************************/
 app.listen(8081, () => {
   console.log("Connected!");
