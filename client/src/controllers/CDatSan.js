@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
-import FootballField from "../models/FootballField";
+import FootballField from "../models/SanBong";
 
 const GetInfoCoSo = (idCoSo) =>{
     const[coSo, setCoSo] = useState('');
