@@ -11,4 +11,5 @@ class Bill{
         this.thoiGianDat = thoiGianDat;
         this.trangThai = trangThai;
     }
+    
 }
