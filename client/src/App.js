@@ -7,7 +7,13 @@ import {
   Admin,
   Header,
   Footer,
-  FormHoanTien
+  FormHoanTien,
+  FormLogin,
+  FormHoaDon,
+  FormInfoCaNhan,
+  FormLichSu,
+  PersonalInfo,
+  FormSignUp
 } from "./views"
 
 function App() {
@@ -21,6 +27,13 @@ function App() {
         <Route path="/Header" element={<Header />}/>
         <Route path="/Footer" element={<Footer />}/>
         <Route path="/FormHoanTien" element={<FormHoanTien/>}/>
+        <Route path="/FormLogin" element={<FormLogin/>}/>
+        <Route path="/FormHoaDon" element={<FormHoaDon/>}/>
+        <Route path="/FormInfoCaNhan" element={<FormInfoCaNhan/>}/>
+        <Route path="/FormLichSu" element={<FormLichSu/>}/>
+        <Route path="/PersonalInfo" element={<PersonalInfo/>}/>
+        <Route path="/FormSignUp" element={<FormSignUp/>}/>
+
       </Routes>
     </BrowserRouter>
   );

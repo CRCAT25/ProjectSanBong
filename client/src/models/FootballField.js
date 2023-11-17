@@ -8,3 +8,5 @@ class FootballField{
         this.TrangThai = trangThai;
     }
 }
+
+export default FootballField

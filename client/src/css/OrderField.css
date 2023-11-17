@@ -6,3 +6,23 @@
   border: 1px solid #667B3D;
   background: linear-gradient(93deg, #7DA82A 5.86%, #BCEA63 26.96%, #8EB740 48.07%, #BCEA63 71.86%, #7DA82A 92.07%);
 }
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+}
+.react-calendar{
+  position: absolute !important;
+  z-index: 10;
+  width: 300px !important;
+  font-size: 14px;
+  right: 30px;
+  border-radius: 7px;
+}
+.buttonLogin{
+  border: 1px solid #667B3D;
+  background: linear-gradient(93deg, #7DA82A 5.86%, #BCEA63 26.96%, #8EB740 48.07%, #BCEA63 71.86%, #7DA82A 92.07%);
+}

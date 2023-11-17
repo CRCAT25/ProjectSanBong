@@ -1,13 +1,21 @@
 import React from "react";
+import Calendar from 'react-calendar'
+import "react-calendar/dist/Calendar.css"
 import  "../css/OrderField.css"
+import { useState } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import axios from "axios";
 import {faLocationDot, 
     faChevronDown, 
     faMagnifyingGlass,
-    faCalendarDays,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
-import CDatSan from "../controllers/CDatSan";
+import CDatSan, { GetAllSanFromCoSo, GetInfoCoSo } from "../controllers/CDatSan";
+import { useEffect } from "react";
+import { useRef } from "react";
+import "../controllers/CTimKiem";
+import { TimKiemSanBong, getAllCoSo } from "../controllers/CTimKiem";
+import CoSoSan from "../models/CoSoSan";
 const Icon24px = ({classIcon}) => {
     const iconSize = {
         width: "24px",
@@ -29,7 +37,77 @@ const IconCheck = ({classIcon}) => {
     )
 }
 
+const ShowCoSo = (idCoso) => {
+    const[sanBongs, setSanBongs] = useState([]);
+    GetInfoCoSo(idCoso)
+    setSanBongs(GetAllSanFromCoSo(idCoso))
+}
+
+
+
+
+/*                           CITY API                            */
+const host = 'https://provinces.open-api.vn/api/?depth=1';
+
+var callAPI = (api) => {
+    return axios.get(api)
+        .then((response) => {
+            renderData(response.data, "cityLocation");
+        });
+}
+
+var renderData = (array, select) => {
+    let row = ' <option disable value="">Chọn thành phố</option>';
+    array.forEach(tinhthanh => {
+        row += `<option data-id="${tinhthanh.code}" value="${tinhthanh.name}">${tinhthanh.name}</option>`
+    });
+    document.querySelector("#" + select).innerHTML = row
+    // const tkhText = document.querySelector(`.tkh-${id}`).textContent;
+
+}
+
+/*                                                        */
 export const OrderField = () => {
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+    const [textofDate, setTextofDate] = useState(new Date().toLocaleDateString("vi-VN", {
+        weekday: "short", // Abbreviated weekday name (e.g., "Mon")
+        day: "2-digit",   // Two-digit day of the month (e.g., "01")
+        month: "2-digit", // Two-digit month (e.g., "10")
+        year: "numeric",  // Full year (e.g., "2023")
+    }));
+    const calendarRef = useRef();
+    const handleCalendarClick = () =>{
+        setIsCalendarVisible(true);
+        if(isCalendarVisible){
+            setIsCalendarVisible(false);
+    }
+    // var selectedDate = document.getElementById('calendarValue');
+    // setSelectedDate(selectedDate.)
+    
+    }
+    useEffect(() => {
+        callAPI(host);
+      }, []);
+
+    const handleChangeCalendar = (date) =>{
+        const formattedDate = date.toLocaleDateString("vi-VN", {
+            weekday: "short", // Abbreviated weekday name (e.g., "Mon")
+            day: "2-digit",   // Two-digit day of the month (e.g., "01")
+            month: "2-digit", // Two-digit month (e.g., "10")
+            year: "numeric",  // Full year (e.g., "2023")
+        });
+        setTextofDate(formattedDate);
+        handleCalendarClick();
+    }
+    const[coSo, setCoSo] = useState([])
+
+    const GetCoSo = async () =>{
+        setCoSo(await getAllCoSo())
+    }
+    
+
+    // Update the state variable textofDate with the formatted date
   return (
     <div className="w-[80%] mx-auto mt-5">
         <div className="grid grid-cols-12">
@@ -42,39 +120,25 @@ export const OrderField = () => {
             <div className="col-span-4 border-[#379E13] border-[3px] rounded-[10px] p-5">
                 <div className="flex justify-between">
                     <div className="text-[24px] justify-center flex flex-col">Vị trí:</div>
-                    <div className="border-2 border-[#000] py-2 px-4 rounded-[10px] cursor-pointer">
-                        <Icon24px classIcon={faLocationDot}/>
-                        <span className="text-[24px] mx-4">Hồ Chí Minh</span>
-                        <Icon24px classIcon={faChevronDown}/>
+                    <div className="relative left-[70px] top-2"><Icon24px classIcon={faLocationDot}/></div>
+                    <select id="cityLocation" className={`border-2 border-[#000] py-2 w-[300px] rounded-[10px] cursor-pointer justify-center text-center"`}> 
+
+                    </select>
+                </div>
+                <div className="flex relative">
+                    <input className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-3 pr-12 mb-3 w-[470px]" placeholder="Tìm kiếm tên cơ sở ..." />
+                    <div className="absolute right-4  top-[32px] cursor-pointer" onClick={GetCoSo}> <Icon24px classIcon={faMagnifyingGlass}/> </div>
+                </div>
+                
+                {coSo.map((data, i) => (
+                    <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex " key={i}>
+                        <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                        <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">{data.Ten}</span>
                     </div>
-                </div>
+                ))}
+                
+                
 
-                <div className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-2 mb-10">
-                    <div className="text-[18px] justify-center flex flex-col text-[#776F6F]">Tìm kiếm tên cơ sở...</div>
-                    <div className="py-2 pr-[10px]">
-                        <Icon24px classIcon={faMagnifyingGlass}/>
-                    </div>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">Cơ sở sân 1</span>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
-                </div>
             </div>
 
 
@@ -95,20 +159,19 @@ export const OrderField = () => {
                             <span className="font-[400] ml-3">08128782993 </span>
                         </div>
 
-                        <div className="text-[20px] mt-5 flex justify-between">
+                        <div className="text-[20px] mt-5 flex">
                             <span className="font-[600] justify-center flex flex-col">Ngày đặt sân:</span>
-                            <div className="flex gap-4">
-                                <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer">
-                                    <span className="text-[20px] mx-4">T7 31/10/2023</span>
+                            <div className="flex gap-4 ml-3">
+                                <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer w-[230px]" onClick = {handleCalendarClick}>
+                                    <span className="text-[20px] mx-4 textofDate">{textofDate}</span>
                                 </div>
-                                <div className="border-2 border-[#379E13] py-1 px-2 rounded-[10px] cursor-pointer">
-                                    <Icon24px classIcon={faCalendarDays}/>
-                                </div>
+                
                                 <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer">
                                     <span className="text-[20px] mx-4">Lọc loại sân</span>
                                     <Icon24px classIcon={faChevronDown}/>
                                 </div>
                             </div>
+                                {isCalendarVisible === true ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value = {selectedDate}/> : ""}
                         </div>
 
                         <div className="grid grid-cols-10 mt-5 gap-3">
@@ -163,9 +226,11 @@ export const OrderField = () => {
                 <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]">Xác nhận</button>
 
             </div>
+
+            
         </div>
-    
-    
   </div>
   )
 }
+
+

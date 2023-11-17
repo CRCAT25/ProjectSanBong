@@ -1,8 +1,8 @@
 class Account {
-    constructor (idAccount, idPhanQuyen, hoTen, email, soDienThoai, nganHang, sTK, matKhau, xacThuc) {
+    constructor (idAccount, idPhanQuyen, ten, email, soDienThoai, nganHang, sTK, matKhau, xacThuc) {
         this.IdAccount = idAccount;
         this.IdPhanQuyen = idPhanQuyen;
-        this.HoTen = hoTen;
+        this.Ten = ten;
         this.Email = email;
         this.SoDienThoai = soDienThoai;
         this.NganHang = nganHang;
@@ -13,3 +13,4 @@ class Account {
 
     
 }
+export default Account
