@@ -24,5 +24,13 @@ class KhungGio{
         
         return resultList
     }
+    getKhungGioById(idKhungGio){
+        return this.getAllKhungGio()
+            .then(allKhungGio => allKhungGio.find(khungGio => khungGio.IdKhungGio === idKhungGio))
+            .catch(error => {
+                console.error(error);
+            });
+        
+    }
 }
 export default KhungGio

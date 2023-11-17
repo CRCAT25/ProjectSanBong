@@ -39,25 +39,33 @@ app.post("/getInfoCoSo", (req, res) => {
 });
 
 // Lấy lịch giao hữu cho Home
-app.post("/getLichGiaoHuuByHD",(req,res) => {
-  const idHD = req.body.idHD;
+app.post("/getAllLichGiaoHuu",(req,res) => {
   const sql = `SELECT
-                  tk1.Ten,tk1.SoDienThoai, tk2.Ten, tk2.DiaChiCoSo, sanbong.TenSan, hoadon.Ngay, khunggio.ThoiGian
-                FROM
-                  taikhoan as tk1, taikhoan as tk2, hoadon, sanbong, khunggio
-                WHERE
-                hoadon.GiaoHuu = 1
-                  AND hoadon.IDKhungGio = khunggio.IDKhungGio
-                  AND hoadon.idDoiThu IS NULL
-                  AND hoadon.TrangThai = 'Completed'
-                  AND DAY(hoadon.Ngay) > DAY(CURRENT_DATE)
-                  AND tk1.IDTaiKhoan = hoadon.IDTaiKhoan 
-                  AND sanbong.IDSan = hoadon.IDSan
-                  AND tk2.IDTaiKhoan = sanbong.IDTaiKhoan;`
+                    tk1.IDTaiKhoan as IDNgDat, tk1.Ten as NguoiDat,tk1.SoDienThoai, tk2.Ten as TenCoSo, tk2.DiaChiCoSo, sanbong.TenSan, DATE_FORMAT(hoadon.Ngay, '%d-%m-%Y') AS ngay, khunggio.ThoiGian
+                  FROM
+                    taikhoan as tk1, taikhoan as tk2, hoadon, sanbong, khunggio
+                  WHERE
+                    hoadon.IDKhungGio = khunggio.IDKhungGio
+                    AND hoadon.idDoiThu IS NULL
+                    AND hoadon.TrangThai = 'Completed'
+                    AND hoadon.GiaoHuu = 1
+                    AND DAY(ngay) > DAY(CURRENT_DATE)
+                    and tk1.IDTaiKhoan = hoadon.IDTaiKhoan
+                    and sanbong.IDSan = hoadon.IDSan
+                    and tk2.IDTaiKhoan = sanbong.IDTaiKhoan`;
   db.query(sql, (err, data) => {
     res.json(data);
   });
 })
+
+app.post("/getAllBill", (req, res) => {
+  const sql = "SELECT * FROM hoadon"; 
+  db.query(sql, (err, data) => {
+      res.json(data);
+  });
+});
+
+
 //Huỳnh Công Tấn  
 // Trang quản lý sân, quản lý lịch sân
 app.post("/getAllLoaiSan", (req, res) => {

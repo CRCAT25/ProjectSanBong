@@ -1,5 +1,10 @@
+import axios from "axios";
 import "../css/LichGiaoHuu.css"
 import Swal from 'sweetalert2'
+import { getAllLichGiaoHuu} from "../controllers/CQuanLyLich";
+import { useId } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const LichGiaoHuu = () =>{
   const conFirmClicked=()=>{
@@ -22,7 +27,15 @@ const LichGiaoHuu = () =>{
     });
   }
 
-  
+  const [getLichs, setLichs] = useState([]);
+
+  const GetAllLichGiaoHuu = async () =>{
+    setLichs(await getAllLichGiaoHuu())
+  }
+
+  useEffect(() => {
+    GetAllLichGiaoHuu()
+  }, []);
 
   return (
     <div className="ThamGiaGiaoHU my-[80px]" >
