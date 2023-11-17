@@ -13,6 +13,7 @@ const db = mysql.createConnection({
   database: "projectdatsanbong",
 });
 
+/* TRUONG THIEN MEO MEO*/
 app.post("/getAllCoSo", (req, res) => {
   const sql = "SELECT * FROM taikhoan"; // Assuming 'coso' is the correct table name
   db.query(sql, (err, data) => {
@@ -25,7 +26,7 @@ app.post("/getCoSoBySearch", (req, res) => {
     const diaDiem = req.body.diaDiem;
     const sql = `select * from taikhoan where DiaChiCoSo != null AND TenCoSo = ${tenCoSo} OR DiaDiem = ${diaDiem}`;
     db.query(sql, (err, data) => {
-        console.log(data)
+      res.json(data);
     });
 });
 
@@ -33,3 +34,5 @@ app.post("/getCoSoBySearch", (req, res) => {
 app.listen(8081, () => {
   console.log("Connected!");
 });
+
+/*************************/

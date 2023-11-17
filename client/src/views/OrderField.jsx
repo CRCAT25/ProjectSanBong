@@ -56,8 +56,6 @@ var callAPI = (api) => {
         });
 }
 
-
-
 var renderData = (array, select) => {
     let row = ' <option disable value="">Chọn thành phố</option>';
     array.forEach(tinhthanh => {
@@ -102,12 +100,31 @@ export const OrderField = () => {
         setTextofDate(formattedDate);
         handleCalendarClick();
     }
-    const[coSo, setCoSo] = useState([]);
-    
-
-    const GetCoSo = () =>{
-        console.log(getAllCoSo())
+    const[coSo, setCoSo] = useState([])
+    const[coSoMSG, setCoSoMSG] = useState("")
+    const[coSoIsAString, setCoSoIsAString] = useState(false)
+    const[coSoByCate, setcoSoByCate] = useState([])
+    const[tenCoSoInput, setTenCoSoInput] = useState("")
+    const[diaDiemInput, setDiaDiemInput] = useState("")
+    const GetCoSo = async () =>{
+        setCoSo(await getAllCoSo())
     }
+    const TimKiemSanBong = async () => {
+        let result = await TimKiemSanBong(tenCoSoInput, diaDiemInput)
+        if(typeof result === 'string'){
+            setCoSoMSG(result)
+            setCoSoIsAString(true)
+        }else{
+            setCoSo(result)
+            setCoSoIsAString(false)
+        }
+    }
+
+    const formatAddress = (diaChi) =>{
+        alert(diaChi.split(', '))
+    }
+
+    
     
 
     // Update the state variable textofDate with the formatted date
@@ -124,35 +141,24 @@ export const OrderField = () => {
                 <div className="flex justify-between">
                     <div className="text-[24px] justify-center flex flex-col">Vị trí:</div>
                     <div className="relative left-[70px] top-2"><Icon24px classIcon={faLocationDot}/></div>
-                    <select id="cityLocation" className={`border-2 border-[#000] py-2 w-[300px] rounded-[10px] cursor-pointer justify-center text-center"`}> 
+                    <select id="cityLocation" className={`border-2 border-[#000] py-2 w-[300px] rounded-[10px] cursor-pointer justify-center text-center"`} onChange={setDiaDiemInput}> 
 
                     </select>
                 </div>
                 <div className="flex relative">
-                    <input className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-3 pr-12 mb-3 w-[470px]" placeholder="Tìm kiếm tên cơ sở ..." />
+                    <input className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-3 pr-12 mb-3 w-[470px]" onChange={setTenCoSoInput} placeholder="Tìm kiếm tên cơ sở ..." />
                     <div className="absolute right-4  top-[32px] cursor-pointer" onClick={GetCoSo}> <Icon24px classIcon={faMagnifyingGlass}/> </div>
                 </div>
                 
+                {coSoIsAString === false ? coSo.map((data, i) => (
+                    <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex " key={i}>
+                        <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                        <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">{data.Ten}</span>
+                    </div>
+                )) : "Khong thay"}
+                
+                
 
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">Cơ sở sân 1</span>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
-                </div>
-
-                <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex">
-                    <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px]">Cơ sở sân 1</span>
-                </div>
             </div>
 
 
@@ -196,11 +202,11 @@ export const OrderField = () => {
                     </div>
                 </div>
 
-                <div className="mt-[50px] relative">
+                <div className="mt-[30px] relative">
                     <div className="text-[24px] text-[#2B790F]">Chi tiết sân bóng:</div>
                     <div className="w-full h-[3px] lineCustom"></div>
                     <div className="mt-4 flex gap-6">
-                        <img className="w-[300px] h-[300px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                        <img className="w-[300px] h-[300px] rounded-[15px] mb-[50px]" src="./assets/sanbong.jpg" alt="" />
 
                         <div className="w-full">
                             <div className="text-[20px] mt-1">
@@ -212,6 +218,7 @@ export const OrderField = () => {
                                 <span className="font-[600]">Loại sân:</span>
                                 <span className="font-[400] ml-3">VIP</span>
                             </div>
+                            
 
                             <div className="mt-7 w-full gap-3 grid grid-cols-12">
                                 <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">5:00 - 7:00</div>                          
@@ -222,15 +229,14 @@ export const OrderField = () => {
                                 <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">15:00 - 17:00</div>                          
                                 <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">17:00 - 19:00</div>                          
                             </div>
-
-                            <div className="absolute flex gap-3 bottom-0">
+                            <div className="absolute flex gap-3 my-10">
                                 <div className="w-[30px] h-[30px] bg-[#2AB514] border-[2px] border-[#2AB514] rounded-[5px] cursor-pointer p-1">
                                     <IconCheck classIcon={faCheck}/>
                                 </div>
-
                                 <div className="flex flex-col justify-center font-[600]">Cho phép người khác tham gia giao hữu</div>
 
                             </div>
+                            
                         </div>
                     </div>
                 </div>
