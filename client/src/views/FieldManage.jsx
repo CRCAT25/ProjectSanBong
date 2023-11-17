@@ -7,20 +7,24 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getAllLoaiSan, getAllSanByTaiKhoan} from "../controllers/CQuanLySan";
+import { getAllLoaiSan, getAllSanByTaiKhoan, getAllKhungGio} from "../controllers/CQuanLySan";
 
 
 
 const FieldManage =  () => {
   const [getLoaiSans, setLoaiSans] = useState([]);
   const [getSans, setSans] = useState([]);
+  const [getKhungGios, setKhungGios] = useState([]);
   useEffect(() => {
     GetLoaiSans()
+    GetKhungGios()
     GetAllSansByTaiKhoan("1")
-    alert(getSans)
   }, []);
   const GetLoaiSans = async () =>{
     setLoaiSans(await getAllLoaiSan())
+  }
+  const GetKhungGios = async () =>{
+    setKhungGios(await getAllKhungGio())
   }
   const GetAllSansByTaiKhoan = async (IDTaiKhoan) =>{
     setSans(await getAllSanByTaiKhoan(IDTaiKhoan))
@@ -233,10 +237,12 @@ const FieldManage =  () => {
                 Khung giờ:
               </div>
               <select name="cars" className="selectKhungGio">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
+                <option value="none">--Khung giờ--</option>
+                {
+                    getKhungGios.map((khungGio, i) => (
+                      <option value={khungGio.IdKhungGio} >{khungGio.ThoiGian}</option>
+                    ))
+                  }
               </select>
             </div>
             <div className="nhp-tn-sn-vKu" id="257:946">
@@ -244,10 +250,8 @@ const FieldManage =  () => {
                 Cho phép giao hữu
               </div>
               <select name="cars" className="selectGH">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
+                <option value="0">Không</option>
+                <option value="1">Có</option>
               </select>
             </div>
           </div>

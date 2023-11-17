@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import KhungGio from '../models/KhungGio'
 import SanBong from '../models/SanBong'
 import LoaiSan from '../models/LoaiSan'
 
@@ -15,7 +16,14 @@ const getAllLoaiSan = async () =>{
     return list
     
  }
+ const getAllKhungGio = async () =>{
+   const khungGio = new KhungGio()
+   let list = await khungGio.GetAllKhungGio()
+   return list
+   
+}
  export {
     getAllLoaiSan,
-    getAllSanByTaiKhoan
+    getAllSanByTaiKhoan,
+    getAllKhungGio
  }

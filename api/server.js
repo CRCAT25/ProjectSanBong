@@ -52,6 +52,13 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
       res.json(data);
   });
 });
+app.post("/getAllKhungGio", (req, res) => {
+  const sql = "SELECT * FROM khunggio"; 
+  db.query(sql, (err, data) => {
+      res.json(data);
+  });
+});
+
 
 
 
