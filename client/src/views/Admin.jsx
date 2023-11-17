@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
+import {faMagnifyingGlass,faUser,faUserShield} from "@fortawesome/free-solid-svg-icons"
 
  const Admin = () => {
 
@@ -21,14 +21,26 @@ import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
         <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
     )
 }
+const Icon19px = ({classIcon, width, height}) => {
+  const iconSize = {
+      width: width,
+      height: height,
+      color: "#black",
+      marginRight: "15px",
+  };
+  return(
+      <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
+  )
+}
 
   return (
     <div>
-      <div className="w-full h-[96px] px-[60px] fixed z-50 top-0 bg-white">
-      <div className=" item-center justify-center  py-[8px] w-[100%]">
-          <div className="flex gap-3 justify-center ">
-            <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''}`} data-electronic="khachhang" onClick={() => openTab('khachhang')}>Khách hàng</button>
-            <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso')}>Partner</button>
+      <div className="w-full h-[96px]  fixed  top-0 bg-white">
+      <div className=" item-center justify-center w-[100%]">
+          <div className=" gap-3 justify-center bg-[#E2EDFF] w-[300px] h-[500px]">
+            <div id="nameaccount" className="text-[25px] font-bold w-full text-center py-[20px]" >Lê Hữu Minh</div>
+            <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''}`} data-electronic="khachhang" onClick={() => openTab('khachhang')}><Icon19px classIcon={faUser} width={"19px"} height={"19px"}/>Khách hàng</button>
+            <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso')}><Icon19px classIcon={faUserShield} width={"19px"} height={"19px"}/>Partner</button>
             <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin')}>Admin</button>
             <button id="tablink" className={`tablink ${activeTab === 'doanhthu' ? 'active' : ''}`} data-electronic="doanhthu" onClick={() => openTab('doanhthu')}>Doanh Thu</button>
 
@@ -182,8 +194,11 @@ import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
                 <h3 id="h3veripartner">Xác thực</h3>
                 <h3 id="h3cccdpartner">CCCD</h3>
                 <h3 id="h3gpkdpartner">Giấy phép</h3>
-
+              
               </div>
+              <select name="" id="">
+                <option value=""><img src="" alt="" srcset="" /></option>
+              </select>
             </div>
             {/* <div id="showpartner" style={{ overflow: "scroll" }}>
               {partners.length > 0 ? (
