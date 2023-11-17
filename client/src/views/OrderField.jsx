@@ -112,29 +112,29 @@ export const OrderField = () => {
     const TimKiemSanBong = async () => {
         let result = await TimKiemSanBongC(tenCoSoInput, diaDiemInput)
         if(typeof result === 'string'){
-            setCoSoMSG(result)
             setCoSoIsAString(true)
+            setCoSoMSG(result)
         }else{
-            setCoSo(result)
             setCoSoIsAString(false)
+            setCoSo(result)   
         }
     }
 
     const[infoCoSo, setInfoCoSo] = useState(new CoSoSan)
+    const[gotInfo, setGotInfo] = useState(false)
     const ChonCoSoSan = async (idCoso) => {
-        
+        setInfoCoSo(await GetInfoCoSoSan(idCoso))
+        console.log(infoCoSo)
+        setGotInfo(true)
     }
 
-    const formatAddress = (diaChi) =>{
-        alert(diaChi.split(', '))
-    }
 
     
     
 
     // Update the state variable textofDate with the formatted date
   return (
-    <div className="w-[80%] mx-auto mt-5">
+    <div className="w-[80%] mx-auto mt-5 orderField">
         <div className="grid grid-cols-12">
             <div className="h-[3px] lineCustom col-span-5 rotate-180 mt-[59px]"></div>
             <div className="text-[48px] font-[600] my-6 text-center col-span-2 text-[#30691b]">ĐẶT SÂN</div>
@@ -146,21 +146,27 @@ export const OrderField = () => {
                 <div className="flex justify-between">
                     <div className="text-[24px] justify-center flex flex-col">Vị trí:</div>
                     <div className="relative left-[70px] top-2"><Icon24px classIcon={faLocationDot}/></div>
-                    <select id="cityLocation" className={`border-2 border-[#000] py-2 w-[300px] rounded-[10px] cursor-pointer justify-center text-center"`} onChange={setDiaDiemInput}> 
+                    <select id="cityLocation" className={`border-2 border-[#000] py-2 w-[300px] rounded-[10px] cursor-pointer justify-center text-center"`} onChange={(event) => {
+                        setDiaDiemInput(event.target.value);
+                    }}> 
 
                     </select>
                 </div>
                 <div className="flex relative">
-                    <input className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-3 pr-12 mb-3 w-[470px]" onChange={setTenCoSoInput} placeholder="Tìm kiếm tên cơ sở ..." />
-                    <div className="absolute right-4  top-[32px] cursor-pointer" onClick={GetCoSo}> <Icon24px classIcon={faMagnifyingGlass}/> </div>
+                    <input className="flex justify-between mt-5 rounded-[15px] bg-[#E9E9E9] p-3 pr-12 mb-3 w-[470px]" onChange={(event) => {
+                        setTenCoSoInput(event.target.value);
+                    }} placeholder="Tìm kiếm tên cơ sở ..." />
+                    <div className="absolute right-4  top-[32px] cursor-pointer" onClick={TimKiemSanBong}> <Icon24px classIcon={faMagnifyingGlass}/> </div>
                 </div>
                 
-                {coSoIsAString === true ? coSo.map((data, i) => (
-                    <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex " key={i}>
+                {coSoIsAString === false ? coSo.map((data, i) => (
+                    <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex cursor-pointer" key={i} onClick={() => {
+                        ChonCoSoSan(data.IdAccount)
+                    }}>
                         <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
                         <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">{data.Ten}</span>
                     </div>
-                )) : (<div>{}</div>)}
+                )) : (<div>{coSoMSG}</div>)}
                 
                 
 
@@ -169,44 +175,50 @@ export const OrderField = () => {
 
 
             <div className="col-span-8 border-[#379E13] border-[3px] rounded-[10px] p-5 relative">
-                <div className="flex gap-6">
-                    <img className="w-[240px] h-[240px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
-                    <div className="block w-full">
-                        <div className="text-[32px] font-[600] mb-2">Sân Huy Hoàng</div>
-
-                        <div className="text-[20px] mt-1">
-                            <span className="font-[600]">Địa chỉ:</span>
-                            <span className="font-[400] ml-3">32 Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân </span>
-                        </div>
-
-                        <div className="text-[20px] mt-1">
-                            <span className="font-[600]">Số điện thoại:</span>
-                            <span className="font-[400] ml-3">08128782993 </span>
-                        </div>
-
-                        <div className="text-[20px] mt-5 flex">
-                            <span className="font-[600] justify-center flex flex-col">Ngày đặt sân:</span>
-                            <div className="flex gap-4 ml-3">
-                                <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer w-[230px]" onClick = {handleCalendarClick}>
-                                    <span className="text-[20px] mx-4 textofDate">{textofDate}</span>
+            {
+                        gotInfo === true ? ( 
+                <div className="flex gap-6 " >
+                         <img className="w-[240px] h-[240px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                            <div className="block w-full ">                        
+                                <div className="text-[32px] font-[600] mb-2">{infoCoSo.Ten}</div>
+        
+                                <div className="text-[20px] mt-1">
+                                    <span className="font-[600]">Địa chỉ:</span>
+                                    <span className="font-[400] ml-3">{infoCoSo.DiaChiCoSo}</span>
                                 </div>
-                
-                                <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer">
-                                    <span className="text-[20px] mx-4">Lọc loại sân</span>
-                                    <Icon24px classIcon={faChevronDown}/>
+        
+                                <div className="text-[20px] mt-1">
+                                    <span className="font-[600]">Số điện thoại:</span>
+                                    <span className="font-[400] ml-3">{infoCoSo.SoDienThoai}</span>
+                                </div>
+        
+                                <div className="text-[20px] mt-5 flex">
+                                    <span className="font-[600] justify-center flex flex-col">Ngày đặt sân:</span>
+                                    <div className="flex gap-4 ml-3">
+                                        <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer w-[230px]" onClick = {handleCalendarClick}>
+                                            <span className="text-[20px] mx-4 textofDate">{textofDate}</span>
+                                        </div>
+                        
+                                        <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer">
+                                            <span className="text-[20px] mx-4">Lọc loại sân</span>
+                                            <Icon24px classIcon={faChevronDown}/>
+                                        </div>
+                                    </div>
+                                        {isCalendarVisible === true ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value = {selectedDate}/> : ""}
+                                </div>
+        
+                                <div className="grid grid-cols-10 mt-5 gap-3">
+                                    <div className="col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 1</div>
+                                    <div className="col-span-2 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 2</div>
+                                    <div className="col-span-2 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 3</div>
                                 </div>
                             </div>
-                                {isCalendarVisible === true ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value = {selectedDate}/> : ""}
-                        </div>
 
-                        <div className="grid grid-cols-10 mt-5 gap-3">
-                            <div className="col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 1</div>
-                            <div className="col-span-2 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 2</div>
-                            <div className="col-span-2 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 3</div>
-                        </div>
-                    </div>
+                        
+                    
                 </div>
-
+                    ) : ("noo")
+                }
                 <div className="mt-[30px] relative">
                     <div className="text-[24px] text-[#2B790F]">Chi tiết sân bóng:</div>
                     <div className="w-full h-[3px] lineCustom"></div>
