@@ -1,15 +1,47 @@
+import axios from "axios";
 class Bill{
     constructor(idHoaDon, idTaiKhoan, idSan, idKhungGio, ngay, giaoHuu, idDoiThu, tongTien, thoiGianDat, trangThai){
-        this.idHoaDon = idHoaDon;
-        this.idTaiKhoan = idTaiKhoan;
-        this.idSan = idSan;
-        this.idKhungGio = idKhungGio;
-        this.ngay = ngay;
-        this.giaoHuu = giaoHuu;
-        this.idDoiThu = idDoiThu;
-        this.tongTien = tongTien;
-        this.thoiGianDat = thoiGianDat;
-        this.trangThai = trangThai;
+        this.IDHoaDon = idHoaDon;
+        this.IDTaiKhoan = idTaiKhoan;
+        this.IDSan = idSan;
+        this.IDKhungGio = idKhungGio;
+        this.Ngay = ngay;
+        this.GiaoHuu = giaoHuu;
+        this.IDDoiThu = idDoiThu;
+        this.TongTien = tongTien;
+        this.ThoiGianDat = thoiGianDat;
+        this.TrangThai = trangThai;
     }
-    
+
+    GetAllBill() {
+        return axios.post("http://localhost:8081/getAllBill", {})
+            .then(response => {
+                console.log(response.data);
+                const list = this.initBill(response.data);               
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    initBill(list){
+        const resultList = [];
+        list.forEach(bill => {
+            const item = new Bill(bill.IDHoaDon, bill.IDTaiKhoan, bill.IDSan, bill.IDKhungGio,
+               bill.GiaoHuu, bill.Ngay,bill.IDDoiThu,bill.TongTien,bill.ThoiGianDat,bill.TrangThai);
+            resultList.push(item);
+        });
+        
+        return resultList
+    }
+
+    getBillById(idBill){
+        return this.getAllBill()
+            .then(allBill => allBill.find(bill => bill.idBill === idBill))
+            .catch(error => {
+                console.error(error);
+            });
+        
+    }
 }
+export default Bill
