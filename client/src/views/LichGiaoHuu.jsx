@@ -31,7 +31,7 @@ const LichGiaoHuu = () =>{
             <div class="col-span-1 px-5 flex flex-col justify-center">Sân 01</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">T7 31/12/2023<br/>19h00 - 21h00 </div>
             <div className="relative">
-              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3">Tham gia</button>
+              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3 font-bold">Tham gia</button>
             </div>
           </div>  
           <div className="mt-3 rounded-[10px] grid grid-cols-7 bg-[#379E13] text-center justify-center py-5 text-[#fff] text-[20px]" >
@@ -41,7 +41,7 @@ const LichGiaoHuu = () =>{
             <div class="col-span-1 px-5 flex flex-col justify-center">Sân 01</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">T7 31/12/2023<br/>19h00 - 21h00 </div>
             <div className="relative">
-              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3">Tham gia</button>
+              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3 font-bold">Tham gia</button>
             </div>
           </div>  
           <div className="mt-3 rounded-[10px] grid grid-cols-7 bg-[#379E13] text-center justify-center py-5 text-[#fff] text-[20px]" >
@@ -51,7 +51,7 @@ const LichGiaoHuu = () =>{
             <div class="col-span-1 px-5 flex flex-col justify-center">Sân 01</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">T7 31/12/2023<br/>19h00 - 21h00 </div>
             <div className="relative">
-              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3">Tham gia</button>
+              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3 font-bold">Tham gia</button>
             </div>
           </div>  
           <div className="mt-3 rounded-[10px] grid grid-cols-7 bg-[#379E13] text-center justify-center py-5 text-[#fff] text-[20px]" >
@@ -61,7 +61,7 @@ const LichGiaoHuu = () =>{
             <div class="col-span-1 px-5 flex flex-col justify-center">Sân 01</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">T7 31/12/2023<br/>19h00 - 21h00 </div>
             <div className="relative">
-              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3 ">Tham gia</button>
+              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3 font-bold">Tham gia</button>
             </div>
           </div>  
 

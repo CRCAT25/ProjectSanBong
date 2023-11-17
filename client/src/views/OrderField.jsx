@@ -186,11 +186,11 @@ export const OrderField = () => {
                     </div>
                 </div>
 
-                <div className="mt-[50px] relative">
+                <div className="mt-[30px] relative">
                     <div className="text-[24px] text-[#2B790F]">Chi tiết sân bóng:</div>
                     <div className="w-full h-[3px] lineCustom"></div>
                     <div className="mt-4 flex gap-6">
-                        <img className="w-[300px] h-[300px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                        <img className="w-[300px] h-[300px] rounded-[15px] mb-[50px]" src="./assets/sanbong.jpg" alt="" />
 
                         <div className="w-full">
                             <div className="text-[20px] mt-1">
@@ -202,6 +202,7 @@ export const OrderField = () => {
                                 <span className="font-[600]">Loại sân:</span>
                                 <span className="font-[400] ml-3">VIP</span>
                             </div>
+                            
 
                             <div className="mt-7 w-full gap-3 grid grid-cols-12">
                                 <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">5:00 - 7:00</div>                          
@@ -212,15 +213,14 @@ export const OrderField = () => {
                                 <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">15:00 - 17:00</div>                          
                                 <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">17:00 - 19:00</div>                          
                             </div>
-
-                            <div className="absolute flex gap-3 bottom-0">
+                            <div className="absolute flex gap-3 my-10">
                                 <div className="w-[30px] h-[30px] bg-[#2AB514] border-[2px] border-[#2AB514] rounded-[5px] cursor-pointer p-1">
                                     <IconCheck classIcon={faCheck}/>
                                 </div>
-
                                 <div className="flex flex-col justify-center font-[600]">Cho phép người khác tham gia giao hữu</div>
 
                             </div>
+                            
                         </div>
                     </div>
                 </div>
