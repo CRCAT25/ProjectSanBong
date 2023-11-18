@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getAllLoaiSan, getAllSanByTaiKhoan, getAllKhungGio} from "../controllers/CQuanLySan";
+import { getAllLoaiSan, getAllSanByTaiKhoan, getEmptyShiftByDay} from "../controllers/CQuanLySan";
 
 
 
@@ -19,51 +19,63 @@ const FieldManage =  () => {
   function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
-    let month = today.getMonth() + 1; // Month is zero-based
+    let month = today.getMonth() + 1; 
     let day = today.getDate();
-
-    // Add leading zero if month or day is a single digit
     month = month < 10 ? `0${month}` : month;
     day = day < 10 ? `0${day}` : day;
-
     return `${year}-${month}-${day}`;
   }
 
-  const handleDateChange = () =>{
+  const handleDateChange = async () =>{
+    
     document.getElementsByClassName("thng-10-WTm")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[1]+" / "+ document.getElementsByClassName("ngayLS")[0].value.split("-")[0]
     document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
+    GetKhungGios()
   };
   const changeDate = (daysToAdd) =>{
     var currentDate = new Date(document.getElementsByClassName("ngayLS")[0].value);
-
-      // Increase the date by 1 day
       currentDate.setDate(currentDate.getDate() + daysToAdd);
-
-      // Format the increased date and set it back to the input
       var year = currentDate.getFullYear();
       var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
       var day = currentDate.getDate().toString().padStart(2, '0');
       document.getElementsByClassName("ngayLS")[0].value = `${year}-${month}-${day}`;
-    // if(document.getElementsByClassName("ngayLS").length > 0)
-    // document.getElementsByClassName("ngayLS")[0].value = document.getElementsByClassName("ngayLS")[0].value.Date
       handleDateChange()
   }
+
   useEffect(() => {
     GetLoaiSans()
     document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
+    GetKhungGios()
     handleDateChange()
-    // GetKhungGios()
-    // GetAllSansByTaiKhoan("1")
   }, []);
+
+
+  
+  const GetKhungGios = async () =>{
+    let run = true
+    setKhungGios(await getEmptyShiftByDay("1", await document.getElementsByClassName("ngayLS")[0].value))
+    const slect =  document.getElementsByClassName("selectKhungGio")[0];
+    while (slect.hasChildNodes()) {
+      slect.removeChild(slect.firstChild);
+    }
+    slect.innerHTML = `<option value="none">--Khung giờ--</option>`
+    if(run){
+      run = false;
+      ;(await getEmptyShiftByDay("1", await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
+        slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
+      })
+    }
+    
+    
+  }
   const GetLoaiSans = async () =>{
     setLoaiSans(await getAllLoaiSan())
   }
-  const GetKhungGios = async () =>{
-    setKhungGios(await getAllKhungGio())
-  }
+
   const GetAllSansByTaiKhoan = async (IDTaiKhoan) =>{
     setSans(await getAllSanByTaiKhoan(IDTaiKhoan))
   }
+
   return (
     <div className="landing-fAj" id="257:562">
       <div className="qun-l-sn-dgX" id="257:798">
@@ -235,7 +247,7 @@ const FieldManage =  () => {
               Ngày:
             </div>
             <div className="auto-group-efjs-9qd" id="Wa19yo8hWThy9FUqpkefJs">
-              <input type="date" className="ngayLS" id="257:891" onChange={handleDateChange}
+              <input type="date" className="ngayLS" id="257:891" onChange={()=>handleDateChange()}
         min={getCurrentDate()}></input>
             </div>
           </div>
@@ -260,12 +272,6 @@ const FieldManage =  () => {
                 Khung giờ:
               </div>
               <select name="cars" className="selectKhungGio">
-                <option value="none">--Khung giờ--</option>
-                {
-                    getKhungGios.map((khungGio, i) => (
-                      <option value={khungGio.IdKhungGio} >{khungGio.ThoiGian}</option>
-                    ))
-                  }
               </select>
             </div>
             <div className="nhp-tn-sn-vKu" id="257:946">

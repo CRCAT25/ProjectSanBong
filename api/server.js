@@ -10,7 +10,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "projectdatsanbong",
+  database: "projectsanbong",
 });
 
 /* TRUONG THIEN - Lấy All Cơ sở*/
@@ -77,7 +77,7 @@ app.post("/getAllBill", (req, res) => {
   });
 });
 
-
+/*************************/
 //Huỳnh Công Tấn  
 // Trang quản lý sân, quản lý lịch sân
 app.post("/getAllLoaiSan", (req, res) => {
@@ -104,6 +104,28 @@ app.post("/getAllKhungGio", (req, res) => {
       res.json(data);
   });
 });
+app.post("/getHoaDonsCompleteByNgaySan", (req, res) => {
+  const sql = "SELECT * FROM hoadon where Ngay = ? and IDSan = ? and TrangThai = 'Completed'"; 
+  db.query(sql, [req.body.Ngay, req.body.IDSan], (err, data) => {
+      res.json(data);
+  });
+});
+app.post("/getHoaDonsCompleteByNgayKG", (req, res) => {
+  const sql = "SELECT * FROM hoadon where Ngay = ? and IDKhungGio = ? and TrangThai = 'Completed'"; 
+  db.query(sql, [req.body.Ngay, req.body.IDKhungGio], (err, data) => {
+      res.json(data);
+  });
+});
+
+/*************************/
+
+
+
+
+
+
+
+
 
 app.post("/loginUser", (req, res) => {
   const userName = req.body.userName;

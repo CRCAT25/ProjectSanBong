@@ -16,7 +16,6 @@ class Bill{
     GetAllBill() {
         return axios.post("http://localhost:8081/getAllBill", {})
             .then(response => {
-                console.log(response.data);
                 const list = this.initBill(response.data);               
                 return list;
             })
@@ -43,5 +42,30 @@ class Bill{
             });
         
     }
+
+
+    //Tấn - Start
+
+    GetHoaDonsCompleteByNgaySan(day,idSan) {
+        return axios.post("http://localhost:8081/getHoaDonsCompleteByNgaySan", {Ngay: day, IDSan: idSan})
+            .then(response => {
+                const list = this.initBill(response.data);               
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    GetHoaDonsCompleteByNgayKG(day,idKhungGio) {
+        return axios.post("http://localhost:8081/getHoaDonsCompleteByNgayKG", {Ngay: day, IDKhungGio: idKhungGio})
+            .then(response => {
+                const list = this.initBill(response.data);    
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    //Tấn - End
 }
 export default Bill

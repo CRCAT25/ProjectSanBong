@@ -24,7 +24,6 @@ class SanBong{
             const item = new SanBong(san.IDSan, san.IDTaiKhoan, san.IDLoaiSan, san.TenSan, san.TrangThai);
             resultList.push(item);
         });
-        
         return resultList
     }
 }
