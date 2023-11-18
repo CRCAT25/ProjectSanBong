@@ -1118,7 +1118,7 @@ th {
     text-transform: uppercase;
     font-weight: 600;
     transition: 0.2s ease;
-    margin-top: 33%;
+    margin-top: 53%;
     padding: 1rem;
 }
 #logout:hover {
@@ -1367,7 +1367,7 @@ th {
     line-height: 50px;
     border-radius: 5px;
     color: #ffffff;
-    background-color: #3085D6;
+    background-color: #256eb3;
 }
 
 .sdt {
@@ -2131,28 +2131,27 @@ th {
     width: 20%;
 }
 #searchpartner {
-    position: absolute;
-    top: 10px;
-    left: 590px;
+    /* transform: translate(200px,0px); */
     font-size: 19px;
 }
 
 .input_searchemailsopart {
     padding: 10px;
-    width: 19% !important;
+    margin-top: -5px;
+    width: 500px;
     height: 50px !important;
     background: none;
-    border: 3px solid #FF3366 !important;
-    border-radius: 50px !important;
+    border: #000000 solid 3px;
+    border-radius: 5px !important;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    font-size: 17px !important;
+    font-size: 18px !important;
     color: #1e1d1d !important;
     outline: none;
-    transition: .5s;
-    transform: translate(860px, 0px);
     text-align: center;
+    background-color: #ffffff;
+
 }
 
 .submit_searchtensopart {
