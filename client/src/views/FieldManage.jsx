@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { getCostByShiftnTypeField, getLoaiSanByIdField, getAllLoaiSan, getEmptyFieldByDayShift, getEmptyShiftByDay} from "../controllers/CQuanLySan";
 import { getAllSanByTaiKhoan, getAllHoaDonCompletedByCoSo, getBillForRefund} from "../controllers/CQuanLySan";
+import SanBong from "../models/SanBong";
 
 
 
@@ -49,6 +50,7 @@ const FieldManage =  () => {
     document.getElementsByClassName("thng-10-WTm")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[1]+" / "+ document.getElementsByClassName("ngayLS")[0].value.split("-")[0]
     document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
     setSelectKGByNgay()
+    setSelectSanByNgayKG()
   };
 
 
@@ -76,16 +78,59 @@ const FieldManage =  () => {
     ;(await getEmptyFieldByDayShift("7", await document.getElementsByClassName("ngayLS")[0].value,await document.getElementsByClassName("selectKhungGio")[0].value)).map((san, i)=>{
       slect.innerHTML += `<option value="${san.IdSan}" >${san.TenSan}</option>`
     })
+    setLoaiSanLS()
   }
   const setLoaiSanLS = async () =>{
-    document.getElementsByClassName("loaiSanLS")[0].innerHTML = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).TenLoaiSan
-    document.getElementsByClassName("loaiSanLS")[0].value = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).IdLoaiSan
-    setTongTien()
+    if(document.getElementsByClassName("selectTenLS")[0].value  != "none"){
+      document.getElementsByClassName("loaiSanLS")[0].innerHTML = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).TenLoaiSan
+      document.getElementsByClassName("loaiSanLS")[0].value = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).IdLoaiSan
+      document.getElementsByClassName("tongTien")[0].innerHTML = await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value  , await document.getElementsByClassName("loaiSanLS")[0].value) +".000 VND"
+    }else{
+      document.getElementsByClassName("loaiSanLS")[0].innerHTML = "------"
+      document.getElementsByClassName("loaiSanLS")[0].value = null
+      document.getElementsByClassName("tongTien")[0].innerHTML = "0.000 VND"
+    }
   }
-  const setTongTien = async () =>{
-    document.getElementsByClassName("tongTien")[0].innerHTML = await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value  , await document.getElementsByClassName("loaiSanLS")[0].value) +".000 VND"
+  const loadListFields = async () =>{
+    let list = ""
+    getAllSanByTaiKhoan().map( async san=>{
+      const loaiSan = await getLoaiSanByIdField(san.IdSan)
+      list +=  `<div className="sn-XTh" id="257:844">
+      <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
+        <div className="tn-sn-input-J75" id="257:849">
+          <div className="tenSan" value="${san.IdSan}">${san.TenSan}</div>
+        </div>
+        <div className="tn-sn-input-Mr3" id="257:852">
+          <div className="loaiSan" value="${san.IdLoaiSan}">${loaiSan.TenLoaiSan}</div>
+        </div>
+        <div className="tn-sn-input-J91" id="257:855">
+          <div className="donGia">${loaiSan.GiaTien}</div>
+        </div>
+      </div>
+      <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
+        <img
+          className="imgSan"
+          src="https://via.placeholder.com/1920x839"
+          id="257:863"
+        />
+        <img
+          className="imgSan"
+          src="https://via.placeholder.com/1920x839"
+          id="260:1081"
+        />
+      </div>
+      <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
+        <button class="btn">
+          <i class="fa fa-edit fa-2x"></i>
+        </button>
+        <button class="btn">
+          <i class="fa fa-trash fa-2x"></i>
+        </button>
+      </div>
+    </div>`
+    })
+    document.getElementsByClassName("scrollContainerSan")[0].innerHTML = list
   }
-
   const GetAllBillByTaiKhoan = async () =>{
     console.log(await getAllHoaDonCompletedByCoSo(1));
   }
@@ -162,72 +207,7 @@ const FieldManage =  () => {
           Danh sách sân
         </div>
         <div className="scrollContainerSan">
-          <div className="sn-XTh" id="257:844">
-            <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
-              <div className="tn-sn-input-J75" id="257:849">
-                <div className="tenSan">Tên sân</div>
-              </div>
-              <div className="tn-sn-input-Mr3" id="257:852">
-                <div className="loaiSan">Loại sân</div>
-              </div>
-              <div className="tn-sn-input-J91" id="257:855">
-                <div className="donGia">Đơn giá</div>
-              </div>
-            </div>
-            <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
-              <img
-                className="imgSan"
-                src="https://via.placeholder.com/1920x839"
-                id="257:863"
-              />
-              <img
-                className="imgSan"
-                src="https://via.placeholder.com/1920x839"
-                id="260:1081"
-              />
-            </div>
-            <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-              <button class="btn">
-                <i class="fa fa-edit fa-2x"></i>
-              </button>
-              <button class="btn">
-                <i class="fa fa-trash fa-2x"></i>
-              </button>
-            </div>
-          </div>
-          <div className="sn-XTh" id="257:844">
-            <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
-              <div className="tn-sn-input-J75" id="257:849">
-                <div className="tenSan">Tên sân</div>
-              </div>
-              <div className="tn-sn-input-Mr3" id="257:852">
-                <div className="loaiSan">Loại sân</div>
-              </div>
-              <div className="tn-sn-input-J91" id="257:855">
-                <div className="donGia">Đơn giá</div>
-              </div>
-            </div>
-            <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
-              <img
-                className="imgSan"
-                src="https://via.placeholder.com/1920x839"
-                id="257:863"
-              />
-              <img
-                className="imgSan"
-                src="https://via.placeholder.com/1920x839"
-                id="260:1081"
-              />
-            </div>
-            <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-              <button class="btn">
-                <i class="fa fa-edit fa-2x"></i>
-              </button>
-              <button class="btn">
-                <i class="fa fa-trash fa-2x"></i>
-              </button>
-            </div>
-          </div>
+          
         </div>
       </div>
       <hr className="divideLine"/>
