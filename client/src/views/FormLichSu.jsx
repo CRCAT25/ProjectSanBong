@@ -1,5 +1,11 @@
 import React from 'react'
 import Swal from 'sweetalert2'
+import { useEffect } from "react";
+import { useState } from "react";
+import { 
+  getLichByBillId
+
+} from "../controllers/CQuanLyLich";
 
 const FormLichSu = () => {
   return (
@@ -39,146 +45,7 @@ const FormLichSu = () => {
               </div>
               
         </div>  
-        <div className='w-[auto] bg-[#9BCE89] h-[115px] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-7 '>
-            <img src="" alt="" className='w-[90px] h-[90px] col-span-1 ml-[10px] ' />
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ đăng ký:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đỗ Quốc Thành</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              
-        </div>  
-        <div className='w-[auto] bg-[#9BCE89] h-[115px] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-7 '>
-            <img src="" alt="" className='w-[90px] h-[90px] col-span-1 ml-[10px] ' />
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ đăng ký:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đỗ Quốc Thành</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              
-        </div>  
-        <div className='w-[auto] bg-[#9BCE89] h-[115px] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-7 '>
-            <img src="" alt="" className='w-[90px] h-[90px] col-span-1 ml-[10px] ' />
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ đăng ký:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đỗ Quốc Thành</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              
-        </div>  
-        <div className='w-[auto] bg-[#9BCE89] h-[115px] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-7 '>
-            <img src="" alt="" className='w-[90px] h-[90px] col-span-1 ml-[10px] ' />
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ đăng ký:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đỗ Quốc Thành</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              
-        </div>  
-        <div className='w-[auto] bg-[#9BCE89] h-[115px] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-7 '>
-            <img src="" alt="" className='w-[90px] h-[90px] col-span-1 ml-[10px] ' />
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ đăng ký:</div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đỗ Quốc Thành</div>
-              </div>
-              <div className='col-span-1 grid grid-row-2 p-[10px]'>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-                <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-              </div>
-              
-        </div>  
+        
        
       </div>
       

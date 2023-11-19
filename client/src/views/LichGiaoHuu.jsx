@@ -1,13 +1,22 @@
 import axios from "axios";
 import "../css/LichGiaoHuu.css"
 import Swal from 'sweetalert2'
-import { getAllLichGiaoHuu} from "../controllers/CQuanLyLich";
-import { useId } from "react";
+
 import { useEffect } from "react";
 import { useState } from "react";
+import { 
+  getAllLichGiaoHuu,
+  updateBillDoiThuByIdBill
+
+} from "../controllers/CQuanLyLich";
 
 const LichGiaoHuu = () =>{
-  const conFirmClicked=()=>{
+
+  const [getLichs, setLichs] = useState([]);
+  const [getIdBill, setIdBill] = useState([]);
+  const [getIdDoiThu, setIDDoiThu] = useState([]);
+
+  const conFirmClicked=(IdBill,idTk)=>{
     Swal.fire({
       title: "Bạn có muốn tham gia vào trận đấu này ?",
       icon: "question",
@@ -21,15 +30,16 @@ const LichGiaoHuu = () =>{
         Swal.fire({
           title:"Thành công",
           text: "Bạn có thể xem thông tin trận tại lịch sử",
-          icon: "success"
+          icon: "success",
+        
         });
+        alert(IdBill);
+        ThamGiaGiaoHuu(IdBill,idTk);
+        GetAllLichGiaoHuu();
+
       }
     });
   }
-
- 
-  const [getLichs, setLichs] = useState([]);
-
 
   const GetAllLichGiaoHuu = async () =>{
     setLichs(await getAllLichGiaoHuu())
@@ -37,6 +47,10 @@ const LichGiaoHuu = () =>{
   useEffect(() => {
     GetAllLichGiaoHuu()
   }, []);
+
+  const ThamGiaGiaoHuu = async (IdBill,IdTK) =>{
+    await updateBillDoiThuByIdBill(IdBill,IdTK)
+  }
 
   return (
     <div className="ThamGiaGiaoHU mb-[80px] mt-[120px]" >
@@ -55,16 +69,18 @@ const LichGiaoHuu = () =>{
           {getLichs.length > 0 ? getLichs.map((data,i)=>(
             <div key={i} className="mt-3 rounded-[10px] grid grid-cols-7 bg-[#379E13] w-[100%] text-center justify-center py-5 text-[#fff] text-[20px]" >
             <div className="col-span-1 px-5 flex flex-col justify-center">{data.IDNgDat}</div>
+            <div className=" hidden">{data.IDBill}</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">{data.SoDienThoai}</div>
             <div class="col-span-2 px-5 flex flex-col justify-center text-left">{data.TenCoSo}<br/>{data.DiaChiCoSo}</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">{data.MaSan}</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">{data.Ngay}<br/>{data.ThoiGian}</div>
             <div className="relative">
-              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3 font-bold" onClick={conFirmClicked}>Tham gia</button>
+              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3 font-bold" 
+              onClick={() => conFirmClicked(data.IDBill,2)}>Tham gia</button>
             </div>
             </div>  
           )): 
-          (<div>Không có trận giao hữu nào</div>)}
+          (<div className="flex flex-col justify-center">Không có trận giao hữu nào</div>)}
          
           
         </div>

@@ -8,20 +8,24 @@ import {
 import { useEffect } from "react";
 import { useState } from "react";
 import { getCostByShiftnTypeField, getLoaiSanByIdField, getAllLoaiSan, getEmptyFieldByDayShift, getEmptyShiftByDay} from "../controllers/CQuanLySan";
+import { getAllSanByTaiKhoan, getAllHoaDonCompletedByCoSo, getBillForRefund} from "../controllers/CQuanLySan";
 
 
 
 const FieldManage =  () => {
   useEffect(() => {
     GetLoaiSans()
+    // GetAllBillByTaiKhoan()
+    // GetBillForRefund()
     document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
     handleDateChange()
   }, []);
   const [getLoaiSans, setLoaiSans] = useState([]);
   const [getSans, setSans] = useState([]);
-  const GetLoaiSans = async () =>{
-    setLoaiSans(await getAllLoaiSan())
-  }
+  const [getKhungGios, setKhungGios] = useState([]);
+  const [getBills, setBills] = useState([]);
+  const [getBillForRefund, setBillForRefund] = useState([]);
+
   function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
@@ -46,7 +50,8 @@ const FieldManage =  () => {
     document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
     setSelectKGByNgay()
   };
-  
+
+
   const setSelectKGByNgay = async () =>{
     const slect =  document.getElementsByClassName("selectKhungGio")[0];
     while (slect.hasChildNodes()) {
@@ -56,6 +61,9 @@ const FieldManage =  () => {
     ;(await getEmptyShiftByDay("7", await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
       slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
     })
+  }
+  const GetLoaiSans = async () =>{
+    setLoaiSans(await getAllLoaiSan())
   }
  
 
@@ -76,6 +84,14 @@ const FieldManage =  () => {
   }
   const setTongTien = async () =>{
     document.getElementsByClassName("tongTien")[0].innerHTML = await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value  , await document.getElementsByClassName("loaiSanLS")[0].value) +".000 VND"
+  }
+
+  const GetAllBillByTaiKhoan = async () =>{
+    console.log(await getAllHoaDonCompletedByCoSo(1));
+  }
+
+  const GetBillForRefund = async () =>{
+    console.log(await getBillForRefund(1));
   }
 
   return (
@@ -487,5 +503,6 @@ const FieldManage =  () => {
     </div>
   );
 };
+
 
 export default FieldManage;
