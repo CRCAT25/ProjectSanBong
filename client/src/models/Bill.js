@@ -44,20 +44,21 @@ class Bill{
     }
 
     //Tấn - Start
-    GetHoaDonsCompleteByNgaySan(day,idSan) {
-        return axios.post("http://localhost:8081/getHoaDonsCompleteByNgaySan", {Ngay: day, IDSan: idSan})
-            .then(response => {
-                const list = this.initBill(response.data);               
-                return list;
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
+    // GetHoaDonsCompleteByNgaySan(day,idSan) {
+    //     return axios.post("http://localhost:8081/getHoaDonsCompleteByNgaySan", {Ngay: day, IDSan: idSan})
+    //         .then(response => {
+    //             const list = this.initBill(response.data);               
+    //             return list;
+    //         })
+    //         .catch(error => {
+    //             console.error(error);
+    //         });
+    // }
     GetHoaDonsCompleteByNgayKG(day,idKhungGio, idTK) {
         return axios.post("http://localhost:8081/getHoaDonsCompleteByNgayKGTK", {Ngay: day, IDKhungGio: idKhungGio, IDTaiKhoan: idTK})
             .then(response => {
                 const list = this.initBill(response.data);    
+                
                 return list;
             })
             .catch(error => {

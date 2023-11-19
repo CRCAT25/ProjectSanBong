@@ -7,15 +7,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getAllLoaiSan, getAllSanByTaiKhoan, getEmptyShiftByDay, getAllHoaDonCompletedByCoSo, getBillForRefund} from "../controllers/CQuanLySan";
+import { getAllLoaiSan, getAllSanByTaiKhoan, getEmptyShiftByDay,getEmptyFieldByDayShift, getAllHoaDonCompletedByCoSo, getBillForRefund} from "../controllers/CQuanLySan";
 
 
 
 const FieldManage =  () => {
   useEffect(() => {
-    GetLoaiSans()
-    GetAllBillByTaiKhoan()
-    GetBillForRefund()
+    GetLoaiSans(),
+    // GetAllBillByTaiKhoan()
+    // GetBillForRefund()
     document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
     handleDateChange()
   }, []);
@@ -25,6 +25,9 @@ const FieldManage =  () => {
   const [getBills, setBills] = useState([]);
   const [getBillForRefund, setBillForRefund] = useState([]);
 
+  const GetLoaiSans = async () =>{
+    setLoaiSans(await getAllLoaiSan())
+  }
   function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
@@ -34,13 +37,6 @@ const FieldManage =  () => {
     day = day < 10 ? `0${day}` : day;
     return `${year}-${month}-${day}`;
   }
-
-  const handleDateChange = async () =>{
-    
-    document.getElementsByClassName("thng-10-WTm")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[1]+" / "+ document.getElementsByClassName("ngayLS")[0].value.split("-")[0]
-    document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
-    GetKhungGios()
-  };
   const changeDate = (daysToAdd) =>{
     var currentDate = new Date(document.getElementsByClassName("ngayLS")[0].value);
       currentDate.setDate(currentDate.getDate() + daysToAdd);
@@ -54,6 +50,14 @@ const FieldManage =  () => {
   const GetKhungGios = async () =>{
     let run = true
     // setKhungGios(await getEmptyShiftByDay("7", await document.getElementsByClassName("ngayLS")[0].value))
+  const handleDateChange = async () =>{
+    
+    document.getElementsByClassName("thng-10-WTm")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[1]+" / "+ document.getElementsByClassName("ngayLS")[0].value.split("-")[0]
+    document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
+    setSelectKGByNgay()
+  };
+  
+  const setSelectKGByNgay = async () =>{
     const slect =  document.getElementsByClassName("selectKhungGio")[0];
     while (slect.hasChildNodes()) {
       slect.removeChild(slect.firstChild);
@@ -68,10 +72,31 @@ const FieldManage =  () => {
   }
   const GetLoaiSans = async () =>{
     setLoaiSans(await getAllLoaiSan())
+    ;(await getEmptyShiftByDay("7", await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
+      slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
+    })
   }
+ 
 
-  const GetAllSansByTaiKhoan = async (IDTaiKhoan) =>{
-    setSans(await getAllSanByTaiKhoan(IDTaiKhoan))
+  const setSelectSanByNgayKG = async () =>{
+    const slect =  document.getElementsByClassName("selectTenLS")[0];
+    while (slect.hasChildNodes()) {
+      slect.removeChild(slect.firstChild);
+    }
+    slect.innerHTML = `<option value="none">--Sân--</option>`
+    ;(await getEmptyFieldByDayShift("7", await document.getElementsByClassName("ngayLS")[0].value,await document.getElementsByClassName("selectKhungGio")[0].value)).map((san, i)=>{
+      slect.innerHTML += `<option value="${san.IdSan}" >${san.TenSan}</option>`
+    })
+  }
+  const setLoaiSanLS = async () =>{
+    const slect =  document.getElementsByClassName("selectTenLS")[0];
+    while (slect.hasChildNodes()) {
+      slect.removeChild(slect.firstChild);
+    }
+    slect.innerHTML = `<option value="none">--Sân--</option>`
+    ;(await getEmptyFieldByDayShift("7", await document.getElementsByClassName("ngayLS")[0].value,await document.getElementsByClassName("selectKhungGio")[0].value)).map((san, i)=>{
+      slect.innerHTML += `<option value="${san.IdSan}" >${san.TenSan}</option>`
+    })
   }
 
   const GetAllBillByTaiKhoan = async () =>{
@@ -262,12 +287,7 @@ const FieldManage =  () => {
               Tên:
             </div>
             <select name="cars" className="selectTenLS">
-            <option value="none">--Sân--</option>
-                  {
-                    getSans.map((san, i) => (
-                      <option value={san.IdSan} >{san.TenSan}</option>
-                    ))
-                  }
+            
             </select>
           </div>
         </div>
@@ -277,7 +297,7 @@ const FieldManage =  () => {
               <div className="khung-gi--JA7" id="257:882">
                 Khung giờ:
               </div>
-              <select name="cars" className="selectKhungGio">
+              <select name="cars" className="selectKhungGio" onChange={()=>setSelectSanByNgayKG()}>
               </select>
             </div>
             <div className="nhp-tn-sn-vKu" id="257:946">
@@ -290,13 +310,23 @@ const FieldManage =  () => {
               </select>
             </div>
           </div>
-        <div className="nhp-tn-sn-dB9" id="257:884">
-          
-            <div className="loi--xUK" id="257:887">
-              Loại:
+          <div className="groupkhGHuu">
+            <div className="nhp-tn-sn-9o1" id="257:884">
+              
+              <div className="loi--xUK" id="257:887">
+                Loại:
+              </div>
+              <div className="loaiSanLS">None</div>
             </div>
-            <div className="loaiSanLS">--Loại sân--</div>
+            <div className="nhp-tn-sn-vKu" id="257:884">
+              
+              <div className="loi--xUK" id="257:887">
+                Tổng tiền:
+              </div>
+              <div className="tongTien">0 VND</div>
+            </div>
           </div>
+        
           
           
         </div>
@@ -484,5 +514,6 @@ const FieldManage =  () => {
     </div>
   );
 };
+}
 
 export default FieldManage;

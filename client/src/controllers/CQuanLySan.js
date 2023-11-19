@@ -4,7 +4,7 @@ import KhungGio from '../models/KhungGio'
 import SanBong from '../models/SanBong'
 import LoaiSan from '../models/LoaiSan'
 import HoaDon from '../models/Bill'
-import CoSoSan from '../models/CoSoSan';
+
 
 const getAllLoaiSan = async () =>{
     const loaisan = new LoaiSan()
@@ -51,11 +51,32 @@ const getBillForRefund = async(idCoSo)=>{
    let listNeeded = await hoadon.getBillForRefund(idCoSo);
    return listNeeded;
 }
+const getEmptyFieldByDayShift = async (iDTaiKhoan, day, iDShift) =>{
+   const hoadon = new HoaDon()
+   const san = new SanBong()
+   let listSan = await san.GetAllSanByTaiKhoan(iDTaiKhoan)
+   let listHD = await hoadon.GetHoaDonsCompleteByNgayKG(day, iDShift,iDTaiKhoan)
+   let list = []
+   for(var i = 0; i < listSan.length; i++){
+      let have = true;
+      for(var j = 0; j < listHD.length; j++){
+         if(listHD[j].IDSan == listSan[i].IdSan){
+            have = false
+            break
+         }
+      }
+      if(have){
+         list.push(listSan[i])
+      }
+   }
+   return list
+}
  export {
     getAllLoaiSan,
     getAllSanByTaiKhoan,
     getAllKhungGio,
     getEmptyShiftByDay,
     getAllHoaDonCompletedByCoSo,
-    getBillForRefund
+    getBillForRefund,
+    getEmptyFieldByDayShift
  }
