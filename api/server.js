@@ -92,12 +92,24 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
       res.json(data);
   });
 });
-// app.post("/getKhungGioByDay", (req, res) => {
-//   const sql = "SELECT * FROM Khu WHERE IDTaiKhoan = ?"; 
-//   db.query(sql, [req.body.Day], (err, data) => {
-//       res.json(data);
-//   });
-// });
+app.post("/getFieldByIDField", (req, res) => {
+  const sql = `select * from sanbong where IDSan = ?`;
+  db.query(sql,[req.body.IdSan], (err, data) => {
+    res.json(data);
+  });
+});
+app.post("/getShiftByID", (req, res) => {
+  const sql = `select * from khunggio where IDKhungGio = ?`;
+  db.query(sql,[req.body.id], (err, data) => {
+    res.json(data);
+  });
+});
+app.post("/getLoaiSanByID", (req, res) => {
+  const sql = `select * from loaisan where IDLoaiSan = ?`;
+  db.query(sql,[req.body.id], (err, data) => {
+    res.json(data);
+  });
+});
 app.post("/getAllKhungGio", (req, res) => {
   const sql = "SELECT * FROM khunggio"; 
   db.query(sql, (err, data) => {
