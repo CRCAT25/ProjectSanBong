@@ -56,8 +56,8 @@ class Bill{
                 console.error(error);
             });
     }
-    GetHoaDonsCompleteByNgayKG(day,idKhungGio) {
-        return axios.post("http://localhost:8081/getHoaDonsCompleteByNgayKG", {Ngay: day, IDKhungGio: idKhungGio})
+    GetHoaDonsCompleteByNgayKG(day,idKhungGio, idTK) {
+        return axios.post("http://localhost:8081/getHoaDonsCompleteByNgayKGTK", {Ngay: day, IDKhungGio: idKhungGio, IDTaiKhoan: idTK})
             .then(response => {
                 const list = this.initBill(response.data);    
                 return list;

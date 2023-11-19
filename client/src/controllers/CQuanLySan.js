@@ -31,7 +31,7 @@ const getEmptyShiftByDay = async (IDTaiKhoan, ngay) =>{
    let listAllKG = await khungGio.GetAllKhungGio()
    let listKG = []
    for(var i = 0; i < listAllKG.length; i++){
-      let listHD = await hoadon.GetHoaDonsCompleteByNgayKG(ngay, listAllKG[i].IdKhungGio)
+      let listHD = await hoadon.GetHoaDonsCompleteByNgayKG(ngay, listAllKG[i].IdKhungGio,IDTaiKhoan)
       if(listSan.length != listHD.length){
          listKG.push(listAllKG[i])
       }
