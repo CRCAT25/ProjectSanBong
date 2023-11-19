@@ -15,10 +15,22 @@ class LoaiSan {
                 console.error(error);
             });
     }
+    GetLoaiSan(idLoaiSan) {
+        return axios.post("http://localhost:8081/getLoaiSanByID", {
+            IdLoaiSan : idLoaiSan
+        })
+            .then(loaisan => {
+                const loaiSan = new LoaiSan(loaisan.data[0].IDLoaiSan, loaisan.data[0].TenLoaiSan, loaisan.data[0].GiaTien);
+                return loaiSan
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
     initLoaiSan(list){
         const resultList = [];
         list.forEach(loaisan => {
-            const item = new LoaiSan(loaisan.IdLoaiSan, loaisan.TenLoaiSan, loaisan.GiaTien);
+            const item = new LoaiSan(loaisan.IDLoaiSan, loaisan.TenLoaiSan, loaisan.GiaTien);
             resultList.push(item);
         });
         return resultList

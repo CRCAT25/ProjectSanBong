@@ -10,12 +10,13 @@ import {faLocationDot,
     faMagnifyingGlass,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
-import CDatSan, { GetAllSanFromCoSo, GetInfoCoSo } from "../controllers/CDatSan";
+import { getAllKhungGio, GetAllSanFromCoSo, GetInfoSanBong, GetTenLoaiSan } from "../controllers/CDatSan";
 import { useEffect } from "react";
 import { useRef } from "react";
 import "../controllers/CTimKiem";
 import { TimKiemSanBong, getAllCoSo, TimKiemSanBongC, GetInfoCoSoSan } from "../controllers/CTimKiem";
 import CoSoSan from "../models/CoSoSan";
+import LoaiSan from "../models/LoaiSan";
 const Icon24px = ({classIcon}) => {
     const iconSize = {
         width: "24px",
@@ -36,14 +37,6 @@ const IconCheck = ({classIcon}) => {
         <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
     )
 }
-
-const ShowCoSo = (idCoso) => {
-    const[sanBongs, setSanBongs] = useState([]);
-    GetInfoCoSo(idCoso)
-    setSanBongs(GetAllSanFromCoSo(idCoso))
-}
-
-
 
 
 /*                           CITY API                            */
@@ -88,7 +81,8 @@ export const OrderField = () => {
     }
     useEffect(() => {
         callAPI(host);
-        
+        TimKiemSanBong();
+        GetAllLoaiSan();
       }, []);
 
     const handleChangeCalendar = (date) =>{
@@ -104,11 +98,11 @@ export const OrderField = () => {
     const[coSo, setCoSo] = useState([])
     const[coSoMSG, setCoSoMSG] = useState("")
     const[coSoIsAString, setCoSoIsAString] = useState(false)
-    const[coSoByCate, setcoSoByCate] = useState([])
     const[tenCoSoInput, setTenCoSoInput] = useState("")
     const[diaDiemInput, setDiaDiemInput] = useState("")
 
     const TimKiemSanBong = async () => {
+        
         let result = await TimKiemSanBongC(tenCoSoInput, diaDiemInput)
         if(typeof result === 'string'){
             setCoSoIsAString(true)
@@ -121,17 +115,39 @@ export const OrderField = () => {
 
     const[infoCoSo, setInfoCoSo] = useState(new CoSoSan)
     const[gotInfo, setGotInfo] = useState(false)
+    const[gotInfoSan, setGotInfoSan] = useState(false)
+    const[sanBongs, setSanBongs] = useState([]);
+    const[sanBongInfo, setSanBongInfo] = useState([]);
+    const[loaiSans, setLoaiSans] = useState([]);
+    const[tenLoaiSan, setTenLoaiSan] = useState("");
     const ChonCoSoSan = async (idCoso) => {
         setInfoCoSo(await GetInfoCoSoSan(idCoso))
-        console.log(infoCoSo)
+        setSanBongs(await GetAllSanFromCoSo(idCoso))
         setGotInfo(true)
     }
 
+    const GetAllLoaiSan = async () =>{
+        const loaisan = new LoaiSan();
+        let lstLoaiSan = await loaisan.GetAllLoaiSan();
+        setLoaiSans(lstLoaiSan)
+    }
 
-    
-    
+    const ChonSanBong = async (idSan) =>{
+        let infoSanBong = await GetInfoSanBong(idSan)
+        setTenLoaiSan(await GetTenLoaiSan(infoSanBong.IdLoaiSan))   
+        GetAllKhungGio()
+        setSanBongInfo(infoSanBong)
+        setGotInfoSan(true)
+    }
 
-    // Update the state variable textofDate with the formatted date
+    const[khungGios, setKhungGios] = useState([])
+    const[gotInfoKhungGio, setGotInfoKhungGio] = useState(false)
+    const GetAllKhungGio = async () => {
+        setKhungGios(await getAllKhungGio())
+        setGotInfoKhungGio(true)
+    }
+       
+
   return (
     <div className="w-[80%] mx-auto mt-5 orderField">
         <div className="grid grid-cols-12">
@@ -175,7 +191,7 @@ export const OrderField = () => {
 
             <div className="col-span-8 border-[#379E13] border-[3px] rounded-[10px] p-5 relative">
             {
-                        gotInfo === true ? ( 
+                gotInfo === true ? ( 
                 <div className="flex gap-6 " >
                          <img className="w-[240px] h-[240px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
                             <div className="block w-full ">                        
@@ -194,56 +210,43 @@ export const OrderField = () => {
                                 <div className="text-[20px] mt-5 flex">
                                     <span className="font-[600] justify-center flex flex-col">Ngày đặt sân:</span>
                                     <div className="flex gap-4 ml-3">
-                                        <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer w-[230px]" onClick = {handleCalendarClick}>
+                                        <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer w-[230px]  text-center" onClick = {handleCalendarClick}>
                                             <span className="text-[20px] mx-4 textofDate">{textofDate}</span>
                                         </div>
                         
-                                        <div className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer">
-                                            <span className="text-[20px] mx-4">Lọc loại sân</span>
+                                        <select className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer justify-center text-center">
+                                            <option className="text-[19px]" disable value="">Lọc loại sân</option>
+                                            {loaiSans.map((data, i) =>( <option className="text-[19px]" key={i} value={data.IdLoaiSan} >{data.TenLoaiSan}</option>))}
                                             <Icon24px classIcon={faChevronDown}/>
-                                        </div>
+                                        </select>
                                     </div>
                                         {isCalendarVisible === true ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value = {selectedDate}/> : ""}
                                 </div>
         
                                 <div className="grid grid-cols-10 mt-5 gap-3">
-                                    <div className="col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 1</div>
-                                    <div className="col-span-2 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 2</div>
-                                    <div className="col-span-2 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">SÂN SỐ 3</div>
+                                    {sanBongs.map((data, i) => (<div className="col-span-2 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]" value={data.IdSan} key={i} onClick={()=>ChonSanBong(data.IdSan)}>{data.TenSan}</div>))}
                                 </div>
-                            </div>
-
-                        
-                    
-                </div>
-                    ) : ("noo")
+                            </div>                   
+                </div> ) : ("noo")
                 }
                 <div className="mt-[30px] relative">
-                    <div className="text-[24px] text-[#2B790F]">Chi tiết sân bóng:</div>
+                    <div className="text-[24px] text-[#2B790F]">Chi tiết sân bóng:</div>            
                     <div className="w-full h-[3px] lineCustom"></div>
+                    {gotInfoSan === true ? (
                     <div className="mt-4 flex gap-6">
                         <img className="w-[300px] h-[300px] rounded-[15px] mb-[50px]" src="./assets/sanbong.jpg" alt="" />
-
                         <div className="w-full">
-                            <div className="text-[20px] mt-1">
-                                <span className="font-[600]">Cỡ sân:</span>
-                                <span className="font-[400] ml-3">100m<sup>2</sup></span>
-                            </div>
 
                             <div className="text-[20px] mt-1">
                                 <span className="font-[600]">Loại sân:</span>
-                                <span className="font-[400] ml-3">VIP</span>
+                                <span className="font-[400] ml-3">{tenLoaiSan}</span>
                             </div>
                             
 
                             <div className="mt-7 w-full gap-3 grid grid-cols-12">
-                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">5:00 - 7:00</div>                          
-                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">7:00 - 9:00</div>                          
-                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">9:00 - 11:00</div>                          
-                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">11:00 - 13:00</div>                          
-                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">13:00 - 15:00</div>                          
-                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">15:00 - 17:00</div>                          
-                                <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]">17:00 - 19:00</div>                          
+                                {gotInfoKhungGio === true ? khungGios.map((data, i) => (
+                                    <div className="col-span-3 bg-[#D9D9D9] text-center px-4 py-2 rounded-[10px]" key={i}>{data.ThoiGian}</div>
+                                )) : ""}                                                    
                             </div>
                             <div className="absolute flex gap-3 my-10">
                                 <div className="w-[30px] h-[30px] bg-[#2AB514] border-[2px] border-[#2AB514] rounded-[5px] cursor-pointer p-1">
@@ -254,7 +257,8 @@ export const OrderField = () => {
                             </div>
                             
                         </div>
-                    </div>
+                    </div>): ""}
+                    
                 </div>
 
                 <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>

@@ -1,30 +1,38 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
 import FootballField from "../models/SanBong";
+import SanBong from "../models/SanBong";
+import LoaiSan from "../models/LoaiSan";
+import KhungGio from "../models/KhungGio";
 
-const GetInfoCoSo = (idCoSo) =>{
-    const[coSo, setCoSo] = useState('');
-        axios.post('',{
-            idCoSo: idCoSo
-        }).then(res => {
-            setCoSo(res.data)
-            return coSo
-        })
+
+const GetAllSanFromCoSo = async (idCoSo) =>{
+    const sanBong = new SanBong();
+    let lstSanBong = await sanBong.GetAllSanByTaiKhoan(idCoSo)
+    return lstSanBong
+}
+const GetInfoSanBong = async (idSan) =>{
+    const sanBong = new SanBong();
+    let result = await sanBong.FindSanByID(idSan)
+    return result
 }
 
-const GetAllSanFromCoSo = (idCoSo) =>{
-    const[sanBongs, setSanBongs] = useState([]);
-    useEffect(() =>{
-        axios.post('',{
-            idCoSo: idCoSo
-        }).then(res => {
-            setSanBongs(res.data.map(sanbong => new FootballField(sanbong.idSan, sanbong.idTaiKhoan, sanbong.idLoaiSan, sanbong.tenSan, sanbong.giaTien, sanbong.trangThai)))
-            return sanBongs
-        })
-    })
-}
+const GetTenLoaiSan = async (idLoaiSan) => {
+    const loaiSan = new LoaiSan()
+    let result
+    result = await loaiSan.GetLoaiSan(idLoaiSan)
+    return result.TenLoaiSan
+} 
 
-export{
-    GetInfoCoSo, 
-    GetAllSanFromCoSo
+const getAllKhungGio = async () =>{
+    const khungGio = new KhungGio()
+    let list = await khungGio.GetAllKhungGio()
+    return list
+    
+ }
+export{ 
+    GetAllSanFromCoSo,
+    GetInfoSanBong,
+    GetTenLoaiSan,
+    getAllKhungGio
 } 

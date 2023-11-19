@@ -17,7 +17,6 @@ const db = mysql.createConnection({
 app.post("/getAllCoSo", (req, res) => {
   const sql = "SELECT * FROM taikhoan where IDPhanQuyen = 2";
   db.query(sql, (err, data) => {
-    console.log(data)
       res.json(data);
   });
 });
@@ -37,7 +36,7 @@ app.post("/getCoSoBySearch", (req, res) => {
     }
     
     db.query(sql, (err, data) => {
-        // console.log(data)
+        res.json(data)
     });
 });
 
@@ -46,6 +45,22 @@ app.post("/getInfoCoSo", (req, res) => {
   const sql = `select * from taikhoan where IDTaiKhoan = ${idCoSo}`;
   db.query(sql, (err, data) => {
     res.json(data);
+  });
+});
+
+app.post("/getSanByID", (req, res) => {
+  const idSan = req.body.IdSan;
+  const sql = `select * from SanBong where IDSan = ${idSan}`;
+  db.query(sql, (err, data) => {
+    res.json(data);
+  });
+});
+
+app.post("/getLoaiSanByID", (req, res) => {
+  const idLoaiSan = req.body.IdLoaiSan;
+  const sql = `SELECT * FROM loaisan Where IDLoaiSan = ${idLoaiSan}`; 
+  db.query(sql, (err, data) => {
+      res.json(data);
   });
 });
 
