@@ -7,21 +7,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getAllLoaiSan, getEmptyFieldByDayShift, getEmptyShiftByDay} from "../controllers/CQuanLySan";
+import { getCostByShiftnTypeField, getLoaiSanByIdField, getAllLoaiSan, getEmptyFieldByDayShift, getEmptyShiftByDay} from "../controllers/CQuanLySan";
+import { getAllSanByTaiKhoan, getAllHoaDonCompletedByCoSo, getBillForRefund} from "../controllers/CQuanLySan";
 
 
 
 const FieldManage =  () => {
   useEffect(() => {
     GetLoaiSans()
+    // GetAllBillByTaiKhoan()
+    // GetBillForRefund()
     document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
     handleDateChange()
   }, []);
   const [getLoaiSans, setLoaiSans] = useState([]);
   const [getSans, setSans] = useState([]);
-  const GetLoaiSans = async () =>{
-    setLoaiSans(await getAllLoaiSan())
-  }
+  const [getKhungGios, setKhungGios] = useState([]);
+  const [getBills, setBills] = useState([]);
+  const [getBillForRefund, setBillForRefund] = useState([]);
+
   function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
@@ -46,7 +50,8 @@ const FieldManage =  () => {
     document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
     setSelectKGByNgay()
   };
-  
+
+
   const setSelectKGByNgay = async () =>{
     const slect =  document.getElementsByClassName("selectKhungGio")[0];
     while (slect.hasChildNodes()) {
@@ -56,6 +61,9 @@ const FieldManage =  () => {
     ;(await getEmptyShiftByDay("7", await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
       slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
     })
+  }
+  const GetLoaiSans = async () =>{
+    setLoaiSans(await getAllLoaiSan())
   }
  
 
@@ -70,14 +78,20 @@ const FieldManage =  () => {
     })
   }
   const setLoaiSanLS = async () =>{
-    const slect =  document.getElementsByClassName("selectTenLS")[0];
-    while (slect.hasChildNodes()) {
-      slect.removeChild(slect.firstChild);
-    }
-    slect.innerHTML = `<option value="none">--Sân--</option>`
-    ;(await getEmptyFieldByDayShift("7", await document.getElementsByClassName("ngayLS")[0].value,await document.getElementsByClassName("selectKhungGio")[0].value)).map((san, i)=>{
-      slect.innerHTML += `<option value="${san.IdSan}" >${san.TenSan}</option>`
-    })
+    document.getElementsByClassName("loaiSanLS")[0].innerHTML = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).TenLoaiSan
+    document.getElementsByClassName("loaiSanLS")[0].value = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).IdLoaiSan
+    setTongTien()
+  }
+  const setTongTien = async () =>{
+    document.getElementsByClassName("tongTien")[0].innerHTML = await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value  , await document.getElementsByClassName("loaiSanLS")[0].value) +".000 VND"
+  }
+
+  const GetAllBillByTaiKhoan = async () =>{
+    console.log(await getAllHoaDonCompletedByCoSo(1));
+  }
+
+  const GetBillForRefund = async () =>{
+    console.log(await getBillForRefund(1));
   }
 
   return (
@@ -251,7 +265,7 @@ const FieldManage =  () => {
               Ngày:
             </div>
             <div className="auto-group-efjs-9qd" id="Wa19yo8hWThy9FUqpkefJs">
-              <input type="date" className="ngayLS" id="257:891" onChange={()=>handleDateChange()}
+              <input type="date" className="ngayLS" id="257:891" onChange={handleDateChange}
         min={getCurrentDate()}></input>
             </div>
           </div>
@@ -259,7 +273,9 @@ const FieldManage =  () => {
             <div className="tn--9FH" id="257:877">
               Tên:
             </div>
-            <select name="cars" className="selectTenLS">
+            <select name="cars" className="selectTenLS" onChange={()=>{
+              setLoaiSanLS()
+            }}>
             
             </select>
           </div>
@@ -270,7 +286,7 @@ const FieldManage =  () => {
               <div className="khung-gi--JA7" id="257:882">
                 Khung giờ:
               </div>
-              <select name="cars" className="selectKhungGio" onChange={()=>setSelectSanByNgayKG()}>
+              <select name="cars" className="selectKhungGio" onChange={setSelectSanByNgayKG}>
               </select>
             </div>
             <div className="nhp-tn-sn-vKu" id="257:946">
@@ -487,5 +503,6 @@ const FieldManage =  () => {
     </div>
   );
 };
+
 
 export default FieldManage;

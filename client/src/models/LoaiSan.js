@@ -22,6 +22,17 @@ class LoaiSan {
             .then(loaisan => {
                 const loaiSan = new LoaiSan(loaisan.data[0].IDLoaiSan, loaisan.data[0].TenLoaiSan, loaisan.data[0].GiaTien);
                 return loaiSan
+            }).catch(error => {
+                console.error(error);
+            });
+    }
+
+    GetLoaiSanByID(id) {
+        return axios.post("http://localhost:8081/getLoaiSanByID", {id})
+            .then(response => {
+                console.log(response.data)
+                const loaiSan =  new LoaiSan(response.data[0].IDLoaiSan, response.data[0].TenLoaiSan, response.data[0].GiaTien)
+                return loaiSan
             })
             .catch(error => {
                 console.error(error);

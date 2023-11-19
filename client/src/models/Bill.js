@@ -67,6 +67,14 @@ class Bill{
     //Tấn - End
     
     getBillByIdCoSo(idCoSo){
+        return axios.post("http://localhost:8081/getAllHoaDonCompletedByCoSo",{IDTaiKhoan:idCoSo})
+        .then(response => {
+            const list = this.initBill(response.data);    
+            return list;
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
     }
 
@@ -79,6 +87,27 @@ class Bill{
             .catch(error => {
                 console.error(error);
             });
+        }
+    getBillForRefund(idCoSo){
+        return axios.post("http://localhost:8081/getAllBillForRefund",{IDTaiKhoan:idCoSo})
+        .then(response => {
+            const list = this.initBill(response.data);    
+            return list;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    UpdateBillDoiThuByIdBill(IDDoiThu,IDHoaDon)
+    {
+        return axios.post("http://localhost:8081/updateDoiThuInBill",{IDDoiThu,IDHoaDon})
+        .then(response => {
+            return "yeah"
+        })
+        .catch(error => {
+            console.log(error)
+        });
     }
 
 }

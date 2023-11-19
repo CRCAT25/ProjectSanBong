@@ -24,6 +24,19 @@ class SanBong{
             .then(response => {
                 const sanBong = new SanBong(response.data[0].IDSan, response.data[0].IDTaiKhoan, response.data[0].IDLoaiSan, response.data[0].TenSan, response.data[0].TrangThai)
                 return sanBong
+            });
+    }
+    
+    GetFieldByIDField(idField) {
+        return axios.post("http://localhost:8081/getFieldByIDField", {IdSan: idField})
+            .then(response => {
+                const field = new SanBong(response.data[0].IDSan,
+                    response.data[0].IDSan,
+                    response.data[0].IDTaiKhoan,
+                    response.data[0].IDLoaiSan,
+                    response.data[0].TenSan,
+                    response.data[0].TrangThai)
+                return field
             })
             .catch(error => {
                 console.error(error);

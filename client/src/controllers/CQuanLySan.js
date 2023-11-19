@@ -5,6 +5,7 @@ import SanBong from '../models/SanBong'
 import LoaiSan from '../models/LoaiSan'
 import HoaDon from '../models/Bill'
 
+
 const getAllLoaiSan = async () =>{
     const loaisan = new LoaiSan()
     let list = await loaisan.GetAllLoaiSan()
@@ -37,7 +38,18 @@ const getEmptyShiftByDay = async (IDTaiKhoan, ngay) =>{
       }
    }
    return listKG
-   
+}
+
+const getAllHoaDonCompletedByCoSo = async(idCoSo)=>{
+   const hoadon = new HoaDon();
+   let listNeeded = await hoadon.getBillByIdCoSo(idCoSo);
+   return listNeeded;
+}
+
+const getBillForRefund = async(idCoSo)=>{
+   const hoadon = new HoaDon();
+   let listNeeded = await hoadon.getBillForRefund(idCoSo);
+   return listNeeded;
 }
 const getEmptyFieldByDayShift = async (iDTaiKhoan, day, iDShift) =>{
    const hoadon = new HoaDon()
@@ -59,10 +71,34 @@ const getEmptyFieldByDayShift = async (iDTaiKhoan, day, iDShift) =>{
    }
    return list
 }
+const getLoaiSanByIdField = async (idField) =>{
+   const sanbong = new SanBong()
+   const loaiSan = new LoaiSan()
+   let san = await sanbong.GetFieldByIDField(idField)
+   let listLS = await loaiSan.GetAllLoaiSan()
+   for(var i = 0; i < listLS.length; i++){
+      if(listLS[i].IdLoaiSan == san.IdLoaiSan){
+         return listLS[i]
+      }
+   }
+   
+}
+const getCostByShiftnTypeField = async (idShift, idTField) =>{
+   const khungGio = new KhungGio()
+   const loaiSan = new LoaiSan()
+   let shift = await khungGio.GetShiftByID(idShift)
+   console.log(idTField)
+   let typeField = await loaiSan.GetLoaiSanByID(idTField)
+   return shift.GiaTien + typeField.GiaTien
+}
  export {
     getAllLoaiSan,
     getAllSanByTaiKhoan,
     getAllKhungGio,
     getEmptyShiftByDay,
-    getEmptyFieldByDayShift
+    getEmptyFieldByDayShift,
+    getLoaiSanByIdField,
+    getAllHoaDonCompletedByCoSo,
+    getBillForRefund,
+    getCostByShiftnTypeField
  }
