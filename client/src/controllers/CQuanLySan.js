@@ -4,6 +4,7 @@ import KhungGio from '../models/KhungGio'
 import SanBong from '../models/SanBong'
 import LoaiSan from '../models/LoaiSan'
 import HoaDon from '../models/Bill'
+import CoSoSan from '../models/CoSoSan';
 
 const getAllLoaiSan = async () =>{
     const loaisan = new LoaiSan()
@@ -37,11 +38,24 @@ const getEmptyShiftByDay = async (IDTaiKhoan, ngay) =>{
       }
    }
    return listKG
-   
+}
+
+const getAllHoaDonCompletedByCoSo = async(idCoSo)=>{
+   const hoadon = new HoaDon();
+   let listNeeded = await hoadon.getBillByIdCoSo(idCoSo);
+   return listNeeded;
+}
+
+const getBillForRefund = async(idCoSo)=>{
+   const hoadon = new HoaDon();
+   let listNeeded = await hoadon.getBillForRefund(idCoSo);
+   return listNeeded;
 }
  export {
     getAllLoaiSan,
     getAllSanByTaiKhoan,
     getAllKhungGio,
     getEmptyShiftByDay,
+    getAllHoaDonCompletedByCoSo,
+    getBillForRefund
  }

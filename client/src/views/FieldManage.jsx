@@ -7,19 +7,23 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getAllLoaiSan, getAllSanByTaiKhoan, getEmptyShiftByDay} from "../controllers/CQuanLySan";
+import { getAllLoaiSan, getAllSanByTaiKhoan, getEmptyShiftByDay, getAllHoaDonCompletedByCoSo, getBillForRefund} from "../controllers/CQuanLySan";
 
 
 
 const FieldManage =  () => {
   useEffect(() => {
     GetLoaiSans()
+    GetAllBillByTaiKhoan()
+    GetBillForRefund()
     document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
     handleDateChange()
   }, []);
   const [getLoaiSans, setLoaiSans] = useState([]);
   const [getSans, setSans] = useState([]);
   const [getKhungGios, setKhungGios] = useState([]);
+  const [getBills, setBills] = useState([]);
+  const [getBillForRefund, setBillForRefund] = useState([]);
 
   function getCurrentDate() {
     const today = new Date();
@@ -47,10 +51,6 @@ const FieldManage =  () => {
       handleDateChange()
   }
 
-  
-
-
-  
   const GetKhungGios = async () =>{
     let run = true
     // setKhungGios(await getEmptyShiftByDay("7", await document.getElementsByClassName("ngayLS")[0].value))
@@ -65,8 +65,6 @@ const FieldManage =  () => {
         slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
       })
     }
-    
-    
   }
   const GetLoaiSans = async () =>{
     setLoaiSans(await getAllLoaiSan())
@@ -74,6 +72,14 @@ const FieldManage =  () => {
 
   const GetAllSansByTaiKhoan = async (IDTaiKhoan) =>{
     setSans(await getAllSanByTaiKhoan(IDTaiKhoan))
+  }
+
+  const GetAllBillByTaiKhoan = async () =>{
+    console.log(await getAllHoaDonCompletedByCoSo(1));
+  }
+
+  const GetBillForRefund = async () =>{
+    console.log(await getBillForRefund(1));
   }
 
   return (
