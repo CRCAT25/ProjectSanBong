@@ -17,12 +17,24 @@ class SanBong{
                 console.error(error);
             });
     }
+       
 
     FindSanByID(idSan) {
         return axios.post("http://localhost:8081/getSanByID", {IdSan: idSan})
             .then(response => {
                 const sanBong = new SanBong(response.data[0].IDSan, response.data[0].IDTaiKhoan, response.data[0].IDLoaiSan, response.data[0].TenSan, response.data[0].TrangThai)
                 return sanBong
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    FindSanByIDnCate(IdCoSo, loaiSan) {
+        return axios.post("http://localhost:8081/getSanByIDnCate", {IDCoSo: IdCoSo, IDLoaiSan : loaiSan})
+            .then(response => {
+                const list = this.initSan(response.data);
+                return list
             })
             .catch(error => {
                 console.error(error);

@@ -57,8 +57,7 @@ class Bill{
     GetHoaDonsCompleteByNgayKG(day,idKhungGio, idTK) {
         return axios.post("http://localhost:8081/getHoaDonsCompleteByNgayKGTK", {Ngay: day, IDKhungGio: idKhungGio, IDTaiKhoan: idTK})
             .then(response => {
-                const list = this.initBill(response.data);    
-                
+                const list = this.initBill(response.data);                  
                 return list;
             })
             .catch(error => {
@@ -69,6 +68,17 @@ class Bill{
     
     getBillByIdCoSo(idCoSo){
 
+    }
+
+    GetNotEmptyKhungGioByIDSanANDDate(idSan, date){
+        return axios.post("http://localhost:8081/getNotEmptyKhungGioByIDnDate", {IdSan: idSan, Date : date})
+            .then(response => {
+                const list = this.initBill(response.data);   
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
 }

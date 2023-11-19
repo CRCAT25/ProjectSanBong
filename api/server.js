@@ -64,6 +64,25 @@ app.post("/getLoaiSanByID", (req, res) => {
   });
 });
 
+app.post("/getNotEmptyKhungGioByIDnDate", (req, res) => {
+  const idSan = req.body.IdSan;
+  const date = req.body.Date;
+  const sql = `SELECT * FROM hoadon WHERE IDSan = ${idSan} AND Ngay = "${date}" AND (TrangThai = "Completed" OR TrangThai = "Pending")`; 
+  db.query(sql, (err, data) => {
+      res.json(data);
+  });
+});
+
+app.post("/getSanByIDnCate", (req, res) => {
+  const IDTaiKhoan = req.body.IDCoSo
+  const IDLoaiSan = req.body.IDLoaiSan
+  const sql = `SELECT * FROM sanbong WHERE IDTaiKhoan = ${IDTaiKhoan} AND IDLoaiSan LIKE '%${IDLoaiSan}%'`; 
+  db.query(sql, (err, data) => {
+      res.json(data);
+      
+  });
+});
+
 // Lấy lịch giao hữu
 app.post("/getAllLichGiaoHuu",(req,res) => {
   const sql = `SELECT
