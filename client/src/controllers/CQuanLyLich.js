@@ -6,7 +6,6 @@ const getAllLichGiaoHuu = async () =>{
     const lich= new LichGiaoHuu();
     let list = await lich.getAllLichGiaoHuu();
     return list;
-
 }
 
 
