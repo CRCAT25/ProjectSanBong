@@ -65,12 +65,10 @@ class Bill{
             });
     }
     //Tấn - End
-
     
+    getBillByIdCoSo(idCoSo){
 
-
-
-    
+    }
 
 }
 export default Bill
