@@ -12,6 +12,11 @@ import { getAllLoaiSan, getAllSanByTaiKhoan, getEmptyShiftByDay} from "../contro
 
 
 const FieldManage =  () => {
+  useEffect(() => {
+    GetLoaiSans()
+    document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
+    handleDateChange()
+  }, []);
   const [getLoaiSans, setLoaiSans] = useState([]);
   const [getSans, setSans] = useState([]);
   const [getKhungGios, setKhungGios] = useState([]);
@@ -42,18 +47,13 @@ const FieldManage =  () => {
       handleDateChange()
   }
 
-  useEffect(() => {
-    GetLoaiSans()
-    document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
-    GetKhungGios()
-    handleDateChange()
-  }, []);
+  
 
 
   
   const GetKhungGios = async () =>{
     let run = true
-    setKhungGios(await getEmptyShiftByDay("1", await document.getElementsByClassName("ngayLS")[0].value))
+    // setKhungGios(await getEmptyShiftByDay("7", await document.getElementsByClassName("ngayLS")[0].value))
     const slect =  document.getElementsByClassName("selectKhungGio")[0];
     while (slect.hasChildNodes()) {
       slect.removeChild(slect.firstChild);
@@ -61,7 +61,7 @@ const FieldManage =  () => {
     slect.innerHTML = `<option value="none">--Khung giờ--</option>`
     if(run){
       run = false;
-      ;(await getEmptyShiftByDay("1", await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
+      ;(await getEmptyShiftByDay("7", await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
         slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
       })
     }
