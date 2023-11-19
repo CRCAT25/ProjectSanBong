@@ -39,9 +39,30 @@ const getEmptyShiftByDay = async (IDTaiKhoan, ngay) =>{
    return listKG
    
 }
+const getEmptyFieldByDayShift = async (iDTaiKhoan, day, iDShift) =>{
+   const hoadon = new HoaDon()
+   const san = new SanBong()
+   let listSan = await san.GetAllSanByTaiKhoan(iDTaiKhoan)
+   let listHD = await hoadon.GetHoaDonsCompleteByNgayKG(day, iDShift,iDTaiKhoan)
+   let list = []
+   for(var i = 0; i < listSan.length; i++){
+      let have = true;
+      for(var j = 0; j < listHD.length; j++){
+         if(listHD[j].IDSan == listSan[i].IdSan){
+            have = false
+            break
+         }
+      }
+      if(have){
+         list.push(listSan[i])
+      }
+   }
+   return list
+}
  export {
     getAllLoaiSan,
     getAllSanByTaiKhoan,
     getAllKhungGio,
     getEmptyShiftByDay,
+    getEmptyFieldByDayShift
  }
