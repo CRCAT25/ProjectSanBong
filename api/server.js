@@ -119,18 +119,32 @@ app.post("/getAllKhungGio", (req, res) => {
       res.json(data);
   });
 });
-app.post("/getHoaDonsCompleteByNgaySan", (req, res) => {
-  const sql = "SELECT * FROM hoadon where Ngay = ? and IDSan = ? and TrangThai = 'Completed'"; 
-  db.query(sql, [req.body.Ngay, req.body.IDSan], (err, data) => {
+app.post("/getHoaDonsCompleteByNgayKGTK", (req, res) => {
+  const sql = "SELECT * FROM hoadon, sanbong where hoadon.Ngay = ? and hoadon.IDKhungGio = ? and hoadon.TrangThai = 'Completed' and hoadon.IDSan = sanbong.IDSan and sanbong.IDTaiKhoan = ?"; 
+  db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan], (err, data) => {
       res.json(data);
   });
 });
-app.post("/getHoaDonsCompleteByNgayKG", (req, res) => {
-  const sql = "SELECT * FROM hoadon where Ngay = ? and IDKhungGio = ? and TrangThai = 'Completed'"; 
-  db.query(sql, [req.body.Ngay, req.body.IDKhungGio], (err, data) => {
-      res.json(data);
-  });
-});
+
+/*************************/
+app.post("/getAllHoaDonCompletedByCoSo",(req,res)=>{
+  const sql =`SELECT hoadon.IDHoaDon,tk1.IDTaiKhoan,tk1.Ten,tk1.SoDienThoai,sanbong.TenSan as MaSan,sanbong.IDLoaiSan DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay,hoadon.GiaoHuu, khunggio.ThoiGian, hoadon.TongTien
+              FROM taikhoan as tk1, taikhoan as tk2, hoadon, sanbong, khunggio
+              WHERE 
+                hoadon.IDKhungGio = khunggio.IDKhungGio 
+                AND hoadon.idDoiThu IS NULL 
+                AND hoadon.TrangThai = 'Completed' 
+                AND DAY(ngay) > DAY(CURRENT_DATE) 
+                and tk1.IDTaiKhoan = hoadon.IDTaiKhoan 
+                and sanbong.IDSan = hoadon.IDSan 
+                and tk2.IDTaiKhoan = ?;`
+  db.query(sql,[req.body.IDSan],(err,data) =>{
+    res.json(data);
+  })
+
+})
+
+
 
 /*************************/
 
