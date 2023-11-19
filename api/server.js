@@ -112,6 +112,26 @@ app.post("/getHoaDonsCompleteByNgayKGTK", (req, res) => {
 });
 
 /*************************/
+app.post("/getAllHoaDonCompletedByCoSo",(req,res)=>{
+  const sql =`SELECT hoadon.IDHoaDon,tk1.IDTaiKhoan,tk1.Ten,tk1.SoDienThoai,sanbong.TenSan as MaSan,sanbong.IDLoaiSan DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay,hoadon.GiaoHuu, khunggio.ThoiGian, hoadon.TongTien
+              FROM taikhoan as tk1, taikhoan as tk2, hoadon, sanbong, khunggio
+              WHERE 
+                hoadon.IDKhungGio = khunggio.IDKhungGio 
+                AND hoadon.idDoiThu IS NULL 
+                AND hoadon.TrangThai = 'Completed' 
+                AND DAY(ngay) > DAY(CURRENT_DATE) 
+                and tk1.IDTaiKhoan = hoadon.IDTaiKhoan 
+                and sanbong.IDSan = hoadon.IDSan 
+                and tk2.IDTaiKhoan = ?;`
+  db.query(sql,[req.body.IDSan],(err,data) =>{
+    res.json(data);
+  })
+
+})
+
+
+
+/*************************/
 
 
 
