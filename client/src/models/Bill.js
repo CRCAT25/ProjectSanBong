@@ -43,9 +43,7 @@ class Bill{
         
     }
 
-
     //Tấn - Start
-
     GetHoaDonsCompleteByNgaySan(day,idSan) {
         return axios.post("http://localhost:8081/getHoaDonsCompleteByNgaySan", {Ngay: day, IDSan: idSan})
             .then(response => {
@@ -67,5 +65,8 @@ class Bill{
             });
     }
     //Tấn - End
+
+    
+
 }
 export default Bill
