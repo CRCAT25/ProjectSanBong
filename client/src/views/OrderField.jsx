@@ -88,6 +88,7 @@ export const OrderField = () => {
     }
     useEffect(() => {
         callAPI(host);
+        
       }, []);
 
     const handleChangeCalendar = (date) =>{
@@ -106,9 +107,7 @@ export const OrderField = () => {
     const[coSoByCate, setcoSoByCate] = useState([])
     const[tenCoSoInput, setTenCoSoInput] = useState("")
     const[diaDiemInput, setDiaDiemInput] = useState("")
-    const GetCoSo = async () =>{
-        setCoSo(await getAllCoSo())
-    }
+
     const TimKiemSanBong = async () => {
         let result = await TimKiemSanBongC(tenCoSoInput, diaDiemInput)
         if(typeof result === 'string'){
