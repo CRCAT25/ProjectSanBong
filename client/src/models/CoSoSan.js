@@ -25,6 +25,7 @@ class CoSoSan extends Account{
             })
             .then(response => {
                 const listCoSo = this.initCoSo(response.data);
+                console.log(listCoSo)
                 return listCoSo
             })
             .catch(error => {
