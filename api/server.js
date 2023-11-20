@@ -17,7 +17,7 @@ const db = mysql.createConnection({
 app.post("/getAllCoSo", (req, res) => {
   const sql = "SELECT * FROM taikhoan where IDPhanQuyen = 2";
   db.query(sql, (err, data) => {
-    console.log(data)
+    // console.log(data)
       res.json(data);
   });
 });
@@ -141,6 +141,32 @@ app.post("/loginUser", (req, res) => {
 
 
 /*************************/
+
+
+/*************************/
+//Lee Huyn Min  
+// Trang quản lý tài khoản, thống kê báo cáo
+
+//Search ten account theo id
+app.post("/searchtentk", (req, res) => {
+  const searchsql = "SELECT Ten FROM taikhoan WHERE IDTaiKhoan = ?";
+  db.query(searchsql,[req.body.idlogin],
+    (checkErrSearch, checkResultSearch) => {
+      if (checkErrSearch) return res.json("Error");
+      if (checkResultSearch.length > 0) {
+        console.log(checkResultSearch)
+        return res.json(checkResultSearch);
+      } else {
+        return res.json("Not find");
+      }
+    }
+  );
+});
+
+
+/*************************/
+
+
 app.listen(8081, () => {
   console.log("Connected!");
 });

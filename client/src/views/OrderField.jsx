@@ -1,8 +1,6 @@
-import React from "react";
 import Calendar from 'react-calendar'
 import "react-calendar/dist/Calendar.css"
 import  "../css/OrderField.css"
-import { useState } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import axios from "axios";
 import {faLocationDot, 
@@ -11,8 +9,7 @@ import {faLocationDot,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
 import CDatSan, { GetAllSanFromCoSo, GetInfoCoSo } from "../controllers/CDatSan";
-import { useEffect } from "react";
-import { useRef } from "react";
+import {React,useState, useEffect, useRef } from "react";
 import "../controllers/CTimKiem";
 import { TimKiemSanBong, getAllCoSo, TimKiemSanBongC, GetInfoCoSoSan } from "../controllers/CTimKiem";
 import CoSoSan from "../models/CoSoSan";
