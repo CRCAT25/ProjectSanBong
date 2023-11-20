@@ -14,7 +14,7 @@ class SanBong{
         return axios.post("http://localhost:8081/getAllSanByTaiKhoan", {IDTaiKhoan: id})
             .then(response => {
                 const list = this.initSan(response.data);
-                console.log(list)
+                // console.log(list)
                 return list
             })
             .catch(error => {
