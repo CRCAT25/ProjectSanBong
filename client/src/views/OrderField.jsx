@@ -101,6 +101,7 @@ export const OrderField = () => {
         stringDate = formattedDBDate.split('/').reverse().join('-')
         setDBDate(formattedDBDate.split('/').reverse().join('-'))
         setTextofDate(formattedDate);
+        setGotInfoSan(false)
         handleCalendarClick();
     }
     const[coSo, setCoSo] = useState([])
@@ -108,9 +109,8 @@ export const OrderField = () => {
     const[coSoIsAString, setCoSoIsAString] = useState(false)
     const[tenCoSoInput, setTenCoSoInput] = useState("")
     const[diaDiemInput, setDiaDiemInput] = useState("")
-
-    const TimKiemSanBong = async () => {
-        
+    const selectLoaiBoxRef = useRef(null)
+    const TimKiemSanBong = async () => {     
         let result = await TimKiemSanBongC(tenCoSoInput, diaDiemInput)
         if(typeof result === 'string'){
             setCoSoIsAString(true)
@@ -129,9 +129,13 @@ export const OrderField = () => {
     const[loaiSans, setLoaiSans] = useState([]);
     const[tenLoaiSan, setTenLoaiSan] = useState("");
     const ChonCoSoSan = async (idCoso) => {
+        if (selectLoaiBoxRef.current) {
+            selectLoaiBoxRef.current.value = "";
+        } 
         setInfoCoSo(await GetInfoCoSoSan(idCoso))
         setSanBongs(await GetAllSanFromCoSo(idCoso))
         setGotInfo(true)
+        setGotInfoSan(false)
     }
 
     const GetAllLoaiSan = async () =>{
@@ -141,6 +145,7 @@ export const OrderField = () => {
     }
 
     const HandleClickLoaiSan = async (IdLoaiSan) =>{
+        setGotInfoSan(false)
         setSanBongs(await GetAllSanFromCoSoBySearch(infoCoSo.IdAccount, IdLoaiSan))
     }
 
@@ -163,11 +168,24 @@ export const OrderField = () => {
 
     const GetEmptyKhungGio = async (idSan) =>{
         let ocurKhungGio = await getAllOccuredKhungGio(idSan, DBDate)
+        console.log(ocurKhungGio)
         setoccuredKhungGios(ocurKhungGio)
     }
 
+    const[selectedKhungGio, setSelectedKhungGio] = useState(new Date())
+    const SetValueForKhungGio =(khungGio) =>{
+        setSelectedKhungGio(khungGio)
+        
+    }   
     
-       
+    const[isCheckBoxChecked, setIsCheckBoxChecked] = useState(0)
+    const IsChecked = () =>{
+        if(isCheckBoxChecked == 0){
+            setIsCheckBoxChecked(1)
+        }else{
+            setIsCheckBoxChecked(0)
+        }
+    }
 
   return (
     <div className="w-[80%] mx-auto mt-5 orderField">
@@ -210,7 +228,7 @@ export const OrderField = () => {
 
 
 
-            <div className="col-span-8 border-[#379E13] border-[3px] rounded-[10px] p-5 relative">
+            <div className="col-span-8 border-[#379E13] border-[3px] rounded-[10px] p-5 relative h-[770px]">
             {
                 gotInfo === true ? ( 
                 <div className="flex gap-6 " >
@@ -235,7 +253,7 @@ export const OrderField = () => {
                                             <span className="text-[20px] mx-4 textofDate">{textofDate}</span>
                                         </div>
                         
-                                        <select className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer justify-center text-center" onChange={(event) => {
+                                        <select ref={selectLoaiBoxRef} className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer justify-center text-center" onChange={(event) => {
 
                                             HandleClickLoaiSan(event.target.value)}}>
                                             <option className="text-[19px]" disable value="">Lọc loại sân</option>
@@ -250,7 +268,7 @@ export const OrderField = () => {
                                     {selectedDate != null && sanBongs != null ? sanBongs.map((data, i) => (<div className="col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px] cursor-pointer" value={data.IdSan} key={i} onClick={()=>ChonSanBong(data.IdSan)}>{data.TenSan}</div>)) : ""}
                                 </div>
                             </div>                   
-                </div> ) : ("noo")
+                </div> ) : ("")
                 }
                 <div className="mt-[30px] relative">
                     <div className="text-[24px] text-[#2B790F]">Chi tiết sân bóng:</div>            
@@ -261,6 +279,10 @@ export const OrderField = () => {
                         <div className="w-full">
 
                             <div className="text-[20px] mt-1">
+                                <span className="font-[600]">Tên sân:</span>
+                                <span className="font-[400] ml-3">{sanBongInfo.TenSan}</span>
+                            </div>
+                            <div className="text-[20px] mt-1">
                                 <span className="font-[600]">Loại sân:</span>
                                 <span className="font-[400] ml-3">{tenLoaiSan}</span>
                             </div>
@@ -269,16 +291,16 @@ export const OrderField = () => {
                             <div className="mt-7 w-full gap-3 grid grid-cols-12">
                             {gotInfoKhungGio === true ? (
                                 khungGios.map((data, i) => {
-                                    const isOccured = occuredKhungGios.some(ocurkhunggio => ocurkhunggio.IDKhungGio === data.IdKhungGio);                    
+                                    const isOccured = occuredKhungGios.some(ocurkhunggio => ocurkhunggio.KhungGio.IdKhungGio === data.IdKhungGio);                    
                                     return (    
-                                    <div className={`col-span-3 ${isOccured ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} text-center px-4 py-2 rounded-[10px]`} key={i}>{data.ThoiGian} </div>
+                                    <div className={`col-span-3 ${isOccured ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} ${selectedKhungGio == data.IdKhungGio ? 'border-2 border-[#000000]' : ''} text-center px-4 py-2 rounded-[10px]`} onClick ={() => {if(!isOccured){SetValueForKhungGio(data.IdKhungGio)}}}   key={i}>{data.ThoiGian} </div>
                                     );
                                 })
                                 ) : ""}                                                
                             </div>
                             <div className="absolute flex gap-3 my-10">
-                                <div className="w-[30px] h-[30px] bg-[#2AB514] border-[2px] border-[#2AB514] rounded-[5px] cursor-pointer p-1">
-                                    <IconCheck classIcon={faCheck}/>
+                                <div className="w-[30px] h-[30px] bg-[#2AB514] border-[2px] border-[#2AB514] rounded-[5px] cursor-pointer p-1" onClick={IsChecked}>
+                                   {isCheckBoxChecked === 1 ? (<div><IconCheck classIcon={faCheck}/></div>):""} 
                                 </div>
                                 <div className="flex flex-col justify-center font-[600]">Cho phép người khác tham gia giao hữu</div>
 
@@ -288,10 +310,15 @@ export const OrderField = () => {
                     </div>): ""}
                     
                 </div>
-
-                <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
-                <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]">900.000</div>
-                <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]">Xác nhận</button>
+                {gotInfoSan ?
+                
+                (<div>
+                    <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
+                    <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]"></div>
+                    <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]">Xác nhận</button>
+                </div>
+                ): ""}
+                
 
             </div>
 
