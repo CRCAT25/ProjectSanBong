@@ -251,7 +251,9 @@ app.post("/searchtentk", (req, res) => {
   const searchsql = "SELECT Ten FROM taikhoan WHERE IDTaiKhoan = ?";
   db.query(searchsql,[req.body.idlogin],
     (checkErrSearch, checkResultSearch) => {
-      if (checkErrSearch) return res.json("Error");
+      console.log(checkResultSearch)
+      if (checkErrSearch) 
+        return res.json("Error");
       if (checkResultSearch.length > 0) {
         console.log(checkResultSearch)
         return res.json(checkResultSearch);

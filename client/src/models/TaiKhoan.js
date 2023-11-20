@@ -50,17 +50,17 @@ class TaiKhoan {
         })
         .catch(error => {console.error(error);}
         )}
-    }
+
     NameUser = (idlogin) =>{
         return axios.post("http://localhost:8081/searchtentk",{idlogin}
         ).then(response => {
-            
                 return response.data[0]
             })
             .catch(error => {
             console.error(error);
         })
     }
+}
 export default TaiKhoan
 
    
