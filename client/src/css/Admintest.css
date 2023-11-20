@@ -1360,14 +1360,29 @@ th {
 }
 
 #btnthemcs{
-    width: 130px;
+    width: 90%;
     height: 50px;
-    display: flex;
     justify-content: center;
     line-height: 50px;
     border-radius: 5px;
     color: #ffffff;
     background-color: #256eb3;
+}
+#btnthemcs:hover{
+    background-color: #367dbf;
+}
+#btnthemanh{
+    width: 90%;
+    height: 50px;
+    justify-content: center;
+    line-height: 50px;
+    border-radius: 5px;
+    color: #ffffff;
+    background-color: #256eb3;
+    margin-left: 10%;
+}
+#btnthemanh:hover{
+    background-color: #367dbf;
 }
 
 .sdt {

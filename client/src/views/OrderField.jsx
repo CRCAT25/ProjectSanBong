@@ -1,8 +1,6 @@
-import React from "react";
 import Calendar from 'react-calendar'
 import "react-calendar/dist/Calendar.css"
 import  "../css/OrderField.css"
-import { useState } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import axios from "axios";
 import {faLocationDot, 
@@ -10,9 +8,10 @@ import {faLocationDot,
     faMagnifyingGlass,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
+import CDatSan, { GetInfoCoSo } from "../controllers/CDatSan";
+import {React,useState, useEffect, useRef } from "react";
 import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan } from "../controllers/CDatSan";
-import { useEffect } from "react";
-import { useRef } from "react";
+
 import "../controllers/CTimKiem";
 import { TimKiemSanBong, getAllCoSo, TimKiemSanBongC, GetInfoCoSoSan } from "../controllers/CTimKiem";
 import CoSoSan from "../models/CoSoSan";
@@ -147,7 +146,7 @@ export const OrderField = () => {
 
     const ChonSanBong = async (idSan) =>{
         let infoSanBong = await GetInfoSanBong(idSan)
-        setTenLoaiSan(await GetTenLoaiSan(infoSanBong.IdLoaiSan))  
+        setTenLoaiSan(infoSanBong.LoaiSan.TenLoaiSan)  
         GetEmptyKhungGio(idSan) 
         GetAllKhungGio()   
         setSanBongInfo(infoSanBong)

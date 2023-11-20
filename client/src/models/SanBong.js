@@ -1,9 +1,12 @@
 import axios from 'axios';
+import LoaiSan from "./LoaiSan"
+import CoSoSan from "./CoSoSan"
+import PhanQuyen from './PhanQuyen';
 class SanBong{
-    constructor(idSan, idTaiKhoan, idLoaiSan, tenSan, trangThai){
+    constructor(idSan, taiKhoan, loaiSan, tenSan, trangThai){
         this.IdSan = idSan;
-        this.IdTaiKhoan = idTaiKhoan;
-        this.IdLoaiSan = idLoaiSan;
+        this.TaiKhoan = taiKhoan;   
+        this.LoaiSan = loaiSan;
         this.TenSan = tenSan;
         this.TrangThai = trangThai;
     }
@@ -11,6 +14,7 @@ class SanBong{
         return axios.post("http://localhost:8081/getAllSanByTaiKhoan", {IDTaiKhoan: id})
             .then(response => {
                 const list = this.initSan(response.data);
+                console.log(list)
                 return list
             })
             .catch(error => {
@@ -22,7 +26,11 @@ class SanBong{
     FindSanByID(idSan) {
         return axios.post("http://localhost:8081/getSanByID", {IdSan: idSan})
             .then(response => {
-                const sanBong = new SanBong(response.data[0].IDSan, response.data[0].IDTaiKhoan, response.data[0].IDLoaiSan, response.data[0].TenSan, response.data[0].TrangThai)
+                let data = response.data[0]
+                const phanQuyen = new PhanQuyen(data.IDPhanQuyen,data.TenPhanQuyen)
+                const coSoSan = new CoSoSan(data.IDTaiKhoan, phanQuyen, data.Ten, data.Email, data.SoDienThoai, data.DiaChiCoSo, data.NganHang, data.STK, data.Anh, data.MatKhau, data.XacThuc)
+                const loaiSan = new LoaiSan(data.IDLoaiSan, data.TenLoaiSan,data.GiaTien)
+                const sanBong = new SanBong(data.IDSan, coSoSan, loaiSan, data.TenSan, data.TrangThai);
                 return sanBong
             });
     }
@@ -30,12 +38,11 @@ class SanBong{
     GetFieldByIDField(idField) {
         return axios.post("http://localhost:8081/getFieldByIDField", {IdSan: idField})
             .then(response => {
-                const field = new SanBong(response.data[0].IDSan,
-                    response.data[0].IDSan,
-                    response.data[0].IDTaiKhoan,
-                    response.data[0].IDLoaiSan,
-                    response.data[0].TenSan,
-                    response.data[0].TrangThai)
+                let data = response.data[0]
+                const phanQuyen = new PhanQuyen(data.IDPhanQuyen,data.TenPhanQuyen)
+                const coSoSan = new CoSoSan(data.IDTaiKhoan, phanQuyen, data.Ten, data.Email, data.SoDienThoai, data.DiaChiCoSo, data.NganHang, data.STK, data.Anh, data.MatKhau, data.XacThuc)
+                const loaiSan = new LoaiSan(data.IDLoaiSan, data.TenLoaiSan,data.GiaTien)
+                const field = new SanBong(data.IDSan, coSoSan, loaiSan, data.TenSan, data.TrangThai);
                 return field
             })
             .catch(error => {
@@ -56,8 +63,11 @@ class SanBong{
 
     initSan(list){
         const resultList = [];
-        list.forEach(san => {
-            const item = new SanBong(san.IDSan, san.IDTaiKhoan, san.IDLoaiSan, san.TenSan, san.TrangThai);
+        list.forEach(data => {
+            const phanQuyen = new PhanQuyen(data.IDPhanQuyen,data.TenPhanQuyen)
+            const coSoSan = new CoSoSan(data.IDTaiKhoan, phanQuyen, data.Ten, data.Email, data.SoDienThoai, data.DiaChiCoSo, data.NganHang, data.STK, data.Anh, data.MatKhau, data.XacThuc)
+            const loaiSan = new LoaiSan(data.IDLoaiSan, data.TenLoaiSan,data.GiaTien)
+            const item = new SanBong(data.IDSan, coSoSan, loaiSan, data.TenSan, data.TrangThai);
             resultList.push(item);
         });
         return resultList

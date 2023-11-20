@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import LichGiaoHuu from'../models/LichGiaoHuu';
-import Bill from'../models/Bill';
+import HoaDon from'../models/HoaDon';
 
 const getAllLichGiaoHuu = async () =>{
     const lich= new LichGiaoHuu();
@@ -10,7 +10,7 @@ const getAllLichGiaoHuu = async () =>{
 }
 
 const updateBillDoiThuByIdBill = async (idBill,idDoiThu) =>{
-    const bill = new Bill()
+    const bill = new HoaDon()
     bill.UpdateBillDoiThuByIdBill(idBill,idDoiThu);
     getAllLichGiaoHuu()
 }

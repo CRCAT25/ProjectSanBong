@@ -15,8 +15,7 @@ class LichGiaoHuu{
     getAllLichGiaoHuu() {
         return axios.post("http://localhost:8081/getAllLichGiaoHuu", {})
             .then(response => {
-                const list = this.initLichGiaoHuu(response.data);   
-                console.log(list);            
+                const list = this.initLichGiaoHuu(response.data);        
                 return list;
             })
             .catch(error => {
