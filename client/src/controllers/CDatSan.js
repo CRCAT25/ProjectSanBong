@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
-import FootballField from "../models/SanBong";
 import SanBong from "../models/SanBong";
 import LoaiSan from "../models/LoaiSan";
 import KhungGio from "../models/KhungGio";
-import Bill from "../models/Bill";
+import HoaDon from "../models/HoaDon";
 
 
 const GetAllSanFromCoSo = async (idCoSo) =>{
@@ -38,7 +37,7 @@ const getAllKhungGio = async () =>{
 
 const getAllOccuredKhungGio = async(idSan, date) =>{
     // const khungGio = new KhungGio()
-    const khungGioNotEmpty = new Bill()
+    const khungGioNotEmpty = new HoaDon()
     // let khunggios = await khungGio.GetAllKhungGio()
     let notEmptykhunggios = await khungGioNotEmpty.GetNotEmptyKhungGioByIDSanANDDate(idSan, date)
     // let emptyKhungGio

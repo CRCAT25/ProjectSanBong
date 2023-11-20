@@ -33,7 +33,6 @@ const LichGiaoHuu = () =>{
           icon: "success",
         
         });
-        alert(IdBill);
         ThamGiaGiaoHuu(IdBill,idTk);
         GetAllLichGiaoHuu();
 
@@ -43,7 +42,7 @@ const LichGiaoHuu = () =>{
 
   const GetAllLichGiaoHuu = async () =>{
     setLichs(await getAllLichGiaoHuu())
-  }
+  }  
   useEffect(() => {
     GetAllLichGiaoHuu()
   }, []);

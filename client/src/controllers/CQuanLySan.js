@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import KhungGio from '../models/KhungGio'
 import SanBong from '../models/SanBong'
 import LoaiSan from '../models/LoaiSan'
-import HoaDon from '../models/Bill'
+import HoaDon from '../models/HoaDon'
 
 
 const getAllLoaiSan = async () =>{

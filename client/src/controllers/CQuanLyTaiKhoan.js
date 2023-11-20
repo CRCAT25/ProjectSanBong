@@ -1,8 +1,8 @@
 
 import SanBong from '../models/SanBong'
 import CoSoSan from '../models/CoSoSan'
-import HoaDon from '../models/Bill'
-import Account from '../models/Account'
+import HoaDon from '../models/HoaDon'
+import Account from '../models/TaiKhoan'
 
 const getAllCoSo = async () =>{
     const cosoSan = new CoSoSan()
@@ -13,6 +13,7 @@ const getAllCoSo = async () =>{
  }
 
  const getNameLogin = async (idlogin) =>{
+   
     let account = new Account()
     let result = account.NameUser(idlogin)
     console.log(result)
