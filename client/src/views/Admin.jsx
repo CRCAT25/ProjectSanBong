@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import { getAllCoSo, getNameLogin } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
+import { VietQR } from 'vietqr';
 
 
 
@@ -20,6 +21,9 @@ const Admin = () => {
   const [apiphuong, setapiphuong] = useState([]);
   const idlogin = "3";
   let namelogin = "";
+  const [kqapinh, setkqapinh] = useState([]);
+
+
 
 
 
@@ -99,7 +103,7 @@ const Admin = () => {
         console.error('Error fetching province data:', error);
       });
   };
-  
+
   const fetchQuan = (idtinh) => {
     const quanAPI = `${host}p/${idtinh}?depth=2`;
     return axios.get(quanAPI)
@@ -127,7 +131,7 @@ const Admin = () => {
     const phuongAPI = `${host}d/${idquan}?depth=2`;
     return axios.get(phuongAPI)
       .then((response) => {
-        const sortPhuong= response.data.wards.sort((a, b) => {
+        const sortPhuong = response.data.wards.sort((a, b) => {
           return a.name.localeCompare(b.name);
         });
         setapiphuong(sortPhuong);
@@ -152,16 +156,32 @@ const Admin = () => {
     ));
   };
 
-
-
-
-
-
+  function getNganHang() {
+    const nganHang = async () => {
+      let vietQR = new VietQR({
+        clientID: '7d8635e1-1751-455a-bacb-5b23ff254943',
+        apiKey: '54c2ad4f-9485-445e-b9e0-5593699ab26b',
+      });
+  
+      await vietQR.getBanks().then((banks) => {
+        const sortedBanks = banks.data.sort((a, b) => {
+          return a.shortName.localeCompare(b.shortName);
+        });
+  
+        setkqapinh(sortedBanks);
+      }).catch((err) => {
+        console.error('Error fetching banks:', err);
+      });
+    };
+  
+    nganHang();
+  }
 
   useEffect(() => {
     showAllCoSo();
     showNameLogin();
     callAPI(host);
+    getNganHang();
     // alert(listCoso.length)
   }, []);
 
@@ -249,7 +269,14 @@ const Admin = () => {
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Ngân hàng:</div>
-                    <input type="text" class="ipnh" ></input>
+                    <select type="text" class="ipnh" >
+                      <option disable value="">Chọn ngân hàng</option>
+                      {kqapinh.map((nh, i) => (
+                        <React.Fragment key={i}>
+                          <option value="${nh.code}">${nh.code} - ${nh.shortName}</option>
+                        </React.Fragment>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
@@ -355,7 +382,14 @@ const Admin = () => {
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Ngân hàng:</div>
-                    <input type="text" class="ipnh" ></input>
+                    <select type="text" class="ipnh" >
+                      <option disable value="">Chọn ngân hàng</option>
+                      {kqapinh.map((nh, i) => (
+                        <React.Fragment key={i}>
+                          <option value={nh.code}>{nh.shortName}</option>
+                        </React.Fragment>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
