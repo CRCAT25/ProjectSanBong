@@ -22,49 +22,54 @@ const FormLichSu = () => {
   const lichholder = useRef()
   const getPersonalBillByIdTK = async(idTK) =>{
     let list = await GetPersonalBillByIdTK(idTK)
-    setPersonalLich(list)
     setGotPersonalInfo(true)
-    loadLich(list)
+    setPersonalLich(list)
+    // loadLich(list)
 }
   const loadLich = async (list)=>{
     let as="";
-    list.forEach (async data => {   
+    for(const data of list){
       let sanBong = await data.SanBong
-      console.log(sanBong)
+      as+=`
+      <div className='w-[auto] bg-[#9BCE89] h-[115px] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-7 '>
+      <img src="" alt="" className='w-[90px] h-[90px] col-span-1 ml-[10px] ' />
+        <div className='col-span-1 grid grid-row-2 p-[10px]'>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
+        </div>
+        <div className='col-span-1 grid grid-row-2 p-[10px]'>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TenSan}</div>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+        </div>
+        <div className='col-span-1 grid grid-row-2 p-[10px]'>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
+        </div>
+        <div className='col-span-1 grid grid-row-2 p-[10px]'>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+        </div>
+        <div className='col-span-1 grid grid-row-2 p-[10px]'>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ đăng ký:</div>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>\</div>
+        </div>
+        <div className='col-span-1 grid grid-row-2 p-[10px]'>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+          <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+        </div>
+        
+      </div>`
+    }
+    // list.forEach (async data => {   
       
-        console.log(sanBong.TenSan)
-        as+=`
-        <div className='w-[auto] bg-[#9BCE89] h-[115px] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-7 '>
-        <img src="" alt="" className='w-[90px] h-[90px] col-span-1 ml-[10px] ' />
-          <div className='col-span-1 grid grid-row-2 p-[10px]'>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
-          </div>
-          <div className='col-span-1 grid grid-row-2 p-[10px]'>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TenSan}</div>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-          </div>
-          <div className='col-span-1 grid grid-row-2 p-[10px]'>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
-          </div>
-          <div className='col-span-1 grid grid-row-2 p-[10px]'>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-          </div>
-          <div className='col-span-1 grid grid-row-2 p-[10px]'>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ đăng ký:</div>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>\</div>
-          </div>
-          <div className='col-span-1 grid grid-row-2 p-[10px]'>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-            <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
-          </div>
+      
+      // }) 
+      
+      console.log(as)
+      lichholder.current.innerHTML = as;
+      // document.getElementById("lich").innerHTML
           
-      </div>`}
-          )          
-    
-    document.getElementById("lich").innerHTML = as
+          
   }
 
   return (
@@ -76,6 +81,47 @@ const FormLichSu = () => {
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]'> Đã hoàn thành</div>
       </div>
       <div ref={lichholder} id= 'lich'className='bg-[#D9D9D9] w-[90%] h-[620px] mx-auto py-[15px] rounded-[15px] flex flex-col align-middle overflow-y-visible overflow-x-hidden overflow-scroll'> 
+        {gotPersonalInfo === true ? async ()=> {               
+          getPersonalLich.map(async (data, i) => {
+            let sanbong = await data.SanBong
+            console.log(sanbong)
+          })
+            
+            alert(data)
+            console.log(data)
+            // if(sanBong){
+              
+            
+            //   <div className='w-[auto] bg-[#9BCE89] h-[115px] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-7 '>
+            //   <img src="" alt="" className='w-[90px] h-[90px] col-span-1 ml-[10px] ' />
+            //     <div className='col-span-1 grid grid-row-2 p-[10px]'>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
+            //     </div>
+            //     <div className='col-span-1 grid grid-row-2 p-[10px]'>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TenSan}</div>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+            //     </div>
+            //     <div className='col-span-1 grid grid-row-2 p-[10px]'>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
+            //     </div>
+            //     <div className='col-span-1 grid grid-row-2 p-[10px]'>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+            //     </div>
+            //     <div className='col-span-1 grid grid-row-2 p-[10px]'>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ đăng ký:</div>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>\</div>
+            //     </div>
+            //     <div className='col-span-1 grid grid-row-2 p-[10px]'>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+            //       <div className='col-span-1 font-[600] text-[20px] h-[auto] my-auto'></div>
+            //     </div>
+                
+            //   </div>
+            // }
+          }: ""}
         {/* {getPersonalLich.length > 0 ? getPersonalLich.map(data=>{
            <div className='w-[auto] bg-[#9BCE89] h-[115px] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-7 '>
            <img src="" alt="" className='w-[90px] h-[90px] col-span-1 ml-[10px] ' />
@@ -107,7 +153,7 @@ const FormLichSu = () => {
           </div> 
         }):
         (<div className="flex flex-col justify-center">Không có trận giao hữu nào</div>)} */}
-    
+        
       </div>
       
     </div>
