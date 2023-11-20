@@ -1202,8 +1202,9 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
+    background-color: #dfdfdf;
     margin-right: 19%;
+    z-index: 1;
 }
 .ipsdtcs {
     padding: 10px;
@@ -1219,7 +1220,9 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
+    background-color: #dfdfdf;
+    z-index: 1;
+
 }
 
 .ipmkcs {
@@ -1236,8 +1239,10 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
+    background-color: #dfdfdf;
     margin-right: 19%;
+    z-index: 1;
+
 }
 
 .ipemailcs {
@@ -1254,7 +1259,9 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
+    background-color: #dfdfdf;
+    z-index: 1;
+
 }
 
 .iptinh {
@@ -1271,8 +1278,10 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
+    background-color: #dfdfdf;
     margin-right: 19%;
+    z-index: 1;
+
 }
 
 .ipnh {
@@ -1289,12 +1298,14 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
+    background-color: #dfdfdf;
+    z-index: 1;
+
 }
 .ipquan {
     padding: 10px;
     margin-top: -5px;
-    width: 43% !important;
+    width: 46% !important;
     height: 50px !important;
     background: none;
     border-radius: 5px !important;
@@ -1305,13 +1316,15 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
-    margin-right: 19%;
+    background-color: #dfdfdf;
+    margin-right: 16%;
+    z-index: 1;
+
 }
 .ipphuong {
     padding: 10px;
     margin-top: -5px;
-    width: 43% !important;
+    width: 50% !important;
     height: 50px !important;
     background: none;
     border-radius: 5px !important;
@@ -1322,8 +1335,11 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
-    margin-right: 29%;
+    background-color: #dfdfdf;
+    margin-right: 19%;
+    z-index: 1;
+    transform: translate(-40px,0px);
+
 }
 .ipstk {
     padding: 10px;
@@ -1339,7 +1355,9 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
+    background-color: #dfdfdf;
+    z-index: 1;
+
 }
 .ipsonha {
     padding: 10px;
@@ -1355,8 +1373,10 @@ th {
     color: #1e1d1d !important;
     outline: none;
     text-align: center;
-    background-color: #D9D9D9;
+    background-color: #dfdfdf;
     margin-right: 19%;
+    z-index: 1;
+
 }
 
 #btnthemcs{
@@ -1367,9 +1387,12 @@ th {
     border-radius: 5px;
     color: #ffffff;
     background-color: #256eb3;
+    z-index: 1;
+
 }
 #btnthemcs:hover{
     background-color: #367dbf;
+
 }
 #btnthemanh{
     width: 90%;
@@ -1380,6 +1403,8 @@ th {
     color: #ffffff;
     background-color: #256eb3;
     margin-left: 10%;
+    z-index: 1;
+
 }
 #btnthemanh:hover{
     background-color: #367dbf;

@@ -3,6 +3,8 @@ import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import { getAllCoSo, getNameLogin } from "../controllers/CQuanLyTaiKhoan";
+import axios from "axios";
+
 
 
 const Admin = () => {
@@ -13,6 +15,9 @@ const Admin = () => {
   // const [Cosos, setListCoSo] = useState([]);
   // const listCoso = [];
   const [listCoso, setListCoso] = useState([]);
+  const [apitinh, setapitinh] = useState([]);
+  const [apiquan, setapiquan] = useState([]);
+  const [apiphuong, setapiphuong] = useState([]);
   const idlogin = "3";
   let namelogin = "";
 
@@ -59,12 +64,104 @@ const Admin = () => {
     )
   }
 
+  /*                           CITY API                            */
+  // const host = 'https://provinces.open-api.vn/api/?depth=2';
+
+  // var callAPI = (api) => {
+  //   return axios.get(api)
+  //     .then((response) => {
+  //       console.log('Full API Response:', response.data);
+  //       setapitinh(response.data);
+  //       setapiquan(response.data[0].districts);
+  //       // setapiphuong(response.data[0].districts.wards)
+  //       // response.data[0].wards.forEach(wards => {
+  //       //   // console.log('District Name:', district.name);
+  //       //   console.log(wards)
+  //       // });
+  //     });
+  // }
+
+  const host = 'https://provinces.open-api.vn/api/';
+
+  useEffect(() => {
+    callAPI('https://provinces.open-api.vn/api/?depth=1');
+  }, []);
+
+  const callAPI = (api) => {
+    return axios.get(api)
+      .then((response) => {
+        const sorttinh = response.data.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        setapitinh(sorttinh);
+      })
+      .catch((error) => {
+        console.error('Error fetching province data:', error);
+      });
+  };
+  
+  const fetchQuan = (idtinh) => {
+    const quanAPI = `${host}p/${idtinh}?depth=2`;
+    return axios.get(quanAPI)
+      .then((response) => {
+        const sortQuan = response.data.districts.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        setapiquan(sortQuan);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
+  const handleProvinceChangeTinh = (event) => {
+    const selectedtinh = event.target.value;
+    if (selectedtinh) {
+      fetchQuan(selectedtinh);
+    } else {
+      setapiquan([]);
+    }
+  };
+
+  const fetchPhuong = (idquan) => {
+    const phuongAPI = `${host}d/${idquan}?depth=2`;
+    return axios.get(phuongAPI)
+      .then((response) => {
+        const sortPhuong= response.data.wards.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        setapiphuong(sortPhuong);
+      })
+      .catch((error) => {
+        console.error('Error', error);
+      });
+  };
+
+  const handleProvinceChangeQuan = (event) => {
+    const selectedquan = event.target.value;
+    if (selectedquan) {
+      fetchPhuong(selectedquan);
+    } else {
+      setapiphuong([]);
+    }
+  };
+
+  const renderOptions = (dataArray) => {
+    return dataArray.map((item, i) => (
+      <option key={i} value={item.code} className="text-[#000000] text-center bg-[white]">{item.name}</option>
+    ));
+  };
+
+
+
+
 
 
 
   useEffect(() => {
     showAllCoSo();
     showNameLogin();
+    callAPI(host);
     // alert(listCoso.length)
   }, []);
 
@@ -90,11 +187,11 @@ const Admin = () => {
   const showNameLogin = async () => {
     const result = await getNameLogin(idlogin);
     namelogin = result.Ten;
-    
-    alert(namelogin)
+
+    // alert(namelogin)
   };
 
-  function test(){
+  function test() {
     alert("a")
   }
 
@@ -137,7 +234,7 @@ const Admin = () => {
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
                     <div className="text-[20px] w-[30%] ">Mật khẩu:</div>
-                    <input type="text" class="ipmkcs" ></input>
+                    <input disabled type="text" class="ipmkcs" ></input>
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Email:</div>
@@ -214,6 +311,9 @@ const Admin = () => {
               {/* kh co gi o day */}
             </div>
             <div className="w-full col-span-10">
+              <div className="w-[82%] border-2 border-[grey] h-[406px] rounded-md absolute translate-x-[10px] translate-y-[-38px] z-0">
+
+              </div>
               <div id="" className=" w-full mx-auto">
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
@@ -237,10 +337,21 @@ const Admin = () => {
                   </div>
                 </div>
 
+                {/* var renderData = (array, select) => {
+  let row = ' <option disable value="">Chọn thành phố</option>';
+  array.forEach(tinhthanh => {
+      row += `<option data-id="${tinhthanh.code}" value="${tinhthanh.name}">${tinhthanh.name}</option>`
+  });
+  document.querySelector("#" + select).innerHTML = row
+} */}
+
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
                     <div className="text-[20px] w-[30%] ">Tỉnh thành phố:</div>
-                    <input type="text" class="iptinh" ></input>
+                    <select type="text" class="iptinh" onChange={handleProvinceChangeTinh}>
+                      <option value="" selected>Chọn tỉnh thành</option>
+                      {renderOptions(apitinh)}
+                    </select>
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Ngân hàng:</div>
@@ -252,11 +363,17 @@ const Admin = () => {
                 <div className="w-full grid grid-cols-6 mb-[30px]  px-[60px]">
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] w-[30%] ">Quận/ Huyện:</div>
-                    <input type="text" class="ipquan" ></input>
+                    <select type="text" class="ipquan" onChange={handleProvinceChangeQuan}>
+                      <option value="" selected>Chọn quận huyện</option>
+                      {renderOptions(apiquan)}
+                    </select>
                   </div>
-                  <div className="col-span-2 flex justify-between translate-x-[-50px]">
+                  <div className="col-span-2 flex justify-between translate-x-[-60px]">
                     <div className="text-[20px] w-[30%] ">Phường:</div>
-                    <input type="text" class="ipphuong" ></input>
+                    <select type="text" class="ipphuong">
+                      <option value="" selected>Chọn phường xã</option>
+                      {renderOptions(apiphuong)}
+                    </select>
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] translate-x-[5px] ">Số tài khoản:</div>
@@ -295,33 +412,34 @@ const Admin = () => {
             <div className="col-span-2 text-[white] text-center pt-[17px]">Email</div>
             <div className="col-span-1 text-[white] text-center pt-[17px]">Số điện thoại</div>
             <div className="col-span-3 text-[white] text-center pt-[17px]">Địa chỉ</div>
-            <div className="col-span-2 text-[white] text-center pt-[17px]">Ngân hàng</div>
+            <div className="col-span-1 text-[white] text-center pt-[17px]">Ngân hàng</div>
             <div className="col-span-1 text-[white] text-center pt-[17px]">Số tài khoản</div>
             <div className="col-span-1 text-[white] text-center pt-[17px]">Ảnh</div>
             <div className="col-span-1 text-[white] text-center pt-[17px]">Xác thực</div>
+
           </div>
           <div className="overflow-y-scroll h-[200px]">
             {listCoso.length > 0 ? (
-                <div className="w-full grid grid-cols-12 bg-[#ffffff] mt-[20px] h-[100px]">
-                  {listCoso.map((coso, i) => (
-                    <React.Fragment key={i}>
-                      <div className=" text-[#000000] text-center pt-[30px] hidden">{coso.idAccount}</div>
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px]" onClick={test}>{coso.Ten}</div>
-                      <div className="col-span-2 text-[#000000] text-center pt-[30px]">{coso.Email}</div>
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px]">{coso.SoDienThoai}</div>
-                      <div className="col-span-3 text-[#000000] text-center pt-[30px]">{coso.DiaChiCoSo}</div>
-                      <div className="col-span-1 text-[#291616] text-center pt-[30px]">{coso.NganHang}</div>
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px]">{coso.STK}</div>
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] underline hover:text-[red] cursor-pointer">Xem</div>
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px]">{formattedDate(coso.XacThuc)}</div>
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red] cursor-pointer">X</div>  
-                    </React.Fragment>
-                  ))}
+              <div className="w-full grid grid-cols-12 bg-[#ffffff] mt-[20px] h-[100px]">
+                {listCoso.map((coso, i) => (
+                  <React.Fragment key={i}>
+                    <div className=" text-[#000000] text-center pt-[30px] hidden">{coso.idAccount}</div>
+                    <div className="col-span-1 text-[#000000] text-center pt-[30px]" onClick={test}>{coso.Ten}</div>
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]">{coso.Email}</div>
+                    <div className="col-span-1 text-[#000000] text-center pt-[30px]">{coso.SoDienThoai}</div>
+                    <div className="col-span-3 text-[#000000] text-center pt-[30px]">{coso.DiaChiCoSo}</div>
+                    <div className="col-span-1 text-[#291616] text-center pt-[30px]">{coso.NganHang}</div>
+                    <div className="col-span-1 text-[#000000] text-center pt-[30px]">{coso.STK}</div>
+                    <div className="col-span-1 text-[#000000] text-center pt-[30px] underline hover:text-[red] cursor-pointer">Xem</div>
+                    <div className="col-span-1 text-[#000000] text-center pt-[30px]">{formattedDate(coso.XacThuc)}</div>
+                    <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red] cursor-pointer">X</div>
+                  </React.Fragment>
+                ))}
 
-                </div>
-              ) : (
-                <p>No Co so.</p>
-              )
+              </div>
+            ) : (
+              <p>No Co so.</p>
+            )
             }
 
 

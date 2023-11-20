@@ -18,6 +18,7 @@ class HoaDon{
         this.TrangThai = trangThai;
     }
 
+
     GetAllBill() {
         return axios.post("http://localhost:8081/getAllBill", {})
             .then(response => {
