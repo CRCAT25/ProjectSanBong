@@ -211,7 +211,7 @@ export const OrderField = () => {
 
 
 
-            <div className="col-span-8 border-[#379E13] border-[3px] rounded-[10px] p-5 relative">
+            <div className="col-span-8 border-[#379E13] border-[3px] rounded-[10px] p-5 relative h-[770px]">
             {
                 gotInfo === true ? ( 
                 <div className="flex gap-6 " >
@@ -251,7 +251,7 @@ export const OrderField = () => {
                                     {selectedDate != null && sanBongs != null ? sanBongs.map((data, i) => (<div className="col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px] cursor-pointer" value={data.IdSan} key={i} onClick={()=>ChonSanBong(data.IdSan)}>{data.TenSan}</div>)) : ""}
                                 </div>
                             </div>                   
-                </div> ) : ("noo")
+                </div> ) : ("")
                 }
                 <div className="mt-[30px] relative">
                     <div className="text-[24px] text-[#2B790F]">Chi tiết sân bóng:</div>            
@@ -261,6 +261,10 @@ export const OrderField = () => {
                         <img className="w-[300px] h-[300px] rounded-[15px] mb-[50px]" src="./assets/sanbong.jpg" alt="" />
                         <div className="w-full">
 
+                            <div className="text-[20px] mt-1">
+                                <span className="font-[600]">Tên sân:</span>
+                                <span className="font-[400] ml-3">{sanBongInfo.TenSan}</span>
+                            </div>
                             <div className="text-[20px] mt-1">
                                 <span className="font-[600]">Loại sân:</span>
                                 <span className="font-[400] ml-3">{tenLoaiSan}</span>
@@ -289,10 +293,15 @@ export const OrderField = () => {
                     </div>): ""}
                     
                 </div>
-
-                <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
-                <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]">900.000</div>
-                <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]">Xác nhận</button>
+                {gotInfoSan ?
+                
+                (<div>
+                    <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
+                    <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]"></div>
+                    <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]">Xác nhận</button>
+                </div>
+                ): ""}
+                
 
             </div>
 
