@@ -15,9 +15,15 @@ const updateBillDoiThuByIdBill = async (idBill,idDoiThu) =>{
     getAllLichGiaoHuu()
 }
 
-
+const GetPersonalBillByIdTK = async (idTk) =>{
+    const bill = new HoaDon()
+    let list = await bill.getPersonalBillByIdTk(idTk)
+    // console.log(list)
+    return list
+}
 
 export {
     getAllLichGiaoHuu,
-    updateBillDoiThuByIdBill
+    updateBillDoiThuByIdBill,
+    GetPersonalBillByIdTK
 }

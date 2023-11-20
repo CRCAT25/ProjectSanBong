@@ -23,7 +23,7 @@ class SanBong{
     }
        
 
-    FindSanByID(idSan) {
+    getSanByID(idSan) {
         return axios.post("http://localhost:8081/getSanByID", {IdSan: idSan})
             .then(response => {
                 let data = response.data[0]

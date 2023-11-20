@@ -47,5 +47,13 @@ class LoaiSan {
         });
         return resultList
     }
+
+    getLoaiSanByID = (idSan) =>{
+        return axios.post("http://localhost:8081/getLoaiSanByID",{idSan}).then(response => {
+            const itemCoSo = new LoaiSan(response.data[0].IdLoaiSan, response.data[0].TenLoaiSan, response.data[0].GiaTien);
+            return itemCoSo
+        })
+        .catch(error => {console.error(error);}
+        )}
 }
 export default LoaiSan
