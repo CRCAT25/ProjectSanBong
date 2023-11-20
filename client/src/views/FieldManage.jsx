@@ -7,14 +7,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getAllLoaiSan, getAllSanByTaiKhoan, getEmptyShiftByDay} from "../controllers/CQuanLySan";
+import { getCostByShiftnTypeField, getLoaiSanByIdField, getAllLoaiSan, getEmptyFieldByDayShift, getEmptyShiftByDay} from "../controllers/CQuanLySan";
+import { getAllSanByTaiKhoan, getAllHoaDonCompletedByCoSo, getBillForRefund} from "../controllers/CQuanLySan";
+import SanBong from "../models/SanBong";
 
 
 
 const FieldManage =  () => {
+  useEffect(() => {
+    GetLoaiSans()
+    // GetAllBillByTaiKhoan()
+    // GetBillForRefund()
+    document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
+    handleDateChange()
+  }, []);
   const [getLoaiSans, setLoaiSans] = useState([]);
   const [getSans, setSans] = useState([]);
   const [getKhungGios, setKhungGios] = useState([]);
+  const [getBills, setBills] = useState([]);
+  const [getBillForRefund, setBillForRefund] = useState([]);
 
   function getCurrentDate() {
     const today = new Date();
@@ -25,13 +36,6 @@ const FieldManage =  () => {
     day = day < 10 ? `0${day}` : day;
     return `${year}-${month}-${day}`;
   }
-
-  const handleDateChange = async () =>{
-    
-    document.getElementsByClassName("thng-10-WTm")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[1]+" / "+ document.getElementsByClassName("ngayLS")[0].value.split("-")[0]
-    document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
-    GetKhungGios()
-  };
   const changeDate = (daysToAdd) =>{
     var currentDate = new Date(document.getElementsByClassName("ngayLS")[0].value);
       currentDate.setDate(currentDate.getDate() + daysToAdd);
@@ -41,39 +45,98 @@ const FieldManage =  () => {
       document.getElementsByClassName("ngayLS")[0].value = `${year}-${month}-${day}`;
       handleDateChange()
   }
+  const handleDateChange = async () =>{
+    
+    document.getElementsByClassName("thng-10-WTm")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[1]+" / "+ document.getElementsByClassName("ngayLS")[0].value.split("-")[0]
+    document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
+    setSelectKGByNgay()
+    setSelectSanByNgayKG()
+  };
 
-  useEffect(() => {
-    GetLoaiSans()
-    document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
-    GetKhungGios()
-    handleDateChange()
-  }, []);
 
-
-  
-  const GetKhungGios = async () =>{
-    let run = true
-    setKhungGios(await getEmptyShiftByDay("1", await document.getElementsByClassName("ngayLS")[0].value))
+  const setSelectKGByNgay = async () =>{
     const slect =  document.getElementsByClassName("selectKhungGio")[0];
     while (slect.hasChildNodes()) {
       slect.removeChild(slect.firstChild);
     }
     slect.innerHTML = `<option value="none">--Khung giờ--</option>`
-    if(run){
-      run = false;
-      ;(await getEmptyShiftByDay("1", await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
-        slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
-      })
-    }
-    
-    
+    ;(await getEmptyShiftByDay("7", await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
+      slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
+    })
   }
   const GetLoaiSans = async () =>{
     setLoaiSans(await getAllLoaiSan())
   }
+ 
 
-  const GetAllSansByTaiKhoan = async (IDTaiKhoan) =>{
-    setSans(await getAllSanByTaiKhoan(IDTaiKhoan))
+  const setSelectSanByNgayKG = async () =>{
+    const slect =  document.getElementsByClassName("selectTenLS")[0];
+    while (slect.hasChildNodes()) {
+      slect.removeChild(slect.firstChild);
+    }
+    slect.innerHTML = `<option value="none">--Sân--</option>`
+    ;(await getEmptyFieldByDayShift("7", await document.getElementsByClassName("ngayLS")[0].value,await document.getElementsByClassName("selectKhungGio")[0].value)).map((san, i)=>{
+      slect.innerHTML += `<option value="${san.IdSan}" >${san.TenSan}</option>`
+    })
+    setLoaiSanLS()
+  }
+  const setLoaiSanLS = async () =>{
+    if(document.getElementsByClassName("selectTenLS")[0].value  != "none"){
+      document.getElementsByClassName("loaiSanLS")[0].innerHTML = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).TenLoaiSan
+      document.getElementsByClassName("loaiSanLS")[0].value = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).IdLoaiSan
+      document.getElementsByClassName("tongTien")[0].innerHTML = await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value  , await document.getElementsByClassName("loaiSanLS")[0].value) +".000 VND"
+    }else{
+      document.getElementsByClassName("loaiSanLS")[0].innerHTML = "------"
+      document.getElementsByClassName("loaiSanLS")[0].value = null
+      document.getElementsByClassName("tongTien")[0].innerHTML = "0.000 VND"
+    }
+  }
+  const loadListFields = async () =>{
+    let list = ""
+    getAllSanByTaiKhoan().map( async san=>{
+      const loaiSan = await getLoaiSanByIdField(san.IdSan)
+      list +=  `<div className="sn-XTh" id="257:844">
+      <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
+        <div className="tn-sn-input-J75" id="257:849">
+          <div className="tenSan" value="${san.IdSan}">${san.TenSan}</div>
+        </div>
+        <div className="tn-sn-input-Mr3" id="257:852">
+          <div className="loaiSan" value="${san.IdLoaiSan}">${loaiSan.TenLoaiSan}</div>
+        </div>
+        <div className="tn-sn-input-J91" id="257:855">
+          <div className="donGia">${loaiSan.GiaTien}</div>
+        </div>
+      </div>
+      <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
+        <img
+          className="imgSan"
+          src="https://via.placeholder.com/1920x839"
+          id="257:863"
+        />
+        <img
+          className="imgSan"
+          src="https://via.placeholder.com/1920x839"
+          id="260:1081"
+        />
+      </div>
+      <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
+        <button class="btn">
+          <i class="fa fa-edit fa-2x"></i>
+        </button>
+        <button class="btn">
+          <i class="fa fa-trash fa-2x"></i>
+        </button>
+      </div>
+    </div>`
+    })
+    document.getElementsByClassName("scrollContainerSan")[0].innerHTML = list
+  }
+  const GetAllBillByTaiKhoan = async () =>{
+    console.log(await getAllHoaDonCompletedByCoSo(1));
+  }
+
+  const GetBillForRefund = async () =>{
+    console.log(await getBillForRefund(1));
   }
 
   return (
@@ -144,72 +207,7 @@ const FieldManage =  () => {
           Danh sách sân
         </div>
         <div className="scrollContainerSan">
-          <div className="sn-XTh" id="257:844">
-            <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
-              <div className="tn-sn-input-J75" id="257:849">
-                <div className="tenSan">Tên sân</div>
-              </div>
-              <div className="tn-sn-input-Mr3" id="257:852">
-                <div className="loaiSan">Loại sân</div>
-              </div>
-              <div className="tn-sn-input-J91" id="257:855">
-                <div className="donGia">Đơn giá</div>
-              </div>
-            </div>
-            <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
-              <img
-                className="imgSan"
-                src="https://via.placeholder.com/1920x839"
-                id="257:863"
-              />
-              <img
-                className="imgSan"
-                src="https://via.placeholder.com/1920x839"
-                id="260:1081"
-              />
-            </div>
-            <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-              <button class="btn">
-                <i class="fa fa-edit fa-2x"></i>
-              </button>
-              <button class="btn">
-                <i class="fa fa-trash fa-2x"></i>
-              </button>
-            </div>
-          </div>
-          <div className="sn-XTh" id="257:844">
-            <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
-              <div className="tn-sn-input-J75" id="257:849">
-                <div className="tenSan">Tên sân</div>
-              </div>
-              <div className="tn-sn-input-Mr3" id="257:852">
-                <div className="loaiSan">Loại sân</div>
-              </div>
-              <div className="tn-sn-input-J91" id="257:855">
-                <div className="donGia">Đơn giá</div>
-              </div>
-            </div>
-            <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
-              <img
-                className="imgSan"
-                src="https://via.placeholder.com/1920x839"
-                id="257:863"
-              />
-              <img
-                className="imgSan"
-                src="https://via.placeholder.com/1920x839"
-                id="260:1081"
-              />
-            </div>
-            <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-              <button class="btn">
-                <i class="fa fa-edit fa-2x"></i>
-              </button>
-              <button class="btn">
-                <i class="fa fa-trash fa-2x"></i>
-              </button>
-            </div>
-          </div>
+          
         </div>
       </div>
       <hr className="divideLine"/>
@@ -247,7 +245,7 @@ const FieldManage =  () => {
               Ngày:
             </div>
             <div className="auto-group-efjs-9qd" id="Wa19yo8hWThy9FUqpkefJs">
-              <input type="date" className="ngayLS" id="257:891" onChange={()=>handleDateChange()}
+              <input type="date" className="ngayLS" id="257:891" onChange={handleDateChange}
         min={getCurrentDate()}></input>
             </div>
           </div>
@@ -255,13 +253,10 @@ const FieldManage =  () => {
             <div className="tn--9FH" id="257:877">
               Tên:
             </div>
-            <select name="cars" className="selectTenLS">
-            <option value="none">--Sân--</option>
-                  {
-                    getSans.map((san, i) => (
-                      <option value={san.IdSan} >{san.TenSan}</option>
-                    ))
-                  }
+            <select name="cars" className="selectTenLS" onChange={()=>{
+              setLoaiSanLS()
+            }}>
+            
             </select>
           </div>
         </div>
@@ -271,7 +266,7 @@ const FieldManage =  () => {
               <div className="khung-gi--JA7" id="257:882">
                 Khung giờ:
               </div>
-              <select name="cars" className="selectKhungGio">
+              <select name="cars" className="selectKhungGio" onChange={setSelectSanByNgayKG}>
               </select>
             </div>
             <div className="nhp-tn-sn-vKu" id="257:946">
@@ -284,13 +279,23 @@ const FieldManage =  () => {
               </select>
             </div>
           </div>
-        <div className="nhp-tn-sn-dB9" id="257:884">
-          
-            <div className="loi--xUK" id="257:887">
-              Loại:
+          <div className="groupkhGHuu">
+            <div className="nhp-tn-sn-9o1" id="257:884">
+              
+              <div className="loi--xUK" id="257:887">
+                Loại:
+              </div>
+              <div className="loaiSanLS">None</div>
             </div>
-            <div className="loaiSanLS">--Loại sân--</div>
+            <div className="nhp-tn-sn-vKu" id="257:884">
+              
+              <div className="loi--xUK" id="257:887">
+                Tổng tiền:
+              </div>
+              <div className="tongTien">0 VND</div>
+            </div>
           </div>
+        
           
           
         </div>
@@ -478,5 +483,6 @@ const FieldManage =  () => {
     </div>
   );
 };
+
 
 export default FieldManage;

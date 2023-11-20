@@ -17,7 +17,6 @@ const db = mysql.createConnection({
 app.post("/getAllCoSo", (req, res) => {
   const sql = "SELECT * FROM taikhoan where IDPhanQuyen = 2";
   db.query(sql, (err, data) => {
-    // console.log(data)
       res.json(data);
   });
 });
@@ -37,7 +36,7 @@ app.post("/getCoSoBySearch", (req, res) => {
     }
     
     db.query(sql, (err, data) => {
-        // console.log(data)
+        res.json(data)
     });
 });
 
@@ -46,6 +45,41 @@ app.post("/getInfoCoSo", (req, res) => {
   const sql = `select * from taikhoan where IDTaiKhoan = ${idCoSo}`;
   db.query(sql, (err, data) => {
     res.json(data);
+  });
+});
+
+app.post("/getSanByID", (req, res) => {
+  const idSan = req.body.IdSan;
+  const sql = `select * from SanBong where IDSan = ${idSan}`;
+  db.query(sql, (err, data) => {
+    res.json(data);
+  });
+});
+
+app.post("/getLoaiSanByID", (req, res) => {
+  const idLoaiSan = req.body.IdLoaiSan;
+  const sql = `SELECT * FROM loaisan Where IDLoaiSan = ${idLoaiSan}`; 
+  db.query(sql, (err, data) => {
+      res.json(data);
+  });
+});
+
+app.post("/getNotEmptyKhungGioByIDnDate", (req, res) => {
+  const idSan = req.body.IdSan;
+  const date = req.body.Date;
+  const sql = `SELECT * FROM hoadon WHERE IDSan = ${idSan} AND Ngay = "${date}" AND (TrangThai = "Completed" OR TrangThai = "Pending")`; 
+  db.query(sql, (err, data) => {
+      res.json(data);
+  });
+});
+
+app.post("/getSanByIDnCate", (req, res) => {
+  const IDTaiKhoan = req.body.IDCoSo
+  const IDLoaiSan = req.body.IDLoaiSan
+  const sql = `SELECT * FROM sanbong WHERE IDTaiKhoan = ${IDTaiKhoan} AND IDLoaiSan LIKE '%${IDLoaiSan}%'`; 
+  db.query(sql, (err, data) => {
+      res.json(data);
+      
   });
 });
 
@@ -92,30 +126,62 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
       res.json(data);
   });
 });
-// app.post("/getKhungGioByDay", (req, res) => {
-//   const sql = "SELECT * FROM Khu WHERE IDTaiKhoan = ?"; 
-//   db.query(sql, [req.body.Day], (err, data) => {
-//       res.json(data);
-//   });
-// });
+app.post("/getFieldByIDField", (req, res) => {
+  const sql = `select * from sanbong where IDSan = ?`;
+  db.query(sql,[req.body.IdSan], (err, data) => {
+    res.json(data);
+  });
+});
+app.post("/getShiftByID", (req, res) => {
+  const sql = `select * from khunggio where IDKhungGio = ?`;
+  db.query(sql,[req.body.id], (err, data) => {
+    res.json(data);
+  });
+});
+app.post("/getLoaiSanByID", (req, res) => {
+  const sql = `select * from loaisan where IDLoaiSan = ?`;
+  db.query(sql,[req.body.id], (err, data) => {
+    res.json(data);
+  });
+});
 app.post("/getAllKhungGio", (req, res) => {
   const sql = "SELECT * FROM khunggio"; 
   db.query(sql, (err, data) => {
       res.json(data);
   });
 });
-app.post("/getHoaDonsCompleteByNgaySan", (req, res) => {
-  const sql = "SELECT * FROM hoadon where Ngay = ? and IDSan = ? and TrangThai = 'Completed'"; 
-  db.query(sql, [req.body.Ngay, req.body.IDSan], (err, data) => {
+app.post("/getHoaDonsCompleteByNgayKGTK", (req, res) => {
+  const sql = "SELECT * FROM hoadon, sanbong where hoadon.Ngay = ? and hoadon.IDKhungGio = ? and hoadon.TrangThai = 'Completed' and hoadon.IDSan = sanbong.IDSan and sanbong.IDTaiKhoan = ?"; 
+  db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan], (err, data) => {
       res.json(data);
   });
 });
-app.post("/getHoaDonsCompleteByNgayKG", (req, res) => {
-  const sql = "SELECT * FROM hoadon where Ngay = ? and IDKhungGio = ? and TrangThai = 'Completed'"; 
-  db.query(sql, [req.body.Ngay, req.body.IDKhungGio], (err, data) => {
-      res.json(data);
-  });
-});
+
+/*************************/
+app.post("/getAllHoaDonCompletedByCoSo",(req,res)=>{
+  const sql =`SELECT * FROM hoadon, sanbong 
+              where hoadon.TrangThai = 'Completed' and hoadon.IDSan = sanbong.IDSan and sanbong.IDTaiKhoan = ?`
+  db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
+    res.json(data);
+  })
+})
+
+app.post("/getAllBillForRefund",(req,res)=>{
+  const sql=`SELECT * FROM hoadon WHERE hoadon.TrangThai='Completed' and DATEDIFF(CURRENT_DATE, hoadon.Ngay) <= 0`;
+  db.query(sql,(err,data) =>{
+    res.json(data);
+  })
+})
+
+app.post("/updateDoiThuInBill",(req,res)=>{
+  const sql=`UPDATE hoadon SET IDDoiThu = ? WHERE hoadon.IDHoaDon = ?`;
+  db.query(sql,[req.body.IDDoiThu,req.body.IDHoaDon],(err,data) =>{
+    console.log(data)
+    res.json(data);
+    
+  })
+})
+
 
 /*************************/
 

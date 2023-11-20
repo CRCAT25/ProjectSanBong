@@ -1,11 +1,10 @@
 import axios from 'axios';
 class SanBong{
-    constructor(idSan, idTaiKhoan, idLoaiSan, tenSan, giaTien, trangThai){
+    constructor(idSan, idTaiKhoan, idLoaiSan, tenSan, trangThai){
         this.IdSan = idSan;
         this.IdTaiKhoan = idTaiKhoan;
         this.IdLoaiSan = idLoaiSan;
         this.TenSan = tenSan;
-        this.GiaTien = giaTien;
         this.TrangThai = trangThai;
     }
     GetAllSanByTaiKhoan(id) {
@@ -18,6 +17,43 @@ class SanBong{
                 console.error(error);
             });
     }
+       
+
+    FindSanByID(idSan) {
+        return axios.post("http://localhost:8081/getSanByID", {IdSan: idSan})
+            .then(response => {
+                const sanBong = new SanBong(response.data[0].IDSan, response.data[0].IDTaiKhoan, response.data[0].IDLoaiSan, response.data[0].TenSan, response.data[0].TrangThai)
+                return sanBong
+            });
+    }
+    
+    GetFieldByIDField(idField) {
+        return axios.post("http://localhost:8081/getFieldByIDField", {IdSan: idField})
+            .then(response => {
+                const field = new SanBong(response.data[0].IDSan,
+                    response.data[0].IDSan,
+                    response.data[0].IDTaiKhoan,
+                    response.data[0].IDLoaiSan,
+                    response.data[0].TenSan,
+                    response.data[0].TrangThai)
+                return field
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    FindSanByIDnCate(IdCoSo, loaiSan) {
+        return axios.post("http://localhost:8081/getSanByIDnCate", {IDCoSo: IdCoSo, IDLoaiSan : loaiSan})
+            .then(response => {
+                const list = this.initSan(response.data);
+                return list
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
     initSan(list){
         const resultList = [];
         list.forEach(san => {

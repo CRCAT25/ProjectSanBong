@@ -44,20 +44,20 @@ class Bill{
     }
 
     //Tấn - Start
-    GetHoaDonsCompleteByNgaySan(day,idSan) {
-        return axios.post("http://localhost:8081/getHoaDonsCompleteByNgaySan", {Ngay: day, IDSan: idSan})
+    // GetHoaDonsCompleteByNgaySan(day,idSan) {
+    //     return axios.post("http://localhost:8081/getHoaDonsCompleteByNgaySan", {Ngay: day, IDSan: idSan})
+    //         .then(response => {
+    //             const list = this.initBill(response.data);               
+    //             return list;
+    //         })
+    //         .catch(error => {
+    //             console.error(error);
+    //         });
+    // }
+    GetHoaDonsCompleteByNgayKG(day,idKhungGio, idTK) {
+        return axios.post("http://localhost:8081/getHoaDonsCompleteByNgayKGTK", {Ngay: day, IDKhungGio: idKhungGio, IDTaiKhoan: idTK})
             .then(response => {
-                const list = this.initBill(response.data);               
-                return list;
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-    GetHoaDonsCompleteByNgayKG(day,idKhungGio) {
-        return axios.post("http://localhost:8081/getHoaDonsCompleteByNgayKG", {Ngay: day, IDKhungGio: idKhungGio})
-            .then(response => {
-                const list = this.initBill(response.data);    
+                const list = this.initBill(response.data);                  
                 return list;
             })
             .catch(error => {
@@ -65,8 +65,50 @@ class Bill{
             });
     }
     //Tấn - End
-
     
+    getBillByIdCoSo(idCoSo){
+        return axios.post("http://localhost:8081/getAllHoaDonCompletedByCoSo",{IDTaiKhoan:idCoSo})
+        .then(response => {
+            const list = this.initBill(response.data);    
+            return list;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    }
+
+    GetNotEmptyKhungGioByIDSanANDDate(idSan, date){
+        return axios.post("http://localhost:8081/getNotEmptyKhungGioByIDnDate", {IdSan: idSan, Date : date})
+            .then(response => {
+                const list = this.initBill(response.data);   
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+    getBillForRefund(idCoSo){
+        return axios.post("http://localhost:8081/getAllBillForRefund",{IDTaiKhoan:idCoSo})
+        .then(response => {
+            const list = this.initBill(response.data);    
+            return list;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    UpdateBillDoiThuByIdBill(IDDoiThu,IDHoaDon)
+    {
+        return axios.post("http://localhost:8081/updateDoiThuInBill",{IDDoiThu,IDHoaDon})
+        .then(response => {
+            return "yeah"
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }
 
 }
 export default Bill

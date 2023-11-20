@@ -34,6 +34,16 @@ class KhungGio{
         
         return resultList
     }
+    GetShiftByID(id) {
+        return axios.post("http://localhost:8081/getShiftByID", {id})
+            .then(response => {
+                const khungGio =  new KhungGio(response.data[0].IDKhungGio, response.data[0].ThoiGian, response.data[0].GiaTien)
+                return khungGio
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
     getKhungGioById(idKhungGio){
         return this.getAllKhungGio()
             .then(allKhungGio => allKhungGio.find(khungGio => khungGio.IdKhungGio === idKhungGio))

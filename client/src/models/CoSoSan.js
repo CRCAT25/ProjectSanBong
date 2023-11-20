@@ -11,7 +11,6 @@ class CoSoSan extends Account{
             .then(response => {
                 const listCoSo = this.initCoSo(response.data);
                 return listCoSo
-                // Do something with listCoSo if needed
             })
             .catch(error => {
                 console.error(error);
@@ -25,7 +24,6 @@ class CoSoSan extends Account{
             })
             .then(response => {
                 const listCoSo = this.initCoSo(response.data);
-                console.log(listCoSo)
                 return listCoSo
             })
             .catch(error => {

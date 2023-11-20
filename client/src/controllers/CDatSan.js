@@ -1,30 +1,61 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
 import FootballField from "../models/SanBong";
+import SanBong from "../models/SanBong";
+import LoaiSan from "../models/LoaiSan";
+import KhungGio from "../models/KhungGio";
+import Bill from "../models/Bill";
 
-const GetInfoCoSo = (idCoSo) =>{
-    const[coSo, setCoSo] = useState('');
-        axios.post('',{
-            idCoSo: idCoSo
-        }).then(res => {
-            setCoSo(res.data)
-            return coSo
-        })
+
+const GetAllSanFromCoSo = async (idCoSo) =>{
+    const sanBong = new SanBong();
+    let lstSanBong = await sanBong.GetAllSanByTaiKhoan(idCoSo)
+    return lstSanBong
+}
+const GetAllSanFromCoSoBySearch = async (idCoSo, loaiSan) =>{
+    const sanBong = new SanBong();
+    let lstSanBong = await sanBong.FindSanByIDnCate(idCoSo, loaiSan)
+    return lstSanBong
+}
+const GetInfoSanBong = async (idSan) =>{
+    const sanBong = new SanBong();
+    let result = await sanBong.FindSanByID(idSan)
+    return result
 }
 
-const GetAllSanFromCoSo = (idCoSo) =>{
-    const[sanBongs, setSanBongs] = useState([]);
-    useEffect(() =>{
-        axios.post('',{
-            idCoSo: idCoSo
-        }).then(res => {
-            setSanBongs(res.data.map(sanbong => new FootballField(sanbong.idSan, sanbong.idTaiKhoan, sanbong.idLoaiSan, sanbong.tenSan, sanbong.giaTien, sanbong.trangThai)))
-            return sanBongs
-        })
-    })
+const GetTenLoaiSan = async (idLoaiSan) => {
+    const loaiSan = new LoaiSan()
+    let result
+    result = await loaiSan.GetLoaiSan(idLoaiSan)
+    return result.TenLoaiSan
+} 
+
+const getAllKhungGio = async () =>{
+    const khungGio = new KhungGio()
+    let list = await khungGio.GetAllKhungGio()
+    return list 
 }
 
-export{
-    GetInfoCoSo, 
-    GetAllSanFromCoSo
+const getAllOccuredKhungGio = async(idSan, date) =>{
+    // const khungGio = new KhungGio()
+    const khungGioNotEmpty = new Bill()
+    // let khunggios = await khungGio.GetAllKhungGio()
+    let notEmptykhunggios = await khungGioNotEmpty.GetNotEmptyKhungGioByIDSanANDDate(idSan, date)
+    // let emptyKhungGio
+    // khunggios.forEach(time => {
+    //     notEmptykhunggios.forEach(occuredTime => {
+    //         if(occuredTime.IdKhungGio != time.IdKhungGio){
+    //             emptyKhungGio.push(occuredTime)
+    //         }
+    //     });
+    // });
+    return notEmptykhunggios
+}
+export{ 
+    GetAllSanFromCoSo,
+    GetInfoSanBong,
+    GetTenLoaiSan,
+    getAllKhungGio,
+    getAllOccuredKhungGio,
+    GetAllSanFromCoSoBySearch
 } 
