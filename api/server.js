@@ -42,7 +42,7 @@ app.post("/getCoSoBySearch", (req, res) => {
     }
     
     db.query(sql, (err, data) => {
-      console.log(data)
+      // console.log(data)
         res.json(data)
     });
 });
@@ -150,8 +150,9 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
     taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and
     sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan and 
     sanbong.IDLoaiSan = loaisan.IDLoaiSan and  
-    IDTaiKhoan = ?`; 
+    taikhoan.IDTaiKhoan = ?`; 
   db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
+    console.log(data)
       res.json(data);
   });
 });
