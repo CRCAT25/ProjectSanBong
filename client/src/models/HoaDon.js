@@ -1,13 +1,18 @@
 import axios from "axios";
-class Bill{
-    constructor(idHoaDon, idTaiKhoan, idSan, idKhungGio, ngay, giaoHuu, idDoiThu, tongTien, thoiGianDat, trangThai){
+import TaiKhoan from "./TaiKhoan";
+import LoaiSan from "./LoaiSan";
+import CoSoSan from "./CoSoSan";
+import SanBong from './SanBong'
+import KhungGio from './KhungGio'
+class HoaDon{
+    constructor(idHoaDon, taiKhoan, sanBong, khungGio, ngay, giaoHuu, doiThu, tongTien, thoiGianDat, trangThai){
         this.IDHoaDon = idHoaDon;
-        this.IDTaiKhoan = idTaiKhoan;
-        this.IDSan = idSan;
-        this.IDKhungGio = idKhungGio;
+        this.TaiKhoan = taiKhoan;
+        this.SanBong = sanBong;
+        this.KhungGio = khungGio;
         this.Ngay = ngay;
         this.GiaoHuu = giaoHuu;
-        this.IDDoiThu = idDoiThu;
+        this.DoiThu = doiThu;
         this.TongTien = tongTien;
         this.ThoiGianDat = thoiGianDat;
         this.TrangThai = trangThai;
@@ -26,8 +31,15 @@ class Bill{
     initBill(list){
         const resultList = [];
         list.forEach(bill => {
-            const item = new Bill(bill.IDHoaDon, bill.IDTaiKhoan, bill.IDSan, bill.IDKhungGio,
-               bill.GiaoHuu, bill.Ngay,bill.IDDoiThu,bill.TongTien,bill.ThoiGianDat,bill.TrangThai);
+            const taiKhoan = new TaiKhoan()
+            taiKhoan.SetTK(bill.IDTaiKhoan)
+            const loaiSan = new LoaiSan(bill.IDLoaiSan)
+            const khungGio = new KhungGio(bill.IDKhungGio)
+            const doiThu = new TaiKhoan(bill.IDDoiThu)
+            const sanBong = new SanBong(bill.IDSan)
+            const coSo = new TaiKhoan(bill.Coso)
+            const item = new HoaDon(bill.IDHoaDon, taiKhoan, sanBong, khungGio,
+               bill.GiaoHuu, bill.Ngay,doiThu,bill.TongTien,bill.ThoiGianDat,bill.TrangThai);
             resultList.push(item);
         });
         
@@ -111,4 +123,4 @@ class Bill{
     }
 
 }
-export default Bill
+export default HoaDon

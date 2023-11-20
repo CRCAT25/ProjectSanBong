@@ -20,6 +20,8 @@ const FieldManage =  () => {
     // GetBillForRefund()
     document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
     handleDateChange()
+    loadListFields()
+
   }, []);
   const [getLoaiSans, setLoaiSans] = useState([]);
   const [getSans, setSans] = useState([]);

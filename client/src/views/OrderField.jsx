@@ -147,7 +147,7 @@ export const OrderField = () => {
 
     const ChonSanBong = async (idSan) =>{
         let infoSanBong = await GetInfoSanBong(idSan)
-        setTenLoaiSan(await GetTenLoaiSan(infoSanBong.IdLoaiSan))  
+        setTenLoaiSan(infoSanBong.LoaiSan.TenLoaiSan)  
         GetEmptyKhungGio(idSan) 
         GetAllKhungGio()   
         setSanBongInfo(infoSanBong)

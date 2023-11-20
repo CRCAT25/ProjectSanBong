@@ -20,6 +20,7 @@ class LoaiSan {
             IdLoaiSan : idLoaiSan
         })
             .then(loaisan => {
+                console.log(idLoaiSan)
                 const loaiSan = new LoaiSan(loaisan.data[0].IDLoaiSan, loaisan.data[0].TenLoaiSan, loaisan.data[0].GiaTien);
                 return loaiSan
             }).catch(error => {

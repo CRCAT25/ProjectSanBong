@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
-import Account from "../models/Account"
+import TaiKhoan from "../models/TaiKhoan"
 
 const Login = async (userName, passWord) =>{
-    const user = new Account();
+    const user = new TaiKhoan();
     let MSGno = "khong"
     let MSGco = "co"
     const authUser = await user.LoginUser(userName, passWord);
