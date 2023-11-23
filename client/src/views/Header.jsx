@@ -1,20 +1,20 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../css/Header.css"
 import "../css/OrderField.css"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faAngleDown, faXmark} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faAngleDown, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router-dom";
 import FormLogin from './FormLogin'
 import FormSignUp from './FormSignUp'
 import FormResPass from './FormResPass'
 
-const Icon24px = ({classIcon}) => {
+const Icon24px = ({ classIcon }) => {
     const iconSize = {
         width: "24px",
         height: "24px",
     };
-    return(
-        <FontAwesomeIcon icon={classIcon} style = {iconSize}/>
+    return (
+        <FontAwesomeIcon icon={classIcon} style={iconSize} />
     )
 }
 
@@ -24,8 +24,8 @@ const IconClose = () => {
         width: "36px",
         height: "36px",
     };
-    return(
-        <span><FontAwesomeIcon icon={faXmark} style = {iconSize}/></span>
+    return (
+        <span><FontAwesomeIcon icon={faXmark} style={iconSize} /></span>
     )
 }
 
@@ -99,11 +99,24 @@ export default function Header() {
         formResPass.style.top = "-100%";
     }
 
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!isDropdownOpen);
+    };
+
+    const closeDropdown = () => {
+        setDropdownOpen(false);
+    };
+
     useEffect(() => {
         var bgCus = document.getElementsByClassName('bgCus')[0];
-        bgCus.addEventListener('click', CloseFormLogin);
-        bgCus.addEventListener('click', CloseFormSignUp);
-        bgCus.addEventListener('click', CloseFormResPass);
+        if(!userName){
+            bgCus.addEventListener('click', CloseFormLogin);
+            bgCus.addEventListener('click', CloseFormSignUp);
+            bgCus.addEventListener('click', CloseFormResPass);
+        }
+        bgCus.addEventListener('click', closeDropdown);
         var iconClose = document.getElementsByClassName('iconClose')[0];
         iconClose.addEventListener('click', CloseFormLogin);
 
@@ -117,58 +130,66 @@ export default function Header() {
 
     const userName = localStorage.getItem("userName");
 
+   
 
-  return (
-    <div className='w-full bgHeader h-[839px] relative'>
-        <div className='bg-[#000] bgCus opacity-10 h-[839px] w-full absolute z-1'></div>
-        <nav className='px-[10%] mt-11 w-full text-[#fff] z-100 flex justify-between absolute'>
-            <ul className='text-[24px] flex gap-10 cursor-pointer'>
-                <li id='textDatSanNgay'>ĐẶT SÂN</li>
-                <li id='textLichGiaoHuu'>THAM GIA GIAO HỮU</li>
-            </ul>
 
-            <ul className='flex gap-6'>
-                {userName ? (
-                    <>
-                        <li className='flex flex-col justify-center cursor-pointer'>
-                            <span className='text-[24px]'>{userName}</span>
-                        </li>
-                        <li className='flex flex-col justify-center cursor-pointer'>
-                            <Icon24px classIcon={faAngleDown}/>
-                        </li>
-                    </>
-                ) : (
-                    <>
-                        {/* <li className='flex flex-col justify-center invisible'>
+    return (
+        <div className='w-full bgHeader h-[839px] relative'>
+            <div className='bg-[#000] bgCus opacity-10 h-[839px] w-full absolute z-1'></div>
+            <nav className='px-[10%] mt-11 w-full text-[#fff] z-100 flex justify-between absolute'>
+                <ul className='text-[24px] flex gap-10 cursor-pointer'>
+                    <li id='textDatSanNgay'>ĐẶT SÂN</li>
+                    <li id='textLichGiaoHuu'>THAM GIA GIAO HỮU</li>
+                </ul>
+
+                <ul className='flex gap-6'>
+                    {userName ? (
+                        <>
+                            <li className='flex flex-col justify-center cursor-pointer'>
+                                <span className='text-[24px]'>{userName}</span>
+                            </li>
+                            <li className='flex flex-col justify-center cursor-pointer' onClick={() => toggleDropdown()}>
+                                <Icon24px classIcon={faAngleDown} />
+                            </li>
+                            {isDropdownOpen && (
+                                <div className="w-[242px] bg-white text-black absolute transition duration-500 ease-in-out top-10 cursor-pointer right-[187px] rounded-b-[8px] rounded-tl-[8px]">
+                                    <div className='p-3 hover:bg-slate-200 rounded-tl-[8px]'>Thông tin cá nhân</div>
+                                    <div onClick={() => {localStorage.removeItem("userName"); window.location.reload()}} className='p-3 hover:bg-slate-200 rounded-b-[8px]'>Đăng xuất</div>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            {/* <li className='flex flex-col justify-center invisible'>
                             <Icon24px classIcon={faBell}/>
                         </li> */}
-                        <li>
-                            <button className='buttonXacNhan w-[130px] h-[40px]' onClick={OpenFormSignUp}>Đăng ký</button>
-                        </li>
-                        <li>
-                            <button id='text-login' className='w-[130px] h-[40px] text-black' onClick={OpenFormLogin}>Đăng nhập</button>
-                        </li>
-                    </>
-                )}
-            </ul>
-        </nav>
-        <div className='ml-[10%] text-[44px] font-[600] absolute z-100 text-[#fff] top-[50%] translate-y-[-50%]'>TÌM SÂN BÓNG <p>YÊU THÍCH CỦA BẠN</p> </div>
-        <button id="buttonDatSanNgay" className='ml-[10%] top-[60%] absolute text-[20px] font-[400] z-100 buttonXacNhan px-8 py-2'>Đặt sân ngay</button>
-        <img className='absolute z-100 w-[220px] bottom-[-150px]' src="../assets/football1.png" alt="" />
-        <img className='absolute z-100 w-[170px] bottom-[-140px] right-0' src="../assets/ball2.png" alt="" />
-        <div id="formLogin" className='top-[-300%] duration-300 absolute z-1000 opacity-0 w-[50%] left-1/2 -translate-x-1/2'>
-            <FormLogin/>
-            <button className='absolute cursor-pointer right-[70px] bottom-[110px]' onClick={OpenFormSignUp}>Tạo tài khoản</button>
-            <button className='absolute text-[#4D74FF] cursor-pointer bottom-[110px] left-[445px] z-1006' onClick={OpenFormResPass}>Quên mật khẩu ?</button>
-            <div className='absolute top-1 right-1 cursor-pointer iconClose'><IconClose/></div>
-        </div>  
-        <div id="formSignUp" className='top-[-100%] duration-300 absolute z-1000 opacity-0 w-[30%] left-1/2 -translate-x-1/2'>
-            <FormSignUp/>   
-            <button className='absolute bottom-6 text-[#4D74FF] cursor-pointer w-full flex justify-center mt-[1px]' onClick={OpenFormLogin}>Đã có tài khoản</button>
-        </div>  
-        <div id="formResPass" className='top-[-100%] duration-300 absolute z-1000 opacity-0 w-[30%] left-1/2 -translate-x-1/2'>
-            <FormResPass/>
+                            <li>
+                                <button className='buttonXacNhan w-[130px] h-[40px]' onClick={OpenFormSignUp}>Đăng ký</button>
+                            </li>
+                            <li>
+                                <button id='text-login' className='w-[130px] h-[40px] text-black' onClick={OpenFormLogin}>Đăng nhập</button>
+                            </li>
+                        </>
+                    )}
+                </ul>
+            </nav>
+            <div className='ml-[10%] text-[44px] font-[600] absolute z-100 text-[#fff] top-[50%] translate-y-[-50%]'>TÌM SÂN BÓNG <p>YÊU THÍCH CỦA BẠN</p> </div>
+            <button id="buttonDatSanNgay" className='ml-[10%] top-[60%] absolute text-[20px] font-[400] z-100 buttonXacNhan px-8 py-2'>Đặt sân ngay</button>
+            <img className='absolute z-100 w-[220px] bottom-[-150px]' src="../assets/football1.png" alt="" />
+            <img className='absolute z-100 w-[170px] bottom-[-140px] right-0' src="../assets/ball2.png" alt="" />
+            <div id="formLogin" className='top-[-300%] duration-300 absolute z-1000 opacity-0 w-[50%] left-1/2 -translate-x-1/2'>
+                <FormLogin />
+                <button className='absolute cursor-pointer right-[70px] bottom-[110px]' onClick={OpenFormSignUp}>Tạo tài khoản</button>
+                <button className='absolute text-[#4D74FF] cursor-pointer bottom-[110px] left-[445px] z-1006' onClick={OpenFormResPass}>Quên mật khẩu ?</button>
+                <div className='absolute top-1 right-1 cursor-pointer iconClose'><IconClose /></div>
+            </div>
+            <div id="formSignUp" className='top-[-100%] duration-300 absolute z-1000 opacity-0 w-[30%] left-1/2 -translate-x-1/2'>
+                <FormSignUp />
+                <button className='absolute bottom-6 text-[#4D74FF] cursor-pointer w-full flex justify-center mt-[1px]' onClick={OpenFormLogin}>Đã có tài khoản</button>
+            </div>
+            <div id="formResPass" className='top-[-100%] duration-300 absolute z-1000 opacity-0 w-[30%] left-1/2 -translate-x-1/2'>
+                <FormResPass />
+            </div>
         </div>
-    </div>
-  )
+    )
 }

@@ -26,6 +26,21 @@ class TaiKhoan {
             console.error(error);
         })
     }
+
+    SignUp = (Ten, Email, SoDienThoai, MatKhau) =>{
+        return axios.post("http://localhost:8081/loginUser",{
+                Ten : Ten,
+                Email : Email,
+                SoDienThoai : SoDienThoai,
+                MatKhau : MatKhau,
+            }).then(response => {
+                const itemCoSo = new TaiKhoan(response.data[0].IDTaiKhoan, response.data[0].phanQuyen, response.data[0].Ten, response.data[0].Email, response.data[0].SoDienThoai, response.data[0].MatKhau, response.data[0].XacThuc);
+                return itemCoSo
+            })
+            .catch(error => {
+            console.error(error);
+        })
+    }
     
     getTKByID = (idTK) =>{
         return axios.post("http://localhost:8081/getTKByID",{idTK}).then(response => {console.log(idTK)

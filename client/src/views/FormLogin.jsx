@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
     faUser, faKey
@@ -27,6 +27,7 @@ const Icon24px = ({ classIcon, top }) => {
 
 
 const FormLogin = () => {
+
     const [userName, setUserName] = useState("");
     const [passWord, setpassWord] = useState("");
     const DangNhap = async () => {
@@ -48,6 +49,8 @@ const FormLogin = () => {
                 title: "Tài khoản không hợp lệ",
                 icon: "error"
             });
+            document.getElementsByClassName('inputUserName')[0].value = ""
+            document.getElementsByClassName('inputPassWord')[0].value = ""
             setTimeout(() => {
                 Swal.close();
             }, 1000);
@@ -67,9 +70,9 @@ const FormLogin = () => {
                 className='inputUserName absolute bg-[#E9E9E9] top-[32%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' 
                 placeholder='Tên đăng nhập'/>
                 <Icon24px classIcon={faUser} top={"35.2%"} />
-                <input 
+                <input
                 onChange={(event)=>{setpassWord(event.target.value)}} 
-                className='absolute bg-[#E9E9E9] top-[45%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' 
+                className='inputPassWord absolute bg-[#E9E9E9] top-[45%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' 
                 placeholder='Mật khẩu'
                 type='password'/>
                 <Icon24px classIcon={faKey} top={"48.2%"} />
