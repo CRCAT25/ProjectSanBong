@@ -74,12 +74,11 @@ app.post("/getLoaiSanByID", (req, res) => {
   });
 });
 app.post("/getTKByID", (req, res) => {
-  const idLoaiSan = req.body.IdLoaiSan;
   const sql = `SELECT * FROM taikhoan,loaiphanquyen Where 
   taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and 
-  IDLoaiSan = ?`; 
+  taikhoan.IDTaiKhoan = ?`; 
   db.query(sql,[req.body.idTK],(err, data) => {
-      res.json(data);
+    res.json(data);
   });
 });
 
@@ -197,6 +196,14 @@ app.post("/getAllKhungGio", (req, res) => {
       res.json(data);
   });
 });
+
+app.post("/getKhungGioByID", (req, res) => {
+  const sql = "SELECT * FROM khunggio where IDKhungGio = ? "; 
+  db.query(sql, [req.body.ID],(err, data) => {
+      res.json(data);
+  });
+});
+
 app.post("/getHoaDonsCompleteByNgayKGTK", (req, res) => {
   const sql = "SELECT * FROM hoadon, sanbong where hoadon.Ngay = ? and hoadon.IDKhungGio = ? and hoadon.TrangThai = 'Completed' and hoadon.IDSan = sanbong.IDSan and sanbong.IDTaiKhoan = ?"; 
   db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan], (err, data) => {
@@ -229,15 +236,16 @@ app.post("/updateDoiThuInBill",(req,res)=>{
   })
 })
 
+app.post("/getPersonalBillByIdTK",(req,res)=>{
+  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
+  db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
+    console.log(data)
+    res.json(data);
+    
+  })
+})
 
 /*************************/
-
-
-
-
-
-
-
 
 
 app.post("/loginUser", (req, res) => {

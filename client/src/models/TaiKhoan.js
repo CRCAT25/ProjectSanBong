@@ -42,10 +42,12 @@ class TaiKhoan {
             console.error(error);
         })
     }
-    SetTK = (idTK) =>{
-        return axios.post("http://localhost:8081/getTKByID",{idTK}).then(response => {
+    getTKByID = (idTK) =>{
+        return axios.post("http://localhost:8081/getTKByID",{idTK}).then(response => {console.log(idTK)
             const phanQuyen = new PhanQuyen(response.data[0].IDPhanQuyen, response.data[0].TenPhanQuyen)
-            const itemCoSo = new TaiKhoan(response.data[0].IDTaiKhoan, phanQuyen, response.data[0].Ten, response.data[0].Email, response.data[0].SoDienThoai, response.data[0].NganHang, response.data[0].STK, response.data[0].MatKhau, response.data[0].XacThuc);
+            const itemCoSo = new TaiKhoan(response.data[0].IDTaiKhoan, phanQuyen, response.data[0].Ten, 
+                response.data[0].Email, response.data[0].SoDienThoai, response.data[0].NganHang, 
+                response.data[0].STK, response.data[0].MatKhau, response.data[0].XacThuc);
             return itemCoSo
         })
         .catch(error => {console.error(error);}

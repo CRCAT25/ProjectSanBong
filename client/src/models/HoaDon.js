@@ -32,15 +32,16 @@ class HoaDon{
     initBill(list){
         const resultList = [];
         list.forEach(bill => {
-            const taiKhoan = new TaiKhoan()
-            taiKhoan.SetTK(bill.IDTaiKhoan)
-            const loaiSan = new LoaiSan(bill.IDLoaiSan)
-            const khungGio = new KhungGio(bill.IDKhungGio)
-            const doiThu = new TaiKhoan(bill.IDDoiThu)
-            const sanBong = new SanBong(bill.IDSan)
-            const coSo = new TaiKhoan(bill.Coso)
+            
+            const taiKhoan = (new TaiKhoan).getTKByID(bill.IDTaiKhoan)
+            const khungGio = (new KhungGio).getKhungGioById(bill.IDKhungGio)
+            const doiThu=null
+            if(bill.IDDoiThu){
+                doiThu = (new TaiKhoan).getTKByID(bill.IDDoiThu)
+            }
+            const sanBong = (new SanBong).getSanByID(bill.IDSan)
             const item = new HoaDon(bill.IDHoaDon, taiKhoan, sanBong, khungGio,
-               bill.GiaoHuu, bill.Ngay,doiThu,bill.TongTien,bill.ThoiGianDat,bill.TrangThai);
+               bill.Ngay, bill.GiaoHuu,doiThu,bill.TongTien,bill.ThoiGianDat,bill.TrangThai);
             resultList.push(item);
         });
         
@@ -123,7 +124,18 @@ class HoaDon{
         });
     }
 
-    
+    getPersonalBillByIdTk(IDTaiKhoan)
+    {
+        return axios.post("http://localhost:8081/getPersonalBillByIdTK",{IDTaiKhoan})
+        .then(response => {
+            // console.log(response.data)
+            const list = this.initBill(response.data);               
+            return list;
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }
 
 }
 export default HoaDon

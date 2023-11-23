@@ -14,7 +14,7 @@ class SanBong{
         return axios.post("http://localhost:8081/getAllSanByTaiKhoan", {IDTaiKhoan: id})
             .then(response => {
                 const list = this.initSan(response.data);
-                console.log(list)
+                // console.log(list)
                 return list
             })
             .catch(error => {
@@ -23,7 +23,7 @@ class SanBong{
     }
        
 
-    FindSanByID(idSan) {
+    getSanByID(idSan) {
         return axios.post("http://localhost:8081/getSanByID", {IdSan: idSan})
             .then(response => {
                 let data = response.data[0]

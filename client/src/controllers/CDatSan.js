@@ -18,7 +18,7 @@ const GetAllSanFromCoSoBySearch = async (idCoSo, loaiSan) =>{
 }
 const GetInfoSanBong = async (idSan) =>{
     const sanBong = new SanBong();
-    let result = await sanBong.FindSanByID(idSan)
+    let result = await sanBong.getSanByID(idSan)
     return result
 }
 

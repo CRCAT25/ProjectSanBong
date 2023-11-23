@@ -8,7 +8,7 @@ const getAllCoSo = async () =>{
     const cosoSan = new CoSoSan()
     let listCoso
     listCoso = await cosoSan.GetAllCoSo()
-    console.log(listCoso)
+   //  console.log(listCoso)
     return listCoso
  }
 
@@ -16,7 +16,7 @@ const getAllCoSo = async () =>{
    
     let account = new Account()
     let result = account.NameUser(idlogin)
-    console.log(result)
+   //  console.log(result)
     return result;
  }
 
