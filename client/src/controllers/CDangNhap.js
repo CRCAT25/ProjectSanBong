@@ -1,20 +1,25 @@
-import { useEffect, useState } from "react"
-import axios from 'axios'
 import TaiKhoan from "../models/TaiKhoan"
+
+const CheckInput = (userName, passWord) => {
+    if(userName.length == 0 || userName == '' || passWord.length == 0 || passWord == '')
+        return false
+    else return true
+}
 
 const Login = async (userName, passWord) =>{
     const user = new TaiKhoan();
-    let MSGno = "khong"
-    let MSGco = "co"
-    const authUser = await user.LoginUser(userName, passWord);
-    console.log(authUser)
-    if(authUser == null || authUser == ''){
-        return MSGno
+    if(CheckInput(userName, passWord) == true){
+        const authUser = await user.LoginUser(userName, passWord);
+        if(authUser == null || authUser == ''){
+            return "khong"
+        }
+        else{
+            return authUser
+        }
     }
     else{
-        return MSGco
-    }
-    // console.log(authUser)
+        return "khong"
+    } 
 }
 
 export{

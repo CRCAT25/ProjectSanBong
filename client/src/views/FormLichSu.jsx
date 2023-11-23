@@ -86,9 +86,6 @@ const FormLichSu = () => {
             let sanbong = await data.SanBong
             console.log(sanbong)
           })
-            
-            alert(data)
-            console.log(data)
             // if(sanBong){
               
             

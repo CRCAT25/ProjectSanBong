@@ -30,17 +30,18 @@ const FormLogin = () => {
     const [userName, setUserName] = useState("");
     const [passWord, setpassWord] = useState("");
     const DangNhap = async () => {
-        console.log(passWord)
-        console.log(userName)
         let result = await (Login(userName, passWord))
-        if(result == "co"){
+        if(result != "khong"){
             Swal.fire({
                 title: "Đăng nhập thành công",
                 icon: "success"
             });
+            localStorage.setItem("userID", result.IdAccount);
+            localStorage.setItem("userName", result.Ten);
             setTimeout(() => {
                 Swal.close();
-            }, 1000);
+                window.location.reload();
+            }, 600);
         }
         else{
             Swal.fire({
@@ -61,9 +62,16 @@ const FormLogin = () => {
 
             <div className="col-span-3 relative rounded-r-[10px] bg-white">
                 <div className='absolute top-[12%] left-1/2 translate-x-[-50%] text-[40px] font-[400] text-center'>Đăng nhập</div>
-                <input onChange={(event)=>{setUserName(event.target.value)}} className='inputUserName absolute bg-[#E9E9E9] top-[32%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' placeholder='Tên đăng nhập'></input>
+                <input 
+                onChange={(event)=>{setUserName(event.target.value)}} 
+                className='inputUserName absolute bg-[#E9E9E9] top-[32%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' 
+                placeholder='Tên đăng nhập'/>
                 <Icon24px classIcon={faUser} top={"35.2%"} />
-                <input  onChange={(event)=>{setpassWord(event.target.value)}} className='absolute bg-[#E9E9E9] top-[45%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' placeholder='Mật khẩu'></input>
+                <input 
+                onChange={(event)=>{setpassWord(event.target.value)}} 
+                className='absolute bg-[#E9E9E9] top-[45%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' 
+                placeholder='Mật khẩu'
+                type='password'/>
                 <Icon24px classIcon={faKey} top={"48.2%"} />
                 <button onClick={DangNhap} className='buttonLogin absolute top-[65%] text-[22px] left-1/2 translate-x-[-50%] rounded-[150px] cursor-pointer w-[75%] h-[60px] '>Đăng nhập</button>
             </div>

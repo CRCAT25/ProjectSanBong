@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import "../css/Header.css"
 import "../css/OrderField.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faBell, faXmark} from "@fortawesome/free-solid-svg-icons"
+import {faAngleDown, faXmark} from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router-dom";
 import FormLogin from './FormLogin'
 import FormSignUp from './FormSignUp'
@@ -12,10 +12,9 @@ const Icon24px = ({classIcon}) => {
     const iconSize = {
         width: "24px",
         height: "24px",
-        color: "#B3E15B",
     };
     return(
-        <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
+        <FontAwesomeIcon icon={classIcon} style = {iconSize}/>
     )
 }
 
@@ -116,6 +115,8 @@ export default function Header() {
         };
     }, []);
 
+    const userName = localStorage.getItem("userName");
+
 
   return (
     <div className='w-full bgHeader h-[839px] relative'>
@@ -127,15 +128,28 @@ export default function Header() {
             </ul>
 
             <ul className='flex gap-6'>
-                <li className='flex flex-col justify-center invisible'>
-                    <Icon24px classIcon={faBell}/>
-                </li>
-                <li>
-                    <button className='buttonXacNhan w-[130px] h-[40px]' onClick={OpenFormSignUp}>Đăng ký</button>
-                </li>
-                <li>
-                    <button id='text-login' className='w-[130px] h-[40px] text-black' onClick={OpenFormLogin}>Đăng nhập</button>
-                </li>
+                {userName ? (
+                    <>
+                        <li className='flex flex-col justify-center cursor-pointer'>
+                            <span className='text-[24px]'>{userName}</span>
+                        </li>
+                        <li className='flex flex-col justify-center cursor-pointer'>
+                            <Icon24px classIcon={faAngleDown}/>
+                        </li>
+                    </>
+                ) : (
+                    <>
+                        {/* <li className='flex flex-col justify-center invisible'>
+                            <Icon24px classIcon={faBell}/>
+                        </li> */}
+                        <li>
+                            <button className='buttonXacNhan w-[130px] h-[40px]' onClick={OpenFormSignUp}>Đăng ký</button>
+                        </li>
+                        <li>
+                            <button id='text-login' className='w-[130px] h-[40px] text-black' onClick={OpenFormLogin}>Đăng nhập</button>
+                        </li>
+                    </>
+                )}
             </ul>
         </nav>
         <div className='ml-[10%] text-[44px] font-[600] absolute z-100 text-[#fff] top-[50%] translate-y-[-50%]'>TÌM SÂN BÓNG <p>YÊU THÍCH CỦA BẠN</p> </div>
