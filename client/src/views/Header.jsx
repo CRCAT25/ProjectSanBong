@@ -154,7 +154,7 @@ export default function Header() {
                             {isDropdownOpen && (
                                 <div className="w-[242px] bg-white text-black absolute transition duration-500 ease-in-out top-10 cursor-pointer right-[187px] rounded-b-[8px] rounded-tl-[8px]">
                                     <div className='p-3 hover:bg-slate-200 rounded-tl-[8px]'>Thông tin cá nhân</div>
-                                    <div onClick={() => {localStorage.removeItem("userName"); window.location.reload()}} className='p-3 hover:bg-slate-200 rounded-b-[8px]'>Đăng xuất</div>
+                                    <div onClick={() => {localStorage.clear(); window.location.reload()}} className='p-3 hover:bg-slate-200 rounded-b-[8px]'>Đăng xuất</div>
                                 </div>
                             )}
                         </>
@@ -187,7 +187,7 @@ export default function Header() {
                 <FormSignUp />
                 <button className='absolute bottom-6 text-[#4D74FF] cursor-pointer w-full flex justify-center mt-[1px]' onClick={OpenFormLogin}>Đã có tài khoản</button>
             </div>
-            <div id="formResPass" className='top-[-100%] duration-300 absolute z-1000 opacity-0 w-[30%] left-1/2 -translate-x-1/2'>
+            <div id="formResPass" className='duration-300 absolute z-1000 opacity-0 w-[30%] left-1/2 -translate-x-1/2'>
                 <FormResPass />
             </div>
         </div>

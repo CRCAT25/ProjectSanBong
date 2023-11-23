@@ -256,6 +256,29 @@ app.post("/loginUser", (req, res) => {
   });
 });
 
+app.post("/resPassUser", (req, res) => {
+  const name = req.body.Ten;
+  const email = req.body.Email;
+  const sdt = req.body.SoDienThoai;
+
+  const sql = `SELECT * FROM taikhoan where (SoDienThoai = "${sdt}" or Email = "${email}") and Ten = "${name}" and IDPhanQuyen = 1`; 
+  db.query(sql, (err, data) => {
+    res.json(data)
+  });
+});
+
+app.post("/updatePassWord", (req, res) => {
+  const Email = req.body.Email;
+  const Pass = req.body.Pass;
+
+  const sql = `UPDATE taikhoan set MatKhau = "${Pass}" where Email = "${Email}"`; 
+  db.query(sql, (err, data) => {
+    res.json("done")
+  });
+});
+
+
+
 
 
 /*************************/
