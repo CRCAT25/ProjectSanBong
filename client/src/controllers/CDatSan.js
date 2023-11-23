@@ -50,11 +50,18 @@ const getAllOccuredKhungGio = async(idSan, date) =>{
     // });
     return notEmptykhunggios
 }
+
+const DatSan = async (IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien) =>{
+    const sanbong = new SanBong()
+    GiaoHuu === true ? GiaoHuu = 1 : GiaoHuu = 0;
+    sanbong.DatSan(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien)
+}
 export{ 
     GetAllSanFromCoSo,
     GetInfoSanBong,
     GetTenLoaiSan,
     getAllKhungGio,
     getAllOccuredKhungGio,
-    GetAllSanFromCoSoBySearch
+    GetAllSanFromCoSoBySearch,
+    DatSan
 } 

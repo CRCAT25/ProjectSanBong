@@ -106,6 +106,19 @@ app.post("/getSanByIDnCate", (req, res) => {
   });
 });
 
+app.post("/datSan", (req, res) => {
+  const IDTaiKhoan = req.body.IDTaiKhoan;
+  const IDSan = req.body.IDSan;
+  const IDKhungGio = req.body.IDKhungGio;
+  const Ngay = req.body.Ngay;
+  const GiaoHuu = req.body.GiaoHuu;
+  const TongTien = req.body.TongTien;
+  const sql = `INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat,TrangThai) VALUES(${IDTaiKhoan}, ${IDSan}}, ${IDKhungGio}, ${Ngay}, ${GiaoHuu}, "${TongTien}", GETDATE(), "Pending")`; 
+  db.query(sql, (err, data) => {
+      res.json(data);
+  });
+});
+
 // Lấy lịch giao hữu // chua sua
 app.post("/getAllLichGiaoHuu",(req,res) => {
   const sql = `SELECT
