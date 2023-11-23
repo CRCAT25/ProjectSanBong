@@ -1,8 +1,9 @@
 import React from 'react'
 
 const FormHoaDon = () => {
+    
   return (
-    <div className='w-[25%] bg-[#DDFCD2] h-[auto] mx-auto my-[10%] rounded-[5]'>
+    <div className='w-[25%] bg-slate-200 h-[auto] left-1/2 -translate-x-1/2 my-[10%] rounded-[5] absolute z-1005'>
         <div className='grid grid-cols-2 p-5'>
             <div className="col-span-1 font-[650]">Nguyễn Xuân Lộc</div>
             <div className="col-span-1 font-[650]">SĐT: 01234567890</div>

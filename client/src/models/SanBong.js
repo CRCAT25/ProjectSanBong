@@ -61,6 +61,16 @@ class SanBong{
             });
     }
 
+    DatSan(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien){
+        return axios.post("http://localhost:8081/datSan", {IDTaiKhoan: IDTaiKhoan, IDSan : IDSan, IDKhungGio : IDKhungGio, Ngay : Ngay, GiaoHuu : GiaoHuu, TongTien : TongTien})
+            .then(response => {
+                
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
     initSan(list){
         const resultList = [];
         list.forEach(data => {
@@ -72,6 +82,8 @@ class SanBong{
         });
         return resultList
     }
+
+    
 }
 
 export default SanBong

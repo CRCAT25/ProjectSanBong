@@ -10,12 +10,14 @@ import {faLocationDot,
 } from "@fortawesome/free-solid-svg-icons"
 import CDatSan, { GetInfoCoSo } from "../controllers/CDatSan";
 import {React,useState, useEffect, useRef } from "react";
-import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan } from "../controllers/CDatSan";
+import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan, DatSan } from "../controllers/CDatSan";
 
 import "../controllers/CTimKiem";
 import { TimKiemSanBong, getAllCoSo, TimKiemSanBongC, GetInfoCoSoSan } from "../controllers/CTimKiem";
 import CoSoSan from "../models/CoSoSan";
 import LoaiSan from "../models/LoaiSan";
+import KhungGio from '../models/KhungGio';
+import FormHoaDon from './FormHoaDon';
 const Icon24px = ({classIcon}) => {
     const iconSize = {
         width: "24px",
@@ -63,6 +65,7 @@ export const OrderField = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [DBDate,setDBDate] = useState("");
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+    const [isValidDate, setIsValidDate] = useState(true);
     const [textofDate, setTextofDate] = useState(new Date().toLocaleDateString("vi-VN", {
         weekday: "short", // Abbreviated weekday name (e.g., "Mon")
         day: "2-digit",   // Two-digit day of the month (e.g., "01")
@@ -97,6 +100,12 @@ export const OrderField = () => {
             day: "2-digit",   // Two-digit day of the month (e.g., "01")
             
         });
+        let currentdate = new Date()
+        if(date < currentdate){
+            setIsValidDate(false)
+        }else{
+            setIsValidDate(true)
+        }
         let stringDate = ""
         stringDate = formattedDBDate.split('/').reverse().join('-')
         setDBDate(formattedDBDate.split('/').reverse().join('-'))
@@ -128,6 +137,7 @@ export const OrderField = () => {
     const[sanBongInfo, setSanBongInfo] = useState([]);
     const[loaiSans, setLoaiSans] = useState([]);
     const[tenLoaiSan, setTenLoaiSan] = useState("");
+
     const ChonCoSoSan = async (idCoso) => {
         if (selectLoaiBoxRef.current) {
             selectLoaiBoxRef.current.value = "";
@@ -145,7 +155,7 @@ export const OrderField = () => {
     }
 
     const HandleClickLoaiSan = async (IdLoaiSan) =>{
-        setGotInfoSan(false)
+        setGotInfoSan(false)       
         setSanBongs(await GetAllSanFromCoSoBySearch(infoCoSo.IdAccount, IdLoaiSan))
     }
 
@@ -168,14 +178,12 @@ export const OrderField = () => {
 
     const GetEmptyKhungGio = async (idSan) =>{
         let ocurKhungGio = await getAllOccuredKhungGio(idSan, DBDate)
-        console.log(ocurKhungGio)
         setoccuredKhungGios(ocurKhungGio)
     }
 
-    const[selectedKhungGio, setSelectedKhungGio] = useState(new Date())
+    const[selectedKhungGio, setSelectedKhungGio] = useState(new KhungGio())
     const SetValueForKhungGio =(khungGio) =>{
         setSelectedKhungGio(khungGio)
-        
     }   
     
     const[isCheckBoxChecked, setIsCheckBoxChecked] = useState(0)
@@ -187,13 +195,33 @@ export const OrderField = () => {
         }
     }
 
+    const DatSanV = async () =>{
+        
+        // await DatSan(3, sanBongInfo.IdSan, selectedKhungGio.IdKhungGio ,DBDate, isCheckBoxChecked, TongTien)
+        HienThiYeuCauDatCoc()
+    }
+
+    const [showHoaDon, setShowHoaDon] = useState(false)
+    const HienThiYeuCauDatCoc = async() =>{
+        setShowHoaDon(true)
+        document.body.style.overflow = 'hidden'
+        
+    }
+
+
   return (
-    <div className="w-[80%] mx-auto mt-5 orderField">
+    <div className="w-[80%] mx-auto mt-5 orderField relative">
         <div className="grid grid-cols-12">
             <div className="h-[3px] lineCustom col-span-5 rotate-180 mt-[59px]"></div>
             <div className="text-[48px] font-[600] my-6 text-center col-span-2 text-[#30691b]">ĐẶT SÂN</div>
             <div className="h-[3px] lineCustom col-span-5 mt-[59px]"></div>
         </div>
+        {showHoaDon === true ? (
+        <div className="fixed inset-0 z-50 flex  bg-gray-800 bg-opacity-50">
+          <div className="bg-white rounded shadow-md">
+            <FormHoaDon />
+          </div>
+        </div>) : ""}
         
         <div className="grid grid-cols-12 gap-4">
             <div className="col-span-4 border-[#379E13] border-[3px] rounded-[10px] p-5">
@@ -226,7 +254,7 @@ export const OrderField = () => {
 
             </div>
 
-
+            
 
             <div className="col-span-8 border-[#379E13] border-[3px] rounded-[10px] p-5 relative h-[770px]">
             {
@@ -256,16 +284,18 @@ export const OrderField = () => {
                                         <select ref={selectLoaiBoxRef} className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer justify-center text-center" onChange={(event) => {
 
                                             HandleClickLoaiSan(event.target.value)}}>
-                                            <option className="text-[19px]" disable value="">Lọc loại sân</option>
+                                            <option className="text-[19px]" value="">Lọc loại sân</option>
                                             {loaiSans.map((data, i) =>( <option className="text-[19px]" key={i} value={data.IdLoaiSan} >{data.TenLoaiSan}</option>))}
                                             <Icon24px classIcon={faChevronDown}/>
                                         </select>
                                     </div>
-                                        {isCalendarVisible === false ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value = {selectedDate}/> : ""}
+                                        {isCalendarVisible === false ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value = {selectedDate} minDate={new Date()}/> : ""}
                                 </div>
         
                                 <div className="grid grid-cols-10 mt-5 gap-3">
-                                    {selectedDate != null && sanBongs != null ? sanBongs.map((data, i) => (<div className="col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px] cursor-pointer" value={data.IdSan} key={i} onClick={()=>ChonSanBong(data.IdSan)}>{data.TenSan}</div>)) : ""}
+                                    {selectedDate != null && sanBongs != null && setIsValidDate != false ? sanBongs.map((data, i) => 
+                                    (<div className="col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px] cursor-pointer" value={data.IdSan} key={i}
+                                     onClick={()=>ChonSanBong(data.IdSan)}>{data.TenSan}</div>)) : ""}
                                 </div>
                             </div>                   
                 </div> ) : ("")
@@ -293,7 +323,7 @@ export const OrderField = () => {
                                 khungGios.map((data, i) => {
                                     const isOccured = occuredKhungGios.some(ocurkhunggio => ocurkhunggio.KhungGio.IdKhungGio === data.IdKhungGio);                    
                                     return (    
-                                    <div className={`col-span-3 ${isOccured ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} ${selectedKhungGio == data.IdKhungGio ? 'border-2 border-[#000000]' : ''} text-center px-4 py-2 rounded-[10px]`} onClick ={() => {if(!isOccured){SetValueForKhungGio(data.IdKhungGio)}}}   key={i}>{data.ThoiGian} </div>
+                                    <div className={`col-span-3 ${isOccured ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} ${selectedKhungGio.IdKhungGio == data.IdKhungGio ? 'border-2 border-[#000000]' : ''} text-center px-4 py-2 rounded-[10px]`} onClick ={() => {if(!isOccured){SetValueForKhungGio(data)}}}   key={i}>{data.ThoiGian} </div>
                                     );
                                 })
                                 ) : ""}                                                
@@ -315,7 +345,7 @@ export const OrderField = () => {
                 (<div>
                     <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
                     <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]"></div>
-                    <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]">Xác nhận</button>
+                    <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]" onClick={() => {DatSanV()}}>Xác nhận</button>
                 </div>
                 ): ""}
                 
