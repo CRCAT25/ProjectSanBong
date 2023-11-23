@@ -187,7 +187,7 @@ export default function Header() {
                 <FormSignUp />
                 <button className='absolute bottom-6 text-[#4D74FF] cursor-pointer w-full flex justify-center mt-[1px]' onClick={OpenFormLogin}>Đã có tài khoản</button>
             </div>
-            <div id="formResPass" className='top-[-100%] duration-300 absolute z-1000 opacity-0 w-[30%] left-1/2 -translate-x-1/2'>
+            <div id="formResPass" className='duration-300 absolute z-1000 opacity-0 w-[30%] left-1/2 -translate-x-1/2'>
                 <FormResPass />
             </div>
         </div>
