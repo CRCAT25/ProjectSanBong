@@ -8,12 +8,12 @@ import {faLocationDot,
     faMagnifyingGlass,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
-import CDatSan, { GetInfoCoSo } from "../controllers/CDatSan";
 import {React,useState, useEffect, useRef } from "react";
 import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan, DatSan } from "../controllers/CDatSan";
 
 import "../controllers/CTimKiem";
 import { TimKiemSanBong, getAllCoSo, TimKiemSanBongC, GetInfoCoSoSan } from "../controllers/CTimKiem";
+import Swal from 'sweetalert2'
 import CoSoSan from "../models/CoSoSan";
 import LoaiSan from "../models/LoaiSan";
 import KhungGio from '../models/KhungGio';
@@ -112,6 +112,7 @@ export const OrderField = () => {
         setTextofDate(formattedDate);
         setGotInfoSan(false)
         handleCalendarClick();
+        ClearSelected()
     }
     const[coSo, setCoSo] = useState([])
     const[coSoMSG, setCoSoMSG] = useState("")
@@ -146,6 +147,7 @@ export const OrderField = () => {
         setSanBongs(await GetAllSanFromCoSo(idCoso))
         setGotInfo(true)
         setGotInfoSan(false)
+        ClearSelected()
     }
 
     const GetAllLoaiSan = async () =>{
@@ -155,7 +157,8 @@ export const OrderField = () => {
     }
 
     const HandleClickLoaiSan = async (IdLoaiSan) =>{
-        setGotInfoSan(false)       
+        setGotInfoSan(false)
+        ClearSelected()       
         setSanBongs(await GetAllSanFromCoSoBySearch(infoCoSo.IdAccount, IdLoaiSan))
     }
 
@@ -166,6 +169,7 @@ export const OrderField = () => {
         GetAllKhungGio()   
         setSanBongInfo(infoSanBong)
         setGotInfoSan(true)
+        ClearSelected()
     }
 
     const[khungGios, setKhungGios] = useState([])
@@ -184,30 +188,71 @@ export const OrderField = () => {
     const[selectedKhungGio, setSelectedKhungGio] = useState(new KhungGio())
     const SetValueForKhungGio =(khungGio) =>{
         setSelectedKhungGio(khungGio)
+        let TongTien = sanBongInfo.LoaiSan.GiaTien + khungGio.GiaTien
+        console.log(TongTien)
+        setTongTien(TongTien)
     }   
     
     const[isCheckBoxChecked, setIsCheckBoxChecked] = useState(0)
+    const[textForGiaoHuu, setTextForGiaoHuu] = useState("")
     const IsChecked = () =>{
         if(isCheckBoxChecked == 0){
             setIsCheckBoxChecked(1)
+            setTextForGiaoHuu("Cho phép tham gia giao hữu !")
         }else{
             setIsCheckBoxChecked(0)
+            setTextForGiaoHuu("")
         }
     }
 
-    const DatSanV = async () =>{
-        
-        // await DatSan(3, sanBongInfo.IdSan, selectedKhungGio.IdKhungGio ,DBDate, isCheckBoxChecked, TongTien)
-        HienThiYeuCauDatCoc()
+    const DatSanV = async () =>{       
+        await DatSan(3, sanBongInfo.IdSan, selectedKhungGio.IdKhungGio ,DBDate, isCheckBoxChecked, tongTien)
     }
 
     const [showHoaDon, setShowHoaDon] = useState(false)
-    const HienThiYeuCauDatCoc = async() =>{
-        setShowHoaDon(true)
-        document.body.style.overflow = 'hidden'
-        
+    const [tongTien, setTongTien] = useState(0)
+    const [valueForHoaDon, setValueForHoaDon] = useState({})
+    const HienThiXacNhanDatSan = async() =>{
+        console.log(selectedKhungGio.IdKhungGio)
+        if(selectedKhungGio.IdKhungGio == 0 || selectedKhungGio == ""){
+            Swal.fire({
+                title: "Vui lòng chọn khung giờ để đặt sân!",
+                icon: "error"
+            });
+            setTimeout(() => {
+                Swal.close();
+            }, 1000);
+        }else{
+            if(showHoaDon == true){
+                setShowHoaDon(false)
+                document.body.style.overflow = 'visible'
+            }else{
+                setShowHoaDon(true)
+                document.body.style.overflow = 'hidden'
+                const valueForHoaDon = {
+                    TenKH : "TAM",
+                    SDTKH :"12123",
+                    KhungGio : selectedKhungGio.ThoiGian,
+                    NgayDat : textofDate, 
+                    TenSan : infoCoSo.Ten, 
+                    DiaDiem : infoCoSo.DiaChiCoSo, 
+                    SDTSan: infoCoSo.SoDienThoai, 
+                    MaSan :sanBongInfo.TenSan, 
+                    LoaiSan : sanBongInfo.LoaiSan.TenLoaiSan, 
+                    GiaoHuu : textForGiaoHuu, 
+                    TongTien :tongTien,
+                }
+                setValueForHoaDon(valueForHoaDon)
+            }
+        }            
     }
+    
+    const ClearSelected = () =>{
+        setSelectedKhungGio(0);
+        setTongTien(0)
+        setIsCheckBoxChecked(0)
 
+    }
 
   return (
     <div className="w-[80%] mx-auto mt-5 orderField relative">
@@ -219,7 +264,7 @@ export const OrderField = () => {
         {showHoaDon === true ? (
         <div className="fixed inset-0 z-50 flex  bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded shadow-md">
-            <FormHoaDon />
+            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} DatSan = {DatSanV} />
           </div>
         </div>) : ""}
         
@@ -344,8 +389,8 @@ export const OrderField = () => {
                 
                 (<div>
                     <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
-                    <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]"></div>
-                    <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]" onClick={() => {DatSanV()}}>Xác nhận</button>
+                    <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]">{tongTien}</div>
+                    <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]" onClick={() => {HienThiXacNhanDatSan()}}>Xác nhận</button>
                 </div>
                 ): ""}
                 
