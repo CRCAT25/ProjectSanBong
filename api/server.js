@@ -42,7 +42,6 @@ app.post("/getCoSoBySearch", (req, res) => {
     }
     
     db.query(sql, (err, data) => {
-      // console.log(data)
         res.json(data)
     });
 });
@@ -85,8 +84,9 @@ app.post("/getTKByID", (req, res) => {
 app.post("/getNotEmptyKhungGioByIDnDate", (req, res) => {
   const idSan = req.body.IdSan;
   const date = req.body.Date;
-  const sql = `SELECT * FROM hoadon WHERE IDSan = ${idSan} AND Ngay = "${date}" AND (TrangThai = "Completed" OR TrangThai = "Pending")`; 
+  const sql = `SELECT * FROM hoadon WHERE IDSan = ${idSan} AND Ngay = '${date}' AND (TrangThai = "Completed" OR TrangThai = "Pending")`; 
   db.query(sql, (err, data) => {
+
       res.json(data);
   });
 });
@@ -113,9 +113,9 @@ app.post("/datSan", (req, res) => {
   const Ngay = req.body.Ngay;
   const GiaoHuu = req.body.GiaoHuu;
   const TongTien = req.body.TongTien;
-  const sql = `INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat,TrangThai) VALUES(${IDTaiKhoan}, ${IDSan}}, ${IDKhungGio}, ${Ngay}, ${GiaoHuu}, "${TongTien}", GETDATE(), "Pending")`; 
+  const sql = `INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat,TrangThai) VALUES(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}', NOW(), 'Pending')`; 
   db.query(sql, (err, data) => {
-      res.json(data);
+    console.log(data)
   });
 });
 
@@ -164,7 +164,6 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
     sanbong.IDLoaiSan = loaisan.IDLoaiSan and  
     taikhoan.IDTaiKhoan = ?`; 
   db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
-    console.log(data)
       res.json(data);
   });
 });
@@ -239,7 +238,6 @@ app.post("/updateDoiThuInBill",(req,res)=>{
 app.post("/getPersonalBillByIdTK",(req,res)=>{
   const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
   db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
-    console.log(data)
     res.json(data);
     
   })
@@ -272,11 +270,9 @@ app.post("/searchtentk", (req, res) => {
   const searchsql = "SELECT Ten FROM taikhoan WHERE IDTaiKhoan = ?";
   db.query(searchsql,[req.body.idlogin],
     (checkErrSearch, checkResultSearch) => {
-      console.log(checkResultSearch)
       if (checkErrSearch) 
         return res.json("Error");
       if (checkResultSearch.length > 0) {
-        console.log(checkResultSearch)
         return res.json(checkResultSearch);
       } else {
         return res.json("Not find");

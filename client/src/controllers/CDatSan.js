@@ -36,24 +36,14 @@ const getAllKhungGio = async () =>{
 }
 
 const getAllOccuredKhungGio = async(idSan, date) =>{
-    // const khungGio = new KhungGio()
     const khungGioNotEmpty = new HoaDon()
-    // let khunggios = await khungGio.GetAllKhungGio()
     let notEmptykhunggios = await khungGioNotEmpty.GetNotEmptyKhungGioByIDSanANDDate(idSan, date)
-    // let emptyKhungGio
-    // khunggios.forEach(time => {
-    //     notEmptykhunggios.forEach(occuredTime => {
-    //         if(occuredTime.IdKhungGio != time.IdKhungGio){
-    //             emptyKhungGio.push(occuredTime)
-    //         }
-    //     });
-    // });
+
     return notEmptykhunggios
 }
 
 const DatSan = async (IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien) =>{
     const sanbong = new SanBong()
-    GiaoHuu === true ? GiaoHuu = 1 : GiaoHuu = 0;
     sanbong.DatSan(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien)
 }
 export{ 

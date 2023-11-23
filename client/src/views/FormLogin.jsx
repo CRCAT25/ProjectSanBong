@@ -39,6 +39,7 @@ const FormLogin = () => {
             });
             localStorage.setItem("userID", result.IdAccount);
             localStorage.setItem("userName", result.Ten);
+            localStorage.setItem("userSDT", result.SoDienThoai);
             setTimeout(() => {
                 Swal.close();
                 window.location.reload();
