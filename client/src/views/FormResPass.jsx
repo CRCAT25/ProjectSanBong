@@ -44,8 +44,19 @@ const FormResPass = () => {
     const TiepTheo = async () => {
         let result = await (ResPass(name, email, sdt))
         console.log(result)
-        if (result != "khong") {
+        if (result == "co") {
             setIsTiepTheo("1")
+        }
+        else if(result == "khongNhap"){
+            setIsTiepTheo("0")
+            Swal.fire({
+                title: "Vui lòng nhập đầy đủ thông tin",
+                icon: "error"
+            });
+
+            setTimeout(() => {
+                Swal.close();
+            }, 1000);
         }
         else {
             setIsTiepTheo("0")

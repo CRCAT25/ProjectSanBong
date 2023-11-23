@@ -154,7 +154,7 @@ export default function Header() {
                             {isDropdownOpen && (
                                 <div className="w-[242px] bg-white text-black absolute transition duration-500 ease-in-out top-10 cursor-pointer right-[187px] rounded-b-[8px] rounded-tl-[8px]">
                                     <div className='p-3 hover:bg-slate-200 rounded-tl-[8px]'>Thông tin cá nhân</div>
-                                    <div onClick={() => {localStorage.removeItem("userName"); window.location.reload()}} className='p-3 hover:bg-slate-200 rounded-b-[8px]'>Đăng xuất</div>
+                                    <div onClick={() => {localStorage.clear(); window.location.reload()}} className='p-3 hover:bg-slate-200 rounded-b-[8px]'>Đăng xuất</div>
                                 </div>
                             )}
                         </>

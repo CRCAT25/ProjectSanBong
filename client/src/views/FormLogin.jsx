@@ -32,7 +32,8 @@ const FormLogin = () => {
     const [passWord, setpassWord] = useState("");
     const DangNhap = async () => {
         let result = await (Login(userName, passWord))
-        if(result != "khong"){
+        console.log(result)
+        if(result == "co"){
             Swal.fire({
                 title: "Đăng nhập thành công",
                 icon: "success"
@@ -44,9 +45,18 @@ const FormLogin = () => {
                 window.location.reload();
             }, 600);
         }
+        else if(result === "chuaNhap"){
+            Swal.fire({
+                title: "Vui lòng nhập đầy đủ thông tin",
+                icon: "error"
+            });
+            setTimeout(() => {
+                Swal.close();
+            }, 1000);
+        }
         else{
             Swal.fire({
-                title: "Tài khoản không hợp lệ",
+                title: "Tài khoản hoặc mật khẩu không đúng",
                 icon: "error"
             });
             document.getElementsByClassName('inputUserName')[0].value = ""

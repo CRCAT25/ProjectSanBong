@@ -32,7 +32,7 @@ const Login = async (userName, passWord) =>{
         }
     }
     else{
-        return "khong"
+        return "chuaNhap"
     } 
 }
 
@@ -48,7 +48,7 @@ const ResPass = async (name, email, sdt) =>{
         }
     }
     else{
-        return "khong"
+        return "khongNhap"
     } 
 }
 
