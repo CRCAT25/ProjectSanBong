@@ -1,6 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const app = express();
+const multer = require('multer');
 const cors = require("cors");
 const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
@@ -167,6 +168,12 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
       res.json(data);
   });
 });
+app.post("/getAnhsByIDSan", (req, res) => {
+  const sql = `SELECT * FROM anh WHERE IDSan = ?`; 
+  db.query(sql, [req.body.IDSan], (err, data) => {
+      res.json(data);
+  });
+});
 app.post("/getFieldByIDField", (req, res) => {
   const sql = `SELECT * FROM sanbong, loaisan, taikhoan, loaiphanquyen WHERE 
   taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and
@@ -208,6 +215,33 @@ app.post("/getHoaDonsCompleteByNgayKGTK", (req, res) => {
   db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan], (err, data) => {
       res.json(data);
   });
+});
+app.post("/InsertSan", (req, res) => {
+  const sql = `CALL InsertAndReturnSan(?, ?, ?)`;
+  db.query(sql, [req.body.IDTaiKhoan,req.body.IDLoaiSan,req.body.TenSan],(err, data) => {
+    let anhs = req.body.Anhs;
+    anhs.forEach(anh => {
+      let insertImageSql  = `INSERT INTO anh(IDSan, Anh) VALUES (${data[0][0].IDSan}, "${anh}")`;
+      db.query(insertImageSql,(err, data) => {});
+    });
+  });
+});
+
+// Set up multer to handle file uploads
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, '../client/public/assets');
+  }, // Specify the directory where files will be stored
+  filename: function (req, file, callback) {
+    callback(null,file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/upload', upload.array('files'), (req, res) => {
+  // If you reach this point, the file has been successfully uploaded
+  res.json({ message: 'File uploaded successfully!' });
 });
 
 /*************************/

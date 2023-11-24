@@ -4,14 +4,26 @@ import KhungGio from '../models/KhungGio'
 import SanBong from '../models/SanBong'
 import LoaiSan from '../models/LoaiSan'
 import HoaDon from '../models/HoaDon'
+import Anh from '../models/AnhSan'
 
 
 const getAllLoaiSan = async () =>{
     const loaisan = new LoaiSan()
     let list = await loaisan.GetAllLoaiSan()
     return list
-    
+     
  }
+ const getAnhsByIDSan = async (id) =>{
+   const anh = new Anh()
+   let list = await anh.GetAnhsByIDSan(id)
+   return list
+    
+}
+ const insertSan = async (idTK, idLS, tenSan, anhs) =>{
+   const san = new SanBong()
+   san.InsertSan(idTK,idLS,tenSan,anhs)
+    
+}
  const getAllSanByTaiKhoan = async (IDTaiKhoan) =>{
     const san = new SanBong()
     let list = await san.GetAllSanByTaiKhoan(IDTaiKhoan)
@@ -100,5 +112,7 @@ const getCostByShiftnTypeField = async (idShift, idTField) =>{
     getLoaiSanByIdField,
     getAllHoaDonCompletedByCoSo,
     getBillForRefund,
-    getCostByShiftnTypeField
+    getCostByShiftnTypeField,
+    insertSan,
+    getAnhsByIDSan
  }

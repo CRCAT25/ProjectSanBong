@@ -1,4 +1,5 @@
 import "../css/FieldManager.css";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
@@ -8,8 +9,8 @@ import {
 import { useEffect } from "react";
 import { useState } from "react";
 import { getCostByShiftnTypeField, getLoaiSanByIdField, getAllLoaiSan, getEmptyFieldByDayShift, getEmptyShiftByDay} from "../controllers/CQuanLySan";
-import { getAllSanByTaiKhoan, getAllHoaDonCompletedByCoSo, getBillForRefund} from "../controllers/CQuanLySan";
-import SanBong from "../models/SanBong";
+import { getAllSanByTaiKhoan, getAllHoaDonCompletedByCoSo, getBillForRefund, insertSan, getAnhsByIDSan} from "../controllers/CQuanLySan";
+
 
 
 
@@ -28,7 +29,73 @@ const FieldManage =  () => {
   const [getKhungGios, setKhungGios] = useState([]);
   const [getBills, setBills] = useState([]);
   const [getBillForRefund, setBillForRefund] = useState([]);
-
+  function InsertSan(){
+    let tenSan = document.getElementsByClassName("auto-group-1jl7-TBh")[0].value
+    let loaiSan = document.getElementsByClassName("selectLoaiS")[0].value
+    let idTK = "7"
+    let anhs = document.getElementById("inputAnh").files
+    let tenAnhs = []
+    let addible = false
+    if(tenSan.length > 0){
+      if(loaiSan !== "none"){
+        if(anhs.length > 0){
+          for(let i = 0; i < anhs.length; i++){
+            if(i == 2){break}
+            tenAnhs.push(anhs[i].name)
+          }
+          addible = true
+        }else{
+          alert("Yêu cầu nhập đơn giá.")
+        }
+      }else{
+        alert("Yêu cầu chọn loại sân.")
+      }
+    }else{
+      alert("Yêu cầu nhập tên sân.")
+    }
+    if(addible){
+      insertSan(idTK, loaiSan, tenSan, tenAnhs)
+      const formData = new FormData();
+      for (let i = 0; i < anhs.length; i++) {
+        formData.append('files', anhs[i]);
+      }
+      axios.post('http://localhost:8081/upload', formData)
+        .then(response => {
+          console.log('Files uploaded successfully:', response.data);
+        })
+        .catch(error => {
+          console.error('Error uploading files:', error);
+        });
+  }
+  }
+  function chooseImage(){
+    document.getElementById("inputAnh").click()
+  }
+  const readURL = async () => {
+    let files = await document.getElementById("inputAnh").files;
+    if (files.length > 0) {
+      document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML = ``
+      if(files.length > 2){
+        alert("Tối đa 2 hình.")
+      }
+      for(let i = 0; i < files.length; i++){
+        if(i == 2){
+          break
+        }
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML += `
+                <img
+              className="imgSanInput"
+              src=${e.target.result}
+            />`;
+        };
+        reader.readAsDataURL(files[i]);
+      }
+    }else{
+      document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML = `<i class="fa fa-image fa-2x"  id = "iconImg"></i>`
+    }
+  }
   function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
@@ -66,10 +133,10 @@ const FieldManage =  () => {
       slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
     })
   }
+  
   const GetLoaiSans = async () =>{
     setLoaiSans(await getAllLoaiSan())
   }
- 
 
   const setSelectSanByNgayKG = async () =>{
     const slect =  document.getElementsByClassName("selectTenLS")[0];
@@ -95,43 +162,109 @@ const FieldManage =  () => {
   }
   const loadListFields = async () =>{
     let list = ""
-    getAllSanByTaiKhoan().map( async san=>{
-      const loaiSan = await getLoaiSanByIdField(san.IdSan)
-      list +=  `<div className="sn-XTh" id="257:844">
-      <div className="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
-        <div className="tn-sn-input-J75" id="257:849">
-          <div className="tenSan" value="${san.IdSan}">${san.TenSan}</div>
+    let aList = await getAllSanByTaiKhoan("7");
+    if(aList.length > 0){
+      aList.map( async san=>{
+        let anhs = await getAnhsByIDSan(san.IdSan)
+        switch(anhs.length){
+          case 0:{
+            list +=  `<div class="sn-XTh" id="257:844">
+        <div class="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
+          <div class="tn-sn-input-J75" id="257:849">
+            <div class="tenSan" value="${san.IdSan}">${san.TenSan}</div>
+          </div>
+          <div class="tn-sn-input-Mr3" id="257:852">
+            <div class="loaiSan" value="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
+          </div>
+          <div class="tn-sn-input-J91" id="257:855">
+            <div class="donGia">${san.LoaiSan.GiaTien}</div>
+          </div>
         </div>
-        <div className="tn-sn-input-Mr3" id="257:852">
-          <div className="loaiSan" value="${san.IdLoaiSan}">${loaiSan.TenLoaiSan}</div>
+        <div class="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
+        
         </div>
-        <div className="tn-sn-input-J91" id="257:855">
-          <div className="donGia">${loaiSan.GiaTien}</div>
+        <div class="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
+          <button class="btn">
+            <i class="fa fa-edit fa-2x"></i>
+          </button>
+          <button class="btn">
+            <i class="fa fa-trash fa-2x"></i>
+          </button>
         </div>
-      </div>
-      <div className="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
+      </div>`
+          }
+          case 1:{
+            list +=  `<div class="sn-XTh" id="257:844">
+        <div class="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
+          <div class="tn-sn-input-J75" id="257:849">
+            <div class="tenSan" value="${san.IdSan}">${san.TenSan}</div>
+          </div>
+          <div class="tn-sn-input-Mr3" id="257:852">
+            <div class="loaiSan" value="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
+          </div>
+          <div class="tn-sn-input-J91" id="257:855">
+            <div class="donGia">${san.LoaiSan.GiaTien}</div>
+          </div>
+        </div>
+        <div class="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
         <img
-          className="imgSan"
-          src="https://via.placeholder.com/1920x839"
-          id="257:863"
-        />
+          class="imgSan"
+            src="../public/asset/${anhs[0].Anh}"
+            id="257:863"
+          />
+        </div>
+        <div class="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
+          <button class="btn">
+            <i class="fa fa-edit fa-2x"></i>
+          </button>
+          <button class="btn">
+            <i class="fa fa-trash fa-2x"></i>
+          </button>
+        </div>
+      </div>`
+          }
+          case 2:{
+            list +=  `<div class="sn-XTh" id="257:844">
+        <div class="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
+          <div class="tn-sn-input-J75" id="257:849">
+            <div class="tenSan" value="${san.IdSan}">${san.TenSan}</div>
+          </div>
+          <div class="tn-sn-input-Mr3" id="257:852">
+            <div class="loaiSan" value="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
+          </div>
+          <div class="tn-sn-input-J91" id="257:855">
+            <div class="donGia">${san.LoaiSan.GiaTien}</div>
+          </div>
+        </div>
+        <div class="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
         <img
-          className="imgSan"
-          src="https://via.placeholder.com/1920x839"
-          id="260:1081"
-        />
-      </div>
-      <div className="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-        <button class="btn">
-          <i class="fa fa-edit fa-2x"></i>
-        </button>
-        <button class="btn">
-          <i class="fa fa-trash fa-2x"></i>
-        </button>
-      </div>
-    </div>`
-    })
-    document.getElementsByClassName("scrollContainerSan")[0].innerHTML = list
+          class="imgSan"
+            src="../public/asset/${anhs[0].Anh}"
+            id="257:863"
+          />
+          <img
+          class="imgSan"
+            src="../public/asset/${anhs[1].Anh}"
+            id="257:863"
+          />
+        </div>
+        <div class="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
+          <button class="btn">
+            <i class="fa fa-edit fa-2x"></i>
+          </button>
+          <button class="btn">
+            <i class="fa fa-trash fa-2x"></i>
+          </button>
+        </div>
+      </div>`
+          }
+        }
+      })
+    }else{
+      list = "Không có sân."
+    }
+    
+    document.getElementsByClassName("scrollContainerSan")[0].innerHTML = await list
   }
   const GetAllBillByTaiKhoan = async () =>{
     console.log(await getAllHoaDonCompletedByCoSo(1));
@@ -179,6 +312,7 @@ const FieldManage =  () => {
                 Đơn giá:
               </div>
               <input
+              type="number"
                 placeholder="Đơn giá"
                 className="auto-group-6ywm-4sd"
                 id="Wa16GQKbfnkeocz8Vg6Ywm"
@@ -189,12 +323,13 @@ const FieldManage =  () => {
             <div className="nh--pEX" id="257:810">
               Ảnh:
             </div>
-            <div className="auto-group-bp27-YwD" id="Wa16pPQJdzzne9yQzcbp27">
-              <FontAwesomeIcon icon={faImage} size="2x" />
+            <div className="auto-group-bp27-YwD" id="Wa16pPQJdzzne9yQzcbp27" onClick={()=>chooseImage()}>
+            <i class="fa fa-image fa-2x" id = "iconImg"></i>
             </div>
+            <input type="file" id ="inputAnh" name="files" accept="image/*" style={{opacity: 0}} multiple onChange={readURL}/>
           </div>
           <div className="auto-group-hhjs-nKm" id="Wa16MefrYhWfBdYBexHhJs">
-            <button className="btnThemSan" id="257:815">
+            <button className="btnThemSan" id="257:815" onClick={InsertSan}>
               Thêm
             </button>
             <button className="btnCapNhatSan" id="257:818">
