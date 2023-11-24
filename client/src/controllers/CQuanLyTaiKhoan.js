@@ -20,7 +20,13 @@ const getAllCoSo = async () =>{
     return result;
  }
 
+ const CheckEmailSdt = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
+   let account = new Account()
+   account.checkemailsdt(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
+}
+
  export {
     getAllCoSo,
     getNameLogin,
+    CheckEmailSdt,
 }

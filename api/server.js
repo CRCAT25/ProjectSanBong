@@ -19,31 +19,31 @@ app.post("/getAllCoSo", (req, res) => {
   taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and 
   taikhoan.IDPhanQuyen = 2`;
   db.query(sql, (err, data) => {
-      res.json(data);
+    res.json(data);
   });
 });
 
 app.post("/getCoSoBySearch", (req, res) => {
-    let tenCoSo = req.body.tenCoSo;
-    let diaDiem = req.body.diaDiem;
-    let sql = " ";
-    if(tenCoSo == ""){tenCoSo = null;}
-    if(diaDiem == ""){tenCoSo = null;}
-    if(tenCoSo != null && diaDiem != null){
-      sql = `select * from taikhoan, loaiphanquyen where 
+  let tenCoSo = req.body.tenCoSo;
+  let diaDiem = req.body.diaDiem;
+  let sql = " ";
+  if (tenCoSo == "") { tenCoSo = null; }
+  if (diaDiem == "") { tenCoSo = null; }
+  if (tenCoSo != null && diaDiem != null) {
+    sql = `select * from taikhoan, loaiphanquyen where 
       taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and
       taikhoan.IDPhanQuyen = 2 AND 
       (Ten LIKE "%${tenCoSo}%" AND 
       DiaChiCoSo LIKE "%${diaDiem}%")`
-    }else if(tenCoSo != null && diaDiem == null){
-      sql = `select * from taikhoan,loaiphanquyen where taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and taikhoan.IDPhanQuyen = 2 AND Ten LIKE "%${tenCoSo}%"`
-    }else if(tenCoSo == null && diaDiem != null){
-      sql = `select * from taikhoan,loaiphanquyen where taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and taikhoan.IDPhanQuyen = 2 AND DiaChiCoSo LIKE "%${diaDiem}%"`
-    }
-    
-    db.query(sql, (err, data) => {
-        res.json(data)
-    });
+  } else if (tenCoSo != null && diaDiem == null) {
+    sql = `select * from taikhoan,loaiphanquyen where taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and taikhoan.IDPhanQuyen = 2 AND Ten LIKE "%${tenCoSo}%"`
+  } else if (tenCoSo == null && diaDiem != null) {
+    sql = `select * from taikhoan,loaiphanquyen where taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and taikhoan.IDPhanQuyen = 2 AND DiaChiCoSo LIKE "%${diaDiem}%"`
+  }
+
+  db.query(sql, (err, data) => {
+    res.json(data)
+  });
 });
 
 app.post("/getInfoCoSo", (req, res) => {
@@ -67,16 +67,16 @@ app.post("/getSanByID", (req, res) => {
 
 app.post("/getLoaiSanByID", (req, res) => {
   const idLoaiSan = req.body.IdLoaiSan;
-  const sql = `SELECT * FROM loaisan Where IDLoaiSan = ${idLoaiSan}`; 
+  const sql = `SELECT * FROM loaisan Where IDLoaiSan = ${idLoaiSan}`;
   db.query(sql, (err, data) => {
-      res.json(data);
+    res.json(data);
   });
 });
 app.post("/getTKByID", (req, res) => {
   const sql = `SELECT * FROM taikhoan,loaiphanquyen Where 
   taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and 
-  taikhoan.IDTaiKhoan = ?`; 
-  db.query(sql,[req.body.idTK],(err, data) => {
+  taikhoan.IDTaiKhoan = ?`;
+  db.query(sql, [req.body.idTK], (err, data) => {
     res.json(data);
   });
 });
@@ -84,10 +84,10 @@ app.post("/getTKByID", (req, res) => {
 app.post("/getNotEmptyKhungGioByIDnDate", (req, res) => {
   const idSan = req.body.IdSan;
   const date = req.body.Date;
-  const sql = `SELECT * FROM hoadon WHERE IDSan = ${idSan} AND Ngay = '${date}' AND (TrangThai = "Completed" OR TrangThai = "Pending")`; 
+  const sql = `SELECT * FROM hoadon WHERE IDSan = ${idSan} AND Ngay = '${date}' AND (TrangThai = "Completed" OR TrangThai = "Pending")`;
   db.query(sql, (err, data) => {
 
-      res.json(data);
+    res.json(data);
   });
 });
 
@@ -99,10 +99,10 @@ app.post("/getSanByIDnCate", (req, res) => {
   sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan and 
   sanbong.IDLoaiSan = loaisan.IDLoaiSan and 
   sanbong.IDTaiKhoan = ${IDTaiKhoan} and
-  sanbong.IDLoaiSan  LIKE '%${IDLoaiSan}%'`; 
+  sanbong.IDLoaiSan  LIKE '%${IDLoaiSan}%'`;
   db.query(sql, (err, data) => {
-      res.json(data);
-      
+    res.json(data);
+
   });
 });
 
@@ -113,14 +113,14 @@ app.post("/datSan", (req, res) => {
   const Ngay = req.body.Ngay;
   const GiaoHuu = req.body.GiaoHuu;
   const TongTien = req.body.TongTien;
-  const sql = `INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat,TrangThai) VALUES(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}', NOW(), 'Pending')`; 
+  const sql = `INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat,TrangThai) VALUES(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}', NOW(), 'Pending')`;
   db.query(sql, (err, data) => {
     console.log(data)
   });
 });
 
 // Lấy lịch giao hữu // chua sua
-app.post("/getAllLichGiaoHuu",(req,res) => {
+app.post("/getAllLichGiaoHuu", (req, res) => {
   const sql = `SELECT
                 hoadon.IDHoaDon ,tk1.Ten,tk1.SoDienThoai, tk2.Ten as CoSo, tk2.DiaChiCoSo, sanbong.TenSan as MaSan, DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay, khunggio.ThoiGian
               FROM
@@ -142,9 +142,9 @@ app.post("/getAllLichGiaoHuu",(req,res) => {
 
 // Lấy all hóa đơn
 app.post("/getAllBill", (req, res) => {
-  const sql = "SELECT * FROM hoadon"; 
+  const sql = "SELECT * FROM hoadon";
   db.query(sql, (err, data) => {
-      res.json(data);
+    res.json(data);
   });
 });
 
@@ -152,9 +152,9 @@ app.post("/getAllBill", (req, res) => {
 //Huỳnh Công Tấn  
 // Trang quản lý sân, quản lý lịch sân
 app.post("/getAllLoaiSan", (req, res) => {
-  const sql = "SELECT * FROM loaisan"; 
+  const sql = "SELECT * FROM loaisan";
   db.query(sql, (err, data) => {
-      res.json(data);
+    res.json(data);
   });
 });
 app.post("/getAllSanByTaiKhoan", (req, res) => {
@@ -162,9 +162,9 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
     taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and
     sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan and 
     sanbong.IDLoaiSan = loaisan.IDLoaiSan and  
-    taikhoan.IDTaiKhoan = ?`; 
+    taikhoan.IDTaiKhoan = ?`;
   db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
-      res.json(data);
+    res.json(data);
   });
 });
 app.post("/getFieldByIDField", (req, res) => {
@@ -173,73 +173,73 @@ app.post("/getFieldByIDField", (req, res) => {
   sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan and 
   sanbong.IDLoaiSan = loaisan.IDLoaiSan and 
   sanbong.IDSan = ?`;
-  db.query(sql,[req.body.IdSan], (err, data) => {
+  db.query(sql, [req.body.IdSan], (err, data) => {
     res.json(data);
   });
 });
 app.post("/getShiftByID", (req, res) => {
   const sql = `select * from khunggio where IDKhungGio = ?`;
-  db.query(sql,[req.body.id], (err, data) => {
+  db.query(sql, [req.body.id], (err, data) => {
     res.json(data);
   });
 });
 app.post("/getLoaiSanByID", (req, res) => {
   const sql = `select * from loaisan where IDLoaiSan = ?`;
-  db.query(sql,[req.body.id], (err, data) => {
+  db.query(sql, [req.body.id], (err, data) => {
     res.json(data);
   });
 });
 app.post("/getAllKhungGio", (req, res) => {
-  const sql = "SELECT * FROM khunggio"; 
+  const sql = "SELECT * FROM khunggio";
   db.query(sql, (err, data) => {
-      res.json(data);
+    res.json(data);
   });
 });
 
 app.post("/getKhungGioByID", (req, res) => {
-  const sql = "SELECT * FROM khunggio where IDKhungGio = ? "; 
-  db.query(sql, [req.body.ID],(err, data) => {
-      res.json(data);
+  const sql = "SELECT * FROM khunggio where IDKhungGio = ? ";
+  db.query(sql, [req.body.ID], (err, data) => {
+    res.json(data);
   });
 });
 
 app.post("/getHoaDonsCompleteByNgayKGTK", (req, res) => {
-  const sql = "SELECT * FROM hoadon, sanbong where hoadon.Ngay = ? and hoadon.IDKhungGio = ? and hoadon.TrangThai = 'Completed' and hoadon.IDSan = sanbong.IDSan and sanbong.IDTaiKhoan = ?"; 
+  const sql = "SELECT * FROM hoadon, sanbong where hoadon.Ngay = ? and hoadon.IDKhungGio = ? and hoadon.TrangThai = 'Completed' and hoadon.IDSan = sanbong.IDSan and sanbong.IDTaiKhoan = ?";
   db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan], (err, data) => {
-      res.json(data);
+    res.json(data);
   });
 });
 
 /*************************/
-app.post("/getAllHoaDonCompletedByCoSo",(req,res)=>{
-  const sql =`SELECT * FROM hoadon, sanbong 
+app.post("/getAllHoaDonCompletedByCoSo", (req, res) => {
+  const sql = `SELECT * FROM hoadon, sanbong 
               where hoadon.TrangThai = 'Completed' and hoadon.IDSan = sanbong.IDSan and sanbong.IDTaiKhoan = ?`
-  db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
+  db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
     res.json(data);
   })
 })
 
-app.post("/getAllBillForRefund",(req,res)=>{
-  const sql=`SELECT * FROM hoadon WHERE hoadon.TrangThai='Completed' and DATEDIFF(CURRENT_DATE, hoadon.Ngay) <= 0`;
-  db.query(sql,(err,data) =>{
+app.post("/getAllBillForRefund", (req, res) => {
+  const sql = `SELECT * FROM hoadon WHERE hoadon.TrangThai='Completed' and DATEDIFF(CURRENT_DATE, hoadon.Ngay) <= 0`;
+  db.query(sql, (err, data) => {
     res.json(data);
   })
 })
 
-app.post("/updateDoiThuInBill",(req,res)=>{
-  const sql=`UPDATE hoadon SET IDDoiThu = ? WHERE hoadon.IDHoaDon = ?`;
-  db.query(sql,[req.body.IDDoiThu,req.body.IDHoaDon],(err,data) =>{
+app.post("/updateDoiThuInBill", (req, res) => {
+  const sql = `UPDATE hoadon SET IDDoiThu = ? WHERE hoadon.IDHoaDon = ?`;
+  db.query(sql, [req.body.IDDoiThu, req.body.IDHoaDon], (err, data) => {
     // console.log(data)
     res.json(data);
-    
+
   })
 })
 
-app.post("/getPersonalBillByIdTK",(req,res)=>{
-  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
-  db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
+app.post("/getPersonalBillByIdTK", (req, res) => {
+  const sql = `SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
+  db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
     res.json(data);
-    
+
   })
 })
 
@@ -250,7 +250,7 @@ app.post("/loginUser", (req, res) => {
   const userName = req.body.userName;
   const passWord = req.body.passWord;
 
-  const sql = `SELECT * FROM taikhoan where (SoDienThoai = "${userName}" or Email = "${userName}") and MatKhau = "${passWord}" and IDPhanQuyen = 1`; 
+  const sql = `SELECT * FROM taikhoan where (SoDienThoai = "${userName}" or Email = "${userName}") and MatKhau = "${passWord}" and IDPhanQuyen = 1`;
   db.query(sql, (err, data) => {
     res.json(data)
   });
@@ -261,7 +261,7 @@ app.post("/resPassUser", (req, res) => {
   const email = req.body.Email;
   const sdt = req.body.SoDienThoai;
 
-  const sql = `SELECT * FROM taikhoan where (SoDienThoai = "${sdt}" or Email = "${email}") and Ten = "${name}" and IDPhanQuyen = 1`; 
+  const sql = `SELECT * FROM taikhoan where (SoDienThoai = "${sdt}" or Email = "${email}") and Ten = "${name}" and IDPhanQuyen = 1`;
   db.query(sql, (err, data) => {
     res.json(data)
   });
@@ -271,7 +271,7 @@ app.post("/updatePassWord", (req, res) => {
   const Email = req.body.Email;
   const Pass = req.body.Pass;
 
-  const sql = `UPDATE taikhoan set MatKhau = "${Pass}" where Email = "${Email}"`; 
+  const sql = `UPDATE taikhoan set MatKhau = "${Pass}" where Email = "${Email}"`;
   db.query(sql, (err, data) => {
     res.json("done")
   });
@@ -291,9 +291,9 @@ app.post("/updatePassWord", (req, res) => {
 //Search ten account theo id
 app.post("/searchtentk", (req, res) => {
   const searchsql = "SELECT Ten FROM taikhoan WHERE IDTaiKhoan = ?";
-  db.query(searchsql,[req.body.idlogin],
+  db.query(searchsql, [req.body.idlogin],
     (checkErrSearch, checkResultSearch) => {
-      if (checkErrSearch) 
+      if (checkErrSearch)
         return res.json("Error");
       if (checkResultSearch.length > 0) {
         return res.json(checkResultSearch);
@@ -302,6 +302,65 @@ app.post("/searchtentk", (req, res) => {
       }
     }
   );
+});
+
+app.post("/checkemailsdt", (req, res) => {
+  const checkEmail = "SELECT COUNT(*) AS count FROM taikhoan WHERE Email = ?";
+  const checkSdt = "SELECT COUNT(*) AS count FROM taikhoan WHERE SoDienThoai = ?";
+  db.query(checkEmail, [req.body.emailcs], (checkErrEmail, checkResultEmail) => {
+      if (checkErrEmail){
+        return res.json("Error");
+      }
+      db.query(checkSdt, [req.body.sdtcs], (checkErrSdt, checkResultSdt) => {
+        if (checkErrSdt) {
+          return res.json("Error2");
+        }
+        const existemail = checkResultEmail[0].count;
+        const existsdt = checkResultSdt[0].count;
+        if ((existemail > 0) && (existsdt == 0)) {
+          console.log("Email đã tồn tại");
+          return res.json("Email đã tồn tại");
+        } else if ((existsdt > 0) && (existemail == 0)) {
+          console.log("Số điện thoại đã tồn tại");
+          return res.json("Số điện thoại đã tồn tại");
+        } else if ((existsdt > 0) && (existemail > 0)) {
+          console.log("Email và số điện thoại đã tồn tại");
+          return res.json("Email và số điện thoại đã tồn tại");
+        } else {
+          return res.json("Ok")
+        }
+      });
+      
+    }
+
+  );
+});
+
+
+
+app.post("/addcoso", (req, res) => {
+  const insertSql =
+  "INSERT INTO taikhoan (IDPhanQuyen, Ten, Email, SoDienThoai, DiaChiCoSo, NganHang, STK, MatKhau) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+db.query(
+  insertSql,
+  [
+    req.body.idphanquyen,
+    req.body.tencs,
+    req.body.emailcs,
+    req.body.sdtcs,
+    req.body.diachics,
+    req.body.nganhangcs,
+    req.body.stkcs,
+    req.body.matkhaucs,
+  ],
+  (insertErr, insertResult) => {
+    if (insertErr) {
+      console.log("Error");
+    } else {
+      return res.json("Thêm thành công");
+    }
+  }
+);
 });
 
 
