@@ -103,7 +103,7 @@ class TaiKhoan {
         })  
     }
 
-    checkemailsdt = (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
+    QLcheckemailsdt = (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
         return axios.post("http://localhost:8081/checkemailsdt",{email, sdt}
         ).then(response => {
             if(response.data =="Ok"){

@@ -27,8 +27,18 @@ const getAllCoSo = async () =>{
 
  }
 
+ const QLCheckEmailSdt = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
+   console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs)
+
+   let account = new Account()
+   account.QLcheckemailsdt(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
+}
+ 
+
  export {
    getAllCoSo,
    getNameLogin,
-   getPersonalInfoByIdTK
+   getPersonalInfoByIdTK,
+   QLCheckEmailSdt
+
 }

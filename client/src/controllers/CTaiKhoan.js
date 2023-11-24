@@ -19,5 +19,5 @@ const getTKUserByIdTK = async (idTK) =>{
 
 export{
     getTKCoSoByIdTK,
-    getTKUserByIdTK
+    getTKUserByIdTK,
 }
