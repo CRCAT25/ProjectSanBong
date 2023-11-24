@@ -300,11 +300,12 @@ app.post("/signUpAccount", (req, res) => {
   const Name = req.body.Name;
   const Email = req.body.Email;
   const Pass = req.body.Pass;
-  const Sdt = req.body.Sdt;
+  const Sdt = req.body.SDT;
+  
 
-  const sql = `insert into taikhoan(Ten, Email, MatKhau, SoDienThoai) values("${Name}","${Email}","${Pass}","${Sdt}")`; 
+  const sql = `insert into taikhoan(Ten, Email, MatKhau, SoDienThoai, IDPhanQuyen) values("${Name}","${Email}","${Pass}","${Sdt}", 1)`; 
   db.query(sql, (err, data) => {
-    console.log(data)
+    res.json(data)
   });
 });
 

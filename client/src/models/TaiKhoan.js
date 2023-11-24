@@ -67,7 +67,7 @@ class TaiKhoan {
         })
     }
 
-    SignUp = (Name, Email, Pass, SDT) =>{
+    DangKy = (Name, Email, Pass, SDT) =>{
         return axios.post("http://localhost:8081/signUpAccount",{
                 Name : Name,
                 Email : Email,
