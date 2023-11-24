@@ -9,7 +9,7 @@ import {faLocationDot,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
 import {React,useState, useEffect, useRef } from "react";
-import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan, DatSan, HuyDatSan, DatCoc } from "../controllers/CDatSan";
+import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan, DatSanC, HuyDatSan, DatCoc } from "../controllers/CDatSan";
 
 import "../controllers/CTimKiem";
 import { TimKiemSanBong, getAllCoSo, TimKiemSanBongC, GetInfoCoSoSan } from "../controllers/CTimKiem";
@@ -113,6 +113,7 @@ export const OrderField = () => {
         setTextofDate(formattedDate);
         setGotInfoSan(false)
         handleCalendarClick();
+        setSelectedSanBong(0)
         ClearSelected()
     }
     const[coSo, setCoSo] = useState([])
@@ -137,6 +138,7 @@ export const OrderField = () => {
     const[infoCoSo, setInfoCoSo] = useState(new CoSoSan)
     const[gotInfo, setGotInfo] = useState(false)
     const[gotInfoSan, setGotInfoSan] = useState(false)
+    const[selectedSanBong, setSelectedSanBong] = useState([]);
     const[sanBongs, setSanBongs] = useState([]);
     const[sanBongInfo, setSanBongInfo] = useState([]);
     const[loaiSans, setLoaiSans] = useState([]);
@@ -150,6 +152,7 @@ export const OrderField = () => {
         setSanBongs(await GetAllSanFromCoSo(idCoso))
         setGotInfo(true)
         setGotInfoSan(false)
+        setSelectedSanBong(0)
         ClearSelected()
     }
 
@@ -161,12 +164,14 @@ export const OrderField = () => {
 
     const HandleClickLoaiSan = async (IdLoaiSan) =>{
         setGotInfoSan(false)
+        setSelectedSanBong(0)
         ClearSelected()       
         setSanBongs(await GetAllSanFromCoSoBySearch(infoCoSo.IdAccount, IdLoaiSan))
     }
 
     const ChonSanBong = async (idSan) =>{
         let infoSanBong = await GetInfoSanBong(idSan)
+        setSelectedSanBong(idSan)
         setTenLoaiSan(infoSanBong.LoaiSan.TenLoaiSan)
         await GetEmptyKhungGio(idSan) 
         GetAllKhungGio()   
@@ -192,12 +197,16 @@ export const OrderField = () => {
     }
 
     const[selectedKhungGio, setSelectedKhungGio] = useState(new KhungGio())
-    const SetValueForKhungGio =(khungGio) =>{
+    const ChonKhungGio =(khungGio) =>{
         setSelectedKhungGio(khungGio)
+        HienThiTongTien(khungGio)
+    }   
+
+    const HienThiTongTien = (khungGio) =>{
         let TongTien = sanBongInfo.LoaiSan.GiaTien + khungGio.GiaTien
         setTongTien(TongTien)
         setTongTienText(formatCurrency(TongTien))
-    }   
+    }
 
     const formatCurrency = (value) => {
         return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
@@ -205,7 +214,7 @@ export const OrderField = () => {
     
     const[isCheckBoxChecked, setIsCheckBoxChecked] = useState(0)
     const[textForGiaoHuu, setTextForGiaoHuu] = useState("")
-    const IsChecked = () =>{       
+    const TaoGiaoHuu = () =>{       
         if(isCheckBoxChecked == 0){
             setIsCheckBoxChecked(1)
             setTextForGiaoHuu("Cho phép tham gia giao hữu !")          
@@ -221,39 +230,54 @@ export const OrderField = () => {
     const [tongTien, setTongTien] = useState(0)
     const [tongTienText, setTongTienText] = useState("0")
     const [valueForHoaDon, setValueForHoaDon] = useState({})
-    const HienThiXacNhanDatSan = async() =>{
-        
-        if(selectedKhungGio.IdKhungGio == 0 || selectedKhungGio == ""){
-            Swal.fire({
-                title: "Vui lòng chọn khung giờ để đặt sân!",
-                icon: "error"
-            });
-            setTimeout(() => {
-                Swal.close();
-            }, 1000);
+    const DatSan = async() =>{
+        const checkKhungGio = checkSelectKhungGio()
+        if(!checkKhungGio){
+            HienThiThongBaoChonKhungGio()
         }else{
-            if(showHoaDon == true){
-                setShowHoaDon(false)
-                document.body.style.overflow = 'visible'
-            }else{
-                setShowHoaDon(true)
-                document.body.style.overflow = 'hidden'
-                const valueForHoaDon = {
-                    TenKH : localStorage.getItem('userName'),
-                    SDTKH :localStorage.getItem('userSDT'),
-                    KhungGio : selectedKhungGio.ThoiGian,
-                    NgayDat : textofDate, 
-                    TenSan : infoCoSo.Ten, 
-                    DiaDiem : infoCoSo.DiaChiCoSo, 
-                    SDTSan: infoCoSo.SoDienThoai, 
-                    MaSan :sanBongInfo.TenSan, 
-                    LoaiSan : sanBongInfo.LoaiSan.TenLoaiSan, 
-                    GiaoHuu : textForGiaoHuu, 
-                    TongTien :tongTienText,
-                }
-                setValueForHoaDon(valueForHoaDon)
-            }
+            HienThiXacNhanDatSan()
         }            
+    }
+
+    const checkSelectKhungGio = () =>{
+        if(selectedKhungGio.IdKhungGio == 0 || selectedKhungGio == ""){
+            return false
+        }else{
+            return true
+        }
+    }
+
+    const HienThiThongBaoChonKhungGio = () =>{
+        Swal.fire({
+            title: "Vui lòng chọn khung giờ để đặt sân!",
+            icon: "error"
+        });
+        setTimeout(() => {
+            Swal.close();
+        }, 1000);
+    }
+    const HienThiXacNhanDatSan = () =>{
+        if(showHoaDon == true){
+            setShowHoaDon(false)
+            document.body.style.overflow = 'visible'
+        }else{
+            setShowHoaDon(true)
+            document.body.style.overflow = 'hidden'
+            const valueForHoaDon = {
+                TenKH : localStorage.getItem('userName'),
+                SDTKH :localStorage.getItem('userSDT'),
+                KhungGio : selectedKhungGio.ThoiGian,
+                NgayDat : textofDate, 
+                TenSan : infoCoSo.Ten, 
+                DiaDiem : infoCoSo.DiaChiCoSo, 
+                SDTSan: infoCoSo.SoDienThoai, 
+                MaSan :sanBongInfo.TenSan, 
+                LoaiSan : sanBongInfo.LoaiSan.TenLoaiSan, 
+                GiaoHuu : textForGiaoHuu, 
+                TongTien :tongTienText,
+            }
+            setValueForHoaDon(valueForHoaDon)
+        }
     }
 
     const [showDatCoc, setShowDatCoc] = useState(false)
@@ -272,8 +296,30 @@ export const OrderField = () => {
         HienThiDatCoc()
     }
 
-    const DatCocV = async() => {
-        DatCoc(newHoaDonID)
+    const DatCocV = async(NganHang, STK, SoTien) => {
+        let validTTBank = CheckTTBank(NganHang, STK, SoTien)
+        if(validTTBank == true){
+            DatCoc(newHoaDonID)
+            HienThiThongBaoDatCocTC()
+        }else{
+            HienThiThongBaoLoiTT(validTTBank)
+        }
+        
+    }
+
+    const CheckTTBank = (NganHang, STK, SoTien) =>{
+        if(NganHang == "" || STK == "" || SoTien == ""){
+            if(STK.length < 10){
+                return("Số tài khoản phải đủ 10 ký tự !")
+            }
+            return true
+        }
+        else{
+            return("Vui lòng nhập đầy đủ thông tin ngân hàng !")
+        }
+    }
+
+    const HienThiThongBaoDatCocTC = () =>{
         Swal.fire({
             title: "Đặt cọc thành công!",
             icon: "success"
@@ -282,12 +328,21 @@ export const OrderField = () => {
             Swal.close();
             window.location.reload()
         }, 1000);
-        
+    }
+
+    const HienThiThongBaoLoiTT = (message) =>{
+        Swal.fire({
+            title: message,
+            icon: "error"
+        });
+        setTimeout(() => {
+            Swal.close();
+        }, 1000);
     }
 
     const [newHoaDonID, setNewHoaDonID] = useState(null)
-    const DatSanV = async () =>{   
-        let newestHoaDonID = await DatSan(localStorage.getItem('userID'), sanBongInfo.IdSan, selectedKhungGio.IdKhungGio ,DBDate, isCheckBoxChecked, tongTien)
+    const XacNhanDatSanV = async () =>{   
+        let newestHoaDonID = await DatSanC(localStorage.getItem('userID'), sanBongInfo.IdSan, selectedKhungGio.IdKhungGio ,DBDate, isCheckBoxChecked, tongTien)
         setNewHoaDonID(newestHoaDonID)
         await HienThiDatCoc()
     }
@@ -308,7 +363,7 @@ export const OrderField = () => {
         {showHoaDon === true ? (
         <div className="fixed inset-0 z-50 flex  bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded shadow-md">
-            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} DatSanV = {DatSanV} />
+            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} />
             {showDatCoc === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> <FormHoanTien isDatCoc={true} tenKH = {localStorage.getItem('userName')} tongTien = {tongTienText} HuyDatCoc = {HuyDatCoc} DatCoc = {DatCocV}/> </div>
             
             ) : ""}
@@ -386,7 +441,7 @@ export const OrderField = () => {
         
                                 <div className="grid grid-cols-10 mt-5 gap-3">
                                     {selectedDate != null && sanBongs != null && setIsValidDate != false ? sanBongs.map((data, i) => 
-                                    (<div className="col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px] cursor-pointer" value={data.IdSan} key={i}
+                                    (<div className={`'col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px] cursor-pointer' ${selectedSanBong == data.IdSan ? 'border-2 border-[#000000]' : ''}`} value={data.IdSan} key={i}
                                      onClick={()=>ChonSanBong(data.IdSan)}>{data.TenSan}</div>)) : ""}
                                 </div>
                             </div>                   
@@ -415,13 +470,13 @@ export const OrderField = () => {
                                 khungGios.map((data, i) => {
                                     const isOccured = occuredKhungGios.some((ocurkhunggio) => ocurkhunggio.IdKhungGio === data.IdKhungGio);                          
                                     return (    
-                                    <div className={`col-span-3 ${isOccured ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} ${selectedKhungGio.IdKhungGio == data.IdKhungGio ? 'border-2 border-[#000000]' : ''} text-center px-4 py-2 rounded-[10px]`} onClick ={() => {if(!isOccured){SetValueForKhungGio(data)}}}   key={i}>{data.ThoiGian} </div>
+                                    <div className={`col-span-3 ${isOccured ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} ${selectedKhungGio.IdKhungGio == data.IdKhungGio ? 'border-2 border-[#000000]' : ''} text-center px-4 py-2 rounded-[10px]`} onClick ={() => {if(!isOccured){ChonKhungGio(data)}}}   key={i}>{data.ThoiGian} </div>
                                     );
                                 })
                                 ) : ""}                                                
                             </div>
                             <div className="absolute flex gap-3 my-10">
-                                <div className="w-[30px] h-[30px] bg-[#2AB514] border-[2px] border-[#2AB514] rounded-[5px] cursor-pointer p-1" onClick={IsChecked}>
+                                <div className="w-[30px] h-[30px] bg-[#2AB514] border-[2px] border-[#2AB514] rounded-[5px] cursor-pointer p-1" onClick={TaoGiaoHuu}>
                                    {isCheckBoxChecked === 1 ? (<div><IconCheck classIcon={faCheck}/></div>):""} 
                                 </div>
                                 <div className="flex flex-col justify-center font-[600]">Cho phép người khác tham gia giao hữu</div>
@@ -437,7 +492,7 @@ export const OrderField = () => {
                 (<div>
                     <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
                     <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]">{tongTienText}</div>
-                    <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]" onClick={() => {HienThiXacNhanDatSan()}}>Xác nhận</button>
+                    <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]" onClick={() => {DatSan()}}>Xác nhận</button>
                 </div>
                 ): ""}
                 
