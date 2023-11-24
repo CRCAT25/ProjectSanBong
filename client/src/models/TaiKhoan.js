@@ -103,24 +103,22 @@ class TaiKhoan {
         })  
     }
 
-    checkemailsdt = (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
-        return axios.post("http://localhost:8081/checkemailsdt",{email, sdt}
+    QLcheckemailsdt = (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
+        console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs)
+        return axios.post("http://localhost:8081/QLcheckemailsdt",{email, sdt}
         ).then(response => {
-            if(response.data =="Ok"){
-                    this.addcoso(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs)
-            }
-            else{
+            // console.log(response.data)
                 return response.data
-            }
             })
             .catch(error => {
             console.error(error);
         })  
     }
 
-    addcoso = (idphanquyen, tencs, emailcs, sdtcs, diachics, nganhangcs, stkcs, matkhaucs) =>{
-        return axios.post("http://localhost:8081/addcoso",{idphanquyen, tencs, emailcs, sdtcs, diachics, nganhangcs, stkcs, matkhaucs}
+    addcoso = (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
+        return axios.post("http://localhost:8081/addcoso",{idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs}
         ).then(response => {
+                // console.log("Thêm thành công!")
                 return response.data
             })
             .catch(error => {

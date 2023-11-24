@@ -349,14 +349,14 @@ app.post("/searchtentk", (req, res) => {
   );
 });
 
-app.post("/checkemailsdt", (req, res) => {
+app.post("/QLcheckemailsdt", (req, res) => {
   const checkEmail = "SELECT COUNT(*) AS count FROM taikhoan WHERE Email = ?";
   const checkSdt = "SELECT COUNT(*) AS count FROM taikhoan WHERE SoDienThoai = ?";
-  db.query(checkEmail, [req.body.emailcs], (checkErrEmail, checkResultEmail) => {
+  db.query(checkEmail, [req.body.email], (checkErrEmail, checkResultEmail) => {
       if (checkErrEmail){
         return res.json("Error");
       }
-      db.query(checkSdt, [req.body.sdtcs], (checkErrSdt, checkResultSdt) => {
+      db.query(checkSdt, [req.body.sdt], (checkErrSdt, checkResultSdt) => {
         if (checkErrSdt) {
           return res.json("Error2");
         }
@@ -391,8 +391,8 @@ db.query(
   [
     req.body.idphanquyen,
     req.body.tencs,
-    req.body.emailcs,
-    req.body.sdtcs,
+    req.body.email,
+    req.body.sdt,
     req.body.diachics,
     req.body.nganhangcs,
     req.body.stkcs,

@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
-import { getAllCoSo, getNameLogin, CheckEmailSdt } from "../controllers/CQuanLyTaiKhoan";
+import { getAllCoSo, getNameLogin, QLCheckEmailSdt } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
 import { VietQR } from 'vietqr';
 
@@ -210,9 +210,9 @@ const Admin = () => {
     }
   };
 
-  useEffect(() => {
-    stringdiachi += duong +", " + phuong +", "+ quan +", "+ tinh ;
-  }, [duong, tinh, quan, phuong]);
+  // useEffect(() => {
+  //   stringdiachi += duong +", " + phuong +", "+ quan +", "+ tinh ;
+  // }, [duong, tinh, quan, phuong]);
 
   const renderOptions = (dataArray) => {
     return dataArray.map((item, i) => (
@@ -277,7 +277,9 @@ const Admin = () => {
   }
 
   function checkEmailSdt(){
-    CheckEmailSdt(idphanquyen, tencs, email, sdt, stringdiachi, nganhangcs, stkcs, matkhaucs)
+    stringdiachi = duong +", " + phuong +", "+ quan +", "+ tinh ;
+    alert(stringdiachi)
+    QLCheckEmailSdt(idphanquyen, tencs, email, sdt, stringdiachi, nganhangcs, stkcs, matkhaucs)
   }
 
   return (
@@ -414,18 +416,18 @@ const Admin = () => {
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Số điện thoại:</div>
-                    <input type="text" class="ipsdtcs" onChange={e => settencs(e.target.value)}></input>
+                    <input type="text" class="ipsdtcs" onChange={e => setsdt(e.target.value)}></input>
                   </div>
                 </div>
 
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
                     <div className="text-[20px] w-[30%] ">Mật khẩu:</div>
-                    <input type="text" class="ipmkcs" onChange={e => settencs(e.target.value)}></input>
+                    <input type="text" class="ipmkcs" onChange={e => setmatkhaucs(e.target.value)}></input>
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Email:</div>
-                    <input type="text" class="ipemailcs" onChange={e => settencs(e.target.value)}></input>
+                    <input type="text" class="ipemailcs" onChange={e => setemail  (e.target.value)}></input>
                   </div>
                 </div>
 
@@ -443,7 +445,7 @@ const Admin = () => {
                       <option disable value="">Chọn ngân hàng</option>
                       {kqapinh.map((nh, i) => (
                         <React.Fragment key={i}>
-                          <option value={nh.code}>{nh.shortName}</option>
+                          <option value={nh.shortName}>{nh.shortName}</option>
                         </React.Fragment>
                       ))}
                     </select>
