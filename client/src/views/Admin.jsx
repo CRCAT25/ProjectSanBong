@@ -2,19 +2,16 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
-import { getAllCoSo, getNameLogin } from "../controllers/CQuanLyTaiKhoan";
+import { getAllCoSo, getNameLogin, QLCheckEmailSdt } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
 import { VietQR } from 'vietqr';
 
 
-
 const Admin = () => {
 
-  const [activeTab, setActiveTab] = useState('partner');
+  const [activeTab, setActiveTab] = useState('coso');
   const [index, setindex] = useState('0');
   const [listtenmenu, setListtenmenu] = useState([]);
-  // const [Cosos, setListCoSo] = useState([]);
-  // const listCoso = [];
   const [listCoso, setListCoso] = useState([]);
   const [apitinh, setapitinh] = useState([]);
   const [apiquan, setapiquan] = useState([]);
@@ -22,26 +19,62 @@ const Admin = () => {
   const idlogin = "3";
   let namelogin = "";
   const [kqapinh, setkqapinh] = useState([]);
+  const [tinh, settinh] = useState('');
+  const [quan, setquan] = useState('');
+  const [phuong, setphuong] = useState('');
+  let stringdiachi = "";
+  //Coso
+  const [idphanquyen, setidphanquyen] = useState('2');
+  const [tencs, settencs] = useState('');
+  const [email, setemail] = useState('');
+  const [sdt, setsdt] = useState('');
+  const [duong, setduong] = useState('');
+  const [nganhangcs, setnganhangcs] = useState('');
+  const [stkcs, setstkcs] = useState('');
+  const [matkhaucs, setmatkhaucs] = useState('');
 
 
+  // const openTab = (tab, index, idpq) => {    
+  //   setActiveTab(tab);
+  //   alert(activeTab)
+  //   setPQ(idpq);
+  //   alert(idphanquyen)
+  //   changeclassname(index);
+  // };
+  // function changeclassname(index) {
+  //   // alert(document.getElementsByClassName('tenmenu').length)
+  //   if (document.getElementsByClassName('tenmenu2').length > 0) {
+  //     document.getElementsByClassName('tenmenu2')[0].classList.remove('tenmenu2')
+  //   }
+  //   document.getElementsByClassName('tenmenu')[index].classList.add('tenmenu2')
+  //   // const buttonElement = document.getElementById('tenmenu');
+  // };
 
+  useEffect(() => {
+    showAllCoSo();
+    showNameLogin();
+    callAPI(host);
+    getNganHang();
+  }, []);
 
-
-  const openTab = (tab, index) => {
-    const buttonElement = document.getElementById('tablink');
+  const openTab = (tab, index, idpq) => {    
     setActiveTab(tab);
-    // buttonElement.classList.remove('active');
-    // buttonElement.classList.add('active2');
     changeclassname(index);
+    setidphanquyen(idpq);
   };
+
   function changeclassname(index) {
-    // alert(document.getElementsByClassName('tenmenu').length)
-    if (document.getElementsByClassName('tenmenu2').length > 0) {
-      document.getElementsByClassName('tenmenu2')[0].classList.remove('tenmenu2')
-    }
-    document.getElementsByClassName('tenmenu')[index].classList.add('tenmenu2')
-    // const buttonElement = document.getElementById('tenmenu');
-  };
+    const elements = document.querySelectorAll('.tenmenu');
+    elements.forEach((element) => {
+      element.classList.remove('tenmenu2');
+    });
+    elements[index].classList.add('tenmenu2');
+  }
+  
+  useEffect(() => {
+    // alert(activeTab);
+    // alert(idphanquyen + " b");
+  }, [idphanquyen, activeTab]);
 
 
   const Icon18px = ({ classIcon }) => {
@@ -69,21 +102,7 @@ const Admin = () => {
   }
 
   /*                           CITY API                            */
-  // const host = 'https://provinces.open-api.vn/api/?depth=2';
 
-  // var callAPI = (api) => {
-  //   return axios.get(api)
-  //     .then((response) => {
-  //       console.log('Full API Response:', response.data);
-  //       setapitinh(response.data);
-  //       setapiquan(response.data[0].districts);
-  //       // setapiphuong(response.data[0].districts.wards)
-  //       // response.data[0].wards.forEach(wards => {
-  //       //   // console.log('District Name:', district.name);
-  //       //   console.log(wards)
-  //       // });
-  //     });
-  // }
 
   const host = 'https://provinces.open-api.vn/api/';
 
@@ -122,6 +141,14 @@ const Admin = () => {
     const selectedtinh = event.target.value;
     if (selectedtinh) {
       fetchQuan(selectedtinh);
+      // console.log(apitinh.length)
+      // console.log(selectedtinh)
+      for(let i=0;i<apitinh.length;i++){
+        // console.log("a"+ apitinh[i].code)
+        if(selectedtinh == apitinh[i].code){
+          settinh(apitinh[i].name)
+        }
+      }
     } else {
       setapiquan([]);
     }
@@ -145,14 +172,34 @@ const Admin = () => {
     const selectedquan = event.target.value;
     if (selectedquan) {
       fetchPhuong(selectedquan);
+      for(let i=0;i<apiquan.length;i++){
+        if(selectedquan == apiquan[i].code){
+          setquan(apiquan[i].name)
+        }
+      }
     } else {
       setapiphuong([]);
     }
   };
 
+  const handleProvinceChangePhuong = (event) => {
+    const selectedphuong = event.target.value;
+    if (selectedphuong) {
+      for(let i=0;i<apiphuong.length;i++){
+        if(selectedphuong == apiphuong[i].code){
+          setphuong(apiphuong[i].name)
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    stringdiachi += duong +", " + phuong +", "+ quan +", "+ tinh ;
+  }, [duong, tinh, quan, phuong]);
+
   const renderOptions = (dataArray) => {
     return dataArray.map((item, i) => (
-      <option key={i} value={item.code} className="text-[#000000] text-center bg-[white]">{item.name}</option>
+      <option key={i} value={item.code} id={item.code+"-"+item.name} className="text-[#000000] text-center bg-[white]">{item.name}</option>
     ));
   };
 
@@ -177,13 +224,7 @@ const Admin = () => {
     nganHang();
   }
 
-  useEffect(() => {
-    showAllCoSo();
-    showNameLogin();
-    callAPI(host);
-    getNganHang();
-    // alert(listCoso.length)
-  }, []);
+
 
   const showAllCoSo = async () => {
     const result = await getAllCoSo();
@@ -211,8 +252,15 @@ const Admin = () => {
     // alert(namelogin)
   };
 
+
   function test() {
-    alert("a")
+    alert(stringdiachi)
+    alert(idphanquyen)
+    alert(nganhangcs)
+  }
+
+  function checkEmailSdt(){
+    QLCheckEmailSdt(idphanquyen, tencs, email, sdt, stringdiachi, nganhangcs, stkcs, matkhaucs)
   }
 
   return (
@@ -221,10 +269,10 @@ const Admin = () => {
         <div className=" item-center justify-center w-full">
           <div className=" gap-3 justify-center bg-[#E2EDFF] h-[570px]">
             <div id="nameaccount" className="text-[25px] font-bold w-full text-center py-[20px]" >{namelogin}</div>
-            <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''} `} data-electronic="khachhang" onClick={() => openTab('khachhang', 0)}><div id="tenmenu" className="tenmenu tenmenu2" ><Iconpx classIcon={faUser} width={"19px"} height={"19px"} marginRight={"15px"} marginLeft={"0px"} />Khách hàng</div></button>
-            <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso', 1)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserTie} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-40px"} />Partner</div></button>
-            <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin', 2)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserShield} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-65px"} />Admin</div></button>
-            <button id="tablink" className={`tablink ${activeTab === 'doanhthu' ? 'active' : ''}`} data-electronic="doanhthu" onClick={() => openTab('doanhthu', 3)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faChartColumn} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-46px"} />Báo cáo</div></button>
+            <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''} `} data-electronic="khachhang" onClick={() => openTab('khachhang', 0, 1)}><div id="tenmenu" className="tenmenu tenmenu2" ><Iconpx classIcon={faUser} width={"19px"} height={"19px"} marginRight={"15px"} marginLeft={"0px"} />Khách hàng</div></button>
+            <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso', 1, 2)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserTie} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-40px"} />Partner</div></button>
+            <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin', 2, 3)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserShield} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-65px"} />Admin</div></button>
+            <button id="tablink" className={`tablink ${activeTab === 'doanhthu' ? 'active' : ''}`} data-electronic="doanhthu" onClick={() => openTab('doanhthu', 3, 0)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faChartColumn} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-46px"} />Báo cáo</div></button>
             <button id="logout"><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faArrowRightFromBracket} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} />Đăng xuất</div></button>
           </div>
         </div>
@@ -302,7 +350,7 @@ const Admin = () => {
                     <input type="text" class="ipsonha" ></input>
                   </div>
 
-                  <button id="btnthemcs" className="col-span-2 flex justify-between">Thêm</button>
+                  <button id="btnthemcs" onClick={test} className="col-span-2 flex justify-between">Thêm tài khoản</button>
                 </div>
                 <div className="w-full flex mt-[40px] px-[60px] justify-center gap-[60px]">
                   <div className="">
@@ -326,11 +374,6 @@ const Admin = () => {
 
         </div>
 
-
-
-
-
-
         {/* partner */}
         <div id="coso" className={`tabcontent ${activeTab === 'coso' ? 'active' : ''}`}>
           <div className="w-full grid grid-cols-12">
@@ -345,32 +388,24 @@ const Admin = () => {
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
                     <div className="text-[20px] w-[30%] ">Tên cơ sở:</div>
-                    <input type="text" class="iptcs" ></input>
+                    <input type="text" class="iptcs" onChange={e => settencs(e.target.value)} ></input>
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Số điện thoại:</div>
-                    <input type="text" class="ipsdtcs" ></input>
+                    <input type="text" class="ipsdtcs" onChange={e => settencs(e.target.value)}></input>
                   </div>
                 </div>
 
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
                     <div className="text-[20px] w-[30%] ">Mật khẩu:</div>
-                    <input type="text" class="ipmkcs" ></input>
+                    <input type="text" class="ipmkcs" onChange={e => settencs(e.target.value)}></input>
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Email:</div>
-                    <input type="text" class="ipemailcs" ></input>
+                    <input type="text" class="ipemailcs" onChange={e => settencs(e.target.value)}></input>
                   </div>
                 </div>
-
-                {/* var renderData = (array, select) => {
-  let row = ' <option disable value="">Chọn thành phố</option>';
-  array.forEach(tinhthanh => {
-      row += `<option data-id="${tinhthanh.code}" value="${tinhthanh.name}">${tinhthanh.name}</option>`
-  });
-  document.querySelector("#" + select).innerHTML = row
-} */}
 
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
@@ -382,7 +417,7 @@ const Admin = () => {
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Ngân hàng:</div>
-                    <select type="text" class="ipnh" >
+                    <select type="text" class="ipnh" onChange={e => setnganhangcs(e.target.value)} >
                       <option disable value="">Chọn ngân hàng</option>
                       {kqapinh.map((nh, i) => (
                         <React.Fragment key={i}>
@@ -404,25 +439,25 @@ const Admin = () => {
                   </div>
                   <div className="col-span-2 flex justify-between translate-x-[-60px]">
                     <div className="text-[20px] w-[30%] ">Phường:</div>
-                    <select type="text" class="ipphuong">
+                    <select type="text" class="ipphuong" onChange={handleProvinceChangePhuong}>
                       <option value="" selected>Chọn phường xã</option>
                       {renderOptions(apiphuong)}
                     </select>
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] translate-x-[5px] ">Số tài khoản:</div>
-                    <input type="text" class="ipstk" ></input>
+                    <input type="text" class="ipstk" onChange={e => setstkcs(e.target.value)}></input>
                   </div>
                 </div>
 
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
                     <div className="text-[20px] w-[30%]">Số nhà / Đường:</div>
-                    <input type="text" class="ipsonha" ></input>
+                    <input type="text" class="ipsonha" onChange={e => setduong(e.target.value)} ></input>
                   </div>
 
-                  <button id="btnthemcs" className="col-span-1">Thêm cơ sở</button>
                   <button id="btnthemanh" className="col-span-1">Thêm ảnh</button>
+                  <button id="btnthemcs" className="col-span-1" onClick={checkEmailSdt}>Thêm cơ sở</button>
 
                 </div>
                 <div className="w-full flex mt-[40px] px-[60px] justify-center gap-[60px]">

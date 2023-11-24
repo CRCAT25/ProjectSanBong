@@ -21,10 +21,6 @@ const Icon24px = ({ classIcon, top }) => {
         <span><FontAwesomeIcon icon={classIcon} style={iconSize} /></span>
     )
 }
-
-
-
-
 const FormLogin = () => {
 
     const [userName, setUserName] = useState("");
@@ -61,6 +57,7 @@ const FormLogin = () => {
             localStorage.setItem("userID", result.IdAccount);
             localStorage.setItem("userName", result.Ten);
             localStorage.setItem("userSDT", result.SoDienThoai);
+            localStorage.setItem("userRole", result.PhanQuyen);
             setTimeout(() => {
                 Swal.close();
                 window.location.reload();

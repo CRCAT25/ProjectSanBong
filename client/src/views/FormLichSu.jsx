@@ -10,23 +10,36 @@ import {
 import SanBong from '../models/SanBong';
 const FormLichSu = () => {
   
+  const [getSelectedBtn, setSelectedBtn] = useState(1)
   const [getSelectedList,setSelectedList] = useState([]);
   const lichholder = useRef()
+  const idUser= localStorage.getItem("userID")
+
+  useEffect( ()=>{
+    loadSelectedLich(0)
+    },[])
 
   const loadSelectedLich = async (idSelected)=>{
     let selected = idSelected
-    getPersonalLichFromBillByIdTK(3, selected)
-    await loadLich(getSelectedList, selected);
+    setSelectedBtn(selected)
+    // getPersonalLichFromBillByIdTK(3, selected)
+    // await loadLich(getSelectedList, selected);
   }
 
   const getPersonalLichFromBillByIdTK = async(idTK,selected) =>{
     let list = await GetPersonalLichFromBillByIdTK(idTK,selected)
-    console.log(list)
     setSelectedList(list);
   }
 
-  const dateFormatter  = (date) =>{
+  useEffect( ()=>{
+    getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+    },[getSelectedBtn])
+    
+  useEffect( ()=>{
+    loadLich(getSelectedList, getSelectedBtn);
+      },[getSelectedList])
 
+  const dateFormatter  = (date) =>{
     let time = new Date(date)
     const formattedDate = time.toLocaleDateString("vi-VN", {
       weekday: "short", // Abbreviated weekday name (e.g., "Mon")
@@ -40,7 +53,6 @@ const FormLichSu = () => {
 
   const loadLich = async (list, selected)=>{
     let as="";
-
     for(const data of list){
       
       let hoaDon = await data
@@ -85,10 +97,7 @@ const FormLichSu = () => {
       lichholder.current.innerHTML = as; 
   }
 
-  useEffect( ()=>{
-  getPersonalLichFromBillByIdTK(3,0)
-    
-  },[])
+ 
 
   return (
     <div className='w-[80%] mx-auto bg-[#FFF] border-[3px] border-[#379E13] pb-[3%] rounded-[10px]'>
