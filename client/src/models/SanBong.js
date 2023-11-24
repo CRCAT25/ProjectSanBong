@@ -2,6 +2,7 @@ import axios from 'axios';
 import LoaiSan from "./LoaiSan"
 import CoSoSan from "./CoSoSan"
 import PhanQuyen from './PhanQuyen';
+import HoaDon from './HoaDon';
 class SanBong{
     constructor(idSan, taiKhoan, loaiSan, tenSan, trangThai){
         this.IdSan = idSan;
@@ -64,6 +65,27 @@ class SanBong{
     DatSan(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien){
         return axios.post("http://localhost:8081/datSan", {IDTaiKhoan: IDTaiKhoan, IDSan : IDSan, IDKhungGio : IDKhungGio, Ngay : Ngay, GiaoHuu : GiaoHuu, TongTien : TongTien})
             .then(response => {
+                return response.data[0].IDHoaDon
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    HuyDatSan(IDHoaDon){
+        return axios.post("http://localhost:8081/huyDatSan", {IDHoaDon: IDHoaDon})
+            .then(response => {
+                
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    DatCoc(IDHoaDon){
+        return axios.post("http://localhost:8081/DatCoc", {IDHoaDon: IDHoaDon})
+            .then(response => {
+                
             })
             .catch(error => {
                 console.error(error);

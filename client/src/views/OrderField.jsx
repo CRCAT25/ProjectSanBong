@@ -9,7 +9,7 @@ import {faLocationDot,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
 import {React,useState, useEffect, useRef } from "react";
-import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan, DatSan } from "../controllers/CDatSan";
+import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan, DatSan, HuyDatSan, DatCoc } from "../controllers/CDatSan";
 
 import "../controllers/CTimKiem";
 import { TimKiemSanBong, getAllCoSo, TimKiemSanBongC, GetInfoCoSoSan } from "../controllers/CTimKiem";
@@ -18,6 +18,7 @@ import CoSoSan from "../models/CoSoSan";
 import LoaiSan from "../models/LoaiSan";
 import KhungGio from '../models/KhungGio';
 import FormHoaDon from './FormHoaDon';
+import FormHoanTien from './FormHoanTien';
 const Icon24px = ({classIcon}) => {
     const iconSize = {
         width: "24px",
@@ -120,7 +121,9 @@ export const OrderField = () => {
     const[tenCoSoInput, setTenCoSoInput] = useState("")
     const[diaDiemInput, setDiaDiemInput] = useState("")
     const selectLoaiBoxRef = useRef(null)
-    const TimKiemSanBong = async () => {     
+    const TimKiemSanBong = async () => {    
+        setGotInfo(false)
+        setGotInfoSan(false)
         let result = await TimKiemSanBongC(tenCoSoInput, diaDiemInput)
         if(typeof result === 'string'){
             setCoSoIsAString(true)
@@ -192,9 +195,13 @@ export const OrderField = () => {
     const SetValueForKhungGio =(khungGio) =>{
         setSelectedKhungGio(khungGio)
         let TongTien = sanBongInfo.LoaiSan.GiaTien + khungGio.GiaTien
-        console.log(TongTien)
         setTongTien(TongTien)
+        setTongTienText(formatCurrency(TongTien))
     }   
+
+    const formatCurrency = (value) => {
+        return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+      };
     
     const[isCheckBoxChecked, setIsCheckBoxChecked] = useState(0)
     const[textForGiaoHuu, setTextForGiaoHuu] = useState("")
@@ -212,6 +219,7 @@ export const OrderField = () => {
 
     const [showHoaDon, setShowHoaDon] = useState(false)
     const [tongTien, setTongTien] = useState(0)
+    const [tongTienText, setTongTienText] = useState("0")
     const [valueForHoaDon, setValueForHoaDon] = useState({})
     const HienThiXacNhanDatSan = async() =>{
         
@@ -241,17 +249,47 @@ export const OrderField = () => {
                     MaSan :sanBongInfo.TenSan, 
                     LoaiSan : sanBongInfo.LoaiSan.TenLoaiSan, 
                     GiaoHuu : textForGiaoHuu, 
-                    TongTien :tongTien,
+                    TongTien :tongTienText,
                 }
                 setValueForHoaDon(valueForHoaDon)
             }
         }            
     }
+
+    const [showDatCoc, setShowDatCoc] = useState(false)
+    const HienThiDatCoc = async () =>{
+        if(showDatCoc == true){
+            setShowDatCoc(false)
+        }
+        else{
+            setShowDatCoc(true)
+        }
+        
+    }
+
+    const HuyDatCoc = async () =>{
+        await HuyDatSan(newHoaDonID)
+        HienThiDatCoc()
+    }
+
+    const DatCocV = async() => {
+        DatCoc(newHoaDonID)
+        Swal.fire({
+            title: "Đặt cọc thành công!",
+            icon: "success"
+        });
+        setTimeout(() => {
+            Swal.close();
+            window.location.reload()
+        }, 1000);
+        
+    }
+
+    const [newHoaDonID, setNewHoaDonID] = useState(null)
     const DatSanV = async () =>{   
-        DatSan(localStorage.getItem('userID'), sanBongInfo.IdSan, selectedKhungGio.IdKhungGio ,DBDate, isCheckBoxChecked, tongTien)
-        setShowHoaDon(false)
-        document.body.style.overflow = 'visible'
-        window.location.reload()
+        let newestHoaDonID = await DatSan(localStorage.getItem('userID'), sanBongInfo.IdSan, selectedKhungGio.IdKhungGio ,DBDate, isCheckBoxChecked, tongTien)
+        setNewHoaDonID(newestHoaDonID)
+        await HienThiDatCoc()
     }
     
     const ClearSelected = () =>{
@@ -271,6 +309,9 @@ export const OrderField = () => {
         <div className="fixed inset-0 z-50 flex  bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded shadow-md">
             <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} DatSanV = {DatSanV} />
+            {showDatCoc === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> <FormHoanTien isDatCoc={true} tenKH = {localStorage.getItem('userName')} tongTien = {tongTienText} HuyDatCoc = {HuyDatCoc} DatCoc = {DatCocV}/> </div>
+            
+            ) : ""}
           </div>
         </div>) : ""}
         
@@ -372,8 +413,7 @@ export const OrderField = () => {
                             <div className="mt-7 w-full gap-3 grid grid-cols-12">
                             {gotInfoKhungGio === true ? (
                                 khungGios.map((data, i) => {
-                                    const isOccured = occuredKhungGios.some((ocurkhunggio) => ocurkhunggio.IdKhungGio === data.IdKhungGio);
-                                    console.log(isOccured)                             
+                                    const isOccured = occuredKhungGios.some((ocurkhunggio) => ocurkhunggio.IdKhungGio === data.IdKhungGio);                          
                                     return (    
                                     <div className={`col-span-3 ${isOccured ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} ${selectedKhungGio.IdKhungGio == data.IdKhungGio ? 'border-2 border-[#000000]' : ''} text-center px-4 py-2 rounded-[10px]`} onClick ={() => {if(!isOccured){SetValueForKhungGio(data)}}}   key={i}>{data.ThoiGian} </div>
                                     );
@@ -396,7 +436,7 @@ export const OrderField = () => {
                 
                 (<div>
                     <div className="text-[28px] font-[600] absolute bottom-5 left-5">Tạm tính:</div>
-                    <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]">{tongTien}</div>
+                    <div className="text-[28px] font-[400] absolute bottom-5 left-[165px]">{tongTienText}</div>
                     <button className="buttonXacNhan w-[250px] h-[50px] absolute bottom-5 right-5 text-[28px]" onClick={() => {HienThiXacNhanDatSan()}}>Xác nhận</button>
                 </div>
                 ): ""}
