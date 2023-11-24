@@ -23,7 +23,7 @@ const CheckInputNewPass = (email, pass, resPass) => {
 const Login = async (userName, passWord) =>{
     const user = new TaiKhoan();
     if(CheckInputSignIn(userName, passWord) == true){
-        const authUser = await user.LoginUser(userName, passWord);
+        let authUser = await user.LoginUser(userName, passWord);
         if(authUser == null || authUser == ''){
             return "khong"
         }
