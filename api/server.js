@@ -106,21 +106,36 @@ app.post("/getSanByIDnCate", (req, res) => {
   });
 });
 
-app.post("/datSan", (req, res) => {
+app.post("/datSan", async (req, res) => {
   const IDTaiKhoan = req.body.IDTaiKhoan;
   const IDSan = req.body.IDSan;
   const IDKhungGio = req.body.IDKhungGio;
   const Ngay = req.body.Ngay;
   const GiaoHuu = req.body.GiaoHuu;
   const TongTien = req.body.TongTien;
-  const sql = `INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat,TrangThai) VALUES(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}', NOW(), 'Pending')`;
+  const sql = `CALL InsertAndReturnHoaDon(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}')`;
   db.query(sql, (err, data) => {
-    console.log(data)
+    res.json(data[0])
   });
 });
 
-// Lấy lịch giao hữu // chua sua
-app.post("/getAllLichGiaoHuu", (req, res) => {
+app.post("/huyDatSan", async (req, res) => {
+  const IDHoaDon = req.body.IDHoaDon;
+  const sql = `DELETE FROM HOADON WHERE IDHoaDon = ${IDHoaDon}`;
+  db.query(sql, (err, data) => {
+    res.json(data[0])
+  });
+});
+
+app.post("/DatCoc", async (req, res) => {
+  const IDHoaDon = req.body.IDHoaDon;
+  const sql = `UPDATE HOADON SET TrangThai = 'Completed' WHERE IDHoaDon = ${IDHoaDon}`;
+  db.query(sql, (err, data) => {
+  });
+});
+
+// Lấy lịch giao hữu // 
+app.post("/getAllLichGiaoHuu",(req,res) => {
   const sql = `SELECT
                 hoadon.IDHoaDon ,tk1.Ten,tk1.SoDienThoai, tk2.Ten as CoSo, tk2.DiaChiCoSo, sanbong.TenSan as MaSan, DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay, khunggio.ThoiGian
               FROM
@@ -135,7 +150,6 @@ app.post("/getAllLichGiaoHuu", (req, res) => {
                 and sanbong.IDSan = hoadon.IDSan
                 and tk2.IDTaiKhoan = sanbong.IDTaiKhoan;`;
   db.query(sql, (err, data) => {
-    // console.log(data)
     res.json(data);
   });
 })
@@ -226,26 +240,28 @@ app.post("/getAllBillForRefund", (req, res) => {
   })
 })
 
-app.post("/updateDoiThuInBill", (req, res) => {
-  const sql = `UPDATE hoadon SET IDDoiThu = ? WHERE hoadon.IDHoaDon = ?`;
-  db.query(sql, [req.body.IDDoiThu, req.body.IDHoaDon], (err, data) => {
-    // console.log(data)
+app.post("/updateDoiThuInBill",(req,res)=>{
+  const sql=`UPDATE hoadon SET IDDoiThu = ? WHERE hoadon.IDHoaDon = ?`;
+  db.query(sql,[req.body.IDDoiThu,req.body.IDHoaDon],(err,data) =>{
     res.json(data);
 
   })
 })
 
-app.post("/getPersonalBillByIdTK", (req, res) => {
-  const sql = `SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
-  db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
+app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
+  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ?`;
+  // console.log(req.body.IDTaiKhoan+"   "+ req.body.GiaoHuu)
+  db.query(sql,[req.body.IDTaiKhoan, req.body.GiaoHuu],(err,data) =>{
+    // console.log(data);
     res.json(data);
-
+   
   })
 })
 
-/*************************/
+/************* Đỗ Quốc Thành *************/
 
 
+// User đăng nhập
 app.post("/loginUser", (req, res) => {
   const userName = req.body.userName;
   const passWord = req.body.passWord;
@@ -256,6 +272,7 @@ app.post("/loginUser", (req, res) => {
   });
 });
 
+// Check tài khoản có tồn tại
 app.post("/resPassUser", (req, res) => {
   const name = req.body.Ten;
   const email = req.body.Email;
@@ -267,6 +284,7 @@ app.post("/resPassUser", (req, res) => {
   });
 });
 
+// Change mật khẩu
 app.post("/updatePassWord", (req, res) => {
   const Email = req.body.Email;
   const Pass = req.body.Pass;
@@ -274,6 +292,33 @@ app.post("/updatePassWord", (req, res) => {
   const sql = `UPDATE taikhoan set MatKhau = "${Pass}" where Email = "${Email}"`;
   db.query(sql, (err, data) => {
     res.json("done")
+  });
+});
+
+// Check email và sdt tồn tại
+app.post("/checkEmailSdt", (req, res) => {
+  const Email = req.body.Email;
+  const Sdt = req.body.Sdt;
+
+  const sql = `select * from taikhoan where Email = "${Email}" or SoDienThoai = "${Sdt}"`; 
+  db.query(sql, (err, data) => {
+    if(data[0] == null)
+      res.json("chua co")
+    else res.json("da co")
+  });
+});
+
+// Đăng ký tài khoản cho user
+app.post("/signUpAccount", (req, res) => {
+  const Name = req.body.Name;
+  const Email = req.body.Email;
+  const Pass = req.body.Pass;
+  const Sdt = req.body.SDT;
+  
+
+  const sql = `insert into taikhoan(Ten, Email, MatKhau, SoDienThoai, IDPhanQuyen) values("${Name}","${Email}","${Pass}","${Sdt}", 1)`; 
+  db.query(sql, (err, data) => {
+    res.json(data)
   });
 });
 

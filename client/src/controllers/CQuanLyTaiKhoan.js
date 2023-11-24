@@ -20,13 +20,15 @@ const getAllCoSo = async () =>{
     return result;
  }
 
- const CheckEmailSdt = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
-   let account = new Account()
-   account.checkemailsdt(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
-}
+ const getPersonalInfoByIdTK = async(idTk)=>{
+   let account = new Account();
+   let list = account.getTKByID(idTk)
+   return list;
+
+ }
 
  export {
-    getAllCoSo,
-    getNameLogin,
-    CheckEmailSdt,
+   getAllCoSo,
+   getNameLogin,
+   getPersonalInfoByIdTK
 }

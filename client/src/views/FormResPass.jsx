@@ -30,17 +30,6 @@ const FormResPass = () => {
     const [nhapLaiMK, setNhapLaiMK] = useState("");
 
 
-    // const ResPassSucessful = () => {
-    //     Swal.fire({
-    //         title: "Đặt lại mật khẩu thành công",
-    //         icon: "success"
-    //     });
-    //     setTimeout(() => {
-    //         Swal.close();
-    //         window.location.reload();
-    //     }, 1000);
-    // }
-
     const TiepTheo = async () => {
         let result = await (ResPass(name, email, sdt))
         console.log(result)
