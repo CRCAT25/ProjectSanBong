@@ -245,9 +245,10 @@ app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
   })
 })
 
-/*************************/
+/************* Đỗ Quốc Thành *************/
 
 
+// User đăng nhập
 app.post("/loginUser", (req, res) => {
   const userName = req.body.userName;
   const passWord = req.body.passWord;
@@ -258,6 +259,7 @@ app.post("/loginUser", (req, res) => {
   });
 });
 
+// Check tài khoản có tồn tại
 app.post("/resPassUser", (req, res) => {
   const name = req.body.Ten;
   const email = req.body.Email;
@@ -269,6 +271,7 @@ app.post("/resPassUser", (req, res) => {
   });
 });
 
+// Change mật khẩu
 app.post("/updatePassWord", (req, res) => {
   const Email = req.body.Email;
   const Pass = req.body.Pass;
@@ -276,6 +279,32 @@ app.post("/updatePassWord", (req, res) => {
   const sql = `UPDATE taikhoan set MatKhau = "${Pass}" where Email = "${Email}"`; 
   db.query(sql, (err, data) => {
     res.json("done")
+  });
+});
+
+// Check email và sdt tồn tại
+app.post("/checkEmailSdt", (req, res) => {
+  const Email = req.body.Email;
+  const Sdt = req.body.Sdt;
+
+  const sql = `select * from taikhoan where Email = "${Email}" or SoDienThoai = "${Sdt}"`; 
+  db.query(sql, (err, data) => {
+    if(data[0] == null)
+      res.json("chua co")
+    else res.json("da co")
+  });
+});
+
+// Đăng ký tài khoản cho user
+app.post("/signUpAccount", (req, res) => {
+  const Name = req.body.Name;
+  const Email = req.body.Email;
+  const Pass = req.body.Pass;
+  const Sdt = req.body.Sdt;
+
+  const sql = `insert into taikhoan(Ten, Email, MatKhau, SoDienThoai) values("${Name}","${Email}","${Pass}","${Sdt}")`; 
+  db.query(sql, (err, data) => {
+    console.log(data)
   });
 });
 
