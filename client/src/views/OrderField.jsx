@@ -164,8 +164,8 @@ export const OrderField = () => {
 
     const ChonSanBong = async (idSan) =>{
         let infoSanBong = await GetInfoSanBong(idSan)
-        setTenLoaiSan(infoSanBong.LoaiSan.TenLoaiSan)  
-        GetEmptyKhungGio(idSan) 
+        setTenLoaiSan(infoSanBong.LoaiSan.TenLoaiSan)
+        await GetEmptyKhungGio(idSan) 
         GetAllKhungGio()   
         setSanBongInfo(infoSanBong)
         setGotInfoSan(true)
@@ -176,13 +176,16 @@ export const OrderField = () => {
     const[occuredKhungGios, setoccuredKhungGios] = useState([])
     const[gotInfoKhungGio, setGotInfoKhungGio] = useState(false)
     const GetAllKhungGio = async () => {
-        setKhungGios(await getAllKhungGio())
+        let khungGios = await getAllKhungGio()
+        setKhungGios(khungGios)
         setGotInfoKhungGio(true)
     }
 
     const GetEmptyKhungGio = async (idSan) =>{
         let ocurKhungGio = await getAllOccuredKhungGio(idSan, DBDate)
-        setoccuredKhungGios(ocurKhungGio)
+        let listOccuredKhungGio = []
+        ocurKhungGio.map(async (data, i) => listOccuredKhungGio.push(await data.KhungGio))
+        setoccuredKhungGios(listOccuredKhungGio)
     }
 
     const[selectedKhungGio, setSelectedKhungGio] = useState(new KhungGio())
@@ -195,25 +198,23 @@ export const OrderField = () => {
     
     const[isCheckBoxChecked, setIsCheckBoxChecked] = useState(0)
     const[textForGiaoHuu, setTextForGiaoHuu] = useState("")
-    const IsChecked = () =>{
+    const IsChecked = () =>{       
         if(isCheckBoxChecked == 0){
             setIsCheckBoxChecked(1)
-            setTextForGiaoHuu("Cho phép tham gia giao hữu !")
+            setTextForGiaoHuu("Cho phép tham gia giao hữu !")          
         }else{
             setIsCheckBoxChecked(0)
             setTextForGiaoHuu("")
         }
     }
 
-    const DatSanV = async () =>{       
-        await DatSan(3, sanBongInfo.IdSan, selectedKhungGio.IdKhungGio ,DBDate, isCheckBoxChecked, tongTien)
-    }
+    
 
     const [showHoaDon, setShowHoaDon] = useState(false)
     const [tongTien, setTongTien] = useState(0)
     const [valueForHoaDon, setValueForHoaDon] = useState({})
     const HienThiXacNhanDatSan = async() =>{
-        console.log(selectedKhungGio.IdKhungGio)
+        
         if(selectedKhungGio.IdKhungGio == 0 || selectedKhungGio == ""){
             Swal.fire({
                 title: "Vui lòng chọn khung giờ để đặt sân!",
@@ -230,8 +231,8 @@ export const OrderField = () => {
                 setShowHoaDon(true)
                 document.body.style.overflow = 'hidden'
                 const valueForHoaDon = {
-                    TenKH : "TAM",
-                    SDTKH :"12123",
+                    TenKH : localStorage.getItem('userName'),
+                    SDTKH :localStorage.getItem('userSDT'),
                     KhungGio : selectedKhungGio.ThoiGian,
                     NgayDat : textofDate, 
                     TenSan : infoCoSo.Ten, 
@@ -246,12 +247,17 @@ export const OrderField = () => {
             }
         }            
     }
+    const DatSanV = async () =>{   
+        DatSan(localStorage.getItem('userID'), sanBongInfo.IdSan, selectedKhungGio.IdKhungGio ,DBDate, isCheckBoxChecked, tongTien)
+        setShowHoaDon(false)
+        document.body.style.overflow = 'visible'
+        window.location.reload()
+    }
     
     const ClearSelected = () =>{
         setSelectedKhungGio(0);
         setTongTien(0)
         setIsCheckBoxChecked(0)
-
     }
 
   return (
@@ -264,7 +270,7 @@ export const OrderField = () => {
         {showHoaDon === true ? (
         <div className="fixed inset-0 z-50 flex  bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded shadow-md">
-            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} DatSan = {DatSanV} />
+            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} DatSanV = {DatSanV} />
           </div>
         </div>) : ""}
         
@@ -366,7 +372,8 @@ export const OrderField = () => {
                             <div className="mt-7 w-full gap-3 grid grid-cols-12">
                             {gotInfoKhungGio === true ? (
                                 khungGios.map((data, i) => {
-                                    const isOccured = occuredKhungGios.some(ocurkhunggio => ocurkhunggio.KhungGio.IdKhungGio === data.IdKhungGio);                    
+                                    const isOccured = occuredKhungGios.some((ocurkhunggio) => ocurkhunggio.IdKhungGio === data.IdKhungGio);
+                                    console.log(isOccured)                             
                                     return (    
                                     <div className={`col-span-3 ${isOccured ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} ${selectedKhungGio.IdKhungGio == data.IdKhungGio ? 'border-2 border-[#000000]' : ''} text-center px-4 py-2 rounded-[10px]`} onClick ={() => {if(!isOccured){SetValueForKhungGio(data)}}}   key={i}>{data.ThoiGian} </div>
                                     );

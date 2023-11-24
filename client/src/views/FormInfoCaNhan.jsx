@@ -1,6 +1,9 @@
 import React from 'react'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faImage} from "@fortawesome/free-solid-svg-icons"
+import {
+    getPersonalInfoByIdTK
+}from "../controllers/CQuanLyTaiKhoan.js"
 
 const Icon24px = ({classIcon}) => {
     const iconSize = {
@@ -12,6 +15,10 @@ const Icon24px = ({classIcon}) => {
         <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
     )
 }
+
+
+
+
 const FormInfoCaNhan = () => {
   return (
     <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>

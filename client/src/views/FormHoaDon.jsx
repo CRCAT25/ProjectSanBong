@@ -1,6 +1,6 @@
 import React from 'react'
 import { OrderField } from './OrderField'
-const FormHoaDon = ({TenKH, SDTKH, KhungGio, NgayDat, TenSan, DiaDiem, SDTSan, MaSan, LoaiSan, GiaoHuu, TongTien, HienThiXacNhanDatSan, DatSan}) => {
+const FormHoaDon = ({TenKH, SDTKH, KhungGio, NgayDat, TenSan, DiaDiem, SDTSan, MaSan, LoaiSan, GiaoHuu, TongTien, HienThiXacNhanDatSan, DatSanV}) => {
   return (
     <div className='w-[25%] bg-slate-200 h-[auto] left-1/2 -translate-x-1/2 my-[10%] rounded-[5] absolute z-1005'>
         <div className='grid grid-cols-2 p-5'>
@@ -43,7 +43,7 @@ const FormHoaDon = ({TenKH, SDTKH, KhungGio, NgayDat, TenSan, DiaDiem, SDTSan, M
 
         <div className='w-[90%] flex flex-auto justify-around p-10 mx-auto '>
             <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000]" onClick={HienThiXacNhanDatSan}>Hủy</button>
-            <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff]" onclick={DatSan}>Tiếp tục</button>
+            <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff]" onClick={DatSanV} >Tiếp tục</button>
         </div>
         
         
