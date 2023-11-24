@@ -55,6 +55,32 @@ class TaiKhoan {
         })
     }
 
+    CheckEmailSdt = (Email, Sdt) =>{
+        return axios.post("http://localhost:8081/checkEmailSdt",{
+                Email : Email,
+                Sdt : Sdt
+            }).then(response => {
+                return response.data
+            })
+            .catch(error => {
+            console.error(error);
+        })
+    }
+
+    SignUp = (Name, Email, Pass, SDT) =>{
+        return axios.post("http://localhost:8081/signUpAccount",{
+                Name : Name,
+                Email : Email,
+                Pass : Pass,
+                SDT : SDT,
+            }).then(response => {
+                return response.data
+            })
+            .catch(error => {
+            console.error(error);
+        })
+    }
+
     
     getTKByID = (idTK) =>{
         return axios.post("http://localhost:8081/getTKByID",{idTK}).then(response => {console.log(idTK)
