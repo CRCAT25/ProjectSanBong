@@ -13,6 +13,7 @@ class TaiKhoan {
         this.XacThuc = xacThuc;
     }
 
+    // Đăng nhập cho user
     LoginUser = (userName, passWord) =>{
         return axios.post("http://localhost:8081/loginUser",{
                 userName : userName,
@@ -27,8 +28,9 @@ class TaiKhoan {
         })
     }
 
-    ResPassUser = (Ten, Email, SoDienThoai) =>{
-        return axios.post("http://localhost:8081/resPassUser",{
+    // Kiểm tra user để khôi phục mật khẩu
+    CheckAccountUser = (Ten, Email, SoDienThoai) =>{
+        return axios.post("http://localhost:8081/checkAccountUser",{
                 Email : Email,
                 Ten : Ten,
                 SoDienThoai : SoDienThoai,
@@ -41,6 +43,7 @@ class TaiKhoan {
         })
     }
 
+    // Cập nhật mật khẩu mới
     UpdatePassWord = (Email, Pass) =>{
         return axios.post("http://localhost:8081/updatePassWord",{
                 Email : Email,
@@ -55,6 +58,7 @@ class TaiKhoan {
         })
     }
 
+    // Kiểm tra tài khoản với email và sdt
     CheckEmailSdt = (Email, Sdt) =>{
         return axios.post("http://localhost:8081/checkEmailSdt",{
                 Email : Email,
@@ -67,6 +71,7 @@ class TaiKhoan {
         })
     }
 
+    // Đăng ký cho user
     DangKy = (Name, Email, Pass, SDT) =>{
         return axios.post("http://localhost:8081/signUpAccount",{
                 Name : Name,

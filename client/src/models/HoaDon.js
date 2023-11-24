@@ -140,5 +140,17 @@ class HoaDon{
         });
     }
 
+    selectTop5InHoaDon(IDTaiKhoan){
+        return axios.post("http://localhost:8081/selectTop5InHoaDon",{IDTaiKhoan:IDTaiKhoan})
+        .then(response => {
+            const list = this.initBill(response.data);    
+            return (list);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    }
+
 }
 export default HoaDon
