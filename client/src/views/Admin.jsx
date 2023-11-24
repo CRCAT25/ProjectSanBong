@@ -7,7 +7,6 @@ import axios from "axios";
 import { VietQR } from 'vietqr';
 
 
-
 const Admin = () => {
 
   const [activeTab, setActiveTab] = useState('coso');
@@ -33,8 +32,6 @@ const Admin = () => {
   const [nganhangcs, setnganhangcs] = useState('');
   const [stkcs, setstkcs] = useState('');
   const [matkhaucs, setmatkhaucs] = useState('');
-
-
 
 
   // const openTab = (tab, index, idpq) => {    
@@ -105,21 +102,7 @@ const Admin = () => {
   }
 
   /*                           CITY API                            */
-  // const host = 'https://provinces.open-api.vn/api/?depth=2';
 
-  // var callAPI = (api) => {
-  //   return axios.get(api)
-  //     .then((response) => {
-  //       console.log('Full API Response:', response.data);
-  //       setapitinh(response.data);
-  //       setapiquan(response.data[0].districts);
-  //       // setapiphuong(response.data[0].districts.wards)
-  //       // response.data[0].wards.forEach(wards => {
-  //       //   // console.log('District Name:', district.name);
-  //       //   console.log(wards)
-  //       // });
-  //     });
-  // }
 
   const host = 'https://provinces.open-api.vn/api/';
 
@@ -392,11 +375,6 @@ const Admin = () => {
           </div>
 
         </div>
-
-
-
-
-
 
         {/* partner */}
         <div id="coso" className={`tabcontent ${activeTab === 'coso' ? 'active' : ''}`}>

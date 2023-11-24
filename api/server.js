@@ -266,14 +266,14 @@ app.post("/loginUser", (req, res) => {
   const userName = req.body.userName;
   const passWord = req.body.passWord;
 
-  const sql = `SELECT * FROM taikhoan where (SoDienThoai = "${userName}" or Email = "${userName}") and MatKhau = "${passWord}" and IDPhanQuyen = 1`;
+  const sql = `SELECT * FROM taikhoan where (SoDienThoai = "${userName}" or Email = "${userName}") and MatKhau = "${passWord}"`; 
   db.query(sql, (err, data) => {
     res.json(data)
   });
 });
 
 // Check tài khoản có tồn tại
-app.post("/resPassUser", (req, res) => {
+app.post("/checkAccountUser", (req, res) => {
   const name = req.body.Ten;
   const email = req.body.Email;
   const sdt = req.body.SoDienThoai;
@@ -322,6 +322,15 @@ app.post("/signUpAccount", (req, res) => {
   });
 });
 
+// Lấy 5 hóa đơn cuối của user
+app.post("/selectTop5InHoaDon", (req, res) => {
+  const IdAccount = req.body.IdAccount;  
+
+  const sql = `select * from hoadon where IDTaiKhoan = 2 order by IDHoaDon DESC Limit 5`; 
+  db.query(sql, (err, data) => {
+    res.json(data)
+  });
+});
 
 
 

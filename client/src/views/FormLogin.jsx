@@ -7,9 +7,8 @@ import "../css/OrderField.css"
 import Swal from 'sweetalert2'
 import { Login } from '../controllers/CDangNhap'
 
-// or via CommonJS
 
-
+// Tạo icon kích thước 24px
 const Icon24px = ({ classIcon, top }) => {
     const iconSize = {
         width: "24px",
@@ -22,14 +21,12 @@ const Icon24px = ({ classIcon, top }) => {
         <span><FontAwesomeIcon icon={classIcon} style={iconSize} /></span>
     )
 }
-
-
-
-
 const FormLogin = () => {
 
     const [userName, setUserName] = useState("");
     const [passWord, setpassWord] = useState("");
+
+    // Đăng nhập
     const DangNhap = async () => {
         let result = await (Login(userName, passWord))
         if (result === "chuaNhap") {
@@ -60,6 +57,7 @@ const FormLogin = () => {
             localStorage.setItem("userID", result.IdAccount);
             localStorage.setItem("userName", result.Ten);
             localStorage.setItem("userSDT", result.SoDienThoai);
+            localStorage.setItem("userRole", result.PhanQuyen);
             setTimeout(() => {
                 Swal.close();
                 window.location.reload();

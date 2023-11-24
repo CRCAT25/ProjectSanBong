@@ -22,8 +22,15 @@ const GetPersonalLichFromBillByIdTK = async (idTk,giaoHuu) =>{
     return list
 }
 
+const GetPersonalBillByIdAccount = async (idTk) =>{
+    const bill = new HoaDon()
+    let list = await bill.selectTop5InHoaDon(idTk)
+    return list
+}
+
 export {
     getAllLichGiaoHuu,
     updateBillDoiThuByIdBill,
-    GetPersonalLichFromBillByIdTK
+    GetPersonalLichFromBillByIdTK,
+    GetPersonalBillByIdAccount
 }

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faImage} from "@fortawesome/free-solid-svg-icons"
 import {
-    getPersonalInfoByIdTK
-}from "../controllers/CQuanLyTaiKhoan.js"
+    getTKCoSoByIdTK,
+    getTKUserByIdTK,
+}from "../controllers/CTaiKhoan.js"
+import axios from "axios";
 
 const Icon24px = ({classIcon}) => {
     const iconSize = {
@@ -15,13 +17,151 @@ const Icon24px = ({classIcon}) => {
         <span><FontAwesomeIcon icon={classIcon} style = {iconSize}/></span>
     )
 }
+    
 const FormInfoCaNhan = () => {
 
+    const [apitinh, setapitinh] = useState([]);
+    const [apiquan, setapiquan] = useState([]);
+    const [apiphuong, setapiphuong] = useState([]);
+    const [tinh, settinh] = useState('');
+    const [quan, setquan] = useState('');
+    const [phuong, setphuong] = useState('');
+    const [duong, setduong] = useState('');
+    let stringdiachi = "";
 
-    const checkUser = () =>{
+    const host = 'https://provinces.open-api.vn/api/';
 
+  useEffect(() => {
+    callAPI('https://provinces.open-api.vn/api/?depth=1');
+  }, []);
+
+  const callAPI = (api) => {
+    return axios.get(api)
+      .then((response) => {
+        const sorttinh = response.data.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        setapitinh(sorttinh);
+      })
+      .catch((error) => {
+        console.error('Error fetching province data:', error);
+      });
+  };
+
+  const fetchQuan = (idtinh) => {
+    const quanAPI = `${host}p/${idtinh}?depth=2`;
+    return axios.get(quanAPI)
+      .then((response) => {
+        const sortQuan = response.data.districts.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        setapiquan(sortQuan);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
+  const handleProvinceChangeTinh = (event) => {
+    const selectedtinh = event.target.value;
+    if (selectedtinh) {
+      fetchQuan(selectedtinh);
+      // console.log(apitinh.length)
+      // console.log(selectedtinh)
+      for(let i=0;i<apitinh.length;i++){
+        // console.log("a"+ apitinh[i].code)
+        if(selectedtinh == apitinh[i].code){
+          settinh(apitinh[i].name)
+        }
+      }
+    } else {
+      setapiquan([]);
     }
+  };
+  const fetchPhuong = (idquan) => {
+    const phuongAPI = `${host}d/${idquan}?depth=2`;
+    return axios.get(phuongAPI)
+      .then((response) => {
+        const sortPhuong = response.data.wards.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        setapiphuong(sortPhuong);
+      })
+      .catch((error) => {
+        console.error('Error', error);
+      });
+  };
 
+  const handleProvinceChangeQuan = (event) => {
+    const selectedquan = event.target.value;
+    if (selectedquan) {
+      fetchPhuong(selectedquan);
+      for(let i=0;i<apiquan.length;i++){
+        if(selectedquan == apiquan[i].code){
+          setquan(apiquan[i].name)
+        }
+      }
+    } else {
+      setapiphuong([]);
+    }
+  };
+
+  const handleProvinceChangePhuong = (event) => {
+    const selectedphuong = event.target.value;
+    if (selectedphuong) {
+      for(let i=0;i<apiphuong.length;i++){
+        if(selectedphuong == apiphuong[i].code){
+          setphuong(apiphuong[i].name)
+        }
+      }
+    }
+  };
+  const renderOptions = (dataArray) => {
+    return dataArray.map((item, i) => (
+      <option key={i} value={item.code} id={item.code+"-"+item.name} 
+      className="">{item.name}</option>
+    ));
+  };
+  
+
+    useEffect(() => {
+        stringdiachi += duong +", " + phuong +", "+ quan +", "+ tinh ;
+      }, [duong, tinh, quan, phuong]);
+    
+    const idUser= localStorage.getItem("userID")
+    const role = localStorage.getItem("userRole")
+    useEffect(()=>{
+        GetPersonalInfoByIdTK(idUser)
+    },[]) 
+    const GetPersonalInfoByIdTK= async(idTK)=>{
+        if(role == 1)
+        {
+            let list = await getTKUserByIdTK(idTK);
+            console.log(list)
+            document.getElementById("hoTen").value=list.Ten
+            document.getElementById("email").value=list.Email
+            document.getElementById("sdt").value=list.SoDienThoai
+        }
+        else
+        {
+            let list = await getTKCoSoByIdTK(idTK);
+            console.log(list)
+            document.getElementById("hoTen").value=list.Ten
+            document.getElementById("email").value=list.Email
+            document.getElementById("bank").value=list.NganHang
+            document.getElementById("stk").value=list.STK
+            document.getElementById("sdt").value=list.SoDienThoai
+            
+            let location = list.DiaChiCoSo.split(', ')
+            console.log(location)
+            document.getElementById("duong").value=location[0]
+            document.getElementById("quan").value=location[1]
+            document.getElementById("phuong").value=location[2]
+            document.getElementById("tinh").value=location[3].substring(0, location[3].length - 7);
+          
+        }
+    }    
+   
   return (
     <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>
         <div className='mx-auto w-auto font-[600] text-[36px] text-center text-white p-10'>THÔNG TIN CÁ NHÂN</div>
@@ -33,28 +173,29 @@ const FormInfoCaNhan = () => {
                 <div className='grid grid-rows-2 w-[100%] h-[50%]'>
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5  flex justify-between'>
-                            <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Họ tên:</div>
-                            <input className='w-[70%] h-[50px] bg-[#D9D9D9] rounded-[5px]' type="text" />
+                            <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Tên người dùng:</div>
+                            <input id='hoTen' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]' placeholder="" type="text" />
                         </div>
                     </div>
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5 flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Email:</div>
-                            <input className='w-[70%] h-[50px] bg-[#D9D9D9] rounded-[5px]' type="text" />
+                            <input id='email' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'  placeholder="" type="text" />
                         </div>
                     </div>
+                    {role == 1 ? (<></>) : (<>
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Ngân hàng:</div>
-                            <input className='w-[70%] h-[50px] bg-[#D9D9D9] rounded-[5px]' type="text" />
+                            <input id='bank' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]' placeholder="" type="text" />
                         </div>
                     </div>
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5 flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>STK:</div>
-                            <input className='w-[70%] h-[50px] bg-[#D9D9D9] rounded-[5px]' type="text" />
+                            <input id='stk' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'placeholder="" type="text" />
                         </div>
-                    </div>
+                    </div></>)}
                 </div>
             </div> 
             <div className='col-span-4 h-[auto] w-[100%] my-[auto]'>
@@ -62,23 +203,40 @@ const FormInfoCaNhan = () => {
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5 ml-0 flex justify-between '>
                             <div className='w-[20%] text-[19px] h-[auto] my-auto text-white'>SĐT:</div>
-                            <input className='w-[80%] h-[50px] bg-[#D9D9D9] rounded-[5px] my-auto' type="text" />
+                            <input id='sdt' className='w-[80%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] my-auto'placeholder="" type="number" />
                         </div>
-                    </div>                
+                    </div>  
+                    {role == 1 ? (<></>) : (<>
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 ml-0 flex justify-between'>
                             <div className='w-[20%] text-[19px] h-[auto] my-auto text-white'>Địa chỉ:</div>
-                            <input className='w-[39%] mr-[0.5%] h-[50px] bg-[#D9D9D9] rounded-[5px] pl-2 ' placeholder='Địa chỉ/Đường' type="text" />
-                            <input className='w-[40%] ml-[0.5%] h-[50px] bg-[#D9D9D9] rounded-[5px] pl-2 'placeholder='Quận/Huyện' type="text" />
+                            <select type="text" 
+                            class=" w-[39%] mr-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2" onChange={handleProvinceChangeTinh}>
+                            <option value="" >Chọn tỉnh thành</option>
+                                {renderOptions(apitinh)}
+                            </select>
+                            <select type="text" 
+                            className=" w-[40%] ml-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2  "  onChange={handleProvinceChangeQuan}>
+                                <option value="" selected>Chọn quận huyện</option>
+                                {renderOptions(apiquan)}
+                            </select>       
                         </div>
                     </div>
                     <div className='row-span-1 h-[auto] my-[5px] '>
-                        <div className='mx-5 ml-0 flex justify-between'>
-                            <div className='w-[20%] text-[19px] h-[auto] my-auto'></div>
-                            <input className='w-[39%] mr-[0.5%] h-[50px] bg-[#D9D9D9] rounded-[5px] pl-2 'placeholder='Phường/Xã' type="text" />
-                            <input className='w-[40%] ml-[0.5%] h-[50px] bg-[#D9D9D9] rounded-[5px] pl-2 'placeholder='Tỉnh/Thành' type="text" />
+                        <div className='mx-5 ml-0 flex justify-center'>
+                            <div className='w-[20%] text-[19px] h-[auto] my-auto bg-white'></div>
+                            <select type="text"
+                                className="w-[39%] mr-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2 " onChange={handleProvinceChangePhuong}>
+                                <option value="" >Chọn phường xã</option>
+                                {renderOptions(apiphuong)}
+                            </select>
+                        <input id='duong' 
+                            className='w-[40%] ml-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2 ' 
+                            placeholder='' type="text" />
                         </div>
                     </div>
+                    </> )}             
+                    
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 ml-0 flex justify-between font-[600]'>
                             <div className='w-[20%] text-[19px] h-[auto] my-auto'></div>
