@@ -4,7 +4,7 @@ import SanBong from "../models/SanBong";
 import LoaiSan from "../models/LoaiSan";
 import KhungGio from "../models/KhungGio";
 import HoaDon from "../models/HoaDon";
-
+import CoSoSan from "../models/CoSoSan";
 
 const GetAllSanFromCoSo = async (idCoSo) =>{
     const sanBong = new SanBong();
@@ -46,6 +46,11 @@ const DatSan = async (IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien) =>
     const sanbong = new SanBong()
     sanbong.DatSan(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien)
 }
+
+
+
+
+
 export{ 
     GetAllSanFromCoSo,
     GetInfoSanBong,
@@ -53,5 +58,6 @@ export{
     getAllKhungGio,
     getAllOccuredKhungGio,
     GetAllSanFromCoSoBySearch,
-    DatSan
+    DatSan,
+  
 } 
