@@ -119,7 +119,7 @@ app.post("/datSan", (req, res) => {
   });
 });
 
-// Lấy lịch giao hữu // chua sua
+// Lấy lịch giao hữu // 
 app.post("/getAllLichGiaoHuu",(req,res) => {
   const sql = `SELECT
                 hoadon.IDHoaDon ,tk1.Ten,tk1.SoDienThoai, tk2.Ten as CoSo, tk2.DiaChiCoSo, sanbong.TenSan as MaSan, DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay, khunggio.ThoiGian
@@ -235,11 +235,13 @@ app.post("/updateDoiThuInBill",(req,res)=>{
   })
 })
 
-app.post("/getPersonalBillByIdTK",(req,res)=>{
-  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
-  db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
+app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
+  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ?`;
+  // console.log(req.body.IDTaiKhoan+"   "+ req.body.GiaoHuu)
+  db.query(sql,[req.body.IDTaiKhoan, req.body.GiaoHuu],(err,data) =>{
+    // console.log(data);
     res.json(data);
-    
+   
   })
 })
 

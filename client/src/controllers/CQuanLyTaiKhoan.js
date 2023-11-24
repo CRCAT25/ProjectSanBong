@@ -20,7 +20,15 @@ const getAllCoSo = async () =>{
     return result;
  }
 
+ const getPersonalInfoByIdTK = async(idTk)=>{
+   let account = new Account();
+   let list = account.getTKByID(idTk)
+   return list;
+
+ }
+
  export {
-    getAllCoSo,
-    getNameLogin,
+   getAllCoSo,
+   getNameLogin,
+   getPersonalInfoByIdTK
 }
