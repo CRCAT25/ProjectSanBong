@@ -53,9 +53,9 @@ class HoaDon{
             .then(allBill => allBill.find(bill => bill.idBill === idBill))
             .catch(error => {
                 console.error(error);
-            });
-        
+            });      
     }
+
 
     //Tấn - Start
     // GetHoaDonsCompleteByNgaySan(day,idSan) {
@@ -126,9 +126,10 @@ class HoaDon{
         });
     }
 
-    getPersonalBillByIdTk(IDTaiKhoan)
+    getPersonalLichFromBillByIdTK(IDTaiKhoan, GiaoHuu)
     {
-        return axios.post("http://localhost:8081/getPersonalBillByIdTK",{IDTaiKhoan})
+        // console.log(IDTaiKhoan+"   "+ GiaoHuu)
+        return axios.post("http://localhost:8081/getPersonalLichFromBillByIdTK",{IDTaiKhoan,GiaoHuu})
         .then(response => {
             // console.log(response.data)
             const list = this.initBill(response.data);               
@@ -137,6 +138,18 @@ class HoaDon{
         .catch(error => {
             console.log(error)
         });
+    }
+
+    selectTop5InHoaDon(IDTaiKhoan){
+        return axios.post("http://localhost:8081/selectTop5InHoaDon",{IDTaiKhoan:IDTaiKhoan})
+        .then(response => {
+            const list = this.initBill(response.data);    
+            return (list);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
     }
 
 }

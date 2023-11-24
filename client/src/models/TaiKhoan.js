@@ -13,13 +13,14 @@ class TaiKhoan {
         this.XacThuc = xacThuc;
     }
 
+    // Đăng nhập cho user
     LoginUser = (userName, passWord) =>{
         return axios.post("http://localhost:8081/loginUser",{
                 userName : userName,
                 passWord : passWord
             }).then(response => {
-                const phanQuyen = new PhanQuyen(response.data[0].IDPhanQuyen, response.data[0].TenPhanQuyen)
-                const itemCoSo = new TaiKhoan(response.data[0].IDTaiKhoan, phanQuyen, response.data[0].Ten, response.data[0].Email, response.data[0].SoDienThoai, response.data[0].NganHang, response.data[0].STK, response.data[0].MatKhau, response.data[0].XacThuc);
+                const itemCoSo = new TaiKhoan(response.data[0].IDTaiKhoan, response.data[0].IDPhanQuyen, response.data[0].Ten, response.data[0].Email, response.data[0].SoDienThoai, response.data[0].NganHang, response.data[0].STK, response.data[0].MatKhau, response.data[0].XacThuc);
+                console.log(itemCoSo)
                 return itemCoSo
             })
             .catch(error => {
@@ -27,8 +28,9 @@ class TaiKhoan {
         })
     }
 
-    ResPassUser = (Ten, Email, SoDienThoai) =>{
-        return axios.post("http://localhost:8081/resPassUser",{
+    // Kiểm tra user để khôi phục mật khẩu
+    CheckAccountUser = (Ten, Email, SoDienThoai) =>{
+        return axios.post("http://localhost:8081/checkAccountUser",{
                 Email : Email,
                 Ten : Ten,
                 SoDienThoai : SoDienThoai,
@@ -41,6 +43,7 @@ class TaiKhoan {
         })
     }
 
+    // Cập nhật mật khẩu mới
     UpdatePassWord = (Email, Pass) =>{
         return axios.post("http://localhost:8081/updatePassWord",{
                 Email : Email,
@@ -49,6 +52,34 @@ class TaiKhoan {
                 if(response.data.length > 0){
                     return "done"
                 }
+            })
+            .catch(error => {
+            console.error(error);
+        })
+    }
+
+    // Kiểm tra tài khoản với email và sdt
+    CheckEmailSdt = (Email, Sdt) =>{
+        return axios.post("http://localhost:8081/checkEmailSdt",{
+                Email : Email,
+                Sdt : Sdt
+            }).then(response => {
+                return response.data
+            })
+            .catch(error => {
+            console.error(error);
+        })
+    }
+
+    // Đăng ký cho user
+    DangKy = (Name, Email, Pass, SDT) =>{
+        return axios.post("http://localhost:8081/signUpAccount",{
+                Name : Name,
+                Email : Email,
+                Pass : Pass,
+                SDT : SDT,
+            }).then(response => {
+                return response.data
             })
             .catch(error => {
             console.error(error);
@@ -74,8 +105,32 @@ class TaiKhoan {
             })
             .catch(error => {
             console.error(error);
-        })
+        })  
     }
+
+    QLcheckemailsdt = (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
+        console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs)
+        return axios.post("http://localhost:8081/QLcheckemailsdt",{email, sdt}
+        ).then(response => {
+            // console.log(response.data)
+                return response.data
+            })
+            .catch(error => {
+            console.error(error);
+        })  
+    }
+
+    addcoso = (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
+        return axios.post("http://localhost:8081/addcoso",{idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs}
+        ).then(response => {
+                // console.log("Thêm thành công!")
+                return response.data
+            })
+            .catch(error => {
+            console.error(error);
+        })  
+    }
+
 }
 export default TaiKhoan
 

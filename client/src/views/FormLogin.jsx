@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
     faUser, faKey
@@ -7,9 +7,8 @@ import "../css/OrderField.css"
 import Swal from 'sweetalert2'
 import { Login } from '../controllers/CDangNhap'
 
-// or via CommonJS
 
-
+// Tạo icon kích thước 24px
 const Icon24px = ({ classIcon, top }) => {
     const iconSize = {
         width: "24px",
@@ -22,31 +21,15 @@ const Icon24px = ({ classIcon, top }) => {
         <span><FontAwesomeIcon icon={classIcon} style={iconSize} /></span>
     )
 }
-
-
-
-
 const FormLogin = () => {
 
     const [userName, setUserName] = useState("");
     const [passWord, setpassWord] = useState("");
+
+    // Đăng nhập
     const DangNhap = async () => {
         let result = await (Login(userName, passWord))
-        console.log(result)
-        if(result == "co"){
-            Swal.fire({
-                title: "Đăng nhập thành công",
-                icon: "success"
-            });
-            localStorage.setItem("userID", result.IdAccount);
-            localStorage.setItem("userName", result.Ten);
-            localStorage.setItem("userSDT", result.SoDienThoai);
-            setTimeout(() => {
-                Swal.close();
-                window.location.reload();
-            }, 600);
-        }
-        else if(result === "chuaNhap"){
+        if (result === "chuaNhap") {
             Swal.fire({
                 title: "Vui lòng nhập đầy đủ thông tin",
                 icon: "error"
@@ -55,7 +38,7 @@ const FormLogin = () => {
                 Swal.close();
             }, 1000);
         }
-        else{
+        else if (result === "khong") {
             Swal.fire({
                 title: "Tài khoản hoặc mật khẩu không đúng",
                 icon: "error"
@@ -65,6 +48,20 @@ const FormLogin = () => {
             setTimeout(() => {
                 Swal.close();
             }, 1000);
+        }
+        else {
+            Swal.fire({
+                title: "Đăng nhập thành công",
+                icon: "success"
+            });
+            localStorage.setItem("userID", result.IdAccount);
+            localStorage.setItem("userName", result.Ten);
+            localStorage.setItem("userSDT", result.SoDienThoai);
+            localStorage.setItem("userRole", result.PhanQuyen);
+            setTimeout(() => {
+                Swal.close();
+                window.location.reload();
+            }, 600);
         }
     }
 
@@ -76,16 +73,16 @@ const FormLogin = () => {
 
             <div className="col-span-3 relative rounded-r-[10px] bg-white">
                 <div className='absolute top-[12%] left-1/2 translate-x-[-50%] text-[40px] font-[400] text-center'>Đăng nhập</div>
-                <input 
-                onChange={(event)=>{setUserName(event.target.value)}} 
-                className='inputUserName absolute bg-[#E9E9E9] top-[32%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' 
-                placeholder='Tên đăng nhập'/>
+                <input
+                    onChange={(event) => { setUserName(event.target.value) }}
+                    className='inputUserName absolute bg-[#E9E9E9] top-[32%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14'
+                    placeholder='Tên đăng nhập' />
                 <Icon24px classIcon={faUser} top={"35.2%"} />
                 <input
-                onChange={(event)=>{setpassWord(event.target.value)}} 
-                className='inputPassWord absolute bg-[#E9E9E9] top-[45%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14' 
-                placeholder='Mật khẩu'
-                type='password'/>
+                    onChange={(event) => { setpassWord(event.target.value) }}
+                    className='inputPassWord absolute bg-[#E9E9E9] top-[45%] left-1/2 translate-x-[-50%] w-[75%] h-[60px] rounded-[150px] pl-14'
+                    placeholder='Mật khẩu'
+                    type='password' />
                 <Icon24px classIcon={faKey} top={"48.2%"} />
                 <button onClick={DangNhap} className='buttonLogin absolute top-[65%] text-[22px] left-1/2 translate-x-[-50%] rounded-[150px] cursor-pointer w-[75%] h-[60px] '>Đăng nhập</button>
             </div>
