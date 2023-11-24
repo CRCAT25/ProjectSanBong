@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
-import { getAllCoSo, getNameLogin, CheckEmailSdt } from "../controllers/CQuanLyTaiKhoan";
+import { getAllCoSo, getNameLogin, QLCheckEmailSdt } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
 import { VietQR } from 'vietqr';
 
@@ -277,7 +277,7 @@ const Admin = () => {
   }
 
   function checkEmailSdt(){
-    CheckEmailSdt(idphanquyen, tencs, email, sdt, stringdiachi, nganhangcs, stkcs, matkhaucs)
+    QLCheckEmailSdt(idphanquyen, tencs, email, sdt, stringdiachi, nganhangcs, stkcs, matkhaucs)
   }
 
   return (

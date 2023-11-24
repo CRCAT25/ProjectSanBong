@@ -1,4 +1,3 @@
-
 import SanBong from '../models/SanBong'
 import CoSoSan from '../models/CoSoSan'
 import HoaDon from '../models/HoaDon'
@@ -13,7 +12,6 @@ const getAllCoSo = async () =>{
  }
 
  const getNameLogin = async (idlogin) =>{
-   
     let account = new Account()
     let result = account.NameUser(idlogin)
    //  console.log(result)
@@ -24,11 +22,17 @@ const getAllCoSo = async () =>{
    let account = new Account();
    let list = account.getTKByID(idTk)
    return list;
-
  }
+ const QLCheckEmailSdt = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
+   console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs)
+
+   let account = new Account()
+   account.QLcheckemailsdt(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
+}
 
  export {
    getAllCoSo,
    getNameLogin,
-   getPersonalInfoByIdTK
+   getPersonalInfoByIdTK,
+   QLCheckEmailSdt,
 }
