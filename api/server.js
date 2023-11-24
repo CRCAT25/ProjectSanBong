@@ -134,7 +134,7 @@ app.post("/DatCoc", async (req, res) => {
   });
 });
 
-// Lấy lịch giao hữu // chua sua
+// Lấy lịch giao hữu // 
 app.post("/getAllLichGiaoHuu",(req,res) => {
   const sql = `SELECT
                 hoadon.IDHoaDon ,tk1.Ten,tk1.SoDienThoai, tk2.Ten as CoSo, tk2.DiaChiCoSo, sanbong.TenSan as MaSan, DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay, khunggio.ThoiGian
@@ -248,17 +248,20 @@ app.post("/updateDoiThuInBill",(req,res)=>{
   })
 })
 
-app.post("/getPersonalBillByIdTK",(req,res)=>{
-  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
-  db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
+app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
+  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ?`;
+  // console.log(req.body.IDTaiKhoan+"   "+ req.body.GiaoHuu)
+  db.query(sql,[req.body.IDTaiKhoan, req.body.GiaoHuu],(err,data) =>{
+    // console.log(data);
     res.json(data);
-    
+   
   })
 })
 
-/*************************/
+/************* Đỗ Quốc Thành *************/
 
 
+// User đăng nhập
 app.post("/loginUser", (req, res) => {
   const userName = req.body.userName;
   const passWord = req.body.passWord;
@@ -269,6 +272,7 @@ app.post("/loginUser", (req, res) => {
   });
 });
 
+// Check tài khoản có tồn tại
 app.post("/resPassUser", (req, res) => {
   const name = req.body.Ten;
   const email = req.body.Email;
@@ -280,6 +284,7 @@ app.post("/resPassUser", (req, res) => {
   });
 });
 
+// Change mật khẩu
 app.post("/updatePassWord", (req, res) => {
   const Email = req.body.Email;
   const Pass = req.body.Pass;
@@ -287,6 +292,32 @@ app.post("/updatePassWord", (req, res) => {
   const sql = `UPDATE taikhoan set MatKhau = "${Pass}" where Email = "${Email}"`; 
   db.query(sql, (err, data) => {
     res.json("done")
+  });
+});
+
+// Check email và sdt tồn tại
+app.post("/checkEmailSdt", (req, res) => {
+  const Email = req.body.Email;
+  const Sdt = req.body.Sdt;
+
+  const sql = `select * from taikhoan where Email = "${Email}" or SoDienThoai = "${Sdt}"`; 
+  db.query(sql, (err, data) => {
+    if(data[0] == null)
+      res.json("chua co")
+    else res.json("da co")
+  });
+});
+
+// Đăng ký tài khoản cho user
+app.post("/signUpAccount", (req, res) => {
+  const Name = req.body.Name;
+  const Email = req.body.Email;
+  const Pass = req.body.Pass;
+  const Sdt = req.body.Sdt;
+
+  const sql = `insert into taikhoan(Ten, Email, MatKhau, SoDienThoai) values("${Name}","${Email}","${Pass}","${Sdt}")`; 
+  db.query(sql, (err, data) => {
+    console.log(data)
   });
 });
 

@@ -4,39 +4,26 @@ import Swal from 'sweetalert2'
 import { useEffect } from "react";
 import { useState } from "react";
 import { 
-  GetPersonalBillByIdTK
+  GetPersonalLichFromBillByIdTK
 
 } from "../controllers/CQuanLyLich";
 import SanBong from '../models/SanBong';
 const FormLichSu = () => {
-  useEffect(()=>{
-    getPersonalBillByIdTK(3)
-  },[])
-  // var doiThu="Trống";
-  // if(data.DoiThu)
-  // {
-  //   doiThu=data.DoiThu
-  // }
-  const [getPersonalLich,setPersonalLich] = useState([]);
-  const [gotPersonalInfo,setGotPersonalInfo] = useState(false);
-  const [getSanBong, setSanBong] = useState([])
+  
   const [getSelectedList,setSelectedList] = useState([]);
   const lichholder = useRef()
 
-  const loadSelectedLich=async (idSelected)=>{
+  const loadSelectedLich = async (idSelected)=>{
     let selected = idSelected
+    getPersonalLichFromBillByIdTK(3, selected)
     await loadLich(getSelectedList, selected);
-    
   }
 
-
-  const getPersonalBillByIdTK = async(idTK) =>{
-    let list = await GetPersonalBillByIdTK(idTK)
+  const getPersonalLichFromBillByIdTK = async(idTK,selected) =>{
+    let list = await GetPersonalLichFromBillByIdTK(idTK,selected)
+    console.log(list)
     setSelectedList(list);
-    setGotPersonalInfo(true)
-    setPersonalLich(list)
-    loadLich(list)
-}
+  }
 
   const dateFormatter  = (date) =>{
 
@@ -51,35 +38,40 @@ const FormLichSu = () => {
     return formattedDate
   }
 
-  const loadLich = async (list, getSelected)=>{
+  const loadLich = async (list, selected)=>{
     let as="";
 
     for(const data of list){
       
-      let sanBong = await data.SanBong
       let hoaDon = await data
+      let sanBong = await data.SanBong
       let khungGio = await data.KhungGio
-      let doiThu
       let date = dateFormatter (hoaDon.Ngay)
-      if(hoaDon.DoiThu == null)
+      let doiThu = await data.DoiThu
+      let tenDoiThu
+      if(doiThu == null)
       {
-        doiThu = "Không có"
+        tenDoiThu = "Không có"
       }else{
-        doiThu = hoaDon.DoiThu.Ten
+        tenDoiThu = doiThu.Ten
       }
-    
-      // console.log(hoaDon)
+      
+      console.log(hoaDon)
       as+=`
-      <div class='w-[auto] bg-[#9BCE89] h-[auto] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-${getSelected == 2 ? ('6') : '5'} '>
+      <div class='w-[auto] bg-[#9BCE89] h-[auto] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-${selected == 1 ? ('6') : '5'} '>
       <img src="" alt="" class='w-[90px] h-[90px] col-span-1 ml-[10px]' />
         <div class='col-span-1 grid grid-row-2 p-[10px]'>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
         </div>
-        <div class='col-span-1 grid grid-row-2 p-[10px]'>
+        <div class='col-span-1 grid grid-row-2 p-[10px]'> 
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TaiKhoan.Ten}</div>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TenSan}</div>
         </div>
+        ${selected == 1 ? ( `<div class='col-span-1 grid grid-row-2 p-[10px]'>
+        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ:</div>
+        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${tenDoiThu}</div>
+      </div>`):""}
         <div class='col-span-1 grid grid-row-2 p-[10px]'>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
@@ -88,22 +80,26 @@ const FormLichSu = () => {
           <div class='col-span-1 font-[600] text-[18px] h-[auto] my-auto'>${date}<p>${khungGio.ThoiGian}</p></div>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${hoaDon.TrangThai}</div>
         </div>
-        ${getSelected == 2 ? ( `<div class='col-span-1 grid grid-row-2 p-[10px]'>
-        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ:</div>
-        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${doiThu}</div>
-      </div>`):""}
       </div>`
     }
       lichholder.current.innerHTML = as; 
   }
 
+  useEffect( ()=>{
+  getPersonalLichFromBillByIdTK(3,0)
+    
+  },[])
+
   return (
     <div className='w-[80%] mx-auto bg-[#FFF] border-[3px] border-[#379E13] pb-[3%] rounded-[10px]'>
       <div className='font-[600] text-[36px] text-center h-[50px] py-[5%] text-[#379E13]'>LỊCH SỬ CÁ NHÂN</div>
       <div className='flex flex-row my-[2%] mx-auto w-[90%]'>
-        <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' onClick={()=> loadSelectedLich(1)}> Sân đã đặt</div>
-        <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] mx-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]'onClick={()=> loadSelectedLich(2)}> Trận giao hữu</div>
-        <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' onClick={()=> loadSelectedLich(2)}> Đã hoàn thành</div>
+        <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' 
+        onClick={()=> loadSelectedLich(0)}> Sân đã đặt</div>
+        <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] mx-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]'
+        onClick={()=> loadSelectedLich(1)}> Trận giao hữu</div>
+        <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' 
+        onClick={()=> loadSelectedLich(1)}> Đã hoàn thành</div>
       </div>
       <div ref={lichholder} id= 'lich'className='bg-[#D9D9D9] w-[90%] h-[620px] mx-auto py-[15px] rounded-[15px] flex flex-col align-middle overflow-y-visible overflow-x-hidden overflow-scroll'> 
         {/* {gotPersonalInfo === true ? async ()=> {               

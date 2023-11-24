@@ -70,7 +70,6 @@ const FieldManage =  () => {
     setLoaiSans(await getAllLoaiSan())
   }
  
-
   const setSelectSanByNgayKG = async () =>{
     const slect =  document.getElementsByClassName("selectTenLS")[0];
     while (slect.hasChildNodes()) {
