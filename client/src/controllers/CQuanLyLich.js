@@ -28,9 +28,15 @@ const GetPersonalBillByIdAccount = async (idTk) =>{
     return list
 }
 
+const HuySanByIDHd = async (IDHoaDon) =>{
+    const hoaDon = new HoaDon()
+    await hoaDon.HuySan(IDHoaDon)
+}
+
 export {
     getAllLichGiaoHuu,
     updateBillDoiThuByIdBill,
     GetPersonalLichFromBillByIdTK,
-    GetPersonalBillByIdAccount
+    GetPersonalBillByIdAccount,
+    HuySanByIDHd
 }
