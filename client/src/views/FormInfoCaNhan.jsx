@@ -32,7 +32,7 @@ const FormInfoCaNhan = () => {
     const host = 'https://provinces.open-api.vn/api/';
 
   useEffect(() => {
-    callAPI('https://provinces.open-api.vn/api/?depth=1');
+    callAPI('https://provinces.open-api.vn/api/?depth=2');
   }, []);
 
   const callAPI = (api) => {
@@ -123,15 +123,16 @@ const FormInfoCaNhan = () => {
     ));
   };
 
-    useEffect(() => {
-        stringdiachi += duong +", " + phuong +", "+ quan +", "+ tinh ;
-      }, [duong, tinh, quan, phuong]);
+    // useEffect(() => {
+    //     stringdiachi += duong +", " + phuong +", "+ quan +", "+ tinh ;
+    //   }, [duong, tinh, quan, phuong]);
+
     
     const idUser= localStorage.getItem("userID")
     const role = localStorage.getItem("userRole")
     useEffect(()=>{
         GetPersonalInfoByIdTK(idUser)
-    },[]) 
+    },[apitinh]) 
     const GetPersonalInfoByIdTK= async(idTK)=>{
         if(role == 1)
         {
@@ -150,19 +151,14 @@ const FormInfoCaNhan = () => {
             document.getElementById("bank").value=list.NganHang
             document.getElementById("stk").value=list.STK
             document.getElementById("sdt").value=list.SoDienThoai
-            console.log(location);
-            console.log(apitinh);
-            console.log(apiquan);
-            console.log(apiphuong);
-
             for(let i=0;i<apitinh.length;i++){
               // console.log("a"+ apitinh[i].code)
               if(location[3] == apitinh[i].name){
-                
+                console.log(apitinh[i].name +" a")
                 const selectTinh = document.getElementById("tinh")
+                // alert(document.getElementById("tinh").value)
                 console.log(location[3])
-                console.log(apitinh[i].name)
-                selectTinh.value=location[3]
+                selectTinh.value=apitinh[i].name
                 fetchQuan(apitinh[i].code)
               }
             }

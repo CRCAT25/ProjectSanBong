@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { 
   GetPersonalLichFromBillByIdTK,
-  HuySanByIDHd
+  // HuySanByIDHd
 } from "../controllers/CQuanLyLich";
 import SanBong from '../models/SanBong';
 const FormLichSu = () => {
@@ -51,27 +51,27 @@ const FormLichSu = () => {
     // console.log(formattedDate)
     return formattedDate
   }
-  const [getFormInfo, setFormInfo] = useState(false)
-  const HienThiInfo = async () =>{
-    if(getFormInfo == true){
-      setFormInfo(false)
-    }
-    else{
-      setFormInfo(true)
-    }
+//   const [getFormInfo, setFormInfo] = useState(false)
+//   const HienThiInfo = async () =>{
+//     if(getFormInfo == true){
+//       setFormInfo(false)
+//     }
+//     else{
+//       setFormInfo(true)
+//     }
     
-}
+// }
 
-const HuyDat = async (idHD) =>{
-  await HuySanByIDHd(idHD)
-  HienThiDatCoc()
-}
+// const HuyDat = async (idHD) =>{
+//   await HuySanByIDHd(idHD)
+//   HienThiDatCoc()
+// }
  
-<FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} />
+{/* <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} />
 {getFormInfo === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> 
 <FormHoanTien isDatCoc={true} tenKH = {localStorage.getItem('userName')} tongTien = {tongTienText} HuyDatCoc = {HuyDatCoc} DatCoc = {DatCocV}/> 
 </div>   
-) : ""}
+) : ""} */}
 
 const loadLich = async (list, selected)=>{
   let as="";
