@@ -28,6 +28,10 @@ const FormInfoCaNhan = () => {
     const [phuong, setphuong] = useState('');
     const [duong, setduong] = useState('');
     let stringdiachi = "";
+    const [effectActive, setEffectActive] = useState(true);
+    const [countapi, setCountapi] = useState(0);
+
+
 
     const host = 'https://provinces.open-api.vn/api/';
 
@@ -66,6 +70,7 @@ const FormInfoCaNhan = () => {
     const selectedtinh = event.target.value;
     if (selectedtinh) {
       fetchQuan(selectedtinh);
+      UpdateEffectActive();
       // console.log(apitinh.length)
       // console.log(selectedtinh)
       for(let i=0;i<apitinh.length;i++){
@@ -123,16 +128,26 @@ const FormInfoCaNhan = () => {
     ));
   };
 
-    // useEffect(() => {
-    //     stringdiachi += duong +", " + phuong +", "+ quan +", "+ tinh ;
-    //   }, [duong, tinh, quan, phuong]);
+  useEffect(() => {
+    if (countapi <= 3 ) {
+      console.log('a')
+      console.log(countapi)
+      setCountapi(countapi +1)
+      GetPersonalInfoByIdTK(idUser);
+    }
+  }, [apitinh, apiquan, apiphuong]);
+
+  const UpdateEffectActive = () => {
+    setEffectActive(false);  
+  };
+
 
     
     const idUser= localStorage.getItem("userID")
     const role = localStorage.getItem("userRole")
     useEffect(()=>{
         GetPersonalInfoByIdTK(idUser)
-    },[apitinh]) 
+    },[])
     const GetPersonalInfoByIdTK= async(idTK)=>{
         if(role == 1)
         {
@@ -151,36 +166,35 @@ const FormInfoCaNhan = () => {
             document.getElementById("bank").value=list.NganHang
             document.getElementById("stk").value=list.STK
             document.getElementById("sdt").value=list.SoDienThoai
+
             for(let i=0;i<apitinh.length;i++){
-              // console.log("a"+ apitinh[i].code)
               if(location[3] == apitinh[i].name){
-                console.log(apitinh[i].name +" a")
+                console.log(apitinh[i].code +" a")
                 const selectTinh = document.getElementById("tinh")
-                // alert(document.getElementById("tinh").value)
                 console.log(location[3])
-                selectTinh.value=apitinh[i].name
+                selectTinh.value=apitinh[i].code
                 fetchQuan(apitinh[i].code)
               }
             }
             
             for(let i=0;i<apiquan.length;i++){
               // console.log("a"+ apitinh[i].code)
-              if(location[3] == apiquan[i].name){
-                const selectTinh = document.getElementById("quan")
-                console.log(location[1])
+              if(location[2] == apiquan[i].name){
+                const selectQuan = document.getElementById("quan")
+                console.log(location[2])
                 console.log(apiquan[i].name)
-                selectTinh.value=location[1]
+                selectQuan.value=apiquan[i].code
                 fetchPhuong(apiquan[i].code)
               }
             }
             
             for(let i=0;i<apiphuong.length;i++){
               // console.log("a"+ apitinh[i].code)
-              if(location[3] == apiphuong[i].name){
-                const selectTinh = document.getElementById("phuong")
-                console.log(location[2])
+              if(location[1] == apiphuong[i].name){
+                const selectPhuong = document.getElementById("phuong")
+                console.log(location[1])
                 console.log(apiphuong[i].name)
-                selectTinh.value=location[3]
+                selectPhuong.value=apiphuong[i].code
               }
             }
           
@@ -237,6 +251,7 @@ const FormInfoCaNhan = () => {
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 ml-0 flex justify-between'>
                             <div className='w-[15%] text-[19px] h-[auto] my-auto text-white'>Địa chỉ:</div>
+                            {/* <div className='w-[42%] mr-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2 hidden'></div> */}
                             <select type="text" id ="tinh"
                             class=" w-[42%] mr-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2" 
                             onChange={handleProvinceChangeTinh}>
