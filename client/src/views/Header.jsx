@@ -150,7 +150,7 @@ export default function Header() {
                 let sanbong = await list[0].SanBong;
                 let cososan = await sanbong.TaiKhoan
                 let doiThu = await list[0].DoiThu
-                let tenDoiThu = await doiThu.Ten
+                let tenDoiThu = await doiThu.Ten;
                 let trangthai = await list[0].TrangThai
                 let giaohuu = await list[0].GiaoHuu
                 console.log(list)

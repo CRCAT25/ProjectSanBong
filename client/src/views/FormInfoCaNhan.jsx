@@ -122,7 +122,6 @@ const FormInfoCaNhan = () => {
       className="">{item.name}</option>
     ));
   };
-  
 
     useEffect(() => {
         stringdiachi += duong +", " + phuong +", "+ quan +", "+ tinh ;
@@ -145,27 +144,59 @@ const FormInfoCaNhan = () => {
         else
         {
             let list = await getTKCoSoByIdTK(idTK);
-            console.log(list)
+            let location = list.DiaChiCoSo.split(', ');
             document.getElementById("hoTen").value=list.Ten
             document.getElementById("email").value=list.Email
             document.getElementById("bank").value=list.NganHang
             document.getElementById("stk").value=list.STK
             document.getElementById("sdt").value=list.SoDienThoai
+            console.log(location);
+            console.log(apitinh);
+            console.log(apiquan);
+            console.log(apiphuong);
+
+            for(let i=0;i<apitinh.length;i++){
+              // console.log("a"+ apitinh[i].code)
+              if(location[3] == apitinh[i].name){
+                
+                const selectTinh = document.getElementById("tinh")
+                console.log(location[3])
+                console.log(apitinh[i].name)
+                selectTinh.value=location[3]
+                fetchQuan(apitinh[i].code)
+              }
+            }
             
-            let location = list.DiaChiCoSo.split(', ')
-            console.log(location)
-            document.getElementById("duong").value=location[0]
-            document.getElementById("quan").value=location[1]
-            document.getElementById("phuong").value=location[2]
-            document.getElementById("tinh").value=location[3].substring(0, location[3].length - 7);
+            for(let i=0;i<apiquan.length;i++){
+              // console.log("a"+ apitinh[i].code)
+              if(location[3] == apiquan[i].name){
+                const selectTinh = document.getElementById("quan")
+                console.log(location[1])
+                console.log(apiquan[i].name)
+                selectTinh.value=location[1]
+                fetchPhuong(apiquan[i].code)
+              }
+            }
+            
+            for(let i=0;i<apiphuong.length;i++){
+              // console.log("a"+ apitinh[i].code)
+              if(location[3] == apiphuong[i].name){
+                const selectTinh = document.getElementById("phuong")
+                console.log(location[2])
+                console.log(apiphuong[i].name)
+                selectTinh.value=location[3]
+              }
+            }
           
+            document.getElementById("duong").value = location[0];
+
         }
     }    
    
   return (
     <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>
         <div className='mx-auto w-auto font-[600] text-[36px] text-center text-white p-10'>THÔNG TIN CÁ NHÂN</div>
-        <div className='grid grid-cols-10 mx-5 '>
+        <div className='grid grid-cols-11 mx-5 '>
             <div className='col-span-2 h-[230px] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center'>
                 <Icon24px classIcon={faImage}/>
             </div>
@@ -173,15 +204,15 @@ const FormInfoCaNhan = () => {
                 <div className='grid grid-rows-2 w-[100%] h-[50%]'>
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5  flex justify-between'>
-                            <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Tên người dùng:</div>
+                            <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Tên:</div>
                             <input id='hoTen' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]' placeholder="" type="text" />
                         </div>
                     </div>
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5 flex justify-between'>
-                            <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Email:</div>
-                            <input id='email' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'  placeholder="" type="text" />
-                        </div>
+                            <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>SĐT:</div>
+                            <input id='sdt' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] my-auto'placeholder="" type="number" />
+                          </div>
                     </div>
                     {role == 1 ? (<></>) : (<>
                     <div className='row-span-1 h-[auto] my-[5px] '>
@@ -198,25 +229,27 @@ const FormInfoCaNhan = () => {
                     </div></>)}
                 </div>
             </div> 
-            <div className='col-span-4 h-[auto] w-[100%] my-[auto]'>
+            <div className='col-span-5 h-[auto] w-[100%] my-[auto]'>
                 <div className='grid grid-rows-2 w-[100%] h[50%]'>
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5 ml-0 flex justify-between '>
-                            <div className='w-[20%] text-[19px] h-[auto] my-auto text-white'>SĐT:</div>
-                            <input id='sdt' className='w-[80%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] my-auto'placeholder="" type="number" />
+                            <div className='w-[15%] text-[19px] h-[auto] my-auto text-white'>Email:</div>
+                            <input id='email' className='w-[85%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'  placeholder="" type="text" />
                         </div>
                     </div>  
                     {role == 1 ? (<></>) : (<>
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 ml-0 flex justify-between'>
-                            <div className='w-[20%] text-[19px] h-[auto] my-auto text-white'>Địa chỉ:</div>
-                            <select type="text" 
-                            class=" w-[39%] mr-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2" onChange={handleProvinceChangeTinh}>
+                            <div className='w-[15%] text-[19px] h-[auto] my-auto text-white'>Địa chỉ:</div>
+                            <select type="text" id ="tinh"
+                            class=" w-[42%] mr-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2" 
+                            onChange={handleProvinceChangeTinh}>
                             <option value="" >Chọn tỉnh thành</option>
                                 {renderOptions(apitinh)}
                             </select>
-                            <select type="text" 
-                            className=" w-[40%] ml-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2  "  onChange={handleProvinceChangeQuan}>
+                            <select type="text" id ="quan"
+                            className=" w-[42%] ml-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2  "  
+                            onChange={handleProvinceChangeQuan}>
                                 <option value="" selected>Chọn quận huyện</option>
                                 {renderOptions(apiquan)}
                             </select>       
@@ -224,14 +257,15 @@ const FormInfoCaNhan = () => {
                     </div>
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 ml-0 flex justify-center'>
-                            <div className='w-[20%] text-[19px] h-[auto] my-auto bg-white'></div>
-                            <select type="text"
-                                className="w-[39%] mr-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2 " onChange={handleProvinceChangePhuong}>
+                            <div className='w-[15%] text-[19px] h-[auto] my-auto bg-white'></div>
+                            <select type="text" id ="phuong"
+                                className="w-[42%] mr-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2 " 
+                                onChange={handleProvinceChangePhuong}>
                                 <option value="" >Chọn phường xã</option>
                                 {renderOptions(apiphuong)}
                             </select>
                         <input id='duong' 
-                            className='w-[40%] ml-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2 ' 
+                            className='w-[42%] ml-[0.5%] h-[50px] font-[600] text-[black] text-[19px] text-center bg-[#D9D9D9] rounded-[5px] pl-2 ' 
                             placeholder='' type="text" />
                         </div>
                     </div>
@@ -239,9 +273,9 @@ const FormInfoCaNhan = () => {
                     
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 ml-0 flex justify-between font-[600]'>
-                            <div className='w-[20%] text-[19px] h-[auto] my-auto'></div>
-                            <button class=" w-[39%] mr-[0.5%] h-[50px] bg-[#F00000] rounded-[5px] ">Đổi mật khẩu</button>
-                            <button class=" w-[40%] ml-[0.5%] h-[50px] bg-[#F00000] rounded-[5px] ">CẬP NHẬT</button>
+                            <div className='w-[15%] text-[19px] h-[auto] my-auto'></div>
+                            <button class=" w-[42%] mr-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] ">Đổi mật khẩu</button>
+                            <button class=" w-[42%] ml-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] ">CẬP NHẬT</button>
                         </div>
                     </div>
                     
