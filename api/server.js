@@ -376,22 +376,6 @@ app.post("/selectTop5InHoaDon", (req, res) => {
 //Lee Huyn Min  
 // Trang quản lý tài khoản, thống kê báo cáo
 
-//Search ten account theo id
-app.post("/searchtentk", (req, res) => {
-  const searchsql = "SELECT Ten FROM taikhoan WHERE IDTaiKhoan = ?";
-  db.query(searchsql, [req.body.idlogin],
-    (checkErrSearch, checkResultSearch) => {
-      if (checkErrSearch)
-        return res.json("Error");
-      if (checkResultSearch.length > 0) {
-        return res.json(checkResultSearch);
-      } else {
-        return res.json("Not find");
-      }
-    }
-  );
-});
-
 app.post("/QLcheckemailsdt", (req, res) => {
   const checkEmail = "SELECT COUNT(*) AS count FROM taikhoan WHERE Email = ?";
   const checkSdt = "SELECT COUNT(*) AS count FROM taikhoan WHERE SoDienThoai = ?";
@@ -425,10 +409,21 @@ app.post("/QLcheckemailsdt", (req, res) => {
 });
 
 
+app.post("/showimgcoso", (req, res) => {
+  const sql = "SELECT * FROM taikhoan WHERE IDTaiKhoan = ?";
+  db.query(sql, [req.body.idtaikhoan], (err, data) => {
+    if (err) return res.json("Error");
+    if (data.length > 0) {
+      return res.json(data);
+    }
+  });
+});
+
+
 
 app.post("/addcoso", (req, res) => {
   const insertSql =
-  "INSERT INTO taikhoan (IDPhanQuyen, Ten, Email, SoDienThoai, DiaChiCoSo, NganHang, STK, MatKhau) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+"INSERT INTO taikhoan (IDPhanQuyen, Ten, Email, SoDienThoai, DiaChiCoSo, NganHang, STK, MatKhau) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 db.query(
   insertSql,
   [
@@ -450,6 +445,8 @@ db.query(
   }
 );
 });
+
+
 
 
 /*************************/

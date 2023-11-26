@@ -11,46 +11,31 @@ const getAllCoSo = async () =>{
     return listCoso
  }
 
- const getNameLogin = async (idlogin) =>{
-    let account = new Account()
-    let result = account.NameUser(idlogin)
-   //  console.log(result)
-    return result;
- }
 
  const getPersonalInfoByIdTK = async(idTk)=>{
    let account = new Account();
    let list = account.getTKByID(idTk)
    return list;
  }
- const QLCheckEmailSdt = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
-   // console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs)
+ const CThemTaiKhoan = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
    let account = new Account()
-   let result = await account.QLcheckemailsdt(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
-   if(result == "Ok"){
-      console.log("okkkk")
-      AddCoSo(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs)
-   }
-   else{
-      console.log(result)
-   }
+   let result = await account.ThemTaiKhoan(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
+   return ShowResultCheck(result)
 }
 
-const AddCoSo = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
-   // console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs)
-   let account = new Account()
-   let result = await account.addcoso(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
-   if(result == "Thêm thành công"){
-      console.log("Thêm thành công!")
-   }
-   else{
-      console.log(result)
-   }
+const ShowResultCheck = async (ResultOfThem) =>{
+   return ResultOfThem;
+}
+
+const ShowImgCoSo = async (idtaikhoan) =>{
+   let account = new Account();
+   let result = await account.ShowImgCoSo(idtaikhoan)
+   return result
 }
 
  export {
    getAllCoSo,
-   getNameLogin,
    getPersonalInfoByIdTK,
-   QLCheckEmailSdt,
+   CThemTaiKhoan,
+   ShowImgCoSo,
 }

@@ -2,9 +2,11 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
-import { getAllCoSo, getNameLogin, QLCheckEmailSdt } from "../controllers/CQuanLyTaiKhoan";
+import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
 import { VietQR } from 'vietqr';
+import Swal from 'sweetalert2';
+
 
 
 const Admin = () => {
@@ -17,7 +19,6 @@ const Admin = () => {
   const [apiquan, setapiquan] = useState([]);
   const [apiphuong, setapiphuong] = useState([]);
   const idlogin = "3";
-  let namelogin = "";
   const [kqapinh, setkqapinh] = useState([]);
   const [tinh, settinh] = useState('');
   const [quan, setquan] = useState('');
@@ -52,7 +53,6 @@ const Admin = () => {
 
   useEffect(() => {
     showAllCoSo();
-    showNameLogin();
     callAPI(host);
     getNganHang();
   }, []);
@@ -245,32 +245,82 @@ const Admin = () => {
     return formatted;
   }
 
-  const showNameLogin = async () => {
-    const result = await getNameLogin(idlogin);
-    namelogin = result.Ten;
-
-    // alert(namelogin)
-  };
-
-
   function test() {
     alert(stringdiachi)
     alert(idphanquyen)
     alert(nganhangcs)
   }
 
-  function checkEmailSdt(){
+  const ThemTaiKhoan = async (index) => {
     stringdiachi = duong +", " + phuong +", "+ quan +", "+ tinh ;
-    alert(stringdiachi)
-    QLCheckEmailSdt(idphanquyen, tencs, email, sdt, stringdiachi, nganhangcs, stkcs, matkhaucs)
+    if(index === 2){
+      let result = await CThemTaiKhoan(idphanquyen, tencs, email, sdt, stringdiachi, nganhangcs, stkcs, matkhaucs)
+      ShowResultThem(result)
+    }
   }
+
+  const ShowResultThem = async (result) => {
+    if(result === "Thêm thành công"){
+      Swal.fire({
+        title: 'Thêm thành công!',
+        text: '',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setTimeout(() => {
+        showAllCoSo();
+      }, 1000)
+  
+    } else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Thêm thất bại!',
+        text: result,
+      });
+      setTimeout(() => {
+        showAllCoSo();
+      }, 1000)
+    }
+  }
+
+  const GetIdTaiKhoan = async (idtaikhoan) => {
+    try {
+      const response = await ShowImgCoSo(idtaikhoan)
+      console.log(response.Anh)
+      if(response.Anh !== "null" && response.Anh !== null){
+        Swal.fire({
+          title: `Ảnh của cơ sở ${response.Ten} `,
+          html: `<div class="divimggpkd" ><img class="h-full w-full object-cover" alt="" src="../assets/${response.Anh}"></img></div>`,
+          showCloseButton: true,
+          showConfirmButton: false,
+          customClass: {
+            container: 'custom-swal-container-gpkd',
+            popup: 'custom-swal-popup-gpkd',
+          },
+        });
+      } else{
+        Swal.fire({
+          title: `Ảnh của cơ sở ${response.Ten}</br></br>  Chưa có ảnh`,
+          showCloseButton: true,
+          showConfirmButton: false,
+          customClass: {
+            container: 'custom-swal-container-gpkd',
+            popup: 'custom-swal-popup-gpkd',
+          },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>
       <div className="w-[300px] h-[96px]  fixed  top-0 bg-white">
         <div className=" item-center justify-center w-full">
           <div className=" gap-3 justify-center bg-[#E2EDFF] h-[570px]">
-            <div id="nameaccount" className="text-[25px] font-bold w-full text-center py-[20px]" >{namelogin}</div>
+            <div id="nameaccount" className="text-[25px] font-bold w-full text-center py-[20px]" >{localStorage.getItem("userName")}</div>
             <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''} `} data-electronic="khachhang" onClick={() => openTab('khachhang', 0, 1)}><div id="tenmenu" className="tenmenu tenmenu2" ><Iconpx classIcon={faUser} width={"19px"} height={"19px"} marginRight={"15px"} marginLeft={"0px"} />Khách hàng</div></button>
             <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso', 1, 2)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserTie} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-40px"} />Partner</div></button>
             <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin', 2, 3)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserShield} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-65px"} />Admin</div></button>
@@ -458,8 +508,7 @@ const Admin = () => {
                     <input type="text" class="ipsonha" onChange={e => setduong(e.target.value)} ></input>
                   </div>
 
-                  <button id="btnthemanh" className="col-span-1">Thêm ảnh</button>
-                  <button id="btnthemcs" className="col-span-1" onClick={checkEmailSdt}>Thêm cơ sở</button>
+                  <button id="btnthemcs" className="col-span-2" onClick={() => ThemTaiKhoan(2)}>Thêm cơ sở</button>
 
                 </div>
                 <div className="w-full flex mt-[40px] px-[60px] justify-center gap-[60px]">
@@ -479,14 +528,14 @@ const Admin = () => {
 
           </div>
           <div className="w-full grid grid-cols-12 bg-[#256eb3] h-[60px] mb-[36px] translate-y-[36px]">
-            <div className="col-span-1 text-[white] text-center pt-[17px]">Tên cơ sở</div>
+            <div className="col-span-2 text-[white] text-center pt-[17px]">Tên cơ sở</div>
             <div className="col-span-2 text-[white] text-center pt-[17px]">Email</div>
             <div className="col-span-1 text-[white] text-center pt-[17px]">Số điện thoại</div>
             <div className="col-span-3 text-[white] text-center pt-[17px]">Địa chỉ</div>
             <div className="col-span-1 text-[white] text-center pt-[17px]">Ngân hàng</div>
             <div className="col-span-1 text-[white] text-center pt-[17px]">Số tài khoản</div>
             <div className="col-span-1 text-[white] text-center pt-[17px]">Ảnh</div>
-            <div className="col-span-1 text-[white] text-center pt-[17px]">Xác thực</div>
+            {/* <div className="col-span-1 text-[white] text-center pt-[17px]">Xác thực</div> */}
 
           </div>
           <div className="overflow-y-scroll h-[200px]">
@@ -494,15 +543,16 @@ const Admin = () => {
               <div className="w-full grid grid-cols-12 bg-[#ffffff] mt-[20px] h-[100px]">
                 {listCoso.map((coso, i) => (
                   <React.Fragment key={i}>
-                    <div className=" text-[#000000] text-center pt-[30px] hidden">{coso.idAccount}</div>
-                    <div className="col-span-1 text-[#000000] text-center pt-[30px]" onClick={test}>{coso.Ten}</div>
+                    <div className=" text-[#000000] text-center pt-[30px] hidden">{coso.IdAccount}</div>
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]" onClick={test}>{coso.Ten}</div>
                     <div className="col-span-2 text-[#000000] text-center pt-[30px]">{coso.Email}</div>
                     <div className="col-span-1 text-[#000000] text-center pt-[30px]">{coso.SoDienThoai}</div>
                     <div className="col-span-3 text-[#000000] text-center pt-[30px]">{coso.DiaChiCoSo}</div>
                     <div className="col-span-1 text-[#291616] text-center pt-[30px]">{coso.NganHang}</div>
                     <div className="col-span-1 text-[#000000] text-center pt-[30px]">{coso.STK}</div>
-                    <div className="col-span-1 text-[#000000] text-center pt-[30px] underline hover:text-[red] cursor-pointer">Xem</div>
-                    <div className="col-span-1 text-[#000000] text-center pt-[30px]">{formattedDate(coso.XacThuc)}</div>
+                    <div className="col-span-1 text-[#000000] text-center pt-[30px] underline hover:text-[red] cursor-pointer"
+                    onClick={() => GetIdTaiKhoan(coso.IdAccount)}>Xem</div>
+                    {/* <div className="col-span-1 text-[#000000] text-center pt-[30px]">{formattedDate(coso.XacThuc)}</div> */}
                     <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red] cursor-pointer">X</div>
                   </React.Fragment>
                 ))}
@@ -512,18 +562,6 @@ const Admin = () => {
               <p>No Co so.</p>
             )
             }
-
-
-            {/* <div className="w-full grid grid-cols-12 bg-[#ffffff] mt-[20px] h-[100px]">
-            <div className="col-span-1 text-[#000000] text-center pt-[30px]">2</div>
-            <div className="col-span-1 text-[#000000] text-center pt-[30px]">0913126754</div>
-            <div className="col-span-2 text-[#000000] text-center pt-[30px]">huyhoangct@gmail.com</div>
-            <div className="col-span-3 text-[#000000] text-center pt-[30px]">69/68 Đặng Thùy Trâm, P. 13, Q. Bình Thạnh, Thành phố Hồ Chí Minh</div>
-            <div className="col-span-2 text-[#000000] text-center pt-[30px]">ACB - Ngân hàng quốc tế Á Châu</div>
-            <div className="col-span-1 text-[#000000] text-center pt-[30px]">42332362212443</div>
-            <div className="col-span-1 text-[#000000] text-center pt-[30px]">09:30 am 11/19/2023</div>
-            <div className="col-span-1 text-[#000000] text-center pt-[30px]">X</div>
-          </div> */}
           </div>
 
         </div>

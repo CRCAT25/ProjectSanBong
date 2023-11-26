@@ -1380,15 +1380,14 @@ th {
 }
 
 #btnthemcs{
-    width: 90%;
+    width: 61%;
     height: 50px;
-    justify-content: center;
     line-height: 50px;
     border-radius: 5px;
     color: #ffffff;
     background-color: #256eb3;
-    margin-left: 10%;
     z-index: 1;
+    margin-left: 39%;
 
 }
 #btnthemcs:hover{
@@ -1408,7 +1407,11 @@ th {
 #btnthemanh:hover{
     background-color: #367dbf;
 }
-
+.chuacoanh{
+    transform: translate(0px,-5px);
+    font-size: 25px;
+    color: red;
+}
 .sdt {
     /* transform: translate(616px, 105px);
     position: absolute; */
