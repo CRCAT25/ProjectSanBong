@@ -19,6 +19,11 @@ const getAllLoaiSan = async () =>{
    return list
     
 }
+const getLoaiSanByID = async (id) =>{
+   const loaiSan = new LoaiSan()
+   return loaiSan.GetLoaiSan(id)
+    
+}
  const insertSan = async (idTK, idLS, tenSan, anhs) =>{
    const san = new SanBong()
    san.InsertSan(idTK,idLS,tenSan,anhs)
@@ -114,5 +119,6 @@ const getCostByShiftnTypeField = async (idShift, idTField) =>{
     getBillForRefund,
     getCostByShiftnTypeField,
     insertSan,
-    getAnhsByIDSan
+    getAnhsByIDSan,
+    getLoaiSanByID
  }
