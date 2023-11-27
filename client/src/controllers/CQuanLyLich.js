@@ -36,8 +36,8 @@ const GetPersonalBillByIdAccount = async (idTk) =>{
 }
 
 const HuySanByIDHd = async (IDHoaDon) =>{
-    const sanbong = new SanBong()
-    await sanbong.HuyDatSan(IDHoaDon)
+    const sanbong = new HoaDon()
+    await sanbong.huySanByID(IDHoaDon)
 }
 
 const GetAllBillByIDTk = async(IdTK) =>{

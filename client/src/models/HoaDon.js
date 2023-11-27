@@ -60,7 +60,7 @@ class HoaDon{
     }
 
     huySanByID(IDHoaDon){
-        return axios.post("http://localhost:8081/huyDatSan", {IDHoaDon: IDHoaDon})
+        return axios.post("http://localhost:8081/huyLichDaDat", {IDHoaDon: IDHoaDon})
             .then(response => {
                 return true
             })

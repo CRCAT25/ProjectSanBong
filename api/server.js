@@ -136,6 +136,14 @@ app.post("/huyDatSan", async (req, res) => {
   });
 });
 
+app.post("/huyLichDaDat", async (req, res) => {
+  const IDHoaDon = req.body.IDHoaDon;
+  const sql = `Update HOADON SET TrangThai = "Canceled" WHERE IDHoaDon = ${IDHoaDon}`;
+  db.query(sql, (err, data) => {
+    res.json(data[0])
+  });
+});
+
 app.post("/DatCoc", async (req, res) => {
   const IDHoaDon = req.body.IDHoaDon;
   const sql = `UPDATE HOADON SET TrangThai = 'Completed' WHERE IDHoaDon = ${IDHoaDon}`;
@@ -397,7 +405,7 @@ app.post("/signUpAccount", (req, res) => {
   const Pass = req.body.Pass;
   const Sdt = req.body.SDT;
   
-
+update
   const sql = `insert into taikhoan(Ten, Email, MatKhau, SoDienThoai, IDPhanQuyen) values("${Name}","${Email}","${Pass}","${Sdt}", 1)`; 
   db.query(sql, (err, data) => {
     res.json(data)
