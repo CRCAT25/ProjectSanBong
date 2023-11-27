@@ -122,6 +122,7 @@ export const OrderField = () => {
     const[tenCoSoInput, setTenCoSoInput] = useState("")
     const[diaDiemInput, setDiaDiemInput] = useState("")
     const selectLoaiBoxRef = useRef(null)
+    const trangChu=false;
     const TimKiemSanBong = async () => {    
         setGotInfo(false)
         setGotInfoSan(false)
@@ -143,6 +144,7 @@ export const OrderField = () => {
     const[sanBongInfo, setSanBongInfo] = useState([]);
     const[loaiSans, setLoaiSans] = useState([]);
     const[tenLoaiSan, setTenLoaiSan] = useState("");
+    const FromDatSan=true;
 
     const ChonCoSoSan = async (idCoso) => {
         if (selectLoaiBoxRef.current) {
@@ -256,6 +258,7 @@ export const OrderField = () => {
             Swal.close();
         }, 1000);
     }
+    
     const HienThiXacNhanDatSan = () =>{
         if(showHoaDon == true){
             setShowHoaDon(false)
@@ -363,8 +366,9 @@ export const OrderField = () => {
         {showHoaDon === true ? (
         <div className="fixed inset-0 z-50 flex  bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded shadow-md">
-            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} />
-            {showDatCoc === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> <FormHoanTien isDatCoc={true} tenKH = {localStorage.getItem('userName')} tongTien = {tongTienText} HuyDatCoc = {HuyDatCoc} DatCoc = {DatCocV}/> </div>
+            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} isDatSan={FromDatSan} />
+            {showDatCoc === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> 
+            <FormHoanTien isDatCoc={true} tenKH = {localStorage.getItem('userName')} tongTien = {tongTienText} HuyDatCoc = {HuyDatCoc} DatCoc = {DatCocV}/> </div>
             
             ) : ""}
           </div>

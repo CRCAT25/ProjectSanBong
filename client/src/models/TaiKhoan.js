@@ -137,6 +137,17 @@ class TaiKhoan {
             console.error(error);
         })  
     }
+
+    UpdateUserInfo = (Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK) =>{
+        return axios.post("http://localhost:8081/updatePersonalInfoByIdTK",{Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK
+        }
+        ).then(response => {
+                return response.data[0]
+            })
+            .catch(error => {
+            console.error(error);
+        })  
+    }
     
 
 }

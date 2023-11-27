@@ -48,18 +48,21 @@ class HoaDon{
         return resultList
     }
 
-    getBillById(idBill){
-        return this.getAllBill()
-            .then(allBill => allBill.find(bill => bill.idBill === idBill))
+    getBillById(IDHoaDon){
+        return axios.post("http://localhost:8081/getBillByIDBill", {IDHoaDon: IDHoaDon})
+            .then(response => {
+                const list = this.initBill(response.data);    
+                return list;
+            })
             .catch(error => {
                 console.error(error);
-            });      
+            });
     }
 
-    HuySan(IDHoaDon){
+    huySanByID(IDHoaDon){
         return axios.post("http://localhost:8081/huyDatSan", {IDHoaDon: IDHoaDon})
             .then(response => {
-                
+                return true
             })
             .catch(error => {
                 console.error(error);
@@ -138,6 +141,20 @@ class HoaDon{
     {
         // console.log(IDTaiKhoan+"   "+ GiaoHuu)
         return axios.post("http://localhost:8081/getPersonalLichFromBillByIdTK",{IDTaiKhoan,GiaoHuu})
+        .then(response => {
+            // console.log(response.data)
+            const list = this.initBill(response.data);               
+            return list;
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }
+
+    getAllBillByIdTk(IDTaiKhoan)
+    {
+        // console.log(IDTaiKhoan+"   "+ GiaoHuu)
+        return axios.post("http://localhost:8081/getPersonalBillByIdTK",{IDTaiKhoan})
         .then(response => {
             // console.log(response.data)
             const list = this.initBill(response.data);               

@@ -11,7 +11,6 @@ const getAllCoSo = async () =>{
     return listCoso
  }
 
-
  const getPersonalInfoByIdTK = async(idTk)=>{
    let account = new Account();
    let list = account.getTKByID(idTk)

@@ -7,8 +7,6 @@ import axios from 'axios';
 
 // const host = 'https://api.vietqr.io/v2/banks';
 
-
-
 const Icon24px = ({classIcon}) => {
     const iconSize = {
         width: "24px",
@@ -75,7 +73,7 @@ const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
             {isDatCoc === true ? (
             <div> <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " onClick={HuyDatCoc}>Hủy</button>
             <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={DatCoc}>Xác nhận</button>
-            </div>) : ""}
+            </div>) :"" }
             
         </div>
         
