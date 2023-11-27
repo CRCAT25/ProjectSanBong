@@ -239,7 +239,7 @@ export default function Header() {
                                                 <div className=''>{data.trangthai}</div>
                                                 {data.giaohuu == "Trận giao hữu" ? (data.tenDoiThu ? (<div className=''>Đối thủ: {data.tenDoiThu}</div>) : (<div className=''>Chưa tìm thấy đối thủ</div>)) : ""}
                                             </div>
-                                        )) : "no"}
+                                        )) : (<div className='mt-2'>Không có trận đấu nào</div>)}
                                     </div>
                                 </div>
                             )}
