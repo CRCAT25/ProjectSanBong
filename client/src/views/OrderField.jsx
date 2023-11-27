@@ -236,12 +236,31 @@ export const OrderField = () => {
     const [tongTienText, setTongTienText] = useState("0")
     const [valueForHoaDon, setValueForHoaDon] = useState({})
     const DatSan = async() =>{
-        const checkKhungGio = checkSelectKhungGio()
-        if(!checkKhungGio){
-            HienThiThongBaoChonKhungGio()
+        if(checkDangNhap == true){
+            const checkKhungGio = checkSelectKhungGio()
+            if(!checkKhungGio){
+                HienThiThongBaoChonKhungGio()
+            }else{
+                HienThiXacNhanDatSan()
+            }    
         }else{
-            HienThiXacNhanDatSan()
-        }            
+            Swal.fire({
+                title: "Vui lòng đăng nhập trước khi thực hiện!",
+                icon: "error"
+            });
+            setTimeout(() => {               
+                Swal.close();
+            }, 1000);
+        }             
+    }
+
+    const checkDangNhap = async () =>{
+        if(localStorage.getItem('userName') == ""){
+            
+            return false
+        }else{
+            return true
+        }
     }
 
     const checkSelectKhungGio = () =>{
@@ -377,7 +396,6 @@ export const OrderField = () => {
             return false
         }
     }  
-
 
   return (
     <div className="w-[80%] mx-auto mt-5 orderField relative">
