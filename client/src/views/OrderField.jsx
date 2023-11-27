@@ -378,33 +378,6 @@ export const OrderField = () => {
         }
     }  
 
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            
-            event.returnValue = "result"; 
-        
-        };
-    
-        const handleUnload = () => {
-            
-        };
-
-        if(showHoaDon){
-            window.addEventListener('beforeunload', handleBeforeUnload);
-            window.addEventListener('unload', handleUnload);
-        }
-        else{
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-            window.removeEventListener('unload', handleUnload); 
-        }
-        
-    
-        return () => {
-          window.removeEventListener('beforeunload', handleBeforeUnload);
-          window.removeEventListener('unload', handleUnload);
-        };
-      }, [showHoaDon]);
-
   return (
     <div className="w-[80%] mx-auto mt-5 orderField relative">
         <div className="grid grid-cols-12">
