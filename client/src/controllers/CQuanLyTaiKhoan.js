@@ -2,6 +2,7 @@ import SanBong from '../models/SanBong'
 import CoSoSan from '../models/CoSoSan'
 import HoaDon from '../models/HoaDon'
 import Account from '../models/TaiKhoan'
+import TaiKhoan from '../models/TaiKhoan'
 
 const getAllCoSo = async () =>{
     const cosoSan = new CoSoSan()
@@ -33,9 +34,36 @@ const ShowImgCoSo = async (idtaikhoan) =>{
    return result
 }
 
+const CSearchEmailSdt = async (phanquyen, search) =>{
+   if(phanquyen === 2){
+      let coso = new CoSoSan();
+      let list = []
+      let result = await coso.SearchEmailSdt(phanquyen, search)
+      if(result){
+         list.push(result)
+         console.log(list.length + " a")
+      }
+      return list
+
+   } else {
+      let account = new Account();
+      let list = []
+      let result = await account.SearchEmailSdta(phanquyen, search)
+   
+      if(result){
+         list.push(result)
+         console.log(list.length + " b")
+      }
+      return list
+   }
+   
+
+}
+
  export {
    getAllCoSo,
    getPersonalInfoByIdTK,
    CThemTaiKhoan,
    ShowImgCoSo,
+   CSearchEmailSdt,
 }
