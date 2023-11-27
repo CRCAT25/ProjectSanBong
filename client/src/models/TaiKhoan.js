@@ -98,8 +98,38 @@ class TaiKhoan {
         .catch(error => {console.error(error);}
         )}
 
-    NameUser = (idlogin) =>{
-        return axios.post("http://localhost:8081/searchtentk",{idlogin}
+
+    ThemTaiKhoan = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) => {
+        console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
+
+        try {
+            const ResultCheck = await this.QLCheckEmailSdt(email, sdt);
+            if (ResultCheck === "Ok" && idphanquyen === 2) {
+                const response = await axios.post("http://localhost:8081/addcoso", {idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs
+                });
+
+                return response.data;
+            } else if (ResultCheck === "Ok" && idphanquyen === 1) {
+            } else if (ResultCheck !== "Ok") {
+                return ResultCheck;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    QLCheckEmailSdt = (email, sdt) =>{
+        return axios.post("http://localhost:8081/QLcheckemailsdt",{email, sdt}
+        ).then(response => {
+                return response.data
+            })
+            .catch(error => {
+            console.error(error);
+        })  
+    }
+
+    ShowImgCoSo = (idtaikhoan) =>{
+        return axios.post("http://localhost:8081/showimgcoso",{idtaikhoan}
         ).then(response => {
                 return response.data[0]
             })
@@ -107,31 +137,7 @@ class TaiKhoan {
             console.error(error);
         })  
     }
-
-    QLcheckemailsdt = (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
-        return axios.post("http://localhost:8081/checkemailsdt",{email, sdt}
-        ).then(response => {
-            if(response.data =="Ok"){
-                    this.addcoso(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs)
-            }
-            else{
-                return response.data
-            }
-            })
-            .catch(error => {
-            console.error(error);
-        })  
-    }
-
-    addcoso = (idphanquyen, tencs, emailcs, sdtcs, diachics, nganhangcs, stkcs, matkhaucs) =>{
-        return axios.post("http://localhost:8081/addcoso",{idphanquyen, tencs, emailcs, sdtcs, diachics, nganhangcs, stkcs, matkhaucs}
-        ).then(response => {
-                return response.data
-            })
-            .catch(error => {
-            console.error(error);
-        })  
-    }
+    
 
 }
 export default TaiKhoan

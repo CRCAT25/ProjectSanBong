@@ -2,7 +2,7 @@ import axios from "axios";
 import "../css/LichGiaoHuu.css"
 import Swal from 'sweetalert2'
 
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import { useState } from "react";
 import { 
   getAllLichGiaoHuu,
@@ -15,8 +15,10 @@ const LichGiaoHuu = () =>{
   const [getLichs, setLichs] = useState([]);
   const [getIdBill, setIdBill] = useState([]);
   const [getIdDoiThu, setIDDoiThu] = useState([]);
+  const idUser= localStorage.getItem("userID")
 
   const conFirmClicked=(IdBill,idTk)=>{
+    console.log("lmao:"+idUser)
     Swal.fire({
       title: "Bạn có muốn tham gia vào trận đấu này ?",
       icon: "question",
@@ -25,17 +27,26 @@ const LichGiaoHuu = () =>{
       cancelButtonColor: "#d33",
       confirmButtonText: "Đồng ý, tôi tham gia!",
       cancelButtonText:"Hủy"
+      
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title:"Thành công",
-          text: "Bạn có thể xem thông tin trận tại lịch sử",
-          icon: "success",
-        
-        });
-        ThamGiaGiaoHuu(IdBill,idTk);
-        GetAllLichGiaoHuu();
-
+        if(idTk == idUser)
+        {
+          Swal.fire({
+            title:"Thất bại",
+            text: "Bạn không thể tham gia vào trận của chính mình",
+            icon:"error",
+          });
+        }
+        else{
+          Swal.fire({
+            title:"Thành công",
+            text: "Bạn có thể xem thông tin trận tại lịch sử",
+            icon: "success",
+          });
+          ThamGiaGiaoHuu(IdBill,idTk);
+          GetAllLichGiaoHuu();
+        }
       }
     });
   }

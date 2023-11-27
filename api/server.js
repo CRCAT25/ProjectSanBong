@@ -1,6 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const app = express();
+const multer = require('multer');
 const cors = require("cors");
 const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
@@ -181,6 +182,12 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
     res.json(data);
   });
 });
+app.post("/getAnhsByIDSan", (req, res) => {
+  const sql = `SELECT * FROM anh WHERE IDSan = ?`; 
+  db.query(sql, [req.body.IDSan], (err, data) => {
+      res.json(data);
+  });
+});
 app.post("/getFieldByIDField", (req, res) => {
   const sql = `SELECT * FROM sanbong, loaisan, taikhoan, loaiphanquyen WHERE 
   taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and
@@ -222,6 +229,33 @@ app.post("/getHoaDonsCompleteByNgayKGTK", (req, res) => {
   db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan], (err, data) => {
     res.json(data);
   });
+});
+app.post("/InsertSan", (req, res) => {
+  const sql = `CALL InsertAndReturnSan(?, ?, ?)`;
+  db.query(sql, [req.body.IDTaiKhoan,req.body.IDLoaiSan,req.body.TenSan],(err, data) => {
+    let anhs = req.body.Anhs;
+    anhs.forEach(anh => {
+      let insertImageSql  = `INSERT INTO anh(IDSan, Anh) VALUES (${data[0][0].IDSan}, "${anh}")`;
+      db.query(insertImageSql,(err, data) => {});
+    });
+  });
+});
+
+// Set up multer to handle file uploads
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, '../client/public/assets');
+  }, // Specify the directory where files will be stored
+  filename: function (req, file, callback) {
+    callback(null,file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/upload', upload.array('files'), (req, res) => {
+  // If you reach this point, the file has been successfully uploaded
+  res.json({ message: 'File uploaded successfully!' });
 });
 
 /*************************/
@@ -342,30 +376,14 @@ app.post("/selectTop5InHoaDon", (req, res) => {
 //Lee Huyn Min  
 // Trang quản lý tài khoản, thống kê báo cáo
 
-//Search ten account theo id
-app.post("/searchtentk", (req, res) => {
-  const searchsql = "SELECT Ten FROM taikhoan WHERE IDTaiKhoan = ?";
-  db.query(searchsql, [req.body.idlogin],
-    (checkErrSearch, checkResultSearch) => {
-      if (checkErrSearch)
-        return res.json("Error");
-      if (checkResultSearch.length > 0) {
-        return res.json(checkResultSearch);
-      } else {
-        return res.json("Not find");
-      }
-    }
-  );
-});
-
-app.post("/checkemailsdt", (req, res) => {
+app.post("/QLcheckemailsdt", (req, res) => {
   const checkEmail = "SELECT COUNT(*) AS count FROM taikhoan WHERE Email = ?";
   const checkSdt = "SELECT COUNT(*) AS count FROM taikhoan WHERE SoDienThoai = ?";
-  db.query(checkEmail, [req.body.emailcs], (checkErrEmail, checkResultEmail) => {
+  db.query(checkEmail, [req.body.email], (checkErrEmail, checkResultEmail) => {
       if (checkErrEmail){
         return res.json("Error");
       }
-      db.query(checkSdt, [req.body.sdtcs], (checkErrSdt, checkResultSdt) => {
+      db.query(checkSdt, [req.body.sdt], (checkErrSdt, checkResultSdt) => {
         if (checkErrSdt) {
           return res.json("Error2");
         }
@@ -391,17 +409,28 @@ app.post("/checkemailsdt", (req, res) => {
 });
 
 
+app.post("/showimgcoso", (req, res) => {
+  const sql = "SELECT * FROM taikhoan WHERE IDTaiKhoan = ?";
+  db.query(sql, [req.body.idtaikhoan], (err, data) => {
+    if (err) return res.json("Error");
+    if (data.length > 0) {
+      return res.json(data);
+    }
+  });
+});
+
+
 
 app.post("/addcoso", (req, res) => {
   const insertSql =
-  "INSERT INTO taikhoan (IDPhanQuyen, Ten, Email, SoDienThoai, DiaChiCoSo, NganHang, STK, MatKhau) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+"INSERT INTO taikhoan (IDPhanQuyen, Ten, Email, SoDienThoai, DiaChiCoSo, NganHang, STK, MatKhau) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 db.query(
   insertSql,
   [
     req.body.idphanquyen,
     req.body.tencs,
-    req.body.emailcs,
-    req.body.sdtcs,
+    req.body.email,
+    req.body.sdt,
     req.body.diachics,
     req.body.nganhangcs,
     req.body.stkcs,
@@ -416,6 +445,8 @@ db.query(
   }
 );
 });
+
+
 
 
 /*************************/

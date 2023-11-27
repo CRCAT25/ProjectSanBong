@@ -4,14 +4,15 @@ import Swal from 'sweetalert2'
 import { useEffect } from "react";
 import { useState } from "react";
 import { 
-  GetPersonalLichFromBillByIdTK
-
+  GetPersonalLichFromBillByIdTK,
+  // HuySanByIDHd
 } from "../controllers/CQuanLyLich";
 import SanBong from '../models/SanBong';
 const FormLichSu = () => {
   
   const [getSelectedBtn, setSelectedBtn] = useState(1)
   const [getSelectedList,setSelectedList] = useState([]);
+  
   const lichholder = useRef()
   const idUser= localStorage.getItem("userID")
 
@@ -50,54 +51,73 @@ const FormLichSu = () => {
     // console.log(formattedDate)
     return formattedDate
   }
+//   const [getFormInfo, setFormInfo] = useState(false)
+//   const HienThiInfo = async () =>{
+//     if(getFormInfo == true){
+//       setFormInfo(false)
+//     }
+//     else{
+//       setFormInfo(true)
+//     }
+    
+// }
 
-  const loadLich = async (list, selected)=>{
-    let as="";
-    for(const data of list){
-      
-      let hoaDon = await data
-      let sanBong = await data.SanBong
-      let khungGio = await data.KhungGio
-      let date = dateFormatter (hoaDon.Ngay)
-      let doiThu = await data.DoiThu
-      let tenDoiThu
-      if(doiThu == null)
-      {
-        tenDoiThu = "Không có"
-      }else{
-        tenDoiThu = doiThu.Ten
-      }
-      
-      console.log(hoaDon)
-      as+=`
-      <div class='w-[auto] bg-[#9BCE89] h-[auto] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-${selected == 1 ? ('6') : '5'} '>
-      <img src="" alt="" class='w-[90px] h-[90px] col-span-1 ml-[10px]' />
-        <div class='col-span-1 grid grid-row-2 p-[10px]'>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
-        </div>
-        <div class='col-span-1 grid grid-row-2 p-[10px]'> 
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TaiKhoan.Ten}</div>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TenSan}</div>
-        </div>
-        ${selected == 1 ? ( `<div class='col-span-1 grid grid-row-2 p-[10px]'>
-        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ:</div>
-        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${tenDoiThu}</div>
-      </div>`):""}
-        <div class='col-span-1 grid grid-row-2 p-[10px]'>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
-        </div>
-        <div class='col-span-1 grid grid-row-2 p-[10px] text-center'>
-          <div class='col-span-1 font-[600] text-[18px] h-[auto] my-auto'>${date}<p>${khungGio.ThoiGian}</p></div>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${hoaDon.TrangThai}</div>
-        </div>
-      </div>`
-    }
-      lichholder.current.innerHTML = as; 
-  }
-
+// const HuyDat = async (idHD) =>{
+//   await HuySanByIDHd(idHD)
+//   HienThiDatCoc()
+// }
  
+{/* <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} />
+{getFormInfo === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> 
+<FormHoanTien isDatCoc={true} tenKH = {localStorage.getItem('userName')} tongTien = {tongTienText} HuyDatCoc = {HuyDatCoc} DatCoc = {DatCocV}/> 
+</div>   
+) : ""} */}
+
+const loadLich = async (list, selected)=>{
+  let as="";
+  for(const data of list){
+    
+    let hoaDon = await data
+    let sanBong = await data.SanBong
+    let khungGio = await data.KhungGio
+    let date = dateFormatter (hoaDon.Ngay)
+    let doiThu = await data.DoiThu
+    let tenDoiThu
+    if(doiThu == null)
+    {
+      tenDoiThu = "Không có"
+    }else{
+      tenDoiThu = doiThu.Ten
+    }
+    
+    console.log(hoaDon)
+    as+=`
+    <div class='w-[auto] bg-[#9BCE89] h-[auto] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-${selected == 1 ? ('6') : '5'} '>
+    <img src="" alt="" class='w-[90px] h-[90px] col-span-1 ml-[10px]' />
+      <div class='col-span-1 grid grid-row-2 p-[10px]'>
+        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
+        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
+      </div>
+      <div class='col-span-1 grid grid-row-2 p-[10px]'> 
+        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TaiKhoan.Ten}</div>
+        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TenSan}</div>
+      </div>
+      ${selected == 1 ? ( `<div class='col-span-1 grid grid-row-2 p-[10px]'>
+      <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ:</div>
+      <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${tenDoiThu}</div>
+    </div>`):""}
+      <div class='col-span-1 grid grid-row-2 p-[10px]'>
+        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
+        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
+      </div>
+      <div class='col-span-1 grid grid-row-2 p-[10px] text-center'>
+        <div class='col-span-1 font-[600] text-[18px] h-[auto] my-auto'>${date}<p>${khungGio.ThoiGian}</p></div>
+        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${hoaDon.TrangThai}</div>
+      </div>
+    </div>`
+  }
+    lichholder.current.innerHTML = as; 
+}
 
   return (
     <div className='w-[80%] mx-auto bg-[#FFF] border-[3px] border-[#379E13] pb-[3%] rounded-[10px]'>

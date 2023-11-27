@@ -73,12 +73,19 @@ select{
 }
 .auto-group-bp27-YwD{
   width: 100%;
+  height: 340px;
   background-color: white;
+  
   border-radius: 10px; 
   border: 1px #52C41A solid;
   display: flex;
-  justify-content: center;
-  padding: 60px 0 60px 0;
+  justify-content: space-evenly;
+  padding: 40px 0 ;
+  text-align: center;
+  
+}
+#iconImg{
+  margin-top: 120px;
 }
 .auto-group-bp27-YwD:hover{
   cursor: pointer;
@@ -170,6 +177,10 @@ background-color: lightcyan;
 .imgSan{
   width: 48%;
   border-radius: 30px;
+}
+.imgSanInput{
+  width: 400px;
+  height: 300px;
 }
 .auto-group-vqh9-B1m{
   width: 120px;
