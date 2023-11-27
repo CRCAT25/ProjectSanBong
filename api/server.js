@@ -177,6 +177,7 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
     taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and
     sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan and 
     sanbong.IDLoaiSan = loaisan.IDLoaiSan and  
+    sanbong.TrangThai = 0 and
     taikhoan.IDTaiKhoan = ?`;
   db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
     res.json(data);
@@ -240,7 +241,11 @@ app.post("/InsertSan", (req, res) => {
     });
   });
 });
-
+app.post("/deleteSanByID", (req, res) => {
+  const sql = `UPDATE sanbong SET TrangThai = 1 WHERE IDSan = ?`;
+  db.query(sql, [req.body.IDSan],(err, data) => {
+  });
+});
 // Set up multer to handle file uploads
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {

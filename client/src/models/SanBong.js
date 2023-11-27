@@ -22,6 +22,14 @@ class SanBong{
             });
     }
        
+    DeleteSanByID(id) {
+        return axios.post("http://localhost:8081/deleteSanByID", {IDSan:id})
+            .then(response => {
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 
     getSanByID(idSan) {
         return axios.post("http://localhost:8081/getSanByID", {IdSan: idSan})

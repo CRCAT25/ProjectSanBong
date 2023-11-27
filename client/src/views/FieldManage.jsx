@@ -22,8 +22,10 @@ import {
   getBillForRefund,
   insertSan,
   getLoaiSanByID,
-  getAnhsByIDSan
+  getAnhsByIDSan,
+  deleteSanByID
 } from "../controllers/CQuanLySan";
+import Swal from 'sweetalert2'
 
 
 
@@ -38,12 +40,10 @@ const FieldManage =  () => {
     loadListFields()
 
   }, []);
+  const Swal = require('sweetalert2')
   const [getLoaiSans, setLoaiSans] = useState([]);
-  const [getSan, setSan] = useState();
-  const [getKhungGios, setKhungGios] = useState([]);
-  const [getBills, setBills] = useState([]);
+  let sanID = null
   const [getBillForRefund, setBillForRefund] = useState([]);
-  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   
   const displayLoaiSanPrice = async () =>{
     if(document.getElementsByClassName("selectLoaiS")[0].value == "none"){
@@ -53,12 +53,30 @@ const FieldManage =  () => {
     }
     
   }
-  
+  function fetchImageAndConvertToBlob(imageUrl) {
+    fetch(imageUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        // Use the blob as needed
+        console.log(blob);
+      })
+      .catch(error => {
+        console.error('Error fetching image:', error);
+      });
+  }
+
+
   function InsertSan(){
     let tenSan = document.getElementsByClassName("auto-group-1jl7-TBh")[0].value
     let loaiSan = document.getElementsByClassName("selectLoaiS")[0].value
     let idTK = "7"
     let anhs = document.getElementById("inputAnh").files
+    document.getElementById("inputAnh").files = new File()
     let tenAnhs = []
     let addible = false
     if(tenSan.length > 0){
@@ -186,11 +204,61 @@ const FieldManage =  () => {
       document.getElementsByClassName("tongTien")[0].innerHTML = "0.000 VND"
     }
   }
-  function b(element){
-    setSan(element.id);
-    document.getElementById("Wa15ekgLDPSUrvQVNo1jL7").value = element.children[0].children[0].children[0].innerHTML
-    document.getElementsByClassName("selectLoaiS")[0].value = element.children[0].children[1].children[0].id
-    document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = element.children[0].children[2].children[0].innerHTML
+  function selectSan(element){
+    console.log(element)
+    let isAllow = false
+    let listFile = []
+    if(sanID){
+      document.getElementById(sanID).style.background = "white"
+      isAllow = true
+    } else {
+      isAllow = true
+    }
+    if(isAllow){
+      sanID = element.parentElement.parentElement.id;
+    }
+    document.getElementById("Wa15ekgLDPSUrvQVNo1jL7").value = element.parentElement.parentElement.children[0].children[0].children[0].innerHTML
+    document.getElementsByClassName("selectLoaiS")[0].value = element.parentElement.parentElement.children[0].children[1].children[0].id
+    document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = element.parentElement.parentElement.children[0].children[2].children[0].innerHTML
+    element.parentElement.parentElement.style.background = "red"
+    document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML =""
+    let file = ""
+    for(let i = 0; i < element.parentElement.parentElement.children[1].children.length; i++){
+      document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML += `
+              <img
+            className="imgSanInput"
+            src="${element.parentElement.parentElement.children[1].children[i].src}"
+          />`;
+      // file = new File([fetchImageAndConvertToBlob(document.getElementsByClassName('imgSan')[i].src)], 
+      // (document.getElementsByClassName('imgSan')[i].src).substring(29,(document.getElementsByClassName('imgSan')[i].src).length), 
+      // { type: 'image/*' });
+      // listFile.push(file)
+    }
+    // document.getElementById('inputAnh').files = [file]; 
+  }
+  function deleteSan(element){
+    Swal.fire({
+      title: "Bạn có chắc muốn xoá?",
+      showDenyButton: true,
+      confirmButtonText: "Xoá",
+      denyButtonText: `Không`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if(sanID == element.parentElement.parentElement.id){
+          sanID = null
+        } 
+        deleteSanByID((element.parentElement.parentElement.id).substring(4,(element.parentElement.parentElement.id).length))
+
+        Swal.fire({
+          title: "Xoá thành công!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            loadListFields()
+            
+          }
+        });
+      }
+    });
   }
   const loadListFields = async () =>{
     document.getElementsByClassName("scrollContainerSan")[0].innerHTML = ""
@@ -198,39 +266,14 @@ const FieldManage =  () => {
     if(aList.length > 0){
       aList.map(async (san, i) => {
         let anhs = await getAnhsByIDSan(san.IdSan)
-        if(anhs.length == 0){
-          document.getElementsByClassName("scrollContainerSan")[0].innerHTML +=  `<div class="sn-XTh" id="${san.IdSan}">
-          <div class="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
-            <div class="tn-sn-input-J75" id="257:849">
-              <div class="tenSan">${san.TenSan}</div>
-            </div>
-            <div class="tn-sn-input-Mr3" id="257:852">
-              <div class="loaiSan" id="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
-            </div>
-            <div class="tn-sn-input-J91" id="257:855">
-              <div class="donGia">${san.LoaiSan.GiaTien}</div>
-            </div>
-          </div>
-          <div class="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
-          
-          </div>
-          <div class="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-            <button class="btn">
-              <i class="fa fa-edit fa-2x"></i>
-            </button>
-            <button class="btn">
-              <i class="fa fa-trash fa-2x"></i>
-            </button>
-          </div>
-        </div>`
-        } else if(anhs.length == 1){
-          document.getElementsByClassName("scrollContainerSan")[0].innerHTML +=  `<div class="sn-XTh" id="${san.IdSan}">
+        if(anhs.length == 1){
+          document.getElementsByClassName("scrollContainerSan")[0].innerHTML +=  `<div class="sn-XTh" id="san-${san.IdSan}">
           <div class="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
             <div class="tn-sn-input-J75" id="257:849">
               <div class="tenSan" >${san.TenSan}</div>
             </div>
             <div class="tn-sn-input-Mr3" id="257:852">
-              <div class="loaiSan" value="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
+              <div class="loaiSan" id="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
             </div>
             <div class="tn-sn-input-J91" id="257:855">
               <div class="donGia">${san.LoaiSan.GiaTien}</div>
@@ -244,22 +287,22 @@ const FieldManage =  () => {
             />
           </div>
           <div class="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-            <button class="btn">
+            <button class="btnDetailSan">
               <i class="fa fa-edit fa-2x"></i>
             </button>
-            <button class="btn">
+            <button class="btnDeleteThisSan">
               <i class="fa fa-trash fa-2x"></i>
             </button>
           </div>
         </div>`
         } else if(anhs.length == 2){
-          document.getElementsByClassName("scrollContainerSan")[0].innerHTML +=  `<div class="sn-XTh" id="${san.IdSan}">
+          document.getElementsByClassName("scrollContainerSan")[0].innerHTML +=  `<div class="sn-XTh" id="san-${san.IdSan}">
         <div class="auto-group-lo8w-E7D" id="Wa17AdKabWVfpUgCKqLo8w">
           <div class="tn-sn-input-J75" id="257:849">
             <div class="tenSan" >${san.TenSan}</div>
           </div>
           <div class="tn-sn-input-Mr3" id="257:852">
-            <div class="loaiSan" value="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
+            <div class="loaiSan" id="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
           </div>
           <div class="tn-sn-input-J91" id="257:855">
             <div class="donGia">${san.LoaiSan.GiaTien}</div>
@@ -278,25 +321,33 @@ const FieldManage =  () => {
           />
         </div>
         <div class="auto-group-vqh9-B1m" id="Wa17oh69siGSrCKt8xvQH9">
-          <button class="btn">
+          <button class="btnDetailSan">
             <i class="fa fa-edit fa-2x"></i>
           </button>
-          <button class="btn">
+          <button class="btnDeleteThisSan">
             <i class="fa fa-trash fa-2x"></i>
           </button>
         </div>
           </div>`
         }
         if(aList.length - 1 == i){
-          for (let index = 0; index < document.getElementsByClassName("sn-XTh").length; index++) {
-            document.getElementsByClassName("sn-XTh")[index].addEventListener("click", ()=>{b(document.getElementsByClassName("sn-XTh")[index])});
-
-          }
+          setTimeout(() => {
+            addEventItemSan()
+          }, 20);
+          
         }
       });
     }else{
       document.getElementsByClassName("scrollContainerSan")[0].innerHTML = "Không có sân."
     }
+  }
+  function addEventItemSan(){
+      for (let index = 0; index < document.getElementsByClassName("btnDetailSan").length; index++) {
+        document.getElementsByClassName("btnDetailSan")[index].addEventListener("click", ()=>{
+          selectSan(document.getElementsByClassName("btnDetailSan")[index])});
+        document.getElementsByClassName("btnDeleteThisSan")[index].addEventListener("click", ()=>{
+          deleteSan(document.getElementsByClassName("btnDeleteThisSan")[index])});
+      }
   }
   const GetAllBillByTaiKhoan = async () =>{
     console.log(await getAllHoaDonCompletedByCoSo(1));
