@@ -358,9 +358,9 @@ app.post("/signUpAccount", (req, res) => {
 
 // Lấy 5 hóa đơn cuối của user
 app.post("/selectTop5InHoaDon", (req, res) => {
-  const IdAccount = req.body.IdAccount;  
+  const IdAccount = req.body.IDTaiKhoan;  
 
-  const sql = `select * from hoadon where IDTaiKhoan = 2 order by IDHoaDon DESC Limit 5`; 
+  const sql = `select * from hoadon where IDTaiKhoan = ${IdAccount} order by IDHoaDon DESC Limit 5`; 
   db.query(sql, (err, data) => {
     res.json(data)
   });

@@ -148,9 +148,9 @@ export default function Header() {
     useEffect(() => {
         async function fetchData() {
             if (userName) {
-                let list = await GetPersonalBillByIdAccount(userName);
+                let list = await GetPersonalBillByIdAccount(localStorage.getItem("userID"));
                 let jsonDataArray = [];
-
+                
                 for (let i = 0; i < list.length; i++) {
                     let sanbong = await list[i].SanBong;
                     let cososan = await sanbong.TaiKhoan;
