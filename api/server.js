@@ -115,8 +115,16 @@ app.post("/datSan", async (req, res) => {
   const GiaoHuu = req.body.GiaoHuu;
   const TongTien = req.body.TongTien;
   const sql = `CALL InsertAndReturnHoaDon(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}')`;
+  
   db.query(sql, (err, data) => {
-    res.json(data[0])
+    console.log(data[0])
+    const sql2 = `CREATE EVENT delete_hoadon_event_${data[0][0].IDHoaDon}
+    ON SCHEDULE AT 
+    CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
+    DO CALL delete_passedhoadon_proc(${data[0][0].IDHoaDon});`;
+      db.query(sql2, (err2, data2) => {    
+        res.json(data[0])
+      });
   });
 });
 
@@ -398,9 +406,9 @@ app.post("/signUpAccount", (req, res) => {
 
 // Lấy 5 hóa đơn cuối của user
 app.post("/selectTop5InHoaDon", (req, res) => {
-  const IdAccount = req.body.IdAccount;  
+  const IdAccount = req.body.IDTaiKhoan;  
 
-  const sql = `select * from hoadon where IDTaiKhoan = 2 order by IDHoaDon DESC Limit 5`; 
+  const sql = `select * from hoadon where IDTaiKhoan = ${IdAccount} order by IDHoaDon DESC Limit 5`; 
   db.query(sql, (err, data) => {
     res.json(data)
   });
