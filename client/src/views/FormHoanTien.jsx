@@ -21,6 +21,8 @@ const Icon24px = ({classIcon}) => {
 
 const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
     let kq = [];
+    const [selectedNganHang, setSelectedNganHang] = useState("")
+    const [inputSTK, setInputSTK] = useState("")
     function getNganHang () {
         const nganHang = async () => {
             let vietQR = new VietQR({
@@ -60,9 +62,9 @@ const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
                 
             )}
         </div>
-        <select id='idBank' className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]' >
+        <select id='idBank' className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]' onChange={(e) =>{setSelectedNganHang(e.target.value)}}>
         </select>   
-        <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Số Tài Khoản'></input>
+        <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Số Tài Khoản' onChange={e => setInputSTK(e.target.value)}></input>
         <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Tên Tài Khoản'></input>
         {isDatCoc == true ? (
             <div className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]  flex flex-col justify-center bg-white'>Số tiền: {tongTien}</div>
@@ -74,7 +76,7 @@ const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
         <div className='w-[90%] flex flex-auto justify-around mx-auto'>
             {isDatCoc === true ? (
             <div> <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " onClick={HuyDatCoc}>Hủy</button>
-            <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={DatCoc}>Xác nhận</button>
+            <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={() => DatCoc(selectedNganHang, inputSTK, tongTien)}>Xác nhận</button>
             </div>) : ""}
             
         </div>
