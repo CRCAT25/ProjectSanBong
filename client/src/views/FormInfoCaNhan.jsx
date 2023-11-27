@@ -4,6 +4,7 @@ import {faImage} from "@fortawesome/free-solid-svg-icons"
 import {
     getTKCoSoByIdTK,
     getTKUserByIdTK,
+    updateTkByIdTK
 }from "../controllers/CTaiKhoan.js"
 import axios from "axios";
 
@@ -201,7 +202,11 @@ const FormInfoCaNhan = () => {
             document.getElementById("duong").value = location[0];
 
         }
-    }    
+    }   
+    const updateInfoCaNhanByID=(idTK)=>
+    {
+      
+    } 
    
   return (
     <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>
@@ -285,8 +290,10 @@ const FormInfoCaNhan = () => {
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 ml-0 flex justify-between font-[600]'>
                             <div className='w-[15%] text-[19px] h-[auto] my-auto'></div>
-                            <button class=" w-[42%] mr-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] ">Đổi mật khẩu</button>
-                            <button class=" w-[42%] ml-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] ">CẬP NHẬT</button>
+                            <button class=" w-[42%] mr-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] "
+                            onClick={()=>{}}>Đổi mật khẩu</button>
+                            <button class=" w-[42%] ml-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] "
+                            onClick={()=>{}}>CẬP NHẬT</button>
                         </div>
                     </div>
                     

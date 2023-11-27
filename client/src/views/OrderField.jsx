@@ -88,7 +88,10 @@ export const OrderField = () => {
         handleChangeCalendar(selectedDate);
       }, []);
 
+    
+
     const handleChangeCalendar = (date) =>{
+        setSelectedDate(date)
         const formattedDate = date.toLocaleDateString("vi-VN", {
             weekday: "short", // Abbreviated weekday name (e.g., "Mon")
             day: "2-digit",   // Two-digit day of the month (e.g., "01")
@@ -122,6 +125,7 @@ export const OrderField = () => {
     const[tenCoSoInput, setTenCoSoInput] = useState("")
     const[diaDiemInput, setDiaDiemInput] = useState("")
     const selectLoaiBoxRef = useRef(null)
+    const trangChu=false;
     const TimKiemSanBong = async () => {    
         setGotInfo(false)
         setGotInfoSan(false)
@@ -143,6 +147,7 @@ export const OrderField = () => {
     const[sanBongInfo, setSanBongInfo] = useState([]);
     const[loaiSans, setLoaiSans] = useState([]);
     const[tenLoaiSan, setTenLoaiSan] = useState("");
+    const FromDatSan=true;
 
     const ChonCoSoSan = async (idCoso) => {
         if (selectLoaiBoxRef.current) {
@@ -231,12 +236,31 @@ export const OrderField = () => {
     const [tongTienText, setTongTienText] = useState("0")
     const [valueForHoaDon, setValueForHoaDon] = useState({})
     const DatSan = async() =>{
-        const checkKhungGio = checkSelectKhungGio()
-        if(!checkKhungGio){
-            HienThiThongBaoChonKhungGio()
+        if(checkDangNhap == true){
+            const checkKhungGio = checkSelectKhungGio()
+            if(!checkKhungGio){
+                HienThiThongBaoChonKhungGio()
+            }else{
+                HienThiXacNhanDatSan()
+            }    
         }else{
-            HienThiXacNhanDatSan()
-        }            
+            Swal.fire({
+                title: "Vui lòng đăng nhập trước khi thực hiện!",
+                icon: "error"
+            });
+            setTimeout(() => {               
+                Swal.close();
+            }, 1000);
+        }             
+    }
+
+    const checkDangNhap = async () =>{
+        if(localStorage.getItem('userName') == ""){
+            
+            return false
+        }else{
+            return true
+        }
     }
 
     const checkSelectKhungGio = () =>{
@@ -256,6 +280,7 @@ export const OrderField = () => {
             Swal.close();
         }, 1000);
     }
+    
     const HienThiXacNhanDatSan = () =>{
         if(showHoaDon == true){
             setShowHoaDon(false)
@@ -297,6 +322,7 @@ export const OrderField = () => {
     }
 
     const DatCocV = async(NganHang, STK, SoTien) => {
+        
         let validTTBank = CheckTTBank(NganHang, STK, SoTien)
         if(validTTBank == true){
             DatCoc(newHoaDonID)
@@ -308,7 +334,8 @@ export const OrderField = () => {
     }
 
     const CheckTTBank = (NganHang, STK, SoTien) =>{
-        if(NganHang == "" || STK == "" || SoTien == ""){
+        alert(NganHang + " " +  STK + " " +  SoTien)
+        if(NganHang != "" || STK != "" || SoTien != ""){
             if(STK.length < 10){
                 return("Số tài khoản phải đủ 10 ký tự !")
             }
@@ -351,7 +378,24 @@ export const OrderField = () => {
         setSelectedKhungGio(0);
         setTongTien(0)
         setIsCheckBoxChecked(0)
+        setTongTienText("")
     }
+
+    const checkPassedTime = (thoiGian) => {
+        let time = thoiGian.split(":")[0]
+        let currentDate = new Date()
+
+        if(selectedDate.getDate() == currentDate.getDate()){
+            if(currentDate.getHours() > time){
+                console.log(true)
+                return true
+            }else{
+                return false
+            }
+        }else{
+            return false
+        }
+    }  
 
   return (
     <div className="w-[80%] mx-auto mt-5 orderField relative">
@@ -363,8 +407,8 @@ export const OrderField = () => {
         {showHoaDon === true ? (
         <div className="fixed inset-0 z-50 flex  bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded shadow-md">
-            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} />
-            {showDatCoc === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> <FormHoanTien isDatCoc={true} tenKH = {localStorage.getItem('userName')} tongTien = {tongTienText} HuyDatCoc = {HuyDatCoc} DatCoc = {DatCocV}/> </div>
+            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} isDatSan={true}/>
+            {showDatCoc === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> <FormHoanTien isDatCoc={true} tenKH = {localStorage.getItem('userName')} tongTien = {tongTienText} HuyDatCoc = {HuyDatCoc} DatCoc = {(selectednganhang, stk, tongtien) => DatCocV(selectednganhang, stk, tongtien)}/> </div>
             
             ) : ""}
           </div>
@@ -436,7 +480,7 @@ export const OrderField = () => {
                                             <Icon24px classIcon={faChevronDown}/>
                                         </select>
                                     </div>
-                                        {isCalendarVisible === false ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value = {selectedDate} minDate={new Date()}/> : ""}
+                                        {isCalendarVisible === false ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value ={selectedDate} minDate={new Date()}/> : ""}
                                 </div>
         
                                 <div className="grid grid-cols-10 mt-5 gap-3">
@@ -468,9 +512,12 @@ export const OrderField = () => {
                             <div className="mt-7 w-full gap-3 grid grid-cols-12">
                             {gotInfoKhungGio === true ? (
                                 khungGios.map((data, i) => {
-                                    const isOccured = occuredKhungGios.some((ocurkhunggio) => ocurkhunggio.IdKhungGio === data.IdKhungGio);                          
+                                    const isOccured = occuredKhungGios.some((ocurkhunggio) => ocurkhunggio.IdKhungGio === data.IdKhungGio);       
+                                    const isPassed = checkPassedTime(data.ThoiGian)
+                                                                       
                                     return (    
-                                    <div className={`col-span-3 ${isOccured ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} ${selectedKhungGio.IdKhungGio == data.IdKhungGio ? 'border-2 border-[#000000]' : ''} text-center px-4 py-2 rounded-[10px]`} onClick ={() => {if(!isOccured){ChonKhungGio(data)}}}   key={i}>{data.ThoiGian} </div>
+                                        
+                                    <div className={`col-span-3 ${isOccured || isPassed ? 'bg-[#D9D9D9] pointer-event-none' : 'bg-[#FFEB37] cursor-pointer'} ${selectedKhungGio.IdKhungGio == data.IdKhungGio && !isPassed ? 'border-2 border-[#000000]' : ''} text-center px-4 py-2 rounded-[10px]`} onClick ={() => {if(!isOccured && !isPassed){ChonKhungGio(data)}}}   key={i}>{data.ThoiGian} </div>
                                     );
                                 })
                                 ) : ""}                                                

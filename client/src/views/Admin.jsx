@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
-import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo } from "../controllers/CQuanLyTaiKhoan";
+import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo, CSearchEmailSdt } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
 import { VietQR } from 'vietqr';
 import Swal from 'sweetalert2';
@@ -33,6 +33,8 @@ const Admin = () => {
   const [nganhangcs, setnganhangcs] = useState('');
   const [stkcs, setstkcs] = useState('');
   const [matkhaucs, setmatkhaucs] = useState('');
+  const [stringsearch, setstringsearch] = useState('');
+
 
 
   // const openTab = (tab, index, idpq) => {    
@@ -57,11 +59,14 @@ const Admin = () => {
     getNganHang();
   }, []);
 
-  const openTab = (tab, index, idpq) => {    
+  const openTab = (tab, index, idpq) => {
     setActiveTab(tab);
     changeclassname(index);
     setidphanquyen(idpq);
   };
+  // useEffect(() => {
+  //   alert(listCoso.length)
+  // }, [listCoso]);
 
   function changeclassname(index) {
     const elements = document.querySelectorAll('.tenmenu');
@@ -70,7 +75,7 @@ const Admin = () => {
     });
     elements[index].classList.add('tenmenu2');
   }
-  
+
   useEffect(() => {
     // alert(activeTab);
     // alert(idphanquyen + " b");
@@ -143,9 +148,9 @@ const Admin = () => {
       fetchQuan(selectedtinh);
       // console.log(apitinh.length)
       // console.log(selectedtinh)
-      for(let i=0;i<apitinh.length;i++){
+      for (let i = 0; i < apitinh.length; i++) {
         // console.log("a"+ apitinh[i].code)
-        if(selectedtinh == apitinh[i].code){
+        if (selectedtinh == apitinh[i].code) {
           settinh(apitinh[i].name)
         }
       }
@@ -172,8 +177,8 @@ const Admin = () => {
     const selectedquan = event.target.value;
     if (selectedquan) {
       fetchPhuong(selectedquan);
-      for(let i=0;i<apiquan.length;i++){
-        if(selectedquan == apiquan[i].code){
+      for (let i = 0; i < apiquan.length; i++) {
+        if (selectedquan == apiquan[i].code) {
           setquan(apiquan[i].name)
         }
       }
@@ -185,8 +190,8 @@ const Admin = () => {
   const handleProvinceChangePhuong = (event) => {
     const selectedphuong = event.target.value;
     if (selectedphuong) {
-      for(let i=0;i<apiphuong.length;i++){
-        if(selectedphuong == apiphuong[i].code){
+      for (let i = 0; i < apiphuong.length; i++) {
+        if (selectedphuong == apiphuong[i].code) {
           setphuong(apiphuong[i].name)
         }
       }
@@ -199,7 +204,7 @@ const Admin = () => {
 
   const renderOptions = (dataArray) => {
     return dataArray.map((item, i) => (
-      <option key={i} value={item.code} id={item.code+"-"+item.name} className="text-[#000000] text-center bg-[white]">{item.name}</option>
+      <option key={i} value={item.code} id={item.code + "-" + item.name} className="text-[#000000] text-center bg-[white]">{item.name}</option>
     ));
   };
 
@@ -209,18 +214,18 @@ const Admin = () => {
         clientID: '7d8635e1-1751-455a-bacb-5b23ff254943',
         apiKey: '54c2ad4f-9485-445e-b9e0-5593699ab26b',
       });
-  
+
       await vietQR.getBanks().then((banks) => {
         const sortedBanks = banks.data.sort((a, b) => {
           return a.shortName.localeCompare(b.shortName);
         });
-  
+
         setkqapinh(sortedBanks);
       }).catch((err) => {
         console.error('Error fetching banks:', err);
       });
     };
-  
+
     nganHang();
   }
 
@@ -246,21 +251,19 @@ const Admin = () => {
   }
 
   function test() {
-    alert(stringdiachi)
-    alert(idphanquyen)
-    alert(nganhangcs)
+    alert('a')
   }
 
   const ThemTaiKhoan = async (index) => {
-    stringdiachi = duong +", " + phuong +", "+ quan +", "+ tinh ;
-    if(index === 2){
+    stringdiachi = duong + ", " + phuong + ", " + quan + ", " + tinh;
+    if (index === 2) {
       let result = await CThemTaiKhoan(idphanquyen, tencs, email, sdt, stringdiachi, nganhangcs, stkcs, matkhaucs)
       ShowResultThem(result)
     }
   }
 
   const ShowResultThem = async (result) => {
-    if(result === "Thêm thành công"){
+    if (result === "Thêm thành công") {
       Swal.fire({
         title: 'Thêm thành công!',
         text: '',
@@ -271,8 +274,8 @@ const Admin = () => {
       setTimeout(() => {
         showAllCoSo();
       }, 1000)
-  
-    } else{
+
+    } else {
       Swal.fire({
         icon: 'error',
         title: 'Thêm thất bại!',
@@ -288,7 +291,7 @@ const Admin = () => {
     try {
       const response = await ShowImgCoSo(idtaikhoan)
       console.log(response.Anh)
-      if(response.Anh !== "null" && response.Anh !== null){
+      if (response.Anh !== "null" && response.Anh !== null) {
         Swal.fire({
           title: `Ảnh của cơ sở ${response.Ten} `,
           html: `<div class="divimggpkd" ><img class="h-full w-full object-cover" alt="" src="../assets/${response.Anh}"></img></div>`,
@@ -299,7 +302,7 @@ const Admin = () => {
             popup: 'custom-swal-popup-gpkd',
           },
         });
-      } else{
+      } else {
         Swal.fire({
           title: `Ảnh của cơ sở ${response.Ten}</br></br>  Chưa có ảnh`,
           showCloseButton: true,
@@ -314,6 +317,32 @@ const Admin = () => {
       console.error(error);
     }
   };
+
+  const SearchSdtEmail = async () => {
+    if (stringsearch !== "") {
+      let result = await CSearchEmailSdt(idphanquyen, stringsearch)
+      console.log(result)
+
+      if (idphanquyen === 2) {
+        if (result.length > 0) {
+          setListCoso(result)
+        }
+        else {
+          Swal.fire('Không có tài khoản muốn tìm')
+          showAllCoSo();
+        }
+      } else if (idphanquyen === 1) {
+        if (result.length > 0) {
+        }
+        else {
+          Swal.fire('Không có tài khoản muốn tìm')
+          alert(idphanquyen)
+        }
+      }
+    } else {
+      showAllCoSo()
+    }
+  }
 
   return (
     <div>
@@ -455,7 +484,7 @@ const Admin = () => {
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Email:</div>
-                    <input type="text" class="ipemailcs" onChange={e => setemail  (e.target.value)}></input>
+                    <input type="text" class="ipemailcs" onChange={e => setemail(e.target.value)}></input>
                   </div>
                 </div>
 
@@ -516,8 +545,9 @@ const Admin = () => {
                     <h3 id="searchpartner">Tìm email hoặc số điện thoại:</h3>
 
                   </div>
-                  <div className="col-span-1 ">
-                    <input type="text" class="input_searchemailsopart" id="rssearch" placeholder=""></input>
+                  <div className="col-span-1 flex ">
+                    <input type="text" class="input_searchemailsopart" id="rssearch" placeholder="" onChange={e => setstringsearch(e.target.value)}></input>
+                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} /></div>
                   </div>
 
                 </div>
@@ -550,10 +580,14 @@ const Admin = () => {
                     <div className="col-span-3 text-[#000000] text-center pt-[30px]">{coso.DiaChiCoSo}</div>
                     <div className="col-span-1 text-[#291616] text-center pt-[30px]">{coso.NganHang}</div>
                     <div className="col-span-1 text-[#000000] text-center pt-[30px]">{coso.STK}</div>
-                    <div className="col-span-1 text-[#000000] text-center pt-[30px] underline hover:text-[red] cursor-pointer"
-                    onClick={() => GetIdTaiKhoan(coso.IdAccount)}>Xem</div>
-                    {/* <div className="col-span-1 text-[#000000] text-center pt-[30px]">{formattedDate(coso.XacThuc)}</div> */}
-                    <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red] cursor-pointer">X</div>
+                    <div className="col-span-1 text-[#000000] text-center pt-[30px] ml-[10px] underline hover:text-[red] cursor-pointer"
+                      onClick={() => GetIdTaiKhoan(coso.IdAccount)}>Xem</div>
+                    {coso.TrangThai == 0 ? (
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red] cursor-pointer">X</div>
+                    ) : (
+                        <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red] cursor-pointer">Y</div>
+                    )}
+
                   </React.Fragment>
                 ))}
 
