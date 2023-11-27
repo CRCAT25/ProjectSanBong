@@ -123,7 +123,7 @@ export default function Header() {
 
     useEffect(() => {
         var bgCus = document.getElementsByClassName('bgCus')[0];
-        if(!userName){
+        if (!userName) {
             bgCus.addEventListener('click', CloseFormLogin);
             bgCus.addEventListener('click', CloseFormSignUp);
             bgCus.addEventListener('click', CloseFormResPass);
@@ -143,26 +143,49 @@ export default function Header() {
         };
     }, []);
 
+    const [listNoti, setListNoti] = useState({})
+
     useEffect(() => {
-        async function fetchData(){
-            if(userName){
+        async function fetchData() {
+            if (userName) {
                 let list = await GetPersonalBillByIdAccount(userName);
-                let sanbong = await list[0].SanBong;
-                let cososan = await sanbong.TaiKhoan
-                let doiThu = await list[0].DoiThu
-                let tenDoiThu = await doiThu.Ten
-                let trangthai = await list[0].TrangThai
-                let giaohuu = await list[0].GiaoHuu
-                console.log(list)
-                console.log(await cososan.Ten)
-                console.log(await tenDoiThu)
-                console.log(trangthai)
-                console.log(giaohuu)
+                let jsonDataArray = [];
+
+                for (let i = 0; i < list.length; i++) {
+                    let sanbong = await list[i].SanBong;
+                    let cososan = await sanbong.TaiKhoan;
+                    let trangthai = await list[i].TrangThai;
+                    if (trangthai == "Completed") trangthai = "Đã đặt sân thành công";
+                    if (trangthai == "Refunded") trangthai = "Đã hoàn tiền thành công";
+                    let giaohuu = await list[i].GiaoHuu;
+                    let doiThu, tenDoiThu;
+
+                    if (giaohuu == 1) {
+                        doiThu = await list[i].DoiThu;
+                        tenDoiThu = await doiThu.Ten;                        
+                        giaohuu = "Trận giao hữu";
+                    } else {
+                        giaohuu = "Trận thường";
+                    }
+
+                    let ten = await cososan.Ten;
+
+                    // Tạo một đối tượng JSON từ các thuộc tính
+                    let jsonObject = {
+                        ten: ten,
+                        tenDoiThu: tenDoiThu,
+                        trangthai: trangthai,
+                        giaohuu: giaohuu
+                    };
+
+                    // Thêm đối tượng JSON vào mảng
+                    jsonDataArray.push(jsonObject);
+                }
+                setListNoti(jsonDataArray)
             }
         }
         fetchData()
-    },[])
-
+    }, [])
 
     const userName = localStorage.getItem("userName");
 
@@ -188,7 +211,7 @@ export default function Header() {
                     {userName ? (
                         <>
                             <li className='flex flex-col justify-center' onClick={() => toggleDropdownNotify()}>
-                                <Icon24px classIcon={faBell} color={"FFE500"}/>
+                                <Icon24px classIcon={faBell} color={"FFE500"} />
                             </li>
                             <li className='flex flex-col justify-center cursor-pointer'>
                                 <span className='text-[24px]'>{userName}</span>
@@ -199,30 +222,24 @@ export default function Header() {
                             {isDropdownOpen && (
                                 <div className="w-[242px] bg-white text-black absolute transition duration-500 ease-in-out top-10 cursor-pointer right-[187px] rounded-b-[8px] rounded-tl-[8px]">
                                     <div onClick={() => GoPersonalInfor()} className='p-3 hover:bg-slate-200 rounded-tl-[8px]'>Thông tin cá nhân</div>
-                                    <div onClick={() => {localStorage.clear(); window.location.reload()}} className='p-3 hover:bg-slate-200 rounded-b-[8px]'>Đăng xuất</div>
+                                    <div onClick={() => { localStorage.clear(); window.location.reload() }} className='p-3 hover:bg-slate-200 rounded-b-[8px]'>Đăng xuất</div>
                                 </div>
                             )}
                             {isDropdownOpenNotify && (
                                 <div className="w-[400px] p-3 bg-white text-black absolute transition duration-500 ease-in-out top-10 cursor-pointer right-[455px]">
                                     <div className='text-[26px] font-[600]'>Thông báo</div>
                                     <div className=''>
-                                        <div className='mt-2'>
-                                            <div>
-                                                <span className='font-[600] text-[#DF0000]'>Trận giao hữu</span> 
-                                                <span className='px-1'>tại</span> 
-                                                <span className='font-[600]'>Sân bóng Huy Hoàng</span>
+                                        {listNoti.length > 0 ? listNoti.map((data, index) => (
+                                            <div className='mt-2' key={index}>
+                                                <div>
+                                                    <span className='font-[600] text-[#DF0000]'>{data.giaohuu}</span>
+                                                    <span className='px-1'>tại</span>
+                                                    <span className='font-[600]'>Sân bóng {data.ten}</span>
+                                                </div>
+                                                <div className=''>{data.trangthai}</div>
+                                                {data.giaohuu == "Trận giao hữu" ? (data.tenDoiThu ? (<div className=''>Đối thủ: {data.tenDoiThu}</div>) : (<div className=''>Chưa tìm thấy đối thủ</div>)) : ""}
                                             </div>
-                                            <div className=''>Đã đặt sân thành công</div>
-                                            <div className=''>Chưa tìm được đối thủ</div>
-                                        </div>
-                                        <div className='mt-2'>
-                                            <div>
-                                                <span className='font-[600] text-[#DF0000]'>Trận thường</span> 
-                                                <span className='px-1'>tại</span> 
-                                                <span className='font-[600]'>Sân bóng Huy Hoàng</span>
-                                            </div>
-                                            <div className=''>Đã đặt sân thành công</div>
-                                        </div>
+                                        )) : "no"}
                                     </div>
                                 </div>
                             )}
