@@ -494,6 +494,19 @@ db.query(
 );
 });
 
+app.post("/searchemailsdt", (req, res) => {
+  const sql = "SELECT * FROM taikhoan WHERE IDPhanQuyen = ? AND (SoDienThoai = ? OR Email = ?)";
+  db.query(sql, [req.body.phanquyen ,req.body.search, req.body.search], (err, data) => {
+    if (err) return res.json("Error");
+    if (data.length > 0) {
+      console.log(data)
+      res.json(data);
+    }else {
+      res.json(data)
+    }
+  });
+});
+
 
 
 

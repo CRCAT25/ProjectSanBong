@@ -1,7 +1,7 @@
 import axios from "axios"
 import PhanQuyen from "./PhanQuyen"
 class TaiKhoan {
-    constructor (idAccount, phanQuyen, ten, email, soDienThoai, nganHang, sTK, matKhau, xacThuc) {
+    constructor (idAccount, phanQuyen, ten, email, soDienThoai, nganHang, sTK, matKhau, trangThai) {
         this.IdAccount = idAccount;
         this.PhanQuyen = phanQuyen;
         this.Ten = ten;
@@ -10,7 +10,7 @@ class TaiKhoan {
         this.NganHang = nganHang;
         this.STK = sTK;
         this.MatKhau = matKhau;
-        this.XacThuc = xacThuc;
+        this.TrangThai = trangThai;
     }
 
     // Đăng nhập cho user
@@ -19,7 +19,7 @@ class TaiKhoan {
                 userName : userName,
                 passWord : passWord
             }).then(response => {
-                const itemCoSo = new TaiKhoan(response.data[0].IDTaiKhoan, response.data[0].IDPhanQuyen, response.data[0].Ten, response.data[0].Email, response.data[0].SoDienThoai, response.data[0].NganHang, response.data[0].STK, response.data[0].MatKhau, response.data[0].XacThuc);
+                const itemCoSo = new TaiKhoan(response.data[0].IDTaiKhoan, response.data[0].IDPhanQuyen, response.data[0].Ten, response.data[0].Email, response.data[0].SoDienThoai, response.data[0].NganHang, response.data[0].STK, response.data[0].MatKhau, response.data[0].TrangThai);
                 console.log(itemCoSo)
                 return itemCoSo
             })
@@ -92,7 +92,7 @@ class TaiKhoan {
             const phanQuyen = new PhanQuyen(response.data[0].IDPhanQuyen, response.data[0].TenPhanQuyen)
             const itemCoSo = new TaiKhoan(response.data[0].IDTaiKhoan, phanQuyen, response.data[0].Ten, 
                 response.data[0].Email, response.data[0].SoDienThoai, response.data[0].NganHang, 
-                response.data[0].STK, response.data[0].MatKhau, response.data[0].XacThuc);
+                response.data[0].STK, response.data[0].MatKhau, response.data[0].TrangThai);
             return itemCoSo
         })
         .catch(error => {console.error(error);}
@@ -138,6 +138,23 @@ class TaiKhoan {
         })  
     }
 
+    SearchEmailSdta = (phanquyen, search) =>{
+        return axios.post("http://localhost:8081/searchemailsdt",{phanquyen, search}
+        ).then(response => {
+            let list = []
+            list.push(response.data)
+            if(list.length >= 1 && list[0][0]){
+            const phanQuyen = new PhanQuyen(response.data[0].IDPhanQuyen, response.data[0].TenPhanQuyen)
+            const itemTK = new TaiKhoan(response.data[0].IDTaiKhoan, phanQuyen, response.data[0].Ten, 
+                response.data[0].Email, response.data[0].SoDienThoai, response.data[0].NganHang, 
+                response.data[0].STK, response.data[0].MatKhau, response.data[0].TrangThai);
+                return itemTK
+            } else{
+                return null
+            }
+        })
+    }
+        
     UpdateUserInfo = (Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK) =>{
         return axios.post("http://localhost:8081/updatePersonalInfoByIdTK",{Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK
         }
@@ -148,6 +165,8 @@ class TaiKhoan {
             console.error(error);
         })  
     }
+    
+
     
 
 }
