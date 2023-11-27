@@ -15,7 +15,6 @@ class SanBong{
         return axios.post("http://localhost:8081/getAllSanByTaiKhoan", {IDTaiKhoan: id})
             .then(response => {
                 const list = this.initSan(response.data);
-                // console.log(list)
                 return list
             })
             .catch(error => {
@@ -91,7 +90,13 @@ class SanBong{
                 console.error(error);
             });
     }
-
+    InsertSan(iDTaiKhoan, loaiSan, tenSan, anhs){
+        return axios.post("http://localhost:8081/InsertSan", {IDTaiKhoan: iDTaiKhoan, IDLoaiSan : loaiSan, TenSan : tenSan, Anhs : anhs})
+            .then(response => {})
+            .catch(error => {
+                console.error(error);
+            });
+    }
     initSan(list){
         const resultList = [];
         list.forEach(data => {
@@ -103,7 +108,6 @@ class SanBong{
         });
         return resultList
     }
-
     
 }
 

@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react'
 import "../css/Header.css"
 import "../css/OrderField.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faAngleDown, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faAngleDown, faXmark, faBell } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router-dom";
 import FormLogin from './FormLogin'
 import FormSignUp from './FormSignUp'
 import FormResPass from './FormResPass'
+import { GetPersonalBillByIdAccount } from '../controllers/CQuanLyLich'
 
-const Icon24px = ({ classIcon }) => {
+const Icon24px = ({ classIcon, color }) => {
     const iconSize = {
         width: "24px",
         height: "24px",
+        color: color,
+        cursor: "pointer"
     };
     return (
         <FontAwesomeIcon icon={classIcon} style={iconSize} />
@@ -100,6 +103,7 @@ export default function Header() {
     }
 
     const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [isDropdownOpenNotify, setDropdownOpenNotify] = useState(false);
 
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
@@ -109,16 +113,27 @@ export default function Header() {
         setDropdownOpen(false);
     };
 
+    const toggleDropdownNotify = () => {
+        setDropdownOpenNotify(!isDropdownOpenNotify);
+    };
+
+    const closeDropdownNotify = () => {
+        setDropdownOpenNotify(false);
+    };
+
     useEffect(() => {
         var bgCus = document.getElementsByClassName('bgCus')[0];
-        if(!userName){
+        if (!userName) {
             bgCus.addEventListener('click', CloseFormLogin);
             bgCus.addEventListener('click', CloseFormSignUp);
             bgCus.addEventListener('click', CloseFormResPass);
         }
         bgCus.addEventListener('click', closeDropdown);
+        bgCus.addEventListener('click', closeDropdownNotify
+        );
         var iconClose = document.getElementsByClassName('iconClose')[0];
         iconClose.addEventListener('click', CloseFormLogin);
+
 
 
 
@@ -128,16 +143,66 @@ export default function Header() {
         };
     }, []);
 
+    const [listNoti, setListNoti] = useState({})
+
+    useEffect(() => {
+        async function fetchData() {
+            if (userName) {
+                let list = await GetPersonalBillByIdAccount(localStorage.getItem("userID"));
+                let jsonDataArray = [];
+                
+                for (let i = 0; i < list.length; i++) {
+                    let sanbong = await list[i].SanBong;
+                    let cososan = await sanbong.TaiKhoan;
+                    let trangthai = await list[i].TrangThai;
+                    if (trangthai == "Completed") trangthai = "Đã đặt sân thành công";
+                    if (trangthai == "Refunded") trangthai = "Đã hoàn tiền thành công";
+                    let giaohuu = await list[i].GiaoHuu;
+                    let doiThu, tenDoiThu;
+
+                    if (giaohuu == 1) {
+                        doiThu = await list[i].DoiThu;
+                        tenDoiThu = await doiThu.Ten;                        
+                        giaohuu = "Trận giao hữu";
+                    } else {
+                        giaohuu = "Trận thường";
+                    }
+
+                    let ten = await cososan.Ten;
+
+                    // Tạo một đối tượng JSON từ các thuộc tính
+                    let jsonObject = {
+                        ten: ten,
+                        tenDoiThu: tenDoiThu,
+                        trangthai: trangthai,
+                        giaohuu: giaohuu
+                    };
+
+                    // Thêm đối tượng JSON vào mảng
+                    jsonDataArray.push(jsonObject);
+                }
+                setListNoti(jsonDataArray)
+            }
+        }
+        fetchData()
+    }, [])
+
     const userName = localStorage.getItem("userName");
 
-   
+    const GoPersonalInfor = () => {
+        navigate("/PersonalInfo");
+    }
 
+    const GoHome = () => {
+        navigate("/*");
+    }
 
     return (
         <div className='w-full bgHeader h-[839px] relative'>
             <div className='bg-[#000] bgCus opacity-10 h-[839px] w-full absolute z-1'></div>
             <nav className='px-[10%] mt-11 w-full text-[#fff] z-100 flex justify-between absolute'>
                 <ul className='text-[24px] flex gap-10 cursor-pointer'>
+                    <li onClick={() => GoHome()}>TRANG CHỦ</li>
                     <li id='textDatSanNgay'>ĐẶT SÂN</li>
                     <li id='textLichGiaoHuu'>THAM GIA GIAO HỮU</li>
                 </ul>
@@ -145,6 +210,9 @@ export default function Header() {
                 <ul className='flex gap-6'>
                     {userName ? (
                         <>
+                            <li className='flex flex-col justify-center' onClick={() => toggleDropdownNotify()}>
+                                <Icon24px classIcon={faBell} color={"FFE500"} />
+                            </li>
                             <li className='flex flex-col justify-center cursor-pointer'>
                                 <span className='text-[24px]'>{userName}</span>
                             </li>
@@ -153,16 +221,31 @@ export default function Header() {
                             </li>
                             {isDropdownOpen && (
                                 <div className="w-[242px] bg-white text-black absolute transition duration-500 ease-in-out top-10 cursor-pointer right-[187px] rounded-b-[8px] rounded-tl-[8px]">
-                                    <div className='p-3 hover:bg-slate-200 rounded-tl-[8px]'>Thông tin cá nhân</div>
-                                    <div onClick={() => {localStorage.clear(); window.location.reload()}} className='p-3 hover:bg-slate-200 rounded-b-[8px]'>Đăng xuất</div>
+                                    <div onClick={() => GoPersonalInfor()} className='p-3 hover:bg-slate-200 rounded-tl-[8px]'>Thông tin cá nhân</div>
+                                    <div onClick={() => { localStorage.clear(); window.location.reload() }} className='p-3 hover:bg-slate-200 rounded-b-[8px]'>Đăng xuất</div>
+                                </div>
+                            )}
+                            {isDropdownOpenNotify && (
+                                <div className="w-[400px] p-3 bg-white text-black absolute transition duration-500 ease-in-out top-10 cursor-pointer right-[455px]">
+                                    <div className='text-[26px] font-[600]'>Thông báo</div>
+                                    <div className=''>
+                                        {listNoti.length > 0 ? listNoti.map((data, index) => (
+                                            <div className='mt-2' key={index}>
+                                                <div>
+                                                    <span className='font-[600] text-[#DF0000]'>{data.giaohuu}</span>
+                                                    <span className='px-1'>tại</span>
+                                                    <span className='font-[600]'>Sân bóng {data.ten}</span>
+                                                </div>
+                                                <div className=''>{data.trangthai}</div>
+                                                {data.giaohuu == "Trận giao hữu" ? (data.tenDoiThu ? (<div className=''>Đối thủ: {data.tenDoiThu}</div>) : (<div className=''>Chưa tìm thấy đối thủ</div>)) : ""}
+                                            </div>
+                                        )) : "no"}
+                                    </div>
                                 </div>
                             )}
                         </>
                     ) : (
                         <>
-                            {/* <li className='flex flex-col justify-center invisible'>
-                            <Icon24px classIcon={faBell}/>
-                        </li> */}
                             <li>
                                 <button className='buttonXacNhan w-[130px] h-[40px]' onClick={OpenFormSignUp}>Đăng ký</button>
                             </li>

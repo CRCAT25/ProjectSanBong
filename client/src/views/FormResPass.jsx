@@ -29,7 +29,7 @@ const FormResPass = () => {
     const [matKhauMoi, setMatKhauMoi] = useState("");
     const [nhapLaiMK, setNhapLaiMK] = useState("");
 
-
+    // Nhập email muốn khôi phục mật khẩu
     const TiepTheo = async () => {
         let result = await (ResPass(name, email, sdt))
         console.log(result)
@@ -60,6 +60,7 @@ const FormResPass = () => {
         }
     }
 
+    // Đặt lại mật khẩu
     const ResPassSucessful = async () => {
         let result = await (UpdatePass(email, matKhauMoi, nhapLaiMK))
         if (result != "khong") {

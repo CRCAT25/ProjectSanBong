@@ -7,9 +7,8 @@ import "../css/OrderField.css"
 import Swal from 'sweetalert2'
 import { Login } from '../controllers/CDangNhap'
 
-// or via CommonJS
 
-
+// Tạo icon kích thước 24px
 const Icon24px = ({ classIcon, top }) => {
     const iconSize = {
         width: "24px",
@@ -26,6 +25,8 @@ const FormLogin = () => {
 
     const [userName, setUserName] = useState("");
     const [passWord, setpassWord] = useState("");
+
+    // Đăng nhập
     const DangNhap = async () => {
         let result = await (Login(userName, passWord))
         if (result === "chuaNhap") {

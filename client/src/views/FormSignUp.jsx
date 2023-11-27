@@ -29,6 +29,7 @@ const FormSignUp = () => {
     const [resPass, setResPass] = useState("");
     const [sdt, setSdt] = useState("");
 
+    // Đăng ký
     const DangKy = async () => {
         let signup = await SignUp(name, email, resEmail, password, resPass, sdt);
         if(signup === "ton tai"){
