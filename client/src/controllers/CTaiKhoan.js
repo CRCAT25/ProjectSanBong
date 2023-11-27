@@ -17,7 +17,14 @@ const getTKUserByIdTK = async (idTK) =>{
     return list
 }
 
+const updateTkByIdTK = async( Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK)=>{
+    const user = new TaiKhoan()
+    user.UpdateUserInfo(Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK)
+    getTKUserByIdTK(idTK)
+}
+
 export{
     getTKCoSoByIdTK,
     getTKUserByIdTK,
+    updateTkByIdTK
 }

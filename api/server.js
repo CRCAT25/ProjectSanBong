@@ -115,8 +115,16 @@ app.post("/datSan", async (req, res) => {
   const GiaoHuu = req.body.GiaoHuu;
   const TongTien = req.body.TongTien;
   const sql = `CALL InsertAndReturnHoaDon(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}')`;
+  
   db.query(sql, (err, data) => {
-    res.json(data[0])
+    console.log(data[0])
+    const sql2 = `CREATE EVENT delete_hoadon_event_${data[0][0].IDHoaDon}
+    ON SCHEDULE AT 
+    CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
+    DO CALL delete_passedhoadon_proc(${data[0][0].IDHoaDon});`;
+      db.query(sql2, (err2, data2) => {    
+        res.json(data[0])
+      });
   });
 });
 
@@ -134,6 +142,16 @@ app.post("/DatCoc", async (req, res) => {
   db.query(sql, (err, data) => {
   });
 });
+
+
+app.post("/getBillByIDBill", async (req, res) => {
+  const IDHoaDon = req.body.IDHoaDon;
+  const sql = `SELECT * FROM HOADON WHERE IDHoaDon = ?`;
+  db.query(sql, [IDHoaDon], (err, data) => {
+    res.json(data);
+  });
+});
+
 
 // Lấy lịch giao hữu // 
 app.post("/getAllLichGiaoHuu",(req,res) => {
@@ -292,6 +310,36 @@ app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
   })
 })
 
+app.post("/getPersonalBillByIdTK",(req,res)=>{
+  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
+  // console.log(req.body.IDTaiKhoan)
+  db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
+    // console.log(data);
+    res.json(data);
+   
+  })
+})
+
+app.post("/updatePersonalInfoByIdTK",(req,res)=>{
+  const sql=`UPDATE taikhoan 
+              SET Ten = ?,
+              Email =?,
+              SoDienThoai =?,
+              DiaChiCoSo=?,
+              NganHang=?,
+              STK=?,
+              Anh=?
+              WHERE IDTaiKhoan = ?`;
+  // console.log(req.body.IDTaiKhoan)
+  db.query(sql,[req.body.Ten,req.body.Email,req.body.SoDienThoai,
+                req.body.DiaChiCoSo,req.body.NganHang,req.body.STK,req.body.Anh],(err,data) =>{
+    // console.log(data);
+    res.json(data);
+   
+  })
+})
+
+
 /************* Đỗ Quốc Thành *************/
 
 
@@ -358,9 +406,9 @@ app.post("/signUpAccount", (req, res) => {
 
 // Lấy 5 hóa đơn cuối của user
 app.post("/selectTop5InHoaDon", (req, res) => {
-  const IdAccount = req.body.IdAccount;  
+  const IdAccount = req.body.IDTaiKhoan;  
 
-  const sql = `select * from hoadon where IDTaiKhoan = 2 order by IDHoaDon DESC Limit 5`; 
+  const sql = `select * from hoadon where IDTaiKhoan = ${IdAccount} order by IDHoaDon DESC Limit 5`; 
   db.query(sql, (err, data) => {
     res.json(data)
   });
