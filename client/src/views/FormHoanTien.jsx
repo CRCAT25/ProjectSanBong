@@ -7,8 +7,6 @@ import axios from 'axios';
 
 // const host = 'https://api.vietqr.io/v2/banks';
 
-
-
 const Icon24px = ({classIcon}) => {
     const iconSize = {
         width: "24px",

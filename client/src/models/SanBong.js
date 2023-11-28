@@ -22,13 +22,21 @@ class SanBong{
             });
     }
        
+    DeleteSanByID(id) {
+        return axios.post("http://localhost:8081/deleteSanByID", {IDSan:id})
+            .then(response => {
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 
     getSanByID(idSan) {
         return axios.post("http://localhost:8081/getSanByID", {IdSan: idSan})
             .then(response => {
                 let data = response.data[0]
                 const phanQuyen = new PhanQuyen(data.IDPhanQuyen,data.TenPhanQuyen)
-                const coSoSan = new CoSoSan(data.IDTaiKhoan, phanQuyen, data.Ten, data.Email, data.SoDienThoai, data.DiaChiCoSo, data.NganHang, data.STK, data.Anh, data.MatKhau, data.XacThuc)
+                const coSoSan = new CoSoSan(data.IDTaiKhoan, phanQuyen, data.Ten, data.Email, data.SoDienThoai, data.DiaChiCoSo, data.NganHang, data.STK, data.Anh, data.MatKhau, data.TrangThai)
                 const loaiSan = new LoaiSan(data.IDLoaiSan, data.TenLoaiSan,data.GiaTien)
                 const sanBong = new SanBong(data.IDSan, coSoSan, loaiSan, data.TenSan, data.TrangThai);
                 return sanBong
@@ -40,7 +48,7 @@ class SanBong{
             .then(response => {
                 let data = response.data[0]
                 const phanQuyen = new PhanQuyen(data.IDPhanQuyen,data.TenPhanQuyen)
-                const coSoSan = new CoSoSan(data.IDTaiKhoan, phanQuyen, data.Ten, data.Email, data.SoDienThoai, data.DiaChiCoSo, data.NganHang, data.STK, data.Anh, data.MatKhau, data.XacThuc)
+                const coSoSan = new CoSoSan(data.IDTaiKhoan, phanQuyen, data.Ten, data.Email, data.SoDienThoai, data.DiaChiCoSo, data.NganHang, data.STK, data.Anh, data.MatKhau, data.TrangThai)
                 const loaiSan = new LoaiSan(data.IDLoaiSan, data.TenLoaiSan,data.GiaTien)
                 const field = new SanBong(data.IDSan, coSoSan, loaiSan, data.TenSan, data.TrangThai);
                 return field
@@ -101,7 +109,7 @@ class SanBong{
         const resultList = [];
         list.forEach(data => {
             const phanQuyen = new PhanQuyen(data.IDPhanQuyen,data.TenPhanQuyen)
-            const coSoSan = new CoSoSan(data.IDTaiKhoan, phanQuyen, data.Ten, data.Email, data.SoDienThoai, data.DiaChiCoSo, data.NganHang, data.STK, data.Anh, data.MatKhau, data.XacThuc)
+            const coSoSan = new CoSoSan(data.IDTaiKhoan, phanQuyen, data.Ten, data.Email, data.SoDienThoai, data.DiaChiCoSo, data.NganHang, data.STK, data.Anh, data.MatKhau, data.TrangThai)
             const loaiSan = new LoaiSan(data.IDLoaiSan, data.TenLoaiSan,data.GiaTien)
             const item = new SanBong(data.IDSan, coSoSan, loaiSan, data.TenSan, data.TrangThai);
             resultList.push(item);

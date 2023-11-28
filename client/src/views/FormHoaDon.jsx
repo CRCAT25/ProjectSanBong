@@ -1,6 +1,7 @@
 import React from 'react'
 import { OrderField } from './OrderField'
-const FormHoaDon = ({TenKH, SDTKH, KhungGio, NgayDat, TenSan, DiaDiem, SDTSan, MaSan, LoaiSan, GiaoHuu, TongTien, HienThiXacNhanDatSan, XacNhanDatSanV}) => {
+const FormHoaDon = ({TenKH, SDTKH, KhungGio, NgayDat, TenSan, DiaDiem, SDTSan, MaSan, LoaiSan, GiaoHuu, TongTien, 
+    HienThiXacNhanDatSan, XacNhanDatSanV,isDatSan}) => {
   return (
     <div className='w-[25%] bg-slate-200 h-[auto] left-1/2 -translate-x-1/2 my-[10%] rounded-[5] absolute z-1005'>
         <div className='grid grid-cols-2 p-5'>
@@ -40,13 +41,16 @@ const FormHoaDon = ({TenKH, SDTKH, KhungGio, NgayDat, TenSan, DiaDiem, SDTSan, M
             <div className="col-span-1 font-[650]">Tạm tính:</div>
             <div className="col-span-1 font-[650]">{TongTien}</div>
         </div>
-
-        <div className='w-[90%] flex flex-auto justify-around p-10 mx-auto '>
-            <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000]" onClick={HienThiXacNhanDatSan}>Hủy</button>
-            <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff]" onClick={XacNhanDatSanV} >Tiếp tục</button>
-        </div>
         
-        
+        {isDatSan === true ? (
+            <div className='w-[90%] flex flex-auto justify-around p-10 mx-auto '>
+        <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000]" onClick={HienThiXacNhanDatSan}>Hủy</button>
+        <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff]" onClick={XacNhanDatSanV} >Tiếp tục</button>
+            </div>) :(
+        <div className='w-[90%] flex flex-auto justify-around p-10 mx-auto '> 
+        <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " onClick={HienThiXacNhanDatSan}>Xác nhận</button>
+        <button class=" bg-[#F00000] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={XacNhanDatSanV}>Hủy đặt sân</button>
+        </div>)  }
     </div>
   )
 }

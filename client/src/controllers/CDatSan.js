@@ -58,8 +58,6 @@ const DatCoc = async (IDHoaDon) =>{
     await sanbong.DatCoc(IDHoaDon)
 }
 
-
-
 export{ 
     GetAllSanFromCoSo,
     GetInfoSanBong,

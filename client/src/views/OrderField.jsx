@@ -125,6 +125,7 @@ export const OrderField = () => {
     const[tenCoSoInput, setTenCoSoInput] = useState("")
     const[diaDiemInput, setDiaDiemInput] = useState("")
     const selectLoaiBoxRef = useRef(null)
+    const trangChu=false;
     const TimKiemSanBong = async () => {    
         setGotInfo(false)
         setGotInfoSan(false)
@@ -146,6 +147,7 @@ export const OrderField = () => {
     const[sanBongInfo, setSanBongInfo] = useState([]);
     const[loaiSans, setLoaiSans] = useState([]);
     const[tenLoaiSan, setTenLoaiSan] = useState("");
+    const FromDatSan=true;
 
     const ChonCoSoSan = async (idCoso) => {
         if (selectLoaiBoxRef.current) {
@@ -234,12 +236,31 @@ export const OrderField = () => {
     const [tongTienText, setTongTienText] = useState("0")
     const [valueForHoaDon, setValueForHoaDon] = useState({})
     const DatSan = async() =>{
-        const checkKhungGio = checkSelectKhungGio()
-        if(!checkKhungGio){
-            HienThiThongBaoChonKhungGio()
+        if(checkDangNhap == true){
+            const checkKhungGio = checkSelectKhungGio()
+            if(!checkKhungGio){
+                HienThiThongBaoChonKhungGio()
+            }else{
+                HienThiXacNhanDatSan()
+            }    
         }else{
-            HienThiXacNhanDatSan()
-        }            
+            Swal.fire({
+                title: "Vui lòng đăng nhập trước khi thực hiện!",
+                icon: "error"
+            });
+            setTimeout(() => {               
+                Swal.close();
+            }, 1000);
+        }             
+    }
+
+    const checkDangNhap = async () =>{
+        if(localStorage.getItem('userName') == ""){
+            
+            return false
+        }else{
+            return true
+        }
     }
 
     const checkSelectKhungGio = () =>{
@@ -259,6 +280,7 @@ export const OrderField = () => {
             Swal.close();
         }, 1000);
     }
+    
     const HienThiXacNhanDatSan = () =>{
         if(showHoaDon == true){
             setShowHoaDon(false)
@@ -375,33 +397,6 @@ export const OrderField = () => {
         }
     }  
 
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            
-            event.returnValue = "result"; 
-        
-        };
-    
-        const handleUnload = () => {
-            
-        };
-
-        if(showHoaDon){
-            window.addEventListener('beforeunload', handleBeforeUnload);
-            window.addEventListener('unload', handleUnload);
-        }
-        else{
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-            window.removeEventListener('unload', handleUnload); 
-        }
-        
-    
-        return () => {
-          window.removeEventListener('beforeunload', handleBeforeUnload);
-          window.removeEventListener('unload', handleUnload);
-        };
-      }, [showHoaDon]);
-
   return (
     <div className="w-[80%] mx-auto mt-5 orderField relative">
         <div className="grid grid-cols-12">
@@ -412,7 +407,7 @@ export const OrderField = () => {
         {showHoaDon === true ? (
         <div className="fixed inset-0 z-50 flex  bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded shadow-md">
-            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} />
+            <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan = {HienThiXacNhanDatSan} XacNhanDatSanV = {XacNhanDatSanV} isDatSan={true}/>
             {showDatCoc === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> <FormHoanTien isDatCoc={true} tenKH = {localStorage.getItem('userName')} tongTien = {tongTienText} HuyDatCoc = {HuyDatCoc} DatCoc = {(selectednganhang, stk, tongtien) => DatCocV(selectednganhang, stk, tongtien)}/> </div>
             
             ) : ""}

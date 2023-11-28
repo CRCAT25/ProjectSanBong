@@ -136,12 +136,30 @@ app.post("/huyDatSan", async (req, res) => {
   });
 });
 
+app.post("/huyLichDaDat", async (req, res) => {
+  const IDHoaDon = req.body.IDHoaDon;
+  const sql = `Update HOADON SET TrangThai = "Canceled" WHERE IDHoaDon = ${IDHoaDon}`;
+  db.query(sql, (err, data) => {
+    res.json(data[0])
+  });
+});
+
 app.post("/DatCoc", async (req, res) => {
   const IDHoaDon = req.body.IDHoaDon;
   const sql = `UPDATE HOADON SET TrangThai = 'Completed' WHERE IDHoaDon = ${IDHoaDon}`;
   db.query(sql, (err, data) => {
   });
 });
+
+
+app.post("/getBillByIDBill", async (req, res) => {
+  const IDHoaDon = req.body.IDHoaDon;
+  const sql = `SELECT * FROM HOADON WHERE IDHoaDon = ?`;
+  db.query(sql, [IDHoaDon], (err, data) => {
+    res.json(data);
+  });
+});
+
 
 // Lấy lịch giao hữu // 
 app.post("/getAllLichGiaoHuu",(req,res) => {
@@ -185,6 +203,7 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
     taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and
     sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan and 
     sanbong.IDLoaiSan = loaisan.IDLoaiSan and  
+    sanbong.TrangThai = 0 and
     taikhoan.IDTaiKhoan = ?`;
   db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
     res.json(data);
@@ -248,7 +267,11 @@ app.post("/InsertSan", (req, res) => {
     });
   });
 });
-
+app.post("/deleteSanByID", (req, res) => {
+  const sql = `UPDATE sanbong SET TrangThai = 1 WHERE IDSan = ?`;
+  db.query(sql, [req.body.IDSan],(err, data) => {
+  });
+});
 // Set up multer to handle file uploads
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -299,6 +322,36 @@ app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
    
   })
 })
+
+app.post("/getPersonalBillByIdTK",(req,res)=>{
+  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
+  // console.log(req.body.IDTaiKhoan)
+  db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
+    // console.log(data);
+    res.json(data);
+   
+  })
+})
+
+app.post("/updatePersonalInfoByIdTK",(req,res)=>{
+  const sql=`UPDATE taikhoan 
+              SET Ten = ?,
+              Email =?,
+              SoDienThoai =?,
+              DiaChiCoSo=?,
+              NganHang=?,
+              STK=?,
+              Anh=?
+              WHERE IDTaiKhoan = ?`;
+  // console.log(req.body.IDTaiKhoan)
+  db.query(sql,[req.body.Ten,req.body.Email,req.body.SoDienThoai,
+                req.body.DiaChiCoSo,req.body.NganHang,req.body.STK,req.body.Anh],(err,data) =>{
+    // console.log(data);
+    res.json(data);
+   
+  })
+})
+
 
 /************* Đỗ Quốc Thành *************/
 
@@ -357,7 +410,6 @@ app.post("/signUpAccount", (req, res) => {
   const Email = req.body.Email;
   const Pass = req.body.Pass;
   const Sdt = req.body.SDT;
-
   const sql = `insert into taikhoan(Ten, Email, MatKhau, SoDienThoai, IDPhanQuyen) values("${Name}","${Email}","${Pass}","${Sdt}", 1)`; 
   db.query(sql, (err, data) => {
     res.json(data)
@@ -452,6 +504,19 @@ db.query(
     }
   }
 );
+});
+
+app.post("/searchemailsdt", (req, res) => {
+  const sql = "SELECT * FROM taikhoan WHERE IDPhanQuyen = ? AND (SoDienThoai = ? OR Email = ?)";
+  db.query(sql, [req.body.phanquyen ,req.body.search, req.body.search], (err, data) => {
+    if (err) return res.json("Error");
+    if (data.length > 0) {
+      console.log(data)
+      res.json(data);
+    }else {
+      res.json(data)
+    }
+  });
 });
 
 

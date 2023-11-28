@@ -13,6 +13,11 @@ const getAllLoaiSan = async () =>{
     return list
      
  }
+ const deleteSanByID = async (id) =>{
+   const san = new SanBong()
+   san.DeleteSanByID(id)
+    
+}
  const getAnhsByIDSan = async (id) =>{
    const anh = new Anh()
    let list = await anh.GetAnhsByIDSan(id)
@@ -120,5 +125,6 @@ const getCostByShiftnTypeField = async (idShift, idTField) =>{
     getCostByShiftnTypeField,
     insertSan,
     getAnhsByIDSan,
-    getLoaiSanByID
+    getLoaiSanByID,
+    deleteSanByID
  }

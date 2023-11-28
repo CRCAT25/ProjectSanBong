@@ -2,10 +2,17 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import LichGiaoHuu from'../models/LichGiaoHuu';
 import HoaDon from'../models/HoaDon';
+import SanBong from'../models/SanBong';
 
 const getAllLichGiaoHuu = async () =>{
     const lich= new LichGiaoHuu();
     let list = await lich.getAllLichGiaoHuu();
+    return list;
+}
+
+const GetBillById = async (idBill) =>{
+    const hoadon= new HoaDon();
+    let list = await hoadon.getBillById(idBill);
     return list;
 }
 
@@ -29,8 +36,14 @@ const GetPersonalBillByIdAccount = async (idTk) =>{
 }
 
 const HuySanByIDHd = async (IDHoaDon) =>{
+    const sanbong = new HoaDon()
+    await sanbong.huySanByID(IDHoaDon)
+}
+
+const GetAllBillByIDTk = async(IdTK) =>{
     const hoaDon = new HoaDon()
-    await hoaDon.HuySan(IDHoaDon)
+    let list = await hoaDon.getAllBillByIdTk(IdTK)
+    return list;
 }
 
 export {
@@ -38,5 +51,7 @@ export {
     updateBillDoiThuByIdBill,
     GetPersonalLichFromBillByIdTK,
     GetPersonalBillByIdAccount,
-    HuySanByIDHd
+    HuySanByIDHd,
+    GetAllBillByIDTk,
+    GetBillById
 }
