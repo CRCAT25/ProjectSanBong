@@ -1,4 +1,5 @@
 import TaiKhoan from "../models/TaiKhoan"
+import Swal from 'sweetalert2'
 
 // Kiểm tra đầu vào đăng ký user
 const CheckInput = (name, email, resEmail, pass, resPass, sdt) => {
@@ -26,39 +27,95 @@ const validatePhone = (phone) => {
 };
 
 // Kiểm tra tài khoản đã tồn tại hay chưa
-const CheckAccount = async (name, email, resEmail, pass, resPass, sdt) => {
+const CheckAccount = async (email, sdt) => {
     const user = new TaiKhoan();
-    if (CheckInput(name, email, resEmail, pass, resPass, sdt) == true) {
-        const authUser = await user.CheckEmailSdt(email, sdt);
-        console.log(authUser)
-        if (authUser == "da co")
-            return "Tai khoan da ton tai"
-        else return "Tai khoan chua ton tai"
-    }
-    else {
-        return "chuaNhap"
-    }
+    const authUser = await user.CheckEmailSdt(email, sdt);
+    return authUser
 }
 
 // Đăng ký
 const SignUp = async (name, email, resEmail, pass, resPass, sdt) => {
     const user = new TaiKhoan();
-    if (await CheckAccount(name, email, resEmail, pass, resPass, sdt) === "Tai khoan chua ton tai") {
-        if (!CheckEmail) return "email khong khop"
-        else if (!CheckPass) return "matkhau khong khop"
-        else if (!validateEmail(email)) return "email khong dung format"
-        else if (!validatePhone(sdt)) return "sdt khong dung format"
-        else {
-            const authUser = await user.DangKy(name, email, pass, sdt);
-            return authUser
+    if (CheckInput(name, email, resEmail, pass, resPass, sdt) == true) {
+        if (await CheckAccount(email, sdt) === "chua co") {
+            if (!CheckEmail(email, resEmail)) {
+                Swal.fire({
+                    title: "Email nhập không trùng khớp",
+                        icon: "error"
+                    });
+                document.getElementsByClassName("inputEmail")[0].value = ""
+                document.getElementsByClassName("inputResEmail")[0].value = ""
+                setTimeout(() => {
+                    Swal.close();
+                }, 600);
+            }
+            else if (!CheckPass(pass, resPass))
+            {
+                Swal.fire({
+                    title: "Mật khẩu nhập không trùng khớp",
+                    icon: "error"
+                });
+                setTimeout(() => {
+                    Swal.close();
+                }, 600);
+            }
+            else if (!validateEmail(email)){
+                Swal.fire({
+                    title: "Email không hợp lệ",
+                    icon: "error"
+                });
+                document.getElementsByClassName("inputEmail")[0].value = ""
+                document.getElementsByClassName("inputResEmail")[0].value = ""
+                setTimeout(() => {
+                    Swal.close();
+                }, 600);
+            }
+            else if (!validatePhone(sdt)){
+                Swal.fire({
+                    title: "Số điện thoại không hợp lệ",
+                    icon: "error"
+                });
+                document.getElementsByClassName("inputSdt")[0].value = ""
+                setTimeout(() => {
+                    Swal.close();
+                }, 600);
+            }
+            else {
+                await user.DangKy(name, email, pass, sdt);
+                Swal.fire({
+                    title: "Đăng ký thành công",
+                    icon: "success"
+                });
+                setTimeout(() => {
+                    Swal.close();
+                    window.location.reload();
+                }, 600);
+            }
+        }
+        else if (await CheckAccount(email, sdt) === "da co") {
+            Swal.fire({
+                title: "Tài khoản đã tồn tại",
+                icon: "error"
+            });
+            document.getElementsByClassName("inputEmail")[0].value = ""
+            document.getElementsByClassName("inputResEmail")[0].value = ""
+            document.getElementsByClassName("inputSdt")[0].value = ""
+            setTimeout(() => {
+                Swal.close();
+            }, 600);
         }
     }
-    else if (await CheckAccount(name, email, resEmail, pass, resPass, sdt) === "Tai khoan da ton tai") {
-        return "ton tai"
-    }
     else {
-        return "nhap thieu"
+        Swal.fire({
+            title: "Vui lòng nhập đầy đủ thông tin",
+            icon: "error"
+        });
+        setTimeout(() => {
+            Swal.close();
+        }, 600);
+        return;
     }
+
 }
 
 export {

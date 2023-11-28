@@ -31,79 +31,7 @@ const FormSignUp = () => {
 
     // Đăng ký
     const DangKy = async () => {
-        let signup = await SignUp(name, email, resEmail, password, resPass, sdt);
-        if(signup === "ton tai"){
-            Swal.fire({
-                title: "Tài khoản đã tồn tại",
-                icon: "error"
-            });
-            document.getElementsByClassName("inputEmail")[0].value = ""
-            document.getElementsByClassName("inputResEmail")[0].value = ""
-            document.getElementsByClassName("inputSdt")[0].value = ""
-            setTimeout(() => {
-                Swal.close();
-            }, 600);
-        }
-        else if(signup === "nhap thieu"){
-            Swal.fire({
-                title: "Vui lòng nhập đầy đủ thông tin",
-                icon: "error"
-            });
-            setTimeout(() => {
-                Swal.close();
-            }, 600);
-        }
-        else if(signup === "email khong khop"){
-            Swal.fire({
-                title: "Email nhập không trùng khớp",
-                icon: "error"
-            });
-            document.getElementsByClassName("inputEmail")[0].value = ""
-            document.getElementsByClassName("inputResEmail")[0].value = ""
-            setTimeout(() => {
-                Swal.close();
-            }, 600);
-        }
-        else if(signup === "matkhau khong khop"){
-            Swal.fire({
-                title: "Mật khẩu nhập không trùng khớp",
-                icon: "error"
-            });
-            setTimeout(() => {
-                Swal.close();
-            }, 600);
-        }
-        else if(signup === "email khong dung format"){
-            Swal.fire({
-                title: "Email không hợp lệ",
-                icon: "error"
-            });
-            document.getElementsByClassName("inputEmail")[0].value = ""
-            document.getElementsByClassName("inputResEmail")[0].value = ""
-            setTimeout(() => {
-                Swal.close();
-            }, 600);
-        }
-        else if(signup === "sdt khong dung format"){
-            Swal.fire({
-                title: "Số điện thoại không hợp lệ",
-                icon: "error"
-            });
-            document.getElementsByClassName("inputSdt")[0].value = ""
-            setTimeout(() => {
-                Swal.close();
-            }, 600);
-        }
-        else{
-            Swal.fire({
-                title: "Đăng ký thành công",
-                icon: "success"
-            });
-            setTimeout(() => {
-                Swal.close();
-                window.location.reload();
-            }, 600);
-        }
+        SignUp(name, email, resEmail, password, resPass, sdt)
     }
 
     return (
@@ -128,12 +56,14 @@ const FormSignUp = () => {
             <Icon24px classIcon={faEnvelope} top={"42.7%"} />
 
             <input 
+            type='password'
             className='inputPass bg-[#E9E9E9] h-[60px] rounded-[150px] w-full pl-14 mt-3' 
             placeholder='Mật khẩu'
             onChange={(event) => { setPassword(event.target.value) }}/>
             <Icon24px classIcon={faKey} top={"52.6%"} />
 
             <input 
+            type='password'
             className='inputResPass bg-[#E9E9E9] h-[60px] rounded-[150px] w-full pl-14 mt-3' 
             placeholder='Nhập lại mật khẩu'
             onChange={(event) => { setResPass(event.target.value) }}/>

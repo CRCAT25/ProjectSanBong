@@ -344,8 +344,9 @@ app.post("/checkEmailSdt", (req, res) => {
 
   const sql = `select * from taikhoan where Email = "${Email}" or SoDienThoai = "${Sdt}"`; 
   db.query(sql, (err, data) => {
-    if(data[0] == null)
+    if(data[0] == null){
       res.json("chua co")
+    }
     else res.json("da co")
   });
 });
@@ -356,7 +357,6 @@ app.post("/signUpAccount", (req, res) => {
   const Email = req.body.Email;
   const Pass = req.body.Pass;
   const Sdt = req.body.SDT;
-  
 
   const sql = `insert into taikhoan(Ten, Email, MatKhau, SoDienThoai, IDPhanQuyen) values("${Name}","${Email}","${Pass}","${Sdt}", 1)`; 
   db.query(sql, (err, data) => {
