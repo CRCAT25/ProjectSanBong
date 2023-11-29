@@ -166,7 +166,7 @@ export default function Header() {
                     } else {
                         giaohuu = "Trận thường";
                     }
-                    if(doiThu.length > 0)
+                    if(doiThu != null)
                         tenDoiThu = await doiThu.Ten;                        
                     else tenDoiThu = ""
 

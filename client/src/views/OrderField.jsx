@@ -245,13 +245,25 @@ export const OrderField = () => {
     const [isCheckBoxChecked, setIsCheckBoxChecked] = useState(0)
     const [textForGiaoHuu, setTextForGiaoHuu] = useState("")
     const TaoGiaoHuu = () => {
-        if (isCheckBoxChecked == 0) {
-            setIsCheckBoxChecked(1)
-            setTextForGiaoHuu("Cho phép tham gia giao hữu !")
-        } else {
-            setIsCheckBoxChecked(0)
-            setTextForGiaoHuu("")
+        const currentdate = new Date()
+        if(selectedDate.getDate() == currentdate.getDate()){
+            Swal.fire({
+                title: "Bạn chỉ có thể bật giao hữu trước 1 ngày !",
+                icon: "information"
+            });
+            setTimeout(() => {
+                Swal.close();
+            }, 1000);
+        }else{
+            if (isCheckBoxChecked == 0) {
+                setIsCheckBoxChecked(1)
+                setTextForGiaoHuu("Cho phép tham gia giao hữu !")
+            } else {
+                setIsCheckBoxChecked(0)
+                setTextForGiaoHuu("")
+            }
         }
+        
     }
 
 
