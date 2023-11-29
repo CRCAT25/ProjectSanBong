@@ -42,7 +42,14 @@ class SanBong{
                 return sanBong
             });
     }
-    
+    UpdateSanByID(IDLoaiSan, IDTaiKhoan, TenSan,TrangThai,IDSan) {
+        return axios.post("http://localhost:8081/deleteSanByID", {IDLoaiSan, IDTaiKhoan, TenSan, TrangThai, IDSan})
+            .then(response => {
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
     GetFieldByIDField(idField) {
         return axios.post("http://localhost:8081/getFieldByIDField", {IdSan: idField})
             .then(response => {
@@ -98,9 +105,11 @@ class SanBong{
                 console.error(error);
             });
     }
-    InsertSan(iDTaiKhoan, loaiSan, tenSan, anhs){
-        return axios.post("http://localhost:8081/InsertSan", {IDTaiKhoan: iDTaiKhoan, IDLoaiSan : loaiSan, TenSan : tenSan, Anhs : anhs})
-            .then(response => {})
+    InsertSan(iDTaiKhoan, loaiSan, tenSan){
+        return axios.post("http://localhost:8081/InsertSan", {IDTaiKhoan: iDTaiKhoan, IDLoaiSan : loaiSan, TenSan : tenSan})
+            .then(response => {
+                return response.data[0][0].IDSan
+            })
             .catch(error => {
                 console.error(error);
             });

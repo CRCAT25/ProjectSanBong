@@ -17,11 +17,20 @@ const getAllLoaiSan = async () =>{
    const san = new SanBong()
    san.DeleteSanByID(id)
     
+} 
+const updateSanByID = async (IDLoaiSan, IDTaiKhoan, TenSan,TrangThai,IDSan) =>{
+   const san = new SanBong()
+   san.UpdateSanByID(IDLoaiSan, IDTaiKhoan, TenSan,TrangThai,IDSan)
 }
  const getAnhsByIDSan = async (id) =>{
    const anh = new Anh()
    let list = await anh.GetAnhsByIDSan(id)
    return list
+    
+}
+const getSanByID = async (id) =>{
+   const san = new SanBong()
+   return await san.getSanByID(id)
     
 }
 const getLoaiSanByID = async (id) =>{
@@ -31,8 +40,11 @@ const getLoaiSanByID = async (id) =>{
 }
  const insertSan = async (idTK, idLS, tenSan, anhs) =>{
    const san = new SanBong()
-   san.InsertSan(idTK,idLS,tenSan,anhs)
-    
+   const anh = new Anh()
+   let IDSan = await san.InsertSan(idTK,idLS,tenSan)
+   anhs.forEach(tenAnh => {
+      anh.InsertAnh(IDSan, tenAnh)
+   });
 }
  const getAllSanByTaiKhoan = async (IDTaiKhoan) =>{
     const san = new SanBong()
@@ -126,5 +138,7 @@ const getCostByShiftnTypeField = async (idShift, idTField) =>{
     insertSan,
     getAnhsByIDSan,
     getLoaiSanByID,
-    deleteSanByID
+    deleteSanByID,
+    getSanByID,
+    updateSanByID
  }

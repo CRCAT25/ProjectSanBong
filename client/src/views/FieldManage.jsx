@@ -21,6 +21,8 @@ import {
   getAllHoaDonCompletedByCoSo,
   getBillForRefund,
   insertSan,
+  updateSanByID,
+  getSanByID,
   getLoaiSanByID,
   getAnhsByIDSan,
   deleteSanByID
@@ -42,7 +44,8 @@ const FieldManage =  () => {
   }, []);
   const Swal = require('sweetalert2')
   const [getLoaiSans, setLoaiSans] = useState([]);
-  let sanID = null
+  let IDSan = null
+  const [getIDSan, setIDSan] = useState([]);
   const [getBillForRefund, setBillForRefund] = useState([]);
   
   const displayLoaiSanPrice = async () =>{
@@ -53,30 +56,22 @@ const FieldManage =  () => {
     }
     
   }
-  function fetchImageAndConvertToBlob(imageUrl) {
-    fetch(imageUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
-        }
-        return response.blob();
-      })
-      .then(blob => {
-        // Use the blob as needed
-        console.log(blob);
-      })
-      .catch(error => {
-        console.error('Error fetching image:', error);
-      });
+
+ function deleteSanMainBTN() {
+  if(getIDSan){
+    deleteSan(getIDSan)
+  }else{
+    Swal.fire({
+      title: "Yêu cầu chọn sân muốn xoá!",
+      confirmButtonText: "OK",
+    });
   }
-
-
+ }
   function InsertSan(){
     let tenSan = document.getElementsByClassName("auto-group-1jl7-TBh")[0].value
     let loaiSan = document.getElementsByClassName("selectLoaiS")[0].value
     let idTK = "7"
     let anhs = document.getElementById("inputAnh").files
-    document.getElementById("inputAnh").files = new File()
     let tenAnhs = []
     let addible = false
     if(tenSan.length > 0){
@@ -88,7 +83,7 @@ const FieldManage =  () => {
           }
           addible = true
         }else{
-          alert("Yêu cầu nhập đơn giá.")
+          alert("Yêu cầu chọn ít nhất 1 ảnh.")
         }
       }else{
         alert("Yêu cầu chọn loại sân.")
@@ -205,38 +200,111 @@ const FieldManage =  () => {
     }
   }
   function selectSan(element){
-    console.log(element)
-    let isAllow = false
-    let listFile = []
-    if(sanID){
-      document.getElementById(sanID).style.background = "white"
-      isAllow = true
-    } else {
-      isAllow = true
+    if(IDSan){
+      document.getElementById("san-"+IDSan).style.background = "white"
     }
-    if(isAllow){
-      sanID = element.parentElement.parentElement.id;
-    }
+    setIDSan((element.parentElement.parentElement.id).substring(4,(element.parentElement.parentElement.id).length));
+    IDSan = (element.parentElement.parentElement.id).substring(4,(element.parentElement.parentElement.id).length);
     document.getElementById("Wa15ekgLDPSUrvQVNo1jL7").value = element.parentElement.parentElement.children[0].children[0].children[0].innerHTML
     document.getElementsByClassName("selectLoaiS")[0].value = element.parentElement.parentElement.children[0].children[1].children[0].id
     document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = element.parentElement.parentElement.children[0].children[2].children[0].innerHTML
     element.parentElement.parentElement.style.background = "red"
     document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML =""
-    let file = ""
+    // let file = ""
     for(let i = 0; i < element.parentElement.parentElement.children[1].children.length; i++){
       document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML += `
               <img
             className="imgSanInput"
             src="${element.parentElement.parentElement.children[1].children[i].src}"
           />`;
-      // file = new File([fetchImageAndConvertToBlob(document.getElementsByClassName('imgSan')[i].src)], 
-      // (document.getElementsByClassName('imgSan')[i].src).substring(29,(document.getElementsByClassName('imgSan')[i].src).length), 
-      // { type: 'image/*' });
+      //   let imageUrl = document.getElementsByClassName('imgSan')[i].src
+      // fetch(imageUrl)
+      // .then(response => {
+      //   if (!response.ok) {
+      //     throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+      //   }
+      //   return response.blob();
+      // })
+      // .then(blob => {
+      //   file = new File([blob], 
+      //     (document.getElementsByClassName('imgSan')[i].src).split("/")[(document.getElementsByClassName('imgSan')[i].src).split("/").length - 1], 
+      //     { type: 'image/*' });
+      // })
+      // .catch(error => {
+      //   console.error('Error fetching image:', error);
+      // });
+      
       // listFile.push(file)
     }
     // document.getElementById('inputAnh').files = [file]; 
   }
-  function deleteSan(element){
+  const updateSan = async () => {
+    if(getIDSan){
+      let san = await getSanByID(getIDSan)
+      let tenSan = document.getElementsByClassName("auto-group-1jl7-TBh")[0].value
+      let loaiSan = document.getElementsByClassName("selectLoaiS")[0].value
+      let anhs = document.getElementById("inputAnh").files
+      let tenAnhs = []
+      let perGranted = false
+      let newTenSan = san.TenSan
+      let newLoaiSan = san.LoaiSan.IdLoaiSan
+      if(tenSan.length > 0){
+        if(loaiSan !== "none"){
+          perGranted = true
+        }else{
+          alert("Yêu cầu chọn loại sân.")
+        }
+      }else{
+        alert("Yêu cầu nhập tên sân.")
+      }
+
+      if(perGranted){
+        if(tenSan != san.TenSan){
+          newTenSan = tenSan
+        }
+        if(loaiSan != san.LoaiSan.IdLoaiSan){
+          newLoaiSan = loaiSan
+        }
+        if(anhs.length > 0){
+          for(let i = 0; i < anhs.length; i++){
+            if(i == 2){break}
+            tenAnhs.push(anhs[i].name)
+          }
+        }
+        // updateSanByID(newLoaiSan,san.TaiKhoan.IdAccount, newTenSan, san.TrangThai, san.IdSan)
+      }
+
+
+      // Swal.fire({
+      //   title: "Bạn có chắc muốn xoá?",
+      //   showDenyButton: true,
+      //   confirmButtonText: "Xoá",
+      //   denyButtonText: `Không`
+      // }).then((result) => {
+      //   if (result.isConfirmed) {
+      //     if(getIDSan == IDSan){
+      //       setIDSan(null)
+      //     } 
+      //     deleteSanByID(IDSan)
+  
+      //     Swal.fire({
+      //       title: "Xoá thành công!"
+      //     }).then((result) => {
+      //       if (result.isConfirmed) {
+      //         loadListFields()
+              
+      //       }
+      //     });
+      //   }
+      // });
+    }else{
+      Swal.fire({
+        title: "Yêu cầu chọn sân muốn xoá!",
+        confirmButtonText: "OK",
+      });
+    }
+  }
+  function deleteSan(IDSan){
     Swal.fire({
       title: "Bạn có chắc muốn xoá?",
       showDenyButton: true,
@@ -244,10 +312,11 @@ const FieldManage =  () => {
       denyButtonText: `Không`
     }).then((result) => {
       if (result.isConfirmed) {
-        if(sanID == element.parentElement.parentElement.id){
-          sanID = null
+        if(getIDSan == IDSan){
+          setIDSan(null)
+          IDSan = null
         } 
-        deleteSanByID((element.parentElement.parentElement.id).substring(4,(element.parentElement.parentElement.id).length))
+        deleteSanByID(IDSan)
 
         Swal.fire({
           title: "Xoá thành công!"
@@ -282,7 +351,7 @@ const FieldManage =  () => {
           <div class="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
           <img
             class="imgSan"
-              src="./assets/${anhs[0].Anh}"
+              src="http://localhost:3000/./assets/${anhs[0].Anh}"
               id="257:863"
             />
           </div>
@@ -311,12 +380,12 @@ const FieldManage =  () => {
         <div class="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
         <img
           class="imgSan"
-            src="./assets/${anhs[0].Anh}"
+            src="http://localhost:3000/./assets/${anhs[0].Anh}"
             id="257:863"
           />
           <img
           class="imgSan"
-            src="./assets/${anhs[1].Anh}"
+            src="http://localhost:3000/./assets/${anhs[1].Anh}"
             id="257:863"
           />
         </div>
@@ -346,7 +415,7 @@ const FieldManage =  () => {
         document.getElementsByClassName("btnDetailSan")[index].addEventListener("click", ()=>{
           selectSan(document.getElementsByClassName("btnDetailSan")[index])});
         document.getElementsByClassName("btnDeleteThisSan")[index].addEventListener("click", ()=>{
-          deleteSan(document.getElementsByClassName("btnDeleteThisSan")[index])});
+          deleteSan((document.getElementsByClassName("btnDeleteThisSan")[index].parentElement.parentElement.id).substring(4,(document.getElementsByClassName("btnDeleteThisSan")[index].parentElement.parentElement.id).length))});
       }
   }
   const GetAllBillByTaiKhoan = async () =>{
@@ -413,7 +482,7 @@ const FieldManage =  () => {
             <button className="btnCapNhatSan" id="257:818">
               Cập nhật
             </button>
-            <button className="btXoaSan" id="257:821">
+            <button className="btXoaSan" id="257:821" onClick={deleteSanMainBTN}>
               Xóa
             </button>
           </div>

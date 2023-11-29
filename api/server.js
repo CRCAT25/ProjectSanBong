@@ -199,12 +199,15 @@ app.post("/getAllLoaiSan", (req, res) => {
   });
 });
 app.post("/getAllSanByTaiKhoan", (req, res) => {
-  const sql = `SELECT * FROM sanbong, loaisan, taikhoan, loaiphanquyen WHERE 
-    taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and
-    sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan and 
-    sanbong.IDLoaiSan = loaisan.IDLoaiSan and  
-    sanbong.TrangThai = 0 and
-    taikhoan.IDTaiKhoan = ?`;
+  const sql = `SELECT * 
+              FROM sanbong, loaisan, taikhoan, loaiphanquyen 
+              WHERE 
+                taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and
+                sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan and 
+                sanbong.IDLoaiSan = loaisan.IDLoaiSan and  
+                sanbong.TrangThai = 0 and
+                sanbong.IDTaiKhoan = ?
+              ORDER BY sanbong.IDSan DESC`;
   db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
     res.json(data);
   });
@@ -260,16 +263,22 @@ app.post("/getHoaDonsCompleteByNgayKGTK", (req, res) => {
 app.post("/InsertSan", (req, res) => {
   const sql = `CALL InsertAndReturnSan(?, ?, ?)`;
   db.query(sql, [req.body.IDTaiKhoan,req.body.IDLoaiSan,req.body.TenSan],(err, data) => {
-    let anhs = req.body.Anhs;
-    anhs.forEach(anh => {
-      let insertImageSql  = `INSERT INTO anh(IDSan, Anh) VALUES (${data[0][0].IDSan}, "${anh}")`;
-      db.query(insertImageSql,(err, data) => {});
-    });
+    res.json(data)
+    
   });
+});
+app.post("/insertAnh", (req, res) => {
+  let sql  = `INSERT INTO anh(IDSan, Anh) VALUES ( ?, ? )`;
+  db.query(sql, [req.body.IDSan, req.body.Anh],(err, data) => {});
 });
 app.post("/deleteSanByID", (req, res) => {
   const sql = `UPDATE sanbong SET TrangThai = 1 WHERE IDSan = ?`;
   db.query(sql, [req.body.IDSan],(err, data) => {
+  });
+});
+app.post("/updateSanByID", (req, res) => {
+  const sql = `UPDATE sanbong SET IDLoaiSan = ? ,IDTaiKhoan = ? ,TenSan= ? ,TrangThai= ? WHERE IDSan= ?`;
+  db.query(sql, [req.body.IDLoaiSan, req.body.IDTaiKhoan, req.body.TenSan, req.body.TrangThai, req.body.IDSan],(err, data) => {
   });
 });
 // Set up multer to handle file uploads

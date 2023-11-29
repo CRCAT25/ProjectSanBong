@@ -16,6 +16,15 @@ class AnhSan{
                 console.error(error);
             });
     }
+    InsertAnh(IDSan, Anh) {
+        return axios.post("http://localhost:8081/insertAnh", {IDSan, Anh})
+            .then(response => {
+                
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
     initAnh(data){
         let list =[]
         data.map(anh=>{
