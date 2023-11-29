@@ -162,11 +162,14 @@ export default function Header() {
 
                     if (giaohuu == 1) {
                         doiThu = await list[i].DoiThu;
-                        tenDoiThu = await doiThu.Ten;                        
                         giaohuu = "Trận giao hữu";
                     } else {
                         giaohuu = "Trận thường";
                     }
+                    if(doiThu.length > 0)
+                        tenDoiThu = await doiThu.Ten;                        
+                    else tenDoiThu = ""
+
 
                     let ten = await cososan.Ten;
 
