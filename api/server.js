@@ -494,7 +494,7 @@ db.query(
     req.body.diachics,
     req.body.nganhangcs,
     req.body.stkcs,
-    req.body.matkhaucs,
+    req.body.matkhau,
   ],
   (insertErr, insertResult) => {
     if (insertErr) {
@@ -511,13 +511,33 @@ app.post("/searchemailsdt", (req, res) => {
   db.query(sql, [req.body.phanquyen ,req.body.search, req.body.search], (err, data) => {
     if (err) return res.json("Error");
     if (data.length > 0) {
-      console.log(data)
+      // console.log(data)
       res.json(data);
     }else {
       res.json(data)
     }
   });
 });
+
+app.post("/disableacc", async (req, res) => {
+  const sql = `UPDATE  taikhoan SET TrangThai = 1 WHERE IDTaiKhoan = ?`;
+  db.query(sql,[req.body.idtaikhoan], (err, data) => {
+    if(err) return res.json("Err")
+    else{
+      res.json("Thành công")
+  }
+  });
+});
+app.post("/enableacc", async (req, res) => {
+  const sql = `UPDATE  taikhoan SET TrangThai = 0 WHERE IDTaiKhoan = ?`;
+  db.query(sql,[req.body.idtaikhoan], (err, data) => {
+    if(err) return res.json("Err")
+    else{
+      res.json("Thành công")
+  }
+  });
+});
+
 
 
 
