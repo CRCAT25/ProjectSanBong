@@ -99,13 +99,13 @@ class TaiKhoan {
         )}
 
 
-    ThemTaiKhoan = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) => {
-        console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
+    ThemTaiKhoan = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau) => {
+        console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau);
 
         try {
             const ResultCheck = await this.QLCheckEmailSdt(email, sdt);
             if (ResultCheck === "Ok" && idphanquyen === 2) {
-                const response = await axios.post("http://localhost:8081/addcoso", {idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs
+                const response = await axios.post("http://localhost:8081/addcoso", {idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau
                 });
 
                 return response.data;
@@ -164,6 +164,21 @@ class TaiKhoan {
             .catch(error => {
             console.error(error);
         })  
+    }
+
+    
+    DisableAcc = (idtaikhoan) =>{
+        return axios.post("http://localhost:8081/disableacc",{idtaikhoan}
+        ).then(response => {
+            return response.data
+        })
+    }
+
+    EnableAcc = (idtaikhoan) =>{
+        return axios.post("http://localhost:8081/enableacc",{idtaikhoan}
+        ).then(response => {
+            return response.data
+        })
     }
     
 

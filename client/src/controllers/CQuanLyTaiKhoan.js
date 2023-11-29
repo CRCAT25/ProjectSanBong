@@ -17,9 +17,9 @@ const getAllCoSo = async () =>{
    let list = account.getTKByID(idTk)
    return list;
  }
- const CThemTaiKhoan = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs) =>{
+ const CThemTaiKhoan = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau) =>{
    let account = new Account()
-   let result = await account.ThemTaiKhoan(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhaucs);
+   let result = await account.ThemTaiKhoan(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau);
    return ShowResultCheck(result)
 }
 
@@ -55,8 +55,18 @@ const CSearchEmailSdt = async (phanquyen, search) =>{
       }
       return list
    }
-   
+}
 
+const CDisableAcc = async (idtaikhoan) =>{
+   let account = new Account()
+   let result = await account.DisableAcc(idtaikhoan);
+   return result
+}
+
+const CEnableAcc = async (idtaikhoan) =>{
+   let account = new Account()
+   let result = await account.EnableAcc(idtaikhoan);
+   return result
 }
 
  export {
@@ -65,4 +75,6 @@ const CSearchEmailSdt = async (phanquyen, search) =>{
    CThemTaiKhoan,
    ShowImgCoSo,
    CSearchEmailSdt,
+   CDisableAcc,
+   CEnableAcc,
 }
