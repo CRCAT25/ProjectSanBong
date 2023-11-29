@@ -9,7 +9,7 @@ import {faLocationDot,
     faCheck
 } from "@fortawesome/free-solid-svg-icons"
 import {React,useState, useEffect, useRef } from "react";
-import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan, DatSanC, HuyDatSan, DatCoc } from "../controllers/CDatSan";
+import { getAllKhungGio, getAllOccuredKhungGio, GetAllSanFromCoSo, GetAllSanFromCoSoBySearch, GetInfoSanBong, GetTenLoaiSan, DatSanC, HuyDatSan, DatCoc, getAnhSanByID } from "../controllers/CDatSan";
 
 import "../controllers/CTimKiem";
 import { TimKiemSanBong, getAllCoSo, TimKiemSanBongC, GetInfoCoSoSan } from "../controllers/CTimKiem";
@@ -175,9 +175,12 @@ export const OrderField = () => {
         setSanBongs(await GetAllSanFromCoSoBySearch(infoCoSo.IdAccount, IdLoaiSan))
     }
 
+    const[anhSan, setAnhSan] = useState([])
     const ChonSanBong = async (idSan) =>{
         let infoSanBong = await GetInfoSanBong(idSan)
         setSelectedSanBong(idSan)
+        let anhs = await getAnhSanByID(idSan)
+        setAnhSan(anhs)
         setTenLoaiSan(infoSanBong.LoaiSan.TenLoaiSan)
         await GetEmptyKhungGio(idSan) 
         GetAllKhungGio()   
@@ -185,6 +188,19 @@ export const OrderField = () => {
         setGotInfoSan(true)
         ClearSelected()
     }
+    
+const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % anhSan.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex(
+      (prevIndex) => (prevIndex - 1 + anhSan.length) % anhSan.length
+    );
+  };
+
 
     const[khungGios, setKhungGios] = useState([])
     const[occuredKhungGios, setoccuredKhungGios] = useState([])
@@ -382,6 +398,7 @@ export const OrderField = () => {
         setTongTien(0)
         setIsCheckBoxChecked(0)
         setTongTienText("")
+        
     }
 
     const checkPassedTime = (thoiGian) => {
@@ -439,7 +456,7 @@ export const OrderField = () => {
                     <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex cursor-pointer" key={i} onClick={() => {
                         ChonCoSoSan(data.IdAccount)
                     }}>
-                        <img className="w-[100px] h-[100px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                        <img className="w-[100px] h-[100px] rounded-[15px]" src={"./assets/" + `${data.Anh}`} alt="" />
                         <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">{data.Ten}</span>
                     </div>
                 )) : (<div>{coSoMSG}</div>)}
@@ -454,7 +471,7 @@ export const OrderField = () => {
             {
                 gotInfo === true ? ( 
                 <div className="flex gap-6 " >
-                         <img className="w-[240px] h-[240px] rounded-[15px]" src="./assets/sanbong.jpg" alt="" />
+                         <img className="w-[240px] h-[240px] rounded-[15px]" src={"./assets/" + `${infoCoSo.Anh}`} alt="" />
                             <div className="block w-full ">                        
                                 <div className="text-[32px] font-[600] mb-2">{infoCoSo.Ten}</div>
         
@@ -499,7 +516,25 @@ export const OrderField = () => {
                     <div className="w-full h-[3px] lineCustom"></div>
                     {gotInfoSan === true ? (
                     <div className="mt-4 flex gap-6">
-                        <img className="w-[300px] h-[300px] rounded-[15px] mb-[50px]" src="./assets/sanbong.jpg" alt="" />
+                        
+                        {anhSan.length > 1 && (
+                        <div className='flex'>
+                            <img
+                            className="w-[300px] h-[300px] rounded-[15px] mb-[50px]"
+                            src={`./assets/${anhSan[currentImageIndex].Anh}`}
+                            alt=""/>
+                        <button onClick={prevImage} className="absolute">P&larr;</button>
+                        
+                        <button onClick={nextImage} className="absolute">N&rarr;</button>
+                        </div>
+                        )}
+                        {anhSan.length === 1 && (
+                            <img
+                            className="w-[300px] h-[300px] rounded-[15px] mb-[50px]"
+                            src={`./assets/${anhSan[0].Anh}`}
+                            alt=""
+                            />
+                        )}
                         <div className="w-full">
 
                             <div className="text-[20px] mt-1">

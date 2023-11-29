@@ -17,6 +17,8 @@ const Icon24px = ({classIcon}) => {
     )
 }
 
+
+
 const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
     let kq = [];
     const [selectedNganHang, setSelectedNganHang] = useState("")
@@ -43,10 +45,41 @@ const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
     useEffect(()=>{
         getNganHang();
     },[])
+
+
+    const [seconds, setSeconds] = useState(300);
+const [isActive, setIsActive] = useState(true);
+
+const formatTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
+
+    useEffect(() => {
+        let interval;
+
+        if(isDatCoc){
+            if (isActive) {
+                interval = setInterval(() => {
+                setSeconds((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
+                }, 1000);
+            }
+    }
+    
+    return () => clearInterval(interval);
+  }, [isActive]);
+
+  useEffect(() => {
+    if (seconds === 0) {
+      // Reload the page when the timer reaches zero
+      window.location.reload();
+    }
+  }, [seconds]);
   return (
     <div className='w-[40%] left-1/2 -translate-x-1/2 h-auto p-[30px] relative bg-[#DDFCD2] my-[10%] z-1200'>
         {isDatCoc === true ? (<div className='text-center text-[30px] font-[600] text-[#2B790F] mb-10'>ĐẶT CỌC</div>) : (<div className='text-center text-[30px] font-[600] text-[#2B790F]'>HOÀN TIỀN</div>)}
-        <div className='text-[20px] font-[600] absolute top-5 right-8'>Timer</div>
+        <div className='text-[20px] font-[600] absolute top-5 right-8 text-[#FF0000] font-bold'>{formatTime(seconds)}</div>
         <div className='w-90% mx-[5%] flex justify-center'>
             {isDatCoc == true ? (
                 <div className='w-[100%] h-[50px] my-[5px] mr-[5px] pl-[15px] rounded-[5px] flex flex-col justify-center bg-white'>Tên KH: {tenKH}</div>
@@ -73,8 +106,11 @@ const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
         {isDatCoc === true ? "" : (<textarea className='w-[90%] mx-[5%] my-[5px] pl-[15px] rounded-[5px] py-[10px]' name="" id="" rows="3"placeholder='Nội Dung:'></textarea>)}
         <div className='w-[90%] flex flex-auto justify-around mx-auto'>
             {isDatCoc === true ? (
-            <div> <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " onClick={HuyDatCoc}>Hủy</button>
-            <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={() => DatCoc(selectedNganHang, inputSTK, tongTien)}>Xác nhận</button>
+            <div> 
+            <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " onClick={() => {HuyDatCoc(); setIsActive(false)}}>Hủy</button>
+            <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={() => {DatCoc(selectedNganHang, inputSTK, tongTien);
+            setIsActive(false)}}>Xác nhận</button>
+            <div> <b>Lưu ý:</b> Bạn phải thực hiện đặt cọc trong vòng 5 phút nếu không hệ thống sẽ huỷ mọi thao tác vừa rồi của bạn !</div>
             </div>) : ""}
             
         </div>
