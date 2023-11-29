@@ -193,6 +193,10 @@ export const OrderField = () => {
         ClearSelected()
     }
 
+    useEffect(() => {
+          TimKiemSanBong()
+      }, [diaDiemInput]);
+
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const nextImage = () => {
@@ -443,7 +447,7 @@ export const OrderField = () => {
                     <div className="flex justify-between">
                         <div className="text-[24px] justify-center flex flex-col">Vị trí:</div>
                         <div className="relative left-[70px] top-2"><Icon24px classIcon={faLocationDot} /></div>
-                        <select id="cityLocation" className={`border-2 border-[#000] py-2 w-[300px] rounded-[10px] cursor-pointer justify-center text-center"`} onChange={(event) => {
+                        <select id="cityLocation" className={`border-2 border-[#000] py-2 w-[300px] rounded-[10px] cursor-pointer justify-center text-center"`} onChange={(event) => {                          
                             setDiaDiemInput(event.target.value);
                         }}>
 
@@ -455,7 +459,7 @@ export const OrderField = () => {
                         }} placeholder="Tìm kiếm tên cơ sở ..." />
                         <div className="absolute right-4  top-[32px] cursor-pointer" onClick={TimKiemSanBong}> <Icon24px classIcon={faMagnifyingGlass} /> </div>
                     </div>
-
+                    <div className='overflow-y-auto h-[600px]'>
                     {coSoIsAString === false ? coSo.map((data, i) => (
                         <div className="border-[#379E13] border-[3px] rounded-[15px] p-3 mt-4 flex cursor-pointer" key={i} onClick={() => {
                             ChonCoSoSan(data.IdAccount)
@@ -464,7 +468,8 @@ export const OrderField = () => {
                             <span className="justify-center flex flex-col ml-5 text-[#2B790F] text-[26px] ">{data.Ten}</span>
                         </div>
                     )) : (<div>{coSoMSG}</div>)}
-
+                    </div>
+                    
 
 
                 </div>
@@ -508,7 +513,7 @@ export const OrderField = () => {
                                         {isCalendarVisible === false ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value={selectedDate} minDate={new Date()} /> : ""}
                                     </div>
 
-                                    <div className="grid grid-cols-10 mt-5 gap-3">
+                                    <div className="grid grid-cols-7 mt-5 gap-3 overflow-x-auto w-[700px]">
                                         {selectedDate != null && sanBongs != null && setIsValidDate != false ? sanBongs.map((data, i) =>
                                         (<div className={`'col-span-2 bg-[#FFEB37] text-center px-4 py-2 rounded-[10px] cursor-pointer' ${selectedSanBong == data.IdSan ? 'border-2 border-[#000000]' : ''}`} value={data.IdSan} key={i}
                                             onClick={() => ChonSanBong(data.IdSan)}>{data.TenSan}</div>)) : ""}
