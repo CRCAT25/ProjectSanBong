@@ -5,6 +5,7 @@ import LoaiSan from "../models/LoaiSan";
 import KhungGio from "../models/KhungGio";
 import HoaDon from "../models/HoaDon";
 import CoSoSan from "../models/CoSoSan";
+import AnhSan from "../models/AnhSan";
 
 const GetAllSanFromCoSo = async (idCoSo) =>{
     const sanBong = new SanBong();
@@ -48,6 +49,12 @@ const DatSanC = async (IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien) =
     return newestHoaDon
 }
 
+const getAnhSanByID = async(idSan) =>{
+    const anh = new AnhSan()
+    let listAnh = await anh.GetAnhsByIDSan(idSan)
+    return listAnh
+}
+
 const HuyDatSan = async (IDHoaDon) =>{
     const sanbong = new SanBong()
     await sanbong.HuyDatSan(IDHoaDon)
@@ -63,6 +70,7 @@ export{
     GetInfoSanBong,
     GetTenLoaiSan,
     getAllKhungGio,
+    getAnhSanByID,
     getAllOccuredKhungGio,
     GetAllSanFromCoSoBySearch,
     DatSanC,

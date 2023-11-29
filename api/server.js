@@ -120,7 +120,7 @@ app.post("/datSan", async (req, res) => {
     console.log(data[0])
     const sql2 = `CREATE EVENT delete_hoadon_event_${data[0][0].IDHoaDon}
     ON SCHEDULE AT 
-    CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
+    CURRENT_TIMESTAMP + INTERVAL 5 MINUTE
     DO CALL delete_passedhoadon_proc(${data[0][0].IDHoaDon});`;
       db.query(sql2, (err2, data2) => {    
         res.json(data[0])
