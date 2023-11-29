@@ -99,18 +99,16 @@ class TaiKhoan {
         )}
 
 
-    ThemTaiKhoan = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau) => {
-        console.log(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau);
+    ThemTaiKhoan = async (idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau) => {
+        console.log(idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau);
 
         try {
             const ResultCheck = await this.QLCheckEmailSdt(email, sdt);
-            if (ResultCheck === "Ok" && idphanquyen === 2) {
-                const response = await axios.post("http://localhost:8081/addcoso", {idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau
+            if (ResultCheck === "Ok") {
+                const response = await axios.post("http://localhost:8081/addtk", {idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau
                 });
-
                 return response.data;
-            } else if (ResultCheck === "Ok" && idphanquyen === 1) {
-            } else if (ResultCheck !== "Ok") {
+            } else  {
                 return ResultCheck;
             }
         } catch (error) {
@@ -180,6 +178,30 @@ class TaiKhoan {
             return response.data
         })
     }
+
+    GetAllPlayer = () =>{
+        return axios.post("http://localhost:8081/showallplayer",{}
+        ).then(response => {
+            const listPlayer = this.initTaiKhoan(response.data)
+            // console.log(response.data)
+            return listPlayer
+        })
+            .catch(error => {
+            console.error(error);
+        })  
+    }
+
+    initTaiKhoan(listTaiKhoan){
+        const taikhoanlist = [];
+        listTaiKhoan.forEach(taikhoan => {
+            const phanQuyen = new PhanQuyen(taikhoan.IDPhanQuyen, taikhoan.TenPhanQuyen)
+            const itemTK = new TaiKhoan(taikhoan.IDTaiKhoan, phanQuyen, taikhoan.Ten, taikhoan.Email, taikhoan.SoDienThoai, taikhoan.NganHang, taikhoan.STK, taikhoan.MatKhau, taikhoan.TrangThai);
+            taikhoanlist.push(itemTK);
+        });
+        return taikhoanlist
+    }
+
+
     
 
     

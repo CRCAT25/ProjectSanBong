@@ -2192,21 +2192,23 @@ th {
 
 }
 
-.submit_searchtensopart {
+.input_searchemailsotaikhoan {
     padding: 10px;
-    width: 50px;
-    height: 50px;
+    margin-left: 15px;
+    margin-top: -5px;
+    width: 500px;
+    height: 50px !important;
     background: none;
-    border: 3px solid #FF3366 !important;
-    border-radius: 50px !important;
+    border: #000000 solid 3px;
+    border-radius: 5px !important;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    font-size: 15px !important;
+    font-size: 18px !important;
     color: #1e1d1d !important;
     outline: none;
-    transition: .5s;
-    transform: translate(870px, 0px);
+    text-align: center;
+    background-color: #ffffff;
 
 }
 

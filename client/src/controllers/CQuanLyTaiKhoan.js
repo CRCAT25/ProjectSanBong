@@ -1,8 +1,5 @@
-import SanBong from '../models/SanBong'
 import CoSoSan from '../models/CoSoSan'
-import HoaDon from '../models/HoaDon'
 import Account from '../models/TaiKhoan'
-import TaiKhoan from '../models/TaiKhoan'
 
 const getAllCoSo = async () =>{
     const cosoSan = new CoSoSan()
@@ -17,9 +14,9 @@ const getAllCoSo = async () =>{
    let list = account.getTKByID(idTk)
    return list;
  }
- const CThemTaiKhoan = async (idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau) =>{
+ const CThemTaiKhoan = async (idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau) =>{
    let account = new Account()
-   let result = await account.ThemTaiKhoan(idphanquyen, tencs, email, sdt, diachics, nganhangcs, stkcs, matkhau);
+   let result = await account.ThemTaiKhoan(idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau);
    return ShowResultCheck(result)
 }
 
@@ -40,18 +37,18 @@ const CSearchEmailSdt = async (phanquyen, search) =>{
       let result = await coso.SearchEmailSdt(phanquyen, search)
       if(result){
          list.push(result)
-         console.log(list.length + " a")
       }
       return list
 
    } else {
+      console.log( "b")
       let account = new Account();
       let list = []
       let result = await account.SearchEmailSdta(phanquyen, search)
    
       if(result){
          list.push(result)
-         console.log(list.length + " b")
+         console.log(list.length + " a")
       }
       return list
    }
@@ -69,6 +66,14 @@ const CEnableAcc = async (idtaikhoan) =>{
    return result
 }
 
+const CGetAllPlayer = async () =>{
+   let account = new Account();
+   let result = await account.GetAllPlayer()
+   console.log(result)
+
+   return result
+}
+
  export {
    getAllCoSo,
    getPersonalInfoByIdTK,
@@ -77,4 +82,5 @@ const CEnableAcc = async (idtaikhoan) =>{
    CSearchEmailSdt,
    CDisableAcc,
    CEnableAcc,
+   CGetAllPlayer,
 }

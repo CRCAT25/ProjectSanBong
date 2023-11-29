@@ -478,6 +478,17 @@ app.post("/QLcheckemailsdt", (req, res) => {
 });
 
 
+app.post("/showallplayer", (req, res) => {
+  const sql = "SELECT * FROM taikhoan WHERE IDPhanQuyen = 1";
+  db.query(sql, (err, data) => {
+    if (err) return res.json("Error");
+    if (data.length > 0) {
+      return res.json(data);
+    }
+  });
+});
+
+
 app.post("/showimgcoso", (req, res) => {
   const sql = "SELECT * FROM taikhoan WHERE IDTaiKhoan = ?";
   db.query(sql, [req.body.idtaikhoan], (err, data) => {
@@ -490,14 +501,14 @@ app.post("/showimgcoso", (req, res) => {
 
 
 
-app.post("/addcoso", (req, res) => {
+app.post("/addtk", (req, res) => {
   const insertSql =
 "INSERT INTO taikhoan (IDPhanQuyen, Ten, Email, SoDienThoai, DiaChiCoSo, NganHang, STK, MatKhau) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 db.query(
   insertSql,
   [
     req.body.idphanquyen,
-    req.body.tencs,
+    req.body.ten,
     req.body.email,
     req.body.sdt,
     req.body.diachics,
@@ -507,8 +518,9 @@ db.query(
   ],
   (insertErr, insertResult) => {
     if (insertErr) {
-      console.log("Error");
+      console.log(insertErr);
     } else {
+      console.log("Thêm thành công")
       return res.json("Thêm thành công");
     }
   }
