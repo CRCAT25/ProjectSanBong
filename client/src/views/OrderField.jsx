@@ -373,8 +373,10 @@ export const OrderField = () => {
     }
 
     const CheckTTBank = (NganHang, STK, SoTien) => {
-        alert(NganHang + " " + STK + " " + SoTien)
         if (NganHang != "" || STK != "" || SoTien != "") {
+            if(NganHang == ""){
+                return ("Vui lòng chọn ngân hàng !")
+            }
             if (STK.length < 10) {
                 return ("Số tài khoản phải đủ 10 ký tự !")
             }
