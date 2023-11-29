@@ -89,13 +89,13 @@ export const OrderField = () => {
         callAPI(host);
         TimKiemSanBong();
         GetAllLoaiSan();
-        handleChangeCalendar(selectedDate);
+        ChonNgay(selectedDate);
         checkDangNhap();
     }, []);
 
 
 
-    const handleChangeCalendar = (date) => {
+    const ChonNgay = (date) => {
         setSelectedDate(date)
         const formattedDate = date.toLocaleDateString("vi-VN", {
             weekday: "short", // Abbreviated weekday name (e.g., "Mon")
@@ -158,12 +158,16 @@ export const OrderField = () => {
         if (selectLoaiBoxRef.current) {
             selectLoaiBoxRef.current.value = "";
         }
+        await ShowListSanBongnInfoCS(idCoso)
+        setSelectedSanBong(0)
+        ClearSelected()
+    }
+
+    const ShowListSanBongnInfoCS = async (idCoso) =>{
         setInfoCoSo(await GetInfoCoSoSan(idCoso))
         setSanBongs(await GetAllSanFromCoSo(idCoso))
         setGotInfo(true)
         setGotInfoSan(false)
-        setSelectedSanBong(0)
-        ClearSelected()
     }
 
     const GetAllLoaiSan = async () => {
@@ -172,7 +176,7 @@ export const OrderField = () => {
         setLoaiSans(lstLoaiSan)
     }
 
-    const HandleClickLoaiSan = async (IdLoaiSan) => {
+    const ChonLoaiSan = async (IdLoaiSan) => {
         setGotInfoSan(false)
         setSelectedSanBong(0)
         ClearSelected()
@@ -248,24 +252,27 @@ export const OrderField = () => {
         const currentdate = new Date()
         if(selectedDate.getDate() == currentdate.getDate()){
             Swal.fire({
-                title: "Bạn chỉ có thể bật giao hữu trước 1 ngày !",
+                title: "Bạn chỉ có thể bật giao hữu trước ít nhất 1 ngày !",
                 icon: "information"
             });
             setTimeout(() => {
                 Swal.close();
             }, 1000);
         }else{
-            if (isCheckBoxChecked == 0) {
-                setIsCheckBoxChecked(1)
-                setTextForGiaoHuu("Cho phép tham gia giao hữu !")
-            } else {
-                setIsCheckBoxChecked(0)
-                setTextForGiaoHuu("")
-            }
+            CheckBoxChecked();
         }
         
     }
 
+    const CheckBoxChecked = () =>{
+        if (isCheckBoxChecked == 0) {
+            setIsCheckBoxChecked(1)
+            setTextForGiaoHuu("Cho phép tham gia giao hữu !")
+        } else {
+            setIsCheckBoxChecked(0)
+            setTextForGiaoHuu("")
+        }
+    }
 
 
     const [showHoaDon, setShowHoaDon] = useState(false)
@@ -373,7 +380,7 @@ export const OrderField = () => {
     }
 
     const CheckTTBank = (NganHang, STK, SoTien) => {
-        if (NganHang != "" || STK != "" || SoTien != "") {
+        if (NganHang != "" && STK != "" && SoTien != "") {
             if(NganHang == ""){
                 return ("Vui lòng chọn ngân hàng !")
             }
@@ -517,14 +524,14 @@ export const OrderField = () => {
 
                                             <select ref={selectLoaiBoxRef} className="border-2 border-[#379E13] py-1 px-4 rounded-[10px] cursor-pointer justify-center text-center" onChange={(event) => {
 
-                                                HandleClickLoaiSan(event.target.value)
+                                                ChonLoaiSan(event.target.value)
                                             }}>
                                                 <option className="text-[19px]" value="">Lọc loại sân</option>
                                                 {loaiSans.map((data, i) => (<option className="text-[19px]" key={i} value={data.IdLoaiSan} >{data.TenLoaiSan}</option>))}
                                                 <Icon24px classIcon={faChevronDown} />
                                             </select>
                                         </div>
-                                        {isCalendarVisible === false ? <Calendar ref={calendarRef} onChange={handleChangeCalendar} value={selectedDate} minDate={new Date()} /> : ""}
+                                        {isCalendarVisible === false ? <Calendar ref={calendarRef} onChange={ChonNgay} value={selectedDate} minDate={new Date()} /> : ""}
                                     </div>
 
                                     <div className="grid grid-cols-7 mt-5 gap-3 overflow-x-auto w-[700px]">
