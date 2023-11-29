@@ -46,7 +46,7 @@ const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
   return (
     <div className='w-[40%] mx-auto left-1/2 -translate-x-1/2 h-auto p-[30px] absolute bg-[#DDFCD2] my-[10%] z-1200'>
         {isDatCoc === true ? (<div className='text-center text-[30px] font-[600] text-[#2B790F]'>ĐẶT CỌC</div>) : (<div className='text-center text-[30px] font-[600] text-[#2B790F]'>HOÀN TIỀN</div>)}
-        
+        <div className='text-[20px] font-[600] text-right mr-[20px]'>Timer</div>
         <div className='w-90% mx-[5%] flex justify-center'>
             {isDatCoc == true ? (
                 <div className='w-[100%] h-[50px] my-[5px] mr-[5px] pl-[15px] rounded-[5px] flex flex-col justify-center bg-white'>Tên KH: {tenKH}</div>

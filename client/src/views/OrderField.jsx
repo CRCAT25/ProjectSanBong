@@ -86,6 +86,7 @@ export const OrderField = () => {
         TimKiemSanBong();
         GetAllLoaiSan();
         handleChangeCalendar(selectedDate);
+        checkDangNhap();
       }, []);
 
     
@@ -236,7 +237,7 @@ export const OrderField = () => {
     const [tongTienText, setTongTienText] = useState("0")
     const [valueForHoaDon, setValueForHoaDon] = useState({})
     const DatSan = async() =>{
-        if(checkDangNhap == true){
+        if(isDangNhap == true){
             const checkKhungGio = checkSelectKhungGio()
             if(!checkKhungGio){
                 HienThiThongBaoChonKhungGio()
@@ -254,12 +255,14 @@ export const OrderField = () => {
         }             
     }
 
+
+    const[isDangNhap, setIsDangNhap] = useState(false)
     const checkDangNhap = async () =>{
-        if(localStorage.getItem('userName') == ""){
+        if(localStorage.getItem('userName') != ""){
             
-            return false
+            setIsDangNhap(true)
         }else{
-            return true
+            setIsDangNhap(false)
         }
     }
 
