@@ -11,7 +11,7 @@ import {
 } from "../controllers/CQuanLyLich";
 import FormHoaDon from './FormHoaDon';
 
-const FormLichSu = () => {
+const FormLichSu = () => {  
   
   const [getSelectedBtn, setSelectedBtn] = useState(1)
   const [getSelectedList,setSelectedList] = useState([])
@@ -35,7 +35,7 @@ const FormLichSu = () => {
   }
 
   const getPersonalLichFromBillByIdTK = async(idTK,selected) =>{
-    console.log("nut "+selected)
+    // console.log("nut "+selected)
     let list
     if(selected ==2){
       list = await GetAllBillByIDTk(idTK)
@@ -70,41 +70,46 @@ const FormLichSu = () => {
   }
 
   const huyDatSanByID = async () =>{   
-      console.log("Hello")
     // await HuySanByIDHd(idHD)
-    
-    Swal.fire({
-      title: "Bạn có muốn hủy trận đấu này ?",
-      text:"Bạn sẽ không được hoàn lại tiền đã đặt!",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Đồng ý",
-      cancelButtonText:"Khoan đã"
-      
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title:"Hủy sân thành công",
-          icon: "success",
-        });
-        await HuySanByIDHd(getIdHD);
-        setShowHoaDon(false)
-        getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+    let list = await GetBillById(getIdHD)
+    console.log("plapla"+list[0].TrangThai)
+    if(list[0].TrangThai === "Cancelled")
+    {
+      Swal.fire({
+        title: "Bạn không thể hủy trận đấu này !",
+        text:"Trận đấu này đã bị hủy!",
+        icon: "error"
+      })
+    }
+    else{
+      Swal.fire({
+        title: "Bạn có muốn hủy trận đấu này ?",
+        text:"Bạn sẽ không được hoàn lại tiền đã đặt!",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Đồng ý",
+        cancelButtonText:"Khoan đã"
         
-        
-      }
-    });
-    
-   
-}
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title:"Hủy sân thành công",
+            icon: "success",
+          });
+          await HuySanByIDHd(getIdHD);
+          setShowHoaDon(false)
+          getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+        }
+      });
+    }
+  }
   
   const hienInfoHoaDon = async(idHD)=>{
 
       let list = await GetBillById(idHD)
       let hoaDon = await list[0]
-      
       let taiKhoan = await list[0].TaiKhoan
       let sanBong = await list[0].SanBong
       let khungGio = await list[0].KhungGio
@@ -151,16 +156,11 @@ const FormLichSu = () => {
       let date = dateFormatter (hoaDon.Ngay)
       let doiThu = await data.DoiThu
       let tenDoiThu
-      if(doiThu == null)
-      {
-        tenDoiThu = "Không có"
-      }else{
-        tenDoiThu = doiThu.Ten
-      }
-      // console.log(hoaDon)
+      doiThu == null ? tenDoiThu = "Không có" :tenDoiThu = doiThu.Ten
+      console.log(hoaDon)
       lichholder.current.innerHTML+=`
-      <div class='lich w-[auto] bg-[#9BCE89] h-[auto] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
-      <img src="" alt="" class='w-[90px] h-[90px] col-span-1 ml-[10px]' />
+      <div class='lich w-[auto] bg-[#9BCE89] h-[auto] p-[10px] m-[10px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
+      <img src="./assets/${sanBong.TaiKhoan.Anh}" alt="" class='w-[150px] h-[150px] col-span-1 rounded-[15px]' />
         <div class='col-span-1 grid grid-row-2 p-[10px]'>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
@@ -207,7 +207,7 @@ const FormLichSu = () => {
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] mx-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]'
         onClick={()=> loadSelectedLich(1)}> Trận giao hữu</div>
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' 
-        onClick={()=> loadSelectedLich(2)}> Đã hoàn thành</div>
+        onClick={()=> loadSelectedLich(2)}> Đã tham gia</div>
       </div>
       <div ref={lichholder} id= 'lich'className='bg-[#D9D9D9] w-[90%] h-[620px] mx-auto py-[15px] rounded-[15px] flex flex-col align-middle overflow-y-visible overflow-x-hidden overflow-scroll'> 
         {/* {gotPersonalInfo === true ? async ()=> {               

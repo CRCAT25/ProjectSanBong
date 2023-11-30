@@ -41,14 +41,12 @@ const CSearchEmailSdt = async (phanquyen, search) =>{
       return list
 
    } else {
-      console.log( "b")
       let account = new Account();
       let list = []
       let result = await account.SearchEmailSdta(phanquyen, search)
    
       if(result){
          list.push(result)
-         console.log(list.length + " a")
       }
       return list
    }
@@ -69,6 +67,12 @@ const CEnableAcc = async (idtaikhoan) =>{
 const CGetAllPlayer = async () =>{
    let account = new Account();
    let result = await account.GetAllPlayer()
+   return result
+}
+
+const CGetAllAdmin= async () =>{
+   let account = new Account();
+   let result = await account.GetAllAdmin()
    console.log(result)
 
    return result
@@ -83,4 +87,5 @@ const CGetAllPlayer = async () =>{
    CDisableAcc,
    CEnableAcc,
    CGetAllPlayer,
+   CGetAllAdmin,
 }

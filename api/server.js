@@ -138,7 +138,7 @@ app.post("/huyDatSan", async (req, res) => {
 
 app.post("/huyLichDaDat", async (req, res) => {
   const IDHoaDon = req.body.IDHoaDon;
-  const sql = `Update HOADON SET TrangThai = "Canceled" WHERE IDHoaDon = ${IDHoaDon}`;
+  const sql = `Update HOADON SET TrangThai = "Cancelled" WHERE IDHoaDon = ${IDHoaDon}`;
   db.query(sql, (err, data) => {
     res.json(data[0])
   });
@@ -357,18 +357,26 @@ app.post("/getPersonalBillByIdTK",(req,res)=>{
 
 app.post("/updatePersonalInfoByIdTK",(req,res)=>{
   const sql=`UPDATE taikhoan 
-              SET Ten = ?,
-              Email =?,
-              SoDienThoai =?,
-              DiaChiCoSo=?,
-              NganHang=?,
-              STK=?,
-              Anh=?
-              WHERE IDTaiKhoan = ?`;
-  // console.log(req.body.IDTaiKhoan)
-  db.query(sql,[req.body.Ten,req.body.Email,req.body.SoDienThoai,
-                req.body.DiaChiCoSo,req.body.NganHang,req.body.STK,req.body.Anh],(err,data) =>{
-    // console.log(data);
+          SET Ten = ?, 
+          Email = ?,
+          SoDienThoai = ?,
+          DiaChiCoSo = ?, 
+          NganHang = ?, 
+          STK = ?,
+          Anh =?
+          WHERE taikhoan.IDTaiKhoan = ?;`;
+
+  db.query(sql,[req.body.Ten,
+    req.body.Email,
+    req.body.SoDienThoai,
+    req.body.DiaChiCoSo,
+    req.body.NganHang,
+    req.body.STK,
+    req.body.Anh,
+    req.body.idTK],(err,data) =>{
+    // console.log(req.body.Ten,req.body.Email,req.body.SoDienThoai,
+            // req.body.DiaChiCoSo,req.body.NganHang,req.body.STK,req.body.Anh,req.body.idTK)
+    
     res.json(data);
    
   })
@@ -496,6 +504,17 @@ app.post("/showallplayer", (req, res) => {
   db.query(sql, (err, data) => {
     if (err) return res.json("Error");
     if (data.length > 0) {
+      return res.json(data);
+    }
+  });
+});
+
+app.post("/showalladmin", (req, res) => {
+  const sql = "SELECT * FROM taikhoan WHERE IDPhanQuyen = 3";
+  db.query(sql, (err, data) => {
+    if (err) return res.json("Error");
+    if (data.length > 0) {
+      console.log(data)
       return res.json(data);
     }
   });
