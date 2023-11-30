@@ -10,17 +10,16 @@ const getTKCoSoByIdTK = async (idTK) =>{
     return list
 }
 
-
 const getTKUserByIdTK = async (idTK) =>{
     const user = new TaiKhoan()
     let list = user.getTKByID(idTK)
     return list
 }
 
-const updateTkByIdTK = async( Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK)=>{
+const updateTkByIdTK = async(Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK)=>{
     const user = new TaiKhoan()
+    // console.log(Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK+"CCCCC")
     user.UpdateUserInfo(Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK)
-    getTKUserByIdTK(idTK)
 }
 
 export{

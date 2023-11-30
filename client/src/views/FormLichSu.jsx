@@ -11,7 +11,7 @@ import {
 } from "../controllers/CQuanLyLich";
 import FormHoaDon from './FormHoaDon';
 
-const FormLichSu = () => {
+const FormLichSu = () => {  
   
   const [getSelectedBtn, setSelectedBtn] = useState(1)
   const [getSelectedList,setSelectedList] = useState([])
@@ -35,7 +35,7 @@ const FormLichSu = () => {
   }
 
   const getPersonalLichFromBillByIdTK = async(idTK,selected) =>{
-    console.log("nut "+selected)
+    // console.log("nut "+selected)
     let list
     if(selected ==2){
       list = await GetAllBillByIDTk(idTK)
@@ -70,35 +70,45 @@ const FormLichSu = () => {
   }
 
   const huyDatSanByID = async () =>{   
-      console.log("Hello")
     // await HuySanByIDHd(idHD)
-    
-    Swal.fire({
-      title: "Bạn có muốn hủy trận đấu này ?",
-      text:"Bạn sẽ không được hoàn lại tiền đã đặt!",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Đồng ý",
-      cancelButtonText:"Khoan đã"
-      
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title:"Hủy sân thành công",
-          icon: "success",
-        });
-        await HuySanByIDHd(getIdHD);
-        setShowHoaDon(false)
-        getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+    let list = await GetBillById(getIdHD)
+    console.log("plapla"+list[0].TrangThai)
+    if(list[0].TrangThai === "Cancelled")
+    {
+      Swal.fire({
+        title: "Bạn không thể hủy trận đấu này !",
+        text:"Trận đấu này đã bị hủy!",
+        icon: "error"
+      })
+    }
+    else{
+      Swal.fire({
+        title: "Bạn có muốn hủy trận đấu này ?",
+        text:"Bạn sẽ không được hoàn lại tiền đã đặt!",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Đồng ý",
+        cancelButtonText:"Khoan đã"
         
-        
-      }
-    });
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title:"Hủy sân thành công",
+            icon: "success",
+          });
+          await HuySanByIDHd(getIdHD);
+          setShowHoaDon(false)
+          getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+        }
+      });
+    }
     
    
-}
+    
+   
+  }
   
   const hienInfoHoaDon = async(idHD)=>{
 
@@ -146,17 +156,16 @@ const FormLichSu = () => {
     lichholder.current.innerHTML="";
     list.map( async(data,i)=>{
       let hoaDon = await data
+      if(hoaDon.TrangThai != "Cancelled")
+      {
+        
+      }
       let sanBong = await data.SanBong
       let khungGio = await data.KhungGio
       let date = dateFormatter (hoaDon.Ngay)
       let doiThu = await data.DoiThu
       let tenDoiThu
-      if(doiThu == null)
-      {
-        tenDoiThu = "Không có"
-      }else{
-        tenDoiThu = doiThu.Ten
-      }
+      doiThu == null ? tenDoiThu = "Không có" :tenDoiThu = doiThu.Ten
       // console.log(hoaDon)
       lichholder.current.innerHTML+=`
       <div class='lich w-[auto] bg-[#9BCE89] h-[auto] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
@@ -207,7 +216,7 @@ const FormLichSu = () => {
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] mx-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]'
         onClick={()=> loadSelectedLich(1)}> Trận giao hữu</div>
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' 
-        onClick={()=> loadSelectedLich(2)}> Đã hoàn thành</div>
+        onClick={()=> loadSelectedLich(2)}> Đã tham gia</div>
       </div>
       <div ref={lichholder} id= 'lich'className='bg-[#D9D9D9] w-[90%] h-[620px] mx-auto py-[15px] rounded-[15px] flex flex-col align-middle overflow-y-visible overflow-x-hidden overflow-scroll'> 
         {/* {gotPersonalInfo === true ? async ()=> {               

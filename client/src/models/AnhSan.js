@@ -25,6 +25,15 @@ class AnhSan{
                 console.error(error);
             });
     }
+    DeletetAnh(IDAnh) {
+        return axios.post("http://localhost:8081/deleteAnh", {IDAnh})
+            .then(response => {
+                
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
     initAnh(data){
         let list =[]
         data.map(anh=>{

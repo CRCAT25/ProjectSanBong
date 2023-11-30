@@ -142,10 +142,6 @@ select{
   padding: 40px 5% 40px 5%;
   display: flex;
 }
-.sn-XTh:hover{
-  cursor: pointer;
-background-color: lightcyan;
-}
 .auto-group-lo8w-E7D{
   display: flex;
   flex-direction: column;
@@ -194,6 +190,9 @@ background-color: lightcyan;
   height: 50px;
   border-radius: 6px;
   background-color: white;
+}
+.btnDetailSan{
+  cursor: pointer;
 }
 .main-advertise-letter-XHD{
   width: 100%;
