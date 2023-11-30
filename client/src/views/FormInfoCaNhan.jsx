@@ -207,7 +207,7 @@ const FormInfoCaNhan = () => {
     if(role == 1)
     {
       let list = await getTKUserByIdTK(idTK);
-      // console.log(list)
+      console.log(list)
       setTen(list.Ten)
       setEmail(list.Email)
       setSDT(list.SoDienThoai)
@@ -215,6 +215,7 @@ const FormInfoCaNhan = () => {
       setNganHang(list.NganHang)
       setSTK(list.STK)
       setAnh(list.Anh)
+      console.log(getAnh)
       document.getElementById("anh").src = `./assets/${getAnh}`
       document.getElementById("hoTen").value=getTen
       document.getElementById("email").value=getEmail
@@ -223,7 +224,7 @@ const FormInfoCaNhan = () => {
     else
     {
       let list = await getTKCoSoByIdTK(idTK);
-      
+      console.log(list)
       setTen(list.Ten)
       setEmail(list.Email)
       setSDT(list.SoDienThoai)
@@ -282,8 +283,6 @@ const FormInfoCaNhan = () => {
       // alert(duong+ " duong")
       setduong(location[0])
       document.getElementById("duong").value = duong;
-
-
     }
   }  
 
@@ -376,7 +375,7 @@ const FormInfoCaNhan = () => {
             uploadAnh(document.getElementById("inputAnh").files)
             setAnh(`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`)
             console.log(getAnh)
-            
+
             await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,
               `${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`,idTK)
             Swal.fire({
@@ -390,6 +389,11 @@ const FormInfoCaNhan = () => {
     });
     
   }
+
+  const newProfilePic=()=>{
+    
+  }
+
   const checkLocation=()=>
   {
     console.log(tinh+" "+ quan+" "+ phuong+" "+duong+" check")
