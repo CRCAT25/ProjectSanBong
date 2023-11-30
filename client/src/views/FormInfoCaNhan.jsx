@@ -232,6 +232,7 @@ const FormInfoCaNhan = () => {
       setSTK(list.STK)
       setAnh(list.Anh)
       let location = getDiaChi.split(', ');
+      console.log(getAnh)
       document.getElementById("anh").src = `./assets/${getAnh}`
       document.getElementById("hoTen").value=getTen
       document.getElementById("email").value=getEmail
@@ -294,12 +295,12 @@ const FormInfoCaNhan = () => {
         document.getElementById("anh").src = e.target.result;
       };
       reader.readAsDataURL(files[0]);
+    
+    }else{
+      document.getElementById("anh")[0].src = `./assets/unknow.jpg`
     }
-  //   }else{
-  //     document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML = `<i class="fa fa-image fa-2x"  id = "iconImg"></i>`
-  //   }
-  // }
   }
+ 
   function uploadAnh(anhs){
     const formData = new FormData();
       for (let i = 0; i < anhs.length; i++) {
@@ -341,9 +342,16 @@ const FormInfoCaNhan = () => {
             console.log(getDiaChi+" getDC")
             console.log(getNganHang)   
             console.log(getSTK)
+
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().slice(0, 10);
+            const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
             uploadAnh(document.getElementById("inputAnh").files)
+            setAnh(`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`)
             console.log(getAnh)
-            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,getAnh,idTK)
+
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,
+              `${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`,idTK)
             Swal.fire({
               title: "Cập nhật thông tin thành công",
               icon: "success"
@@ -361,8 +369,16 @@ const FormInfoCaNhan = () => {
             console.log(stringdiachi)
             console.log(getNganHang)   
             console.log(getSTK)
+
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().slice(0, 10);
+            const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
+            uploadAnh(document.getElementById("inputAnh").files)
+            setAnh(`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`)
             console.log(getAnh)
-            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,getAnh,idTK)
+            
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,
+              `${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`,idTK)
             Swal.fire({
               title: "Cập nhật thông tin thành công",
               icon: "success"

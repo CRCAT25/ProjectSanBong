@@ -286,6 +286,7 @@ app.post("/updateSanByID", (req, res) => {
   db.query(sql, [req.body.IDLoaiSan, req.body.IDTaiKhoan, req.body.TenSan, req.body.TrangThai, req.body.IDSan],(err, data) => {
   });
 });
+
 // Set up multer to handle file uploads
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
