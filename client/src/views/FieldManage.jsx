@@ -77,9 +77,17 @@ const FieldManage =  () => {
     if(tenSan.length > 0){
       if(loaiSan !== "none"){
         if(files.length > 0){
+          const currentDate = new Date();
+    
+            // Format date as YYYY-MM-DD
+            const formattedDate = currentDate.toISOString().slice(0, 10);
+            
+            // Format time as HH-mm-ss
+            const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
           for(let i = 0; i < files.length; i++){
             if(i == 2){break}
-            tenAnhs.push(files[i].name)
+            
+            tenAnhs.push(`${formattedDate}_${formattedTime}_${files[i].name}`)
             anhs.push(files[i])
           }
           addible = true
