@@ -292,7 +292,15 @@ const storage = multer.diskStorage({
     cb(null, '../client/public/assets');
   }, // Specify the directory where files will be stored
   filename: function (req, file, callback) {
-    callback(null,file.originalname);
+    const currentDate = new Date();
+    
+    // Format date as YYYY-MM-DD
+    const formattedDate = currentDate.toISOString().slice(0, 10);
+    
+    // Format time as HH-mm-ss
+    const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
+    
+    callback(null, `${formattedDate}_${formattedTime}_${file.originalname}`);
   },
 });
 

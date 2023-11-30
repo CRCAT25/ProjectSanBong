@@ -162,12 +162,21 @@ const FieldManage =  () => {
   }
   const changeDate = (daysToAdd) =>{
     var currentDate = new Date(document.getElementsByClassName("ngayLS")[0].value);
-      currentDate.setDate(currentDate.getDate() + daysToAdd);
-      var year = currentDate.getFullYear();
-      var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-      var day = currentDate.getDate().toString().padStart(2, '0');
+    var minDate = new Date(document.getElementsByClassName("ngayLS")[0].min);
+    currentDate.setDate(currentDate.getDate() + daysToAdd)
+    var year = currentDate.getFullYear();
+    var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    var day = currentDate.getDate().toString().padStart(2, '0');
+    var newDate = new Date(`${year}-${month}-${day}`)
+    if(daysToAdd < 0 && newDate < minDate){
+      Swal.fire({
+        title: "Đã đạt ngày hiện tại.",
+        confirmButtonText: "OK",
+      });
+    }else{
       document.getElementsByClassName("ngayLS")[0].value = `${year}-${month}-${day}`;
       handleDateChange()
+    }
   }
   const handleDateChange = async () =>{
     
@@ -199,17 +208,29 @@ const FieldManage =  () => {
     while (slect.hasChildNodes()) {
       slect.removeChild(slect.firstChild);
     }
-    slect.innerHTML = `<option value="none">--Sân--</option>`
-    ;(await getEmptyFieldByDayShift("7", await document.getElementsByClassName("ngayLS")[0].value,await document.getElementsByClassName("selectKhungGio")[0].value)).map((san, i)=>{
-      slect.innerHTML += `<option value="${san.IdSan}" >${san.TenSan}</option>`
-    })
+    if(document.getElementsByClassName("selectKhungGio")[0].value != "none"){
+      slect.innerHTML = `<option value="none">--Sân--</option>`
+      ;(await getEmptyFieldByDayShift(
+        "7", 
+        await document.getElementsByClassName("ngayLS")[0].value,
+        await document.getElementsByClassName("selectKhungGio")[0].value)
+        ).map((san, i)=>{
+          slect.innerHTML += `<option value="${san.IdSan}" >${san.TenSan}</option>`
+      })
+    }else{
+      slect.innerHTML += `<option value="none" >------------</option>`
+    }
     setLoaiSanLS()
   }
   const setLoaiSanLS = async () =>{
     if(document.getElementsByClassName("selectTenLS")[0].value  != "none"){
-      document.getElementsByClassName("loaiSanLS")[0].innerHTML = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).TenLoaiSan
-      document.getElementsByClassName("loaiSanLS")[0].value = (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).IdLoaiSan
-      document.getElementsByClassName("tongTien")[0].innerHTML = await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value  , await document.getElementsByClassName("loaiSanLS")[0].value) +".000 VND"
+      document.getElementsByClassName("loaiSanLS")[0].innerHTML = 
+        (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).TenLoaiSan
+      document.getElementsByClassName("loaiSanLS")[0].value = 
+        (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).IdLoaiSan
+      document.getElementsByClassName("tongTien")[0].innerHTML = 
+        await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value, 
+                                        await document.getElementsByClassName("loaiSanLS")[0].value) +".000 VND"
     }else{
       document.getElementsByClassName("loaiSanLS")[0].innerHTML = "------"
       document.getElementsByClassName("loaiSanLS")[0].value = null
@@ -238,6 +259,7 @@ const FieldManage =  () => {
               src="${element.parentElement.parentElement.children[1].children[i].src}"
             />`;
       }
+      document.getElementById('257:798').scrollIntoView({ behavior: 'smooth' });
     }
   }
   const updateSan = async () => {
@@ -451,6 +473,7 @@ const FieldManage =  () => {
   }
 
   return (
+    
     <div className="landing-fAj" id="257:562">
       <div className="qun-l-sn-dgX" id="257:798">
         <p className="main-advertise-letter-fNK" id="257:861">
