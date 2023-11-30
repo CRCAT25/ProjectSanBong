@@ -262,22 +262,6 @@ const FormInfoCaNhan = () => {
     }
   }   
 
-  const checkLocation=()=>
-  {
-    console.log(tinh+" "+ quan+" "+ phuong+" "+duong+"check")
-    if(tinh!="" || quan!=" " || phuong!=" "||duong!=" " )
-    {
-      setDiaChi(stringdiachi)
-      console.log(getDiaChi)
-    }
-    else{
-      Swal.fire({
-        title: "Vui lòng điền đầy đủ thông tin",
-        icon: "error"
-      })
-    }
-   
-  }
   const updateInfoCaNhanByID=async(idTK,role)=>
   {
     Swal.fire({
@@ -295,28 +279,73 @@ const FormInfoCaNhan = () => {
         {
           // setduong(document.getElementById("duong").value)
           // console.log("asdsad "+duong) 
-          checkLocation()
-          
-          // console.log(idTK)
-          console.log(getTen)
-          console.log(getEmail)
-          console.log(getSDT)
-          console.log(stringdiachi)
-          console.log(getNganHang)   
-          console.log(getSTK)
-          console.log(getAnh)
-          await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,getAnh,idTK)
-          Swal.fire({
-            title: "Cập nhật thông tin thành công",
-            icon: "success"
-          })
-          await GetPersonalInfoByIdTK(idTK)
+          if(checkInfo() && checkLocation() && checkNganHang()){
+             // console.log(idTK)
+            console.log(getTen)
+            console.log(getEmail)
+            console.log(getSDT)
+            console.log(stringdiachi)
+            console.log(getNganHang)   
+            console.log(getSTK)
+            console.log(getAnh)
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,getAnh,idTK)
+            Swal.fire({
+              title: "Cập nhật thông tin thành công",
+              icon: "success"
+            })
+            await GetPersonalInfoByIdTK(idTK)
+          }
         }
         else{
-    
+            
         }
       }
     });
+    
+  const checkLocation=()=>
+  {
+    console.log(tinh+" "+ quan+" "+ phuong+" "+duong+"check")
+    if(tinh=="" || quan=="" || phuong==""||duong=="")
+    {
+      Swal.fire({
+        title: "Vui lòng kiểm tra lại địa chỉ !",
+        icon: "error"
+      })
+      return false;
+    }
+    else{
+      return true
+    }
+   
+  }
+  const checkInfo=()=>
+  {
+    if(getTen=="" || getSDT.length < 10 || getEmail=="")
+    {
+      Swal.fire({
+        title: "Vui lòng kiểm tra lại thông tin cá nhân ! ",
+        icon: "error"
+      })
+      return false;
+    }
+    else{
+      return true
+    }
+  }
+  const checkNganHang=()=>
+  {
+    if(getNganHang=="" || getSTK.length < 10)
+    {
+      Swal.fire({
+        title: "Vui lòng kiểm tra lại thông tin ngân hàng ! ",
+        icon: "error"
+      })
+      return false;
+    }
+    else{
+      return true
+    }
+  }
    
     
   } 
