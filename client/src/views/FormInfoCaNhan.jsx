@@ -209,7 +209,7 @@ const FormInfoCaNhan = () => {
     if(role == 1)
     {
       let list = await getTKUserByIdTK(idTK);
-      console.log(list)
+      // console.log(list)
       setTen(list.Ten)
       setEmail(list.Email)
       setSDT(list.SoDienThoai)
@@ -224,6 +224,7 @@ const FormInfoCaNhan = () => {
     else
     {
       let list = await getTKCoSoByIdTK(idTK);
+      
       setTen(list.Ten)
       setEmail(list.Email)
       setSDT(list.SoDienThoai)
@@ -232,6 +233,7 @@ const FormInfoCaNhan = () => {
       setSTK(list.STK)
       setAnh(list.Anh)
       let location = getDiaChi.split(', ');
+      // document.getElementById("anh").src = `./assets/${getAnh}`
       document.getElementById("hoTen").value=getTen
       document.getElementById("email").value=getEmail
       document.getElementById("sdt").value=getSDT
@@ -324,11 +326,27 @@ const FormInfoCaNhan = () => {
           }
         }
         else{
-            
+            if(checkInfo())
+            {
+            console.log(getTen)
+            console.log(getEmail)
+            console.log(getSDT)
+            console.log(stringdiachi)
+            console.log(getNganHang)   
+            console.log(getSTK)
+            console.log(getAnh)
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,getAnh,idTK)
+            Swal.fire({
+              title: "Cập nhật thông tin thành công",
+              icon: "success"
+            })
+            await GetPersonalInfoByIdTK(idTK)
+            }
         }
       }
     });
     
+  }
   const checkLocation=()=>
   {
     console.log(tinh+" "+ quan+" "+ phuong+" "+duong+" check")
@@ -374,15 +392,12 @@ const FormInfoCaNhan = () => {
     }
   }
    
-    
-  } 
-  
   return (
     <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>
         <div className='mx-auto w-auto font-[600] text-[36px] text-center text-white p-10'>THÔNG TIN CÁ NHÂN</div>
         <div className='grid grid-cols-11 mx-5 '>
-            <div className='col-span-2 h-[230px] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center'>
-                <Icon24px classIcon={faImage}/>
+            <div className='col-span-2 h-[230px] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center' >
+              <Icon24px classIcon={faImage}/>
             </div>
             <div className='col-span-4 h-[auto] w-[100%] my-[auto]'>
                 <div className='grid grid-rows-2 w-[100%] h-[50%]'>
@@ -397,7 +412,7 @@ const FormInfoCaNhan = () => {
                         <div className='mx-5 flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>SĐT:</div>
                             <input id='sdt' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] my-auto'
-                            onChange={e=>setSDT(e.target.value)} type="text" />
+                            onChange={e=>setSDT(e.target.value)} type="number-moz-appearance: textfield" />
                           </div>
                     </div>
                     {role == 1 ? (<></>) : (<>
@@ -420,7 +435,7 @@ const FormInfoCaNhan = () => {
                         <div className='mx-5 flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>STK:</div>
                             <input id='stk' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'
-                            onChange={e=>setSTK(e.target.value)} type="text" />
+                            onChange={e=>setSTK(e.target.value)} type="number-moz-appearance: textfield"  />
                         </div>
                     </div></>)}
                 </div>
@@ -487,5 +502,6 @@ const FormInfoCaNhan = () => {
     </div>
   )
 }
+
 
 export default FormInfoCaNhan

@@ -366,8 +366,8 @@ app.post("/updatePersonalInfoByIdTK",(req,res)=>{
     req.body.STK,
     req.body.Anh,
     req.body.idTK],(err,data) =>{
-    console.log(req.body.Ten,req.body.Email,req.body.SoDienThoai,
-            req.body.DiaChiCoSo,req.body.NganHang,req.body.STK,req.body.Anh,req.body.idTK)
+    // console.log(req.body.Ten,req.body.Email,req.body.SoDienThoai,
+            // req.body.DiaChiCoSo,req.body.NganHang,req.body.STK,req.body.Anh,req.body.idTK)
     
     res.json(data);
    
