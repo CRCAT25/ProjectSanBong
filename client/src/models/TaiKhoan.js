@@ -154,6 +154,7 @@ class TaiKhoan {
     }
         
     UpdateUserInfo = (Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK) =>{
+        // console.log(Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK+"MMMMMM")
         return axios.post("http://localhost:8081/updatePersonalInfoByIdTK",{Ten,Email,SoDienThoai,DiaChiCoSo,NganHang,STK,Anh,idTK
         }
         ).then(response => {

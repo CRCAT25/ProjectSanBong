@@ -7,6 +7,8 @@ import {
     updateTkByIdTK
 }from "../controllers/CTaiKhoan.js"
 import axios from "axios";
+import Swal from 'sweetalert2'
+import { VietQR } from 'vietqr';
 
 const Icon24px = ({classIcon}) => {
     const iconSize = {
@@ -21,25 +23,33 @@ const Icon24px = ({classIcon}) => {
     
 const FormInfoCaNhan = () => {
 
-    const [apitinh, setapitinh] = useState([]);
-    const [apiquan, setapiquan] = useState([]);
-    const [apiphuong, setapiphuong] = useState([]);
-    const [tinh, settinh] = useState('');
-    const [quan, setquan] = useState('');
-    const [phuong, setphuong] = useState('');
-    const [duong, setduong] = useState('');
-    let stringdiachi = "";
-    const [effectActive, setEffectActive] = useState(true);
-    const [countapi, setCountapi] = useState(0);
+  const [apitinh, setapitinh] = useState([]);
+  const [apiquan, setapiquan] = useState([]);
+  const [apiphuong, setapiphuong] = useState([]);
+  const [tinh, settinh] = useState('');
+  const [quan, setquan] = useState('');
+  const [phuong, setphuong] = useState('');
+  const [duong, setduong] = useState('');
+  const [effectActive, setEffectActive] = useState(true);
+  const [countapi, setCountapi] = useState(0);
+  const [getTen,setTen] = useState("")
+  const [getEmail,setEmail] = useState("")
+  const [getSDT,setSDT] = useState("")
+  const [getDiaChi,setDiaChi] = useState("")
+  const [getNganHang,setNganHang] = useState("")
+  const [getSTK,setSTK] = useState("")
+  const [getAnh,setAnh] = useState("")
+  const [kqapinh, setkqapinh] = useState([]);
 
+  const idUser= localStorage.getItem("userID")
+  const role = localStorage.getItem("userRole")
 
-
-    const host = 'https://provinces.open-api.vn/api/';
+  const host = 'https://provinces.open-api.vn/api/';
+  let stringdiachi = "";
 
   useEffect(() => {
     callAPI('https://provinces.open-api.vn/api/?depth=2');
   }, []);
-
   const callAPI = (api) => {
     return axios.get(api)
       .then((response) => {
@@ -52,7 +62,6 @@ const FormInfoCaNhan = () => {
         console.error('Error fetching province data:', error);
       });
   };
-
   const fetchQuan = (idtinh) => {
     const quanAPI = `${host}p/${idtinh}?depth=2`;
     return axios.get(quanAPI)
@@ -60,13 +69,36 @@ const FormInfoCaNhan = () => {
         const sortQuan = response.data.districts.sort((a, b) => {
           return a.name.localeCompare(b.name);
         });
+        if(countapi>3)
+        {
+          setquan('')
+          document.getElementById("duong").value=''
+        }
         setapiquan(sortQuan);
       })
       .catch((error) => {
         console.error('Error:', error);
       });
   };
-
+  const fetchPhuong = (idquan) => {
+    const phuongAPI = `${host}d/${idquan}?depth=2`;
+    return axios.get(phuongAPI)
+      .then((response) => {
+        const sortPhuong = response.data.wards.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        if(countapi>3)
+        {
+          setphuong('')
+          setduong('')
+          document.getElementById("duong").value=''
+        }
+        setapiphuong(sortPhuong);
+      })
+      .catch((error) => {
+        console.error('Error', error);
+      });
+  };
   const handleProvinceChangeTinh = (event) => {
     const selectedtinh = event.target.value;
     if (selectedtinh) {
@@ -84,20 +116,6 @@ const FormInfoCaNhan = () => {
       setapiquan([]);
     }
   };
-  const fetchPhuong = (idquan) => {
-    const phuongAPI = `${host}d/${idquan}?depth=2`;
-    return axios.get(phuongAPI)
-      .then((response) => {
-        const sortPhuong = response.data.wards.sort((a, b) => {
-          return a.name.localeCompare(b.name);
-        });
-        setapiphuong(sortPhuong);
-      })
-      .catch((error) => {
-        console.error('Error', error);
-      });
-  };
-
   const handleProvinceChangeQuan = (event) => {
     const selectedquan = event.target.value;
     if (selectedquan) {
@@ -111,7 +129,6 @@ const FormInfoCaNhan = () => {
       setapiphuong([]);
     }
   };
-
   const handleProvinceChangePhuong = (event) => {
     const selectedphuong = event.target.value;
     if (selectedphuong) {
@@ -128,13 +145,42 @@ const FormInfoCaNhan = () => {
       className="">{item.name}</option>
     ));
   };
+  function getBank() {
+    const nganHang = async () => {
+      let vietQR = new VietQR({
+        clientID: '7d8635e1-1751-455a-bacb-5b23ff254943',
+        apiKey: '54c2ad4f-9485-445e-b9e0-5593699ab26b',
+      });
+
+      await vietQR.getBanks().then((banks) => {
+        const sortedBanks = banks.data.sort((a, b) => {
+          return a.shortName.localeCompare(b.shortName);
+        });
+        setkqapinh(sortedBanks);
+      }).catch((err) => {
+        console.error('Error fetching banks:', err);
+      });
+    };
+
+    nganHang();
+  }
+
+  useEffect(() => {
+    stringdiachi= duong+", "+phuong+", "+quan+", "+tinh
+    // console.log(stringdiachi+"aaaaaaa")
+
+  }, [tinh, quan, phuong, duong]);
 
   useEffect(() => {
     if (countapi <= 3 ) {
-      console.log('a')
-      console.log(countapi)
+      // console.log('a')
+      // console.log(countapi)
       setCountapi(countapi +1)
       GetPersonalInfoByIdTK(idUser);
+      getBank()
+      console.log(getDiaChi)
+      stringdiachi=getDiaChi
+      
     }
   }, [apitinh, apiquan, apiphuong]);
 
@@ -142,72 +188,139 @@ const FormInfoCaNhan = () => {
     setEffectActive(false);  
   };
 
-
-    
-    const idUser= localStorage.getItem("userID")
-    const role = localStorage.getItem("userRole")
-    useEffect(()=>{
-        GetPersonalInfoByIdTK(idUser)
-    },[])
-    const GetPersonalInfoByIdTK= async(idTK)=>{
-        if(role == 1)
-        {
-            let list = await getTKUserByIdTK(idTK);
-            console.log(list)
-            document.getElementById("hoTen").value=list.Ten
-            document.getElementById("email").value=list.Email
-            document.getElementById("sdt").value=list.SoDienThoai
-        }
-        else
-        {
-            let list = await getTKCoSoByIdTK(idTK);
-            let location = list.DiaChiCoSo.split(', ');
-            document.getElementById("hoTen").value=list.Ten
-            document.getElementById("email").value=list.Email
-            document.getElementById("bank").value=list.NganHang
-            document.getElementById("stk").value=list.STK
-            document.getElementById("sdt").value=list.SoDienThoai
-
-            for(let i=0;i<apitinh.length;i++){
-              if(location[3] == apitinh[i].name){
-                console.log(apitinh[i].code +" a")
-                const selectTinh = document.getElementById("tinh")
-                console.log(location[3])
-                selectTinh.value=apitinh[i].code
-                fetchQuan(apitinh[i].code)
-              }
-            }
-            
-            for(let i=0;i<apiquan.length;i++){
-              // console.log("a"+ apitinh[i].code)
-              if(location[2] == apiquan[i].name){
-                const selectQuan = document.getElementById("quan")
-                console.log(location[2])
-                console.log(apiquan[i].name)
-                selectQuan.value=apiquan[i].code
-                fetchPhuong(apiquan[i].code)
-              }
-            }
-            
-            for(let i=0;i<apiphuong.length;i++){
-              // console.log("a"+ apitinh[i].code)
-              if(location[1] == apiphuong[i].name){
-                const selectPhuong = document.getElementById("phuong")
-                console.log(location[1])
-                console.log(apiphuong[i].name)
-                selectPhuong.value=apiphuong[i].code
-              }
-            }
-          
-            document.getElementById("duong").value = location[0];
-
-        }
-    }   
-    const updateInfoCaNhanByID=(idTK)=>
+  useEffect(()=>{
+      GetPersonalInfoByIdTK(idUser)
+  },[])
+  const GetPersonalInfoByIdTK= async(idTK)=>{
+    if(role == 1)
     {
+      let list = await getTKUserByIdTK(idTK);
+      console.log(list)
+      setTen(list.Ten)
+      setEmail(list.Email)
+      setSDT(list.SoDienThoai)
+      setDiaChi(list.DiaChiCoSo)
+      setNganHang(list.NganHang)
+      setSTK(list.STK)
+      setAnh(list.Anh)
+      document.getElementById("hoTen").value=getTen
+      document.getElementById("email").value=getEmail
+      document.getElementById("sdt").value=getSDT
+    }
+    else
+    {
+      let list = await getTKCoSoByIdTK(idTK);
+      setTen(list.Ten)
+      setEmail(list.Email)
+      setSDT(list.SoDienThoai)
+      setDiaChi(list.DiaChiCoSo)
+      setNganHang(list.NganHang)
+      setSTK(list.STK)
+      setAnh(list.Anh)
+      let location = getDiaChi.split(', ');
+      document.getElementById("hoTen").value=getTen
+      document.getElementById("email").value=getEmail
+      document.getElementById("sdt").value=getSDT
+      document.getElementById("bank").value=getNganHang
+      document.getElementById("stk").value=getSTK
       
-    } 
+      for(let i=0;i<apitinh.length;i++){
+        if(location[3] == apitinh[i].name){
+          // console.log(apitinh[i].code +" a")
+          const selectTinh = document.getElementById("tinh")
+          // console.log(location[3])
+          selectTinh.value=apitinh[i].code
+          settinh(apitinh[i].name)
+          fetchQuan(apitinh[i].code)
+        }
+      }
+      
+      for(let i=0;i<apiquan.length;i++){
+        // console.log("a"+ apitinh[i].code)
+        if(location[2] == apiquan[i].name){
+          const selectQuan = document.getElementById("quan")
+          // console.log(location[2])
+          // console.log(apiquan[i].name)
+          selectQuan.value=apiquan[i].code
+          setquan(apiquan[i].name)
+          fetchPhuong(apiquan[i].code)
+        }
+      }
+      
+      for(let i=0;i<apiphuong.length;i++){
+        // console.log("a"+ apitinh[i].code)
+        if(location[1] == apiphuong[i].name){
+          const selectPhuong = document.getElementById("phuong")
+          // console.log(location[1])
+          // console.log(apiphuong[i].name)
+          selectPhuong.value=apiphuong[i].code
+          setphuong(apiphuong[i].name)
+        }
+      }
+      setduong(location[0])
+      document.getElementById("duong").value = duong;
+    }
+  }   
+
+  const checkLocation=()=>
+  {
+    console.log(tinh+" "+ quan+" "+ phuong+" "+duong+"check")
+    if(tinh!="" || quan!=" " || phuong!=" "||duong!=" " )
+    {
+      setDiaChi(stringdiachi)
+      console.log(getDiaChi)
+    }
+    else{
+      Swal.fire({
+        title: "Vui lòng điền đầy đủ thông tin",
+        icon: "error"
+      })
+    }
    
+  }
+  const updateInfoCaNhanByID=async(idTK,role)=>
+  {
+    Swal.fire({
+      title: "Bạn có muốn cập nhật lại thông tin của mình ?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Đồng ý",
+      cancelButtonText:"Kiểm tra lại"
+      
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        if(role==2)
+        {
+          // setduong(document.getElementById("duong").value)
+          // console.log("asdsad "+duong) 
+          checkLocation()
+          
+          // console.log(idTK)
+          console.log(getTen)
+          console.log(getEmail)
+          console.log(getSDT)
+          console.log(stringdiachi)
+          console.log(getNganHang)   
+          console.log(getSTK)
+          console.log(getAnh)
+          await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,getAnh,idTK)
+          Swal.fire({
+            title: "Cập nhật thông tin thành công",
+            icon: "success"
+          })
+          await GetPersonalInfoByIdTK(idTK)
+        }
+        else{
+    
+        }
+      }
+    });
+   
+    
+  } 
+  
   return (
     <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>
         <div className='mx-auto w-auto font-[600] text-[36px] text-center text-white p-10'>THÔNG TIN CÁ NHÂN</div>
@@ -220,26 +333,38 @@ const FormInfoCaNhan = () => {
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5  flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Tên:</div>
-                            <input id='hoTen' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]' placeholder="" type="text" />
+                            <input id='hoTen' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]' 
+                            onChange={e=>setTen(e.target.value)} placeholder="" type="text" />
                         </div>
                     </div>
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5 flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>SĐT:</div>
-                            <input id='sdt' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] my-auto'placeholder="" type="number" />
+                            <input id='sdt' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] my-auto'
+                            onChange={e=>setSDT(e.target.value)} type="text" />
                           </div>
                     </div>
                     {role == 1 ? (<></>) : (<>
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Ngân hàng:</div>
-                            <input id='bank' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]' placeholder="" type="text" />
+                            <select class='w-[70%] h-[50px] pl-[10px] font-[600] 
+                             text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]' type="text" id="bank" 
+                             onChange={e => setNganHang(e.target.value)} >
+                              <option disable value="">Chọn ngân hàng</option>
+                              {kqapinh.map((nh, i) => (
+                                <React.Fragment key={i}>
+                                  <option value={nh.shortName}>{nh.shortName}</option>
+                                </React.Fragment>
+                              ))}
+                            </select>
                         </div>
                     </div>
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5 flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>STK:</div>
-                            <input id='stk' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'placeholder="" type="text" />
+                            <input id='stk' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'
+                            onChange={e=>setSTK(e.target.value)} type="text" />
                         </div>
                     </div></>)}
                 </div>
@@ -249,7 +374,8 @@ const FormInfoCaNhan = () => {
                     <div className='row-span-1 h-[auto] my-[5px]'>
                         <div className='mx-5 ml-0 flex justify-between '>
                             <div className='w-[15%] text-[19px] h-[auto] my-auto text-white'>Email:</div>
-                            <input id='email' className='w-[85%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'  placeholder="" type="text" />
+                            <input id='email' className='w-[85%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'  
+                            onChange={e=>setEmail(e.target.value)} type="text" />
                         </div>
                     </div>  
                     {role == 1 ? (<></>) : (<>
@@ -282,7 +408,7 @@ const FormInfoCaNhan = () => {
                             </select>
                         <input id='duong' 
                             className='w-[42%] ml-[0.5%] h-[50px] font-[600] text-[black] text-[19px] text-center bg-[#D9D9D9] rounded-[5px] pl-2 ' 
-                            placeholder='' type="text" />
+                            onChange={e=>setduong(e.target.value)} type="text" />
                         </div>
                     </div>
                     </> )}             
@@ -293,7 +419,7 @@ const FormInfoCaNhan = () => {
                             <button class=" w-[42%] mr-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] "
                             onClick={()=>{}}>Đổi mật khẩu</button>
                             <button class=" w-[42%] ml-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] "
-                            onClick={()=>{}}>CẬP NHẬT</button>
+                            onClick={()=>{updateInfoCaNhanByID(idUser,role)}}>CẬP NHẬT</button>
                         </div>
                     </div>
                     
