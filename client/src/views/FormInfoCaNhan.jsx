@@ -300,7 +300,19 @@ const FormInfoCaNhan = () => {
   //   }
   // }
   }
-
+  function uploadAnh(anhs){
+    const formData = new FormData();
+      for (let i = 0; i < anhs.length; i++) {
+        formData.append('files', anhs[i]);
+      }
+      axios.post('http://localhost:8081/upload', formData)
+      .then(response => {
+        console.log('Files uploaded successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error uploading files:', error);
+      });
+  }
   const updateInfoCaNhanByID=async(idTK,role)=>
   {
     Swal.fire({
@@ -327,9 +339,9 @@ const FormInfoCaNhan = () => {
             console.log(getSDT)
             console.log(stringdiachi+" string")
             console.log(getDiaChi+" getDC")
-
             console.log(getNganHang)   
             console.log(getSTK)
+            uploadAnh(document.getElementById("inputAnh").files)
             console.log(getAnh)
             await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,getAnh,idTK)
             Swal.fire({
