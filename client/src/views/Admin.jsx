@@ -291,16 +291,17 @@ const Admin = () => {
     }
   }
   const resetInputValues = () => {
-    document.getElementById('iptcs').value = '';
-    document.getElementById('ipsdtcs').value = '';
-    document.getElementById('ipmkcs').value = '';
-    document.getElementById('ipemailcs').value = '';
-    // document.getElementById('iptinh').value = '';
-    // document.getElementById('ipquan').value = '';
-    // document.getElementById('ipphuong').value = '';
-    // document.getElementById('ipnh').value = '';
-    document.getElementById('ipstk').value = '';
-    document.getElementById('ipsonha').value = '';
+    // alert('a')
+    // document.getElementsByClassName('iptcs')[0].innerHTML = '';
+    // document.getElementsByClassName('ipsdtcs')[0].innerHTML = '';
+    // document.getElementsByClassName('ipmkcs')[0].innerHTML = '';
+    // document.getElementsByClassName('ipemailcs')[0].innerHTML = '';
+    // document.getElementsByClassName('iptinh')[0].value = '';
+    // document.getElementsByClassName('ipquan')[0].value = '';
+    // document.getElementsByClassName('ipphuong')[0].value = '';
+    // document.getElementsByClassName('ipnh')[0].value = '';
+    // document.getElementsByClassName('ipstk')[0].innerHTML = '';
+    // document.getElementsByClassName('ipsonha')[0].innerHTML = '';
   };
 
   const ShowResultThem = async (result) => {
