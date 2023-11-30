@@ -45,7 +45,7 @@ const FieldManage =  () => {
   const Swal = require('sweetalert2')
   const [getLoaiSans, setLoaiSans] = useState([]);
   let IDSan = null
-  const [getIDSan, setIDSan] = useState([]);
+  const [getIDSan, setIDSan] = useState(null);
   const [getBillForRefund, setBillForRefund] = useState([]);
   
   const displayLoaiSanPrice = async () =>{
@@ -54,7 +54,6 @@ const FieldManage =  () => {
     }else{
       document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = (await getLoaiSanByID(document.getElementsByClassName("selectLoaiS")[0].value)).GiaTien
     }
-    
   }
 
  function deleteSanMainBTN() {
@@ -71,40 +70,55 @@ const FieldManage =  () => {
     let tenSan = document.getElementsByClassName("auto-group-1jl7-TBh")[0].value
     let loaiSan = document.getElementsByClassName("selectLoaiS")[0].value
     let idTK = "7"
-    let anhs = document.getElementById("inputAnh").files
+    let files = document.getElementById("inputAnh").files
     let tenAnhs = []
+    let anhs = []
     let addible = false
     if(tenSan.length > 0){
       if(loaiSan !== "none"){
-        if(anhs.length > 0){
-          for(let i = 0; i < anhs.length; i++){
+        if(files.length > 0){
+          for(let i = 0; i < files.length; i++){
             if(i == 2){break}
-            tenAnhs.push(anhs[i].name)
+            tenAnhs.push(files[i].name)
+            anhs.push(files[i])
           }
           addible = true
         }else{
-          alert("Yêu cầu chọn ít nhất 1 ảnh.")
+          Swal.fire({
+            title: "Yêu cầu chọn ít nhất 1 ảnh.",
+            confirmButtonText: "OK",
+          });
         }
       }else{
-        alert("Yêu cầu chọn loại sân.")
+        Swal.fire({
+          title: "Yêu cầu chọn loại sân.",
+          confirmButtonText: "OK",
+        });
       }
     }else{
-      alert("Yêu cầu nhập tên sân.")
+      Swal.fire({
+        title: "Yêu cầu nhập tên sân.",
+        confirmButtonText: "OK",
+      });
     }
     if(addible){
       insertSan(idTK, loaiSan, tenSan, tenAnhs)
-      const formData = new FormData();
+      uploadAnh(anhs)
+      
+  }
+  }
+  function uploadAnh(anhs){
+    const formData = new FormData();
       for (let i = 0; i < anhs.length; i++) {
         formData.append('files', anhs[i]);
       }
       axios.post('http://localhost:8081/upload', formData)
-        .then(response => {
-          console.log('Files uploaded successfully:', response.data);
-        })
-        .catch(error => {
-          console.error('Error uploading files:', error);
-        });
-  }
+      .then(response => {
+        console.log('Files uploaded successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error uploading files:', error);
+      });
   }
   function chooseImage(){
     document.getElementById("inputAnh").click()
@@ -114,7 +128,10 @@ const FieldManage =  () => {
     if (files.length > 0) {
       document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML = ``
       if(files.length > 2){
-        alert("Tối đa 2 hình.")
+        Swal.fire({
+          title: "Tối đa 2 hình.",
+          confirmButtonText: "OK",
+        });
       }
       for(let i = 0; i < files.length; i++){
         if(i == 2){
@@ -200,51 +217,37 @@ const FieldManage =  () => {
     }
   }
   function selectSan(element){
-    if(IDSan){
+    if(IDSan == (element.parentElement.parentElement.id).substring(4,(element.parentElement.parentElement.id).length)){
       document.getElementById("san-"+IDSan).style.background = "white"
+    } else{
+      if(IDSan){
+        document.getElementById("san-"+IDSan).style.background = "white"
+      } 
+      setIDSan((element.parentElement.parentElement.id).substring(4,(element.parentElement.parentElement.id).length));
+      IDSan = (element.parentElement.parentElement.id).substring(4,(element.parentElement.parentElement.id).length);
+
+      document.getElementById("Wa15ekgLDPSUrvQVNo1jL7").value = element.parentElement.parentElement.children[0].children[0].children[0].innerHTML
+      document.getElementsByClassName("selectLoaiS")[0].value = element.parentElement.parentElement.children[0].children[1].children[0].id
+      document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = element.parentElement.parentElement.children[0].children[2].children[0].innerHTML
+      element.parentElement.parentElement.style.background = "lightCyan"
+      document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML =""
+      for(let i = 0; i < element.parentElement.parentElement.children[1].children.length; i++){
+        document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML += `
+                <img
+              className="imgSanInput"
+              src="${element.parentElement.parentElement.children[1].children[i].src}"
+            />`;
+      }
     }
-    setIDSan((element.parentElement.parentElement.id).substring(4,(element.parentElement.parentElement.id).length));
-    IDSan = (element.parentElement.parentElement.id).substring(4,(element.parentElement.parentElement.id).length);
-    document.getElementById("Wa15ekgLDPSUrvQVNo1jL7").value = element.parentElement.parentElement.children[0].children[0].children[0].innerHTML
-    document.getElementsByClassName("selectLoaiS")[0].value = element.parentElement.parentElement.children[0].children[1].children[0].id
-    document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = element.parentElement.parentElement.children[0].children[2].children[0].innerHTML
-    element.parentElement.parentElement.style.background = "red"
-    document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML =""
-    // let file = ""
-    for(let i = 0; i < element.parentElement.parentElement.children[1].children.length; i++){
-      document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML += `
-              <img
-            className="imgSanInput"
-            src="${element.parentElement.parentElement.children[1].children[i].src}"
-          />`;
-      //   let imageUrl = document.getElementsByClassName('imgSan')[i].src
-      // fetch(imageUrl)
-      // .then(response => {
-      //   if (!response.ok) {
-      //     throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
-      //   }
-      //   return response.blob();
-      // })
-      // .then(blob => {
-      //   file = new File([blob], 
-      //     (document.getElementsByClassName('imgSan')[i].src).split("/")[(document.getElementsByClassName('imgSan')[i].src).split("/").length - 1], 
-      //     { type: 'image/*' });
-      // })
-      // .catch(error => {
-      //   console.error('Error fetching image:', error);
-      // });
-      
-      // listFile.push(file)
-    }
-    // document.getElementById('inputAnh').files = [file]; 
   }
   const updateSan = async () => {
     if(getIDSan){
       let san = await getSanByID(getIDSan)
       let tenSan = document.getElementsByClassName("auto-group-1jl7-TBh")[0].value
       let loaiSan = document.getElementsByClassName("selectLoaiS")[0].value
-      let anhs = document.getElementById("inputAnh").files
+      let files = document.getElementById("inputAnh").files
       let tenAnhs = []
+      let anhs = []
       let perGranted = false
       let newTenSan = san.TenSan
       let newLoaiSan = san.LoaiSan.IdLoaiSan
@@ -252,10 +255,16 @@ const FieldManage =  () => {
         if(loaiSan !== "none"){
           perGranted = true
         }else{
-          alert("Yêu cầu chọn loại sân.")
+          Swal.fire({
+            title: "Yêu cầu chọn loại sân.",
+            confirmButtonText: "OK",
+          });
         }
       }else{
-        alert("Yêu cầu nhập tên sân.")
+        Swal.fire({
+          title: "Yêu cầu nhập tên sân.",
+          confirmButtonText: "OK",
+        });
       }
 
       if(perGranted){
@@ -265,44 +274,59 @@ const FieldManage =  () => {
         if(loaiSan != san.LoaiSan.IdLoaiSan){
           newLoaiSan = loaiSan
         }
-        if(anhs.length > 0){
-          for(let i = 0; i < anhs.length; i++){
+        if(files.length > 0){
+          for(let i = 0; i < files.length; i++){
             if(i == 2){break}
-            tenAnhs.push(anhs[i].name)
+            tenAnhs.push(files[i].name)
+            anhs.push(files[i])
           }
         }
-        // updateSanByID(newLoaiSan,san.TaiKhoan.IdAccount, newTenSan, san.TrangThai, san.IdSan)
+        Swal.fire({
+          title: "Bạn có chắc muốn cập nhật?",
+          showDenyButton: true,
+          confirmButtonText: "Có",
+          denyButtonText: `Không`
+        }).then((result) => {
+          if (result.isConfirmed) {
+            if(getIDSan == IDSan){
+              setIDSan(null)
+              IDSan = null
+            } 
+            updateSanByID(newLoaiSan,san.TaiKhoan.IdAccount, newTenSan, san.IdSan, tenAnhs)
+            if(tenAnhs.length > 0){
+              uploadAnh(anhs)
+            }
+            Swal.fire({
+              title: "Cập nhật thành công!"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                reloadSan()
+              }
+            });
+          }
+        });
       }
-
-
-      // Swal.fire({
-      //   title: "Bạn có chắc muốn xoá?",
-      //   showDenyButton: true,
-      //   confirmButtonText: "Xoá",
-      //   denyButtonText: `Không`
-      // }).then((result) => {
-      //   if (result.isConfirmed) {
-      //     if(getIDSan == IDSan){
-      //       setIDSan(null)
-      //     } 
-      //     deleteSanByID(IDSan)
-  
-      //     Swal.fire({
-      //       title: "Xoá thành công!"
-      //     }).then((result) => {
-      //       if (result.isConfirmed) {
-      //         loadListFields()
-              
-      //       }
-      //     });
-      //   }
-      // });
     }else{
       Swal.fire({
-        title: "Yêu cầu chọn sân muốn xoá!",
+        title: "Yêu cầu chọn sân!",
         confirmButtonText: "OK",
       });
     }
+  }
+  function reloadSan() {
+    document.getElementsByClassName("auto-group-1jl7-TBh")[0].value = null
+    document.getElementsByClassName("selectLoaiS")[0].value = "none"
+    var newInput = document.createElement('input');
+    newInput.type = 'file';
+    newInput.id = 'inputAnh';
+    newInput.name = 'files';
+    newInput.accept ="image/*"
+    newInput.style.opacity = 0;
+    newInput.multiple = true;
+    newInput.addEventListener("change",readURL)
+    var oldInput = document.getElementById('inputAnh');
+    oldInput.parentNode.replaceChild(newInput, oldInput);
+    loadListFields()
   }
   function deleteSan(IDSan){
     Swal.fire({
@@ -479,7 +503,7 @@ const FieldManage =  () => {
             <button className="btnThemSan" id="257:815" onClick={InsertSan}>
               Thêm
             </button>
-            <button className="btnCapNhatSan" id="257:818">
+            <button className="btnCapNhatSan" id="257:818" onClick={updateSan}>
               Cập nhật
             </button>
             <button className="btXoaSan" id="257:821" onClick={deleteSanMainBTN}>

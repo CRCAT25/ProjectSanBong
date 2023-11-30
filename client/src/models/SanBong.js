@@ -43,7 +43,7 @@ class SanBong{
             });
     }
     UpdateSanByID(IDLoaiSan, IDTaiKhoan, TenSan,TrangThai,IDSan) {
-        return axios.post("http://localhost:8081/deleteSanByID", {IDLoaiSan, IDTaiKhoan, TenSan, TrangThai, IDSan})
+        return axios.post("http://localhost:8081/updateSanByID", {IDLoaiSan, IDTaiKhoan, TenSan, TrangThai, IDSan})
             .then(response => {
             })
             .catch(error => {

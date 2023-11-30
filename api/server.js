@@ -276,6 +276,11 @@ app.post("/deleteSanByID", (req, res) => {
   db.query(sql, [req.body.IDSan],(err, data) => {
   });
 });
+app.post("/deleteAnh", (req, res) => {
+  const sql = `DELETE FROM anh WHERE IDAnh = ?`;
+  db.query(sql, [req.body.IDAnh],(err, data) => {
+  });
+});
 app.post("/updateSanByID", (req, res) => {
   const sql = `UPDATE sanbong SET IDLoaiSan = ? ,IDTaiKhoan = ? ,TenSan= ? ,TrangThai= ? WHERE IDSan= ?`;
   db.query(sql, [req.body.IDLoaiSan, req.body.IDTaiKhoan, req.body.TenSan, req.body.TrangThai, req.body.IDSan],(err, data) => {
