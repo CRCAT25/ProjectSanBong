@@ -207,7 +207,7 @@ const FormInfoCaNhan = () => {
     if(role == 1)
     {
       let list = await getTKUserByIdTK(idTK);
-      // console.log(list)
+      console.log(list)
       setTen(list.Ten)
       setEmail(list.Email)
       setSDT(list.SoDienThoai)
@@ -215,6 +215,7 @@ const FormInfoCaNhan = () => {
       setNganHang(list.NganHang)
       setSTK(list.STK)
       setAnh(list.Anh)
+      console.log(getAnh)
       document.getElementById("anh").src = `./assets/${getAnh}`
       document.getElementById("hoTen").value=getTen
       document.getElementById("email").value=getEmail
@@ -223,7 +224,7 @@ const FormInfoCaNhan = () => {
     else
     {
       let list = await getTKCoSoByIdTK(idTK);
-      
+      console.log(list)
       setTen(list.Ten)
       setEmail(list.Email)
       setSDT(list.SoDienThoai)
@@ -232,6 +233,7 @@ const FormInfoCaNhan = () => {
       setSTK(list.STK)
       setAnh(list.Anh)
       let location = getDiaChi.split(', ');
+      console.log(getAnh)
       document.getElementById("anh").src = `./assets/${getAnh}`
       document.getElementById("hoTen").value=getTen
       document.getElementById("email").value=getEmail
@@ -281,8 +283,6 @@ const FormInfoCaNhan = () => {
       // alert(duong+ " duong")
       setduong(location[0])
       document.getElementById("duong").value = duong;
-
-
     }
   }  
 
@@ -294,13 +294,25 @@ const FormInfoCaNhan = () => {
         document.getElementById("anh").src = e.target.result;
       };
       reader.readAsDataURL(files[0]);
+    
+    }else{
+      document.getElementById("anh")[0].src = `./assets/unknow.jpg`
     }
-  //   }else{
-  //     document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML = `<i class="fa fa-image fa-2x"  id = "iconImg"></i>`
-  //   }
-  // }
   }
-
+ 
+  function uploadAnh(anhs){
+    const formData = new FormData();
+      for (let i = 0; i < anhs.length; i++) {
+        formData.append('files', anhs[i]);
+      }
+      axios.post('http://localhost:8081/upload', formData)
+      .then(response => {
+        console.log('Files uploaded successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error uploading files:', error);
+      });
+  }
   const updateInfoCaNhanByID=async(idTK,role)=>
   {
     Swal.fire({
@@ -313,6 +325,7 @@ const FormInfoCaNhan = () => {
       cancelButtonText:"Kiểm tra lại"
       
     }).then(async (result) => {
+      // console.log(document.getElementById("anh").src.split("/")[4]+"dasdas")
       if (result.isConfirmed) {
         if(role==2)
         {
@@ -327,11 +340,24 @@ const FormInfoCaNhan = () => {
             console.log(getSDT)
             console.log(stringdiachi+" string")
             console.log(getDiaChi+" getDC")
-
             console.log(getNganHang)   
             console.log(getSTK)
-            console.log(getAnh)
-            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,getAnh,idTK)
+
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().slice(0, 10);
+            const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
+            uploadAnh(document.getElementById("inputAnh").files)
+            let picName=""
+            
+            if(document.getElementById("inputAnh").files.length > 0)
+            {
+              picName=`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`
+            }
+            else {
+              picName= document.getElementById("anh").src.split("/")[4]
+            }
+
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,picName,idTK)
             Swal.fire({
               title: "Cập nhật thông tin thành công",
               icon: "success"
@@ -349,8 +375,22 @@ const FormInfoCaNhan = () => {
             console.log(stringdiachi)
             console.log(getNganHang)   
             console.log(getSTK)
-            console.log(getAnh)
-            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,getAnh,idTK)
+
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().slice(0, 10);
+            const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
+            uploadAnh(document.getElementById("inputAnh").files)
+            
+            let picName=""
+            if(document.getElementById("inputAnh").files.length > 0)
+            {
+              picName=`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`
+            }
+            else {
+              picName= document.getElementById("anh").src.split("/")[4]
+            }
+
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,picName,idTK)
             Swal.fire({
               title: "Cập nhật thông tin thành công",
               icon: "success"
@@ -362,6 +402,11 @@ const FormInfoCaNhan = () => {
     });
     
   }
+
+  const newProfilePic=()=>{
+    
+  }
+
   const checkLocation=()=>
   {
     console.log(tinh+" "+ quan+" "+ phuong+" "+duong+" check")

@@ -74,9 +74,7 @@ app.post("/getLoaiSanByID", (req, res) => {
   });
 });
 app.post("/getTKByID", (req, res) => {
-  const sql = `SELECT * FROM taikhoan,loaiphanquyen Where 
-  taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and 
-  taikhoan.IDTaiKhoan = ?`;
+  const sql = `select * from taikhoan, loaiphanquyen where taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and taikhoan.IDTaiKhoan = ?`;
   db.query(sql, [req.body.idTK], (err, data) => {
     res.json(data);
   });
@@ -172,7 +170,7 @@ app.post("/getAllLichGiaoHuu",(req,res) => {
                 AND hoadon.idDoiThu IS NULL
                 AND hoadon.TrangThai = 'Completed'
                 AND hoadon.GiaoHuu = 1
-                AND DAY(ngay) > DAY(CURRENT_DATE)
+                AND Ngay > CURRENT_DATE
               and tk1.IDTaiKhoan = hoadon.IDTaiKhoan 
                 and sanbong.IDSan = hoadon.IDSan
                 and tk2.IDTaiKhoan = sanbong.IDTaiKhoan;`;
@@ -292,6 +290,7 @@ app.post("/updateSanByID", (req, res) => {
   db.query(sql, [req.body.IDLoaiSan, req.body.IDTaiKhoan, req.body.TenSan, req.body.TrangThai, req.body.IDSan],(err, data) => {
   });
 });
+
 // Set up multer to handle file uploads
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -596,6 +595,16 @@ app.post("/enableacc", async (req, res) => {
   }
   });
 });
+
+app.post("/showdon",(req,res) => {
+  const sql = `SELECT hoadon.IDHoaDon, tk1.Ten, tk1.SoDienThoai, tk2.Ten AS CoSo,
+   tk2.DiaChiCoSo, sanbong.TenSan AS MaSan, DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay 
+   FROM hoadon JOIN taikhoan AS tk1 ON tk1.IDTaiKhoan = hoadon.IDTaiKhoan JOIN sanbong ON sanbong.IDSan = hoadon.IDSan JOIN taikhoan AS tk2 ON tk2.IDTaiKhoan = sanbong.IDTaiKhoan 
+   WHERE hoadon.TrangThai <> 'Refund' AND Ngay < CURRENT_DATE;;`;
+  db.query(sql, (err, data) => {
+    res.json(data);
+  });
+})
 
 
 
