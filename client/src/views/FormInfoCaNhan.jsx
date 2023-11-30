@@ -115,10 +115,8 @@ const FormInfoCaNhan = () => {
     if (selectedtinh) {
       fetchQuan(selectedtinh);
       UpdateEffectActive();
-      // console.log(apitinh.length)
-      // console.log(selectedtinh)
+
       for(let i=0;i<apitinh.length;i++){
-        // console.log("a"+ apitinh[i].code)
         if(selectedtinh == apitinh[i].code){
           settinh(apitinh[i].name)
         }
@@ -323,7 +321,8 @@ const FormInfoCaNhan = () => {
               title: "Cập nhật thông tin thành công",
               icon: "success"
             })
-            await GetPersonalInfoByIdTK(idTK)
+            // await GetPersonalInfoByIdTK(idTK)
+            window.location.reload();
           }
         }
         else{
