@@ -319,10 +319,6 @@ select{
   height: fit-content;
   padding: 20px 40px;
 }
-.rowSan:hover{
-  background-color: lightgrey;
-  cursor: pointer;
-}
 .tenSanLS{
   width: 12.5%;
   background-color: #52C41A;
@@ -357,6 +353,8 @@ select{
 }
 .date:hover{
   cursor: pointer;
+    background-color: lightgreen;
+
 }
 .item-4-cfD{
   font-size: 60px;

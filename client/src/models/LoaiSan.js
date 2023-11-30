@@ -28,10 +28,9 @@ class LoaiSan {
             });
     }
 
-    GetLoaiSanByID(id) {
-        return axios.post("http://localhost:8081/getLoaiSanByID", {id})
+    GetLoaiSanByID(IdLoaiSan) {
+        return axios.post("http://localhost:8081/getLoaiSanByID", {IdLoaiSan})
             .then(response => {
-                console.log(response.data)
                 const loaiSan =  new LoaiSan(response.data[0].IDLoaiSan, response.data[0].TenLoaiSan, response.data[0].GiaTien)
                 return loaiSan
             })
@@ -47,13 +46,5 @@ class LoaiSan {
         });
         return resultList
     }
-
-    getLoaiSanByID = (idSan) =>{
-        return axios.post("http://localhost:8081/getLoaiSanByID",{idSan}).then(response => {
-            const itemCoSo = new LoaiSan(response.data[0].IdLoaiSan, response.data[0].TenLoaiSan, response.data[0].GiaTien);
-            return itemCoSo
-        })
-        .catch(error => {console.error(error);}
-        )}
 }
 export default LoaiSan
