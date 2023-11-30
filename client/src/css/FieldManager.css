@@ -343,19 +343,38 @@ select{
   left: 0;
   z-index: 9;
 }
-.date, .rectangle-4318-587, .rectangle-4319-kk3, .rectangle-4319-kk2, .rectangle-4319-kk4, .rectangle-4319-kk8{
+.shift, .rectangle-4318-587, .rectangle-4319-kk3, .rectangle-4319-kk2, .rectangle-4319-kk4, .rectangle-4319-kk8{
   position: relative;
-  background-color: gray;
   width: 44px;
   height: 44px;
   border-radius: 50%;
   z-index: 10;
 }
-.date:hover{
+.shift:hover{
   cursor: pointer;
-    background-color: lightgreen;
+  background-color: lightgreen;
 
 }
+
+.shift-Busy-Pass{
+  background-color: gray;
+}
+.shift-Empty-Pass{
+  opacity: 0;
+}
+.shift-Empty-Pass:hover{
+  cursor: default;
+}
+.shift-Empty-Future{
+  background-color: yellowgreen;
+}
+.shift-Busy-Future{
+  background-color: rgb(255, 139, 31);
+}
+
+
+
+
 .item-4-cfD{
   font-size: 60px;
 }

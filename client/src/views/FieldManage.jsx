@@ -20,12 +20,14 @@ import {
   getAllSanByTaiKhoan,
   getAllHoaDonCompletedByCoSo,
   getBillForRefund,
+  getHoaDonsByNgayKGTKTTSanIDSan,
   insertSan,
   updateSanByID,
   getSanByID,
   getLoaiSanByID,
   getAnhsByIDSan,
-  deleteSanByID
+  deleteSanByID,
+  getAllKhungGio
 } from "../controllers/CQuanLySan";
 import Swal from 'sweetalert2'
 
@@ -40,10 +42,12 @@ const FieldManage =  () => {
     document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
     handleDateChange()
     loadListFields()
-
+    loadListLS()
   }, []);
+  let idTK = "7"
   const Swal = require('sweetalert2')
   const [getLoaiSans, setLoaiSans] = useState([]);
+  const [getLichSans, setLichSans] = useState([]);
   let IDSan = null
   const [getIDSan, setIDSan] = useState(null);
   const [getBillForRefund, setBillForRefund] = useState([]);
@@ -55,7 +59,44 @@ const FieldManage =  () => {
       document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = (await getLoaiSanByID(document.getElementsByClassName("selectLoaiS")[0].value)).GiaTien
     }
   }
+  const loadListLS = async()  =>{
+    document.getElementById("Wa1D1TazzFCfTx5RoHkPmu").innerHTML =""
+    var listSan = await getAllSanByTaiKhoan(idTK)
+    var listCa = await getAllKhungGio()
+    var string = ""
+    listSan.forEach(san => {
+      string +=  `<div className="rowSan" id="rowSan-${san.IdSan}">
+      <div className="tenSanLS">
+        <div>${san.TenSan}</div>
+      </div>
+      <div className="schedule">`
+      listCa.forEach(async (ca) => {
+        var listHD = await getHoaDonsByNgayKGTKTTSanIDSan(document.getElementsByClassName("ngayLS")[0].value,ca.IdKhungGio,idTK,san.IdSan)
 
+        if(listHD.length > 0){
+          listHD.forEach(hoaDon => {
+            string += `<div className="shift "></div>`
+          });
+        }else{
+
+        }
+      });
+      
+      
+      
+    //   `<div className="shift-${idca[0]}"></div>
+    //     <div className="shift-${idca[0]}"></div>
+    //     <div className="shift-${idca[0]}"></div>
+    //     <div className="shift-${idca[0]}"></div>
+    //     <div className="shift-${idca[0]}"></div>
+    //     <div className="shift-${idca[0]}"></div>`
+        string +=`<hr className="line" />
+        </div>
+      </div>`
+    });
+
+   
+  }
  function deleteSanMainBTN() {
   if(getIDSan){
     deleteSan(getIDSan)
@@ -69,7 +110,6 @@ const FieldManage =  () => {
   function InsertSan(){
     let tenSan = document.getElementsByClassName("auto-group-1jl7-TBh")[0].value
     let loaiSan = document.getElementsByClassName("selectLoaiS")[0].value
-    let idTK = "7"
     let files = document.getElementById("inputAnh").files
     let tenAnhs = []
     let anhs = []
@@ -201,7 +241,7 @@ const FieldManage =  () => {
       slect.removeChild(slect.firstChild);
     }
     slect.innerHTML = `<option value="none">--Khung giờ--</option>`
-    ;(await getEmptyShiftByDay("7", await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
+    ;(await getEmptyShiftByDay(idTK, await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
       slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
     })
   }
@@ -219,7 +259,7 @@ const FieldManage =  () => {
     if(document.getElementsByClassName("selectKhungGio")[0].value != "none"){
       slect.innerHTML = `<option value="none">--Sân--</option>`
       ;(await getEmptyFieldByDayShift(
-        "7", 
+        idTK, 
         await document.getElementsByClassName("ngayLS")[0].value,
         await document.getElementsByClassName("selectKhungGio")[0].value)
         ).map((san, i)=>{
@@ -385,7 +425,7 @@ const FieldManage =  () => {
   }
   const loadListFields = async () =>{
     document.getElementsByClassName("scrollContainerSan")[0].innerHTML = ""
-    let aList = await getAllSanByTaiKhoan("7");
+    let aList = await getAllSanByTaiKhoan(idTK);
     if(aList.length > 0){
       aList.map(async (san, i) => {
         let anhs = await getAnhsByIDSan(san.IdSan)
@@ -702,78 +742,32 @@ const FieldManage =  () => {
             </div>
           </div>
           <div className="auto-group-kpmu-omd" id="Wa1D1TazzFCfTx5RoHkPmu">
-            <div className="rowSan">
-              <div className="tenSanLS">
-                <div>San 1</div>
-              </div>
-              <div className="schedule">
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <hr className="line" />
-              </div>
-            </div>
-            <div className="rowSan">
-              <div className="tenSanLS">
-                <div>San 1</div>
-              </div>
-              <div className="schedule">
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <hr className="line" />
-              </div>
-            </div>
-            <div className="rowSan">
-              <div className="tenSanLS">
-                <div>San 1</div>
-              </div>
-              <div className="schedule">
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <hr className="line" />
-              </div>
-            </div>
-            <div className="rowSan">
-              <div className="tenSanLS">
-                <div>San 1</div>
-              </div>
-              <div className="schedule">
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <hr className="line" />
-              </div>
-            </div>
-            <div className="rowSan">
-              <div className="tenSanLS">
-                <div>San 1</div>
-              </div>
-              <div className="schedule">
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <div className="date"></div>
-                <hr className="line" />
-              </div>
-            </div>
+              
           </div>
         </div>
+        {/* {getLichSans.length > 0 ? (
+                getLichSans.map((element,i) => (
+                  // if(element)
+                  <div className="rowSan" id={"rowSan-"+element}>
+                    <div className="tenSanLS">
+                      <div>San 2</div>
+                    </div>
+                    <div className="schedule">
+                      <div className="shift shift-Busy-Pass"></div>
+                      <div className="shift shift-Empty-Pass"></div>
+                      <div className="shift shift-Empty-Future"></div>
+                      <div className="shift shift-Empty-Future"></div>
+                      <div className="shift shift-Busy-Future"></div>
+                      <div className="shift shift-Empty-Future"></div>
+                      <hr className="line" />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div>Không có gì.</div>
+              )
+
+              } */}
         {/* <div className="ch-thch-3hD" id="293:531">
           <div className="ttlLS">Loại sân</div>
           <div className="groupLC">

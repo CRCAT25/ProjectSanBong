@@ -79,8 +79,18 @@ class HoaDon{
     //             console.error(error);
     //         });
     // }
-    GetHoaDonsCompleteByNgayKG(day,idKhungGio, idTK) {
-        return axios.post("http://localhost:8081/getHoaDonsCompleteByNgayKGTK", {Ngay: day, IDKhungGio: idKhungGio, IDTaiKhoan: idTK})
+    GetBusyHoaDonsByNgayKGTTSan(day,idKhungGio, idTK) {
+        return axios.post("http://localhost:8081/getBusyHoaDonsByNgayKGTKTTSan", {Ngay: day, IDKhungGio: idKhungGio, IDTaiKhoan: idTK})
+            .then(response => {
+                const list = this.initBill(response.data);                  
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    GetHoaDonsByNgayKGTTSanIDSan(day,idKhungGio, idTK, idSan) {
+        return axios.post("http://localhost:8081/getHoaDonsByNgayKGTKTTSanIDSan", {Ngay: day, IDKhungGio: idKhungGio, IDTaiKhoan: idTK, IDSan:idSan})
             .then(response => {
                 const list = this.initBill(response.data);                  
                 return list;
