@@ -104,17 +104,12 @@ const FormLichSu = () => {
         }
       });
     }
-    
-   
-    
-   
   }
   
   const hienInfoHoaDon = async(idHD)=>{
 
       let list = await GetBillById(idHD)
       let hoaDon = await list[0]
-      
       let taiKhoan = await list[0].TaiKhoan
       let sanBong = await list[0].SanBong
       let khungGio = await list[0].KhungGio
@@ -156,20 +151,16 @@ const FormLichSu = () => {
     lichholder.current.innerHTML="";
     list.map( async(data,i)=>{
       let hoaDon = await data
-      if(hoaDon.TrangThai != "Cancelled")
-      {
-        
-      }
       let sanBong = await data.SanBong
       let khungGio = await data.KhungGio
       let date = dateFormatter (hoaDon.Ngay)
       let doiThu = await data.DoiThu
       let tenDoiThu
       doiThu == null ? tenDoiThu = "Không có" :tenDoiThu = doiThu.Ten
-      // console.log(hoaDon)
+      console.log(hoaDon)
       lichholder.current.innerHTML+=`
-      <div class='lich w-[auto] bg-[#9BCE89] h-[auto] py-[10px] m-[15px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
-      <img src="" alt="" class='w-[90px] h-[90px] col-span-1 ml-[10px]' />
+      <div class='lich w-[auto] bg-[#9BCE89] h-[auto] p-[10px] m-[10px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
+      <img src="./assets/${sanBong.TaiKhoan.Anh}" alt="" class='w-[150px] h-[150px] col-span-1 rounded-[15px]' />
         <div class='col-span-1 grid grid-row-2 p-[10px]'>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
           <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>

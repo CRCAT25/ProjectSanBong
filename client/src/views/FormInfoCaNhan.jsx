@@ -190,7 +190,7 @@ const FormInfoCaNhan = () => {
       setCountapi(countapi +1)
       GetPersonalInfoByIdTK(idUser);
       getBank()
-      console.log(getDiaChi+" b")
+      // console.log(getDiaChi+" b")
       stringdiachi=getDiaChi
       
     }
@@ -215,6 +215,7 @@ const FormInfoCaNhan = () => {
       setNganHang(list.NganHang)
       setSTK(list.STK)
       setAnh(list.Anh)
+      document.getElementById("anh").src = `./assets/${getAnh}`
       document.getElementById("hoTen").value=getTen
       document.getElementById("email").value=getEmail
       document.getElementById("sdt").value=getSDT
@@ -231,7 +232,7 @@ const FormInfoCaNhan = () => {
       setSTK(list.STK)
       setAnh(list.Anh)
       let location = getDiaChi.split(', ');
-      // document.getElementById("anh").src = `./assets/${getAnh}`
+      document.getElementById("anh").src = `./assets/${getAnh}`
       document.getElementById("hoTen").value=getTen
       document.getElementById("email").value=getEmail
       document.getElementById("sdt").value=getSDT
@@ -395,9 +396,10 @@ const FormInfoCaNhan = () => {
     <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>
         <div className='mx-auto w-auto font-[600] text-[36px] text-center text-white p-10'>THÔNG TIN CÁ NHÂN</div>
         <div className='grid grid-cols-11 mx-5 '>
-            <div className='col-span-2 h-[230px] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center' >
-              <Icon24px classIcon={faImage}/>
-            </div>
+            <img id ='anh' className='col-span-2 h-[250px] w-[250px] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center'
+            alt="" />
+              {/* <Icon24px classIcon={faImage}/> */}
+            
             <div className='col-span-4 h-[auto] w-[100%] my-[auto]'>
                 <div className='grid grid-rows-2 w-[100%] h-[50%]'>
                     <div className='row-span-1 h-[auto] my-[5px]'>
