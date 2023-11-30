@@ -284,7 +284,22 @@ const FormInfoCaNhan = () => {
 
 
     }
-  }   
+  }  
+
+  const readURL = async () => {
+    let files = await document.getElementById("inputAnh").files;
+    if (files.length > 0) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("anh").src = e.target.result;
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  //   }else{
+  //     document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML = `<i class="fa fa-image fa-2x"  id = "iconImg"></i>`
+  //   }
+  // }
+  }
 
   const updateInfoCaNhanByID=async(idTK,role)=>
   {
@@ -393,12 +408,14 @@ const FormInfoCaNhan = () => {
   }
    
   return (
-    <div className='w-[80%] mx-auto bg-[#379E13] border-[2px] border-[#379E13] h-[500px] rounded-[10px] my-[5%]'>
+    <div className='w-[80%] mx-auto bg-[#379E13] border-[3px] border-[#F00000] h-[500px] rounded-[10px] my-[5%]'>
+      <input type="file" id ="inputAnh" name="files" accept="image/*" style={{opacity: 0}} onChange={readURL}/>
         <div className='mx-auto w-auto font-[600] text-[36px] text-center text-white p-10'>THÔNG TIN CÁ NHÂN</div>
         <div className='grid grid-cols-11 mx-5 '>
-            <img id ='anh' className='col-span-2 h-[250px] w-[250px] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center'
-            alt="" />
+            <img id ='anh' className='col-span-2 h-[250px] w-[250px] border-[3px] border-[#FFFFFF] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center'
+            alt="" onClick={()=>{document.getElementById("inputAnh").click()}}/>
               {/* <Icon24px classIcon={faImage}/> */}
+            
             
             <div className='col-span-4 h-[auto] w-[100%] my-[auto]'>
                 <div className='grid grid-rows-2 w-[100%] h-[50%]'>
