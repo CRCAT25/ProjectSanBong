@@ -1,11 +1,13 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket, faXmark, faCheck } from "@fortawesome/free-solid-svg-icons"
+import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket, faXmark, faCheck, faClipboardCheck, faPiggyBank } from "@fortawesome/free-solid-svg-icons"
 import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo, CSearchEmailSdt, CDisableAcc, CEnableAcc, CGetAllPlayer, CGetAllAdmin } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
 import { VietQR } from 'vietqr';
 import Swal from 'sweetalert2';
+import Chart from "chart.js/auto";
+
 
 
 
@@ -37,7 +39,92 @@ const Admin = () => {
   const [stkcs, setstkcs] = useState('');
   const [matkhau, setmatkhau] = useState('');
   const [stringsearch, setstringsearch] = useState('');
-  //Player && Admin
+  //Doanh thu
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalPriceAfter, setTotalPriceAfter] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState("all"); // Default is all
+  const [selectedYear, setSelectedYear] = useState("2023");
+
+
+  // Define xValues, yValues, and barColors here
+  const xValues = [
+    "Tháng 1",
+    "Tháng 2",
+    "Tháng 3",
+    "Tháng 4",
+    "Tháng 5",
+    "Tháng 6",
+    "Tháng 7",
+    "Tháng 8",
+    "Tháng 9",
+    "Tháng 10",
+    "Tháng 11",
+    "Tháng 12",
+  ];
+  const yValues = [];
+  const barColors = [
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+    "#4FC3F7",
+  ];
+
+  const [chartData, setChartData] = useState({
+    labels: xValues,
+    datasets: [
+      {
+        backgroundColor: barColors,
+        data: yValues, // Change this to monthlyRevenue
+      },
+    ],
+  });
+
+  useEffect(() => {
+    const ctx = document.getElementById("myChart");
+    if (ctx) {
+      const existingChart = Chart.getChart(ctx);
+      if (existingChart) {
+        existingChart.destroy();
+      }
+
+      new Chart(ctx, {
+        type: "bar",
+        data: chartData, // Use the chartData state here
+        options: {
+          plugins: {
+            legend: { display: false },
+            title: {
+              display: true,
+            },
+          },
+        },
+      });
+    }
+  }, [chartData]);
+  
+  useEffect(() => {
+
+  }, []);
+  
+  const filterDataByYear = (data, year) => {
+    if (year === "all") {
+      return data;
+    }
+
+    return data.filter((item) => {
+      const TimeInsertYear = new Date(item.TimeInsert).getFullYear();
+      return TimeInsertYear.toString() === year;
+    });
+  };
+  //
 
 
 
@@ -251,7 +338,7 @@ const Admin = () => {
     const result = await CGetAllAdmin();
     setlistAdmin(result);
   };
-  
+
 
   function test() {
     alert(idphanquyen)
@@ -260,9 +347,9 @@ const Admin = () => {
   const CheckInput = async (index) => {
     const checkaccount = ["idphanquyen", "ten", "email", "sdt", "matkhau"];
     const checkcoso = index === 2 ? [...checkaccount, "tinh", "quan", "phuong", "nganhangcs", "stkcs"] : checkaccount;
-  
+
     const checkfail = checkcoso.find(value => eval(value) === "");
-  
+
     if (checkfail) {
       Swal.fire({
         icon: 'error',
@@ -271,23 +358,23 @@ const Admin = () => {
       });
       return false;
     }
-  
+
     return true;
   };
 
   const ThemTaiKhoan = async (index) => {
     let resultcheck = await CheckInput(index);
     if (index === 2) {
-      if(resultcheck == true){
+      if (resultcheck == true) {
         stringdiachi = duong + ", " + phuong + ", " + quan + ", " + tinh;
         let result = await CThemTaiKhoan(idphanquyen, ten, email, sdt, stringdiachi, nganhangcs, stkcs, matkhau)
         ShowResultThem(result)
       }
     } else {
-        if(resultcheck == true){
-          let result = await CThemTaiKhoan(idphanquyen, ten, email, sdt, stringdiachi, nganhangcs, stkcs, matkhau)
-          ShowResultThem(result)
-        }
+      if (resultcheck == true) {
+        let result = await CThemTaiKhoan(idphanquyen, ten, email, sdt, stringdiachi, nganhangcs, stkcs, matkhau)
+        ShowResultThem(result)
+      }
     }
   }
   const resetInputValues = () => {
@@ -314,7 +401,7 @@ const Admin = () => {
         showConfirmButton: false,
         timer: 2000,
       });
-      setTimeout(() => {      
+      setTimeout(() => {
         showAllCoSo();
         showAllPlayer();
         showAllAdmin();
@@ -368,19 +455,19 @@ const Admin = () => {
   const SearchSdtEmail = async () => {
     if (stringsearch !== "") {
       let result = await CSearchEmailSdt(idphanquyen, stringsearch)
-        if (result.length > 0) {
-          if(idphanquyen=== 2){
-            setListCoso(result)
-          } else if (idphanquyen === 1){
-            setlistPlayer(result)
-          } else {
-            setlistAdmin(result)
-          }
+      if (result.length > 0) {
+        if (idphanquyen === 2) {
+          setListCoso(result)
+        } else if (idphanquyen === 1) {
+          setlistPlayer(result)
+        } else {
+          setlistAdmin(result)
         }
-        else {
-          Swal.fire('Không có tài khoản muốn tìm')
-        } 
-    } else{
+      }
+      else {
+        Swal.fire('Không có tài khoản muốn tìm')
+      }
+    } else {
       showAllCoSo();
       showAllPlayer();
       showAllAdmin();
@@ -395,18 +482,18 @@ const Admin = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Xác nhận",
-      cancelButtonText:"Hủy"
-      
+      cancelButtonText: "Hủy"
+
     }).then((result) => {
       if (result.isConfirmed) {
-          CEnableAcc(idtaikhoan)
-          Swal.fire({
-            title:"Kích hoạt thành công",
-            icon: "success",
-          });
-          showAllCoSo();
-          showAllPlayer();
-          showAllAdmin();
+        CEnableAcc(idtaikhoan)
+        Swal.fire({
+          title: "Kích hoạt thành công",
+          icon: "success",
+        });
+        showAllCoSo();
+        showAllPlayer();
+        showAllAdmin();
       }
     });
   }
@@ -419,26 +506,26 @@ const Admin = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Xác nhận",
-      cancelButtonText:"Hủy"
-      
+      cancelButtonText: "Hủy"
+
     }).then((result) => {
       if (result.isConfirmed) {
-          CDisableAcc(idtaikhoan)
-          Swal.fire({
-            title:"Vô hiệu hóa thành công",
-            icon: "success",
-          });
-          showAllCoSo();
-          showAllPlayer();
-          showAllAdmin();
+        CDisableAcc(idtaikhoan)
+        Swal.fire({
+          title: "Vô hiệu hóa thành công",
+          icon: "success",
+        });
+        showAllCoSo();
+        showAllPlayer();
+        showAllAdmin();
       }
     });
   }
 
   const Inputten = (e) => {
     const inputValue = e.target.value;
-      const sanitizedValue = inputValue.replace(/[0-9]/g, '');
-      setten(sanitizedValue);
+    const sanitizedValue = inputValue.replace(/[0-9]/g, '');
+    setten(sanitizedValue);
     e.target.value = sanitizedValue;
   };
 
@@ -449,10 +536,10 @@ const Admin = () => {
           <div className=" gap-3 justify-center bg-[#E2EDFF] h-[570px]">
             <div id="nameaccount" className="text-[25px] font-bold w-full text-center py-[20px]" >{localStorage.getItem("userName")}</div>
             <button id="tablink" className={`tablink ${activeTab === 'khachhang' ? 'active' : ''} `} data-electronic="khachhang" onClick={() => openTab('khachhang', 0, 1)}><div id="tenmenu" className="tenmenu tenmenu2" ><Iconpx classIcon={faUser} width={"19px"} height={"19px"} marginRight={"15px"} marginLeft={"0px"} color={"black"} />Khách hàng</div></button>
-            <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso', 1, 2)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserTie} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-40px"} color={"black"}/>Partner</div></button>
-            <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin', 2, 3)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserShield} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-65px"} color={"black"}/>Admin</div></button>
-            <button id="tablink" className={`tablink ${activeTab === 'doanhthu' ? 'active' : ''}`} data-electronic="doanhthu" onClick={() => openTab('doanhthu', 3, 0)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faChartColumn} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-46px"} color={"black"} />Báo cáo</div></button>
-            <button id="logout" onClick={test}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faArrowRightFromBracket} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"}/>Đăng xuất</div></button>
+            <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso', 1, 2)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserTie} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-40px"} color={"black"} />Partner</div></button>
+            <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin', 2, 3)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserShield} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-65px"} color={"black"} />Admin</div></button>
+            <button id="tablink" className={`tablink ${activeTab === 'baocao' ? 'active' : ''}`} data-electronic="baocao" onClick={() => openTab('baocao', 3, 0)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faChartColumn} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-46px"} color={"black"} />Báo cáo</div></button>
+            <button id="logout" onClick={test}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faArrowRightFromBracket} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} />Đăng xuất</div></button>
           </div>
         </div>
       </div>
@@ -461,7 +548,7 @@ const Admin = () => {
       <div class="wrapper_tabcontent font-bold">
         {/* khachhang */}
         <div id="khachhang" className={`tabcontent ${activeTab === 'khachhang' ? 'active' : ''}`}>
-        <div className="w-full grid grid-cols-12">
+          <div className="w-full grid grid-cols-12">
             <div className="w-full col-span-2">
               {/* kh co gi o day */}
             </div>
@@ -496,7 +583,7 @@ const Admin = () => {
                   <div className="col-span-4 flex justify-between">
                   </div>
                   <div className="col-span-2 flex justify-between">
-                  <button id="btnthemcs" className="col-span-2" onClick={() => ThemTaiKhoan(1)}>Thêm tài khoản</button>
+                    <button id="btnthemcs" className="col-span-2" onClick={() => ThemTaiKhoan(1)}>Thêm tài khoản</button>
                   </div>
                 </div>
 
@@ -507,7 +594,7 @@ const Admin = () => {
                   </div>
                   <div className="col-span-1 flex ">
                     <input type="text" class="input_searchemailsopart" id="rssearch" placeholder="" onChange={e => setstringsearch(e.target.value)}></input>
-                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"}/></div>                  </div>
+                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>                  </div>
 
                 </div>
 
@@ -531,9 +618,9 @@ const Admin = () => {
                     <div className="col-span-4 text-[#000000] text-center pt-[30px]">{player.Email}</div>
                     <div className="col-span-3 text-[#000000] text-center pt-[30px]">{player.SoDienThoai}</div>
                     {player.TrangThai == 1 ? (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Enable(player.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"}/></div>
-                      ) : (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Disable(player.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"}/></div>
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Enable(player.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"} /></div>
+                    ) : (
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Disable(player.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"} /></div>
                     )}
 
                   </React.Fragment>
@@ -640,7 +727,7 @@ const Admin = () => {
                   </div>
                   <div className="col-span-1 flex ">
                     <input type="text" class="input_searchemailsopart" id="rssearch" placeholder="" onChange={e => setstringsearch(e.target.value)}></input>
-                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"}/></div>                  </div>
+                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>                  </div>
 
                 </div>
 
@@ -675,9 +762,9 @@ const Admin = () => {
                     <div className="col-span-1 text-[#000000] text-center pt-[30px] ml-[10px] underline hover:text-[red] cursor-pointer"
                       onClick={() => GetIdTaiKhoan(coso.IdAccount)}>Xem</div>
                     {coso.TrangThai == 1 ? (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red]  cursor-pointer" onClick={() => Enable(coso.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"}/></div>
-                      ) : (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red] cursor-pointer" onClick={() => Disable(coso.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"}/></div>
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red]  cursor-pointer" onClick={() => Enable(coso.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"} /></div>
+                    ) : (
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] hover:text-[red] cursor-pointer" onClick={() => Disable(coso.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"} /></div>
                     )}
 
                   </React.Fragment>
@@ -694,7 +781,7 @@ const Admin = () => {
 
         {/* admin */}
         <div id="admin" className={`tabcontent ${activeTab === 'admin' ? 'active' : ''}`}>
-        <div className="w-full grid grid-cols-12">
+          <div className="w-full grid grid-cols-12">
             <div className="w-full col-span-2">
               {/* kh co gi o day */}
             </div>
@@ -729,7 +816,7 @@ const Admin = () => {
                   <div className="col-span-4 flex justify-between">
                   </div>
                   <div className="col-span-2 flex justify-between">
-                  <button id="btnthemcs" className="col-span-2" onClick={() => ThemTaiKhoan(1)}>Thêm tài khoản</button>
+                    <button id="btnthemcs" className="col-span-2" onClick={() => ThemTaiKhoan(1)}>Thêm tài khoản</button>
                   </div>
                 </div>
 
@@ -740,7 +827,7 @@ const Admin = () => {
                   </div>
                   <div className="col-span-1 flex ">
                     <input type="text" class="input_searchemailsopart" id="rssearch" placeholder="" onChange={e => setstringsearch(e.target.value)}></input>
-                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"}/></div>                  </div>
+                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>                  </div>
 
                 </div>
 
@@ -764,9 +851,9 @@ const Admin = () => {
                     <div className="col-span-4 text-[#000000] text-center pt-[30px]">{admin.Email}</div>
                     <div className="col-span-3 text-[#000000] text-center pt-[30px]">{admin.SoDienThoai}</div>
                     {admin.TrangThai == 1 ? (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Enable(admin.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"}/></div>
-                      ) : (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Disable(admin.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"}/></div>
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Enable(admin.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"} /></div>
+                    ) : (
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Disable(admin.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"} /></div>
                     )}
 
                   </React.Fragment>
@@ -779,7 +866,71 @@ const Admin = () => {
             }
           </div>
 
-        </div>      
+        </div>
+
+
+
+        {/* baocao */}
+        <div id="baocao" className={`tabcontent ${activeTab === 'baocao' ? 'active' : ''}`}>
+          <div className="w-full grid grid-cols-12">
+            <div className="w-full col-span-2">
+              {/* kh co gi o day */}
+            </div>
+            <div className="w-full col-span-10">
+              <div className="w-full h-[530px] grid grid-cols-12 mt-[-60px]">
+                  <div className="w-full h-[530px] col-span-9 bg-[#ffffff]" >
+                  <div //sơ đồ
+            style={{
+              width: "95%",
+              height: "500px",
+              border: "1px solid red",
+            }}
+          >
+            <canvas
+              id="myChart"
+              style={{ maxWidth: "100%", maxHeight: "500px", }} // Add maxWidth property
+            ></canvas>
+          </div>
+                  </div>
+
+
+                  <div className="w-full h-[530px] col-span-3 bg-[#f14141]">
+                  </div>
+              </div>
+            </div>
+
+          </div>
+          <div className="w-full grid grid-cols-12 bg-[#256eb3] h-[60px]">
+            <div className="col-span-4 text-[white] text-center pt-[17px]">Họ tên</div>
+            <div className="col-span-4 text-[white] text-center pt-[17px]">Email</div>
+            <div className="col-span-3 text-[white] text-center pt-[17px]">Số điện thoại</div>
+          </div>
+          <div className="overflow-y-scroll h-[251px]">
+            {listAdmin.length > 0 ? (
+              <div className="w-full grid grid-cols-12 bg-[#ffffff] mt-[10px] h-[100px]">
+                {listAdmin.map((admin, i) => (
+                  <React.Fragment key={i}>
+                    <div className=" text-[#000000] text-center pt-[30px] hidden">{admin.IdAccount}</div>
+                    <div className="col-span-4 text-[#000000] text-center pt-[30px]">{admin.Ten}</div>
+                    <div className="col-span-4 text-[#000000] text-center pt-[30px]">{admin.Email}</div>
+                    <div className="col-span-3 text-[#000000] text-center pt-[30px]">{admin.SoDienThoai}</div>
+                    {admin.TrangThai == 1 ? (
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Enable(admin.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"} /></div>
+                    ) : (
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Disable(admin.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"} /></div>
+                    )}
+
+                  </React.Fragment>
+                ))}
+
+              </div>
+            ) : (
+              <p>No player.</p>
+            )
+            }
+          </div>
+
+        </div>
       </div>
 
 
