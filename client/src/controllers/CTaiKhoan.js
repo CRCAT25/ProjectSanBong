@@ -13,7 +13,7 @@ const getTKCoSoByIdTK = async (idTK) =>{
 const getTKUserByIdTK = async (idTK) =>{
     const user = new CoSoSan()
     let list = user.GetInfoCoSoSan(idTK)
-    console.log(list)
+    // console.log(list)
     return list
 }
 

@@ -325,6 +325,7 @@ const FormInfoCaNhan = () => {
       cancelButtonText:"Kiểm tra lại"
       
     }).then(async (result) => {
+      // console.log(document.getElementById("anh").src.split("/")[4]+"dasdas")
       if (result.isConfirmed) {
         if(role==2)
         {
@@ -346,11 +347,17 @@ const FormInfoCaNhan = () => {
             const formattedDate = currentDate.toISOString().slice(0, 10);
             const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
             uploadAnh(document.getElementById("inputAnh").files)
-            setAnh(`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`)
-            console.log(getAnh)
+            let picName=""
+            
+            if(document.getElementById("inputAnh").files.length > 0)
+            {
+              picName=`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`
+            }
+            else {
+              picName= document.getElementById("anh").src.split("/")[4]
+            }
 
-            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,
-              `${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`,idTK)
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,picName,idTK)
             Swal.fire({
               title: "Cập nhật thông tin thành công",
               icon: "success"
@@ -373,11 +380,17 @@ const FormInfoCaNhan = () => {
             const formattedDate = currentDate.toISOString().slice(0, 10);
             const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
             uploadAnh(document.getElementById("inputAnh").files)
-            setAnh(`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`)
-            console.log(getAnh)
+            
+            let picName=""
+            if(document.getElementById("inputAnh").files.length > 0)
+            {
+              picName=`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`
+            }
+            else {
+              picName= document.getElementById("anh").src.split("/")[4]
+            }
 
-            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,
-              `${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`,idTK)
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,picName,idTK)
             Swal.fire({
               title: "Cập nhật thông tin thành công",
               icon: "success"

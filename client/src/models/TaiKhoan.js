@@ -20,7 +20,7 @@ class TaiKhoan {
                 passWord : passWord
             }).then(response => {
                 const itemCoSo = new TaiKhoan(response.data[0].IDTaiKhoan, response.data[0].IDPhanQuyen, response.data[0].Ten, response.data[0].Email, response.data[0].SoDienThoai, response.data[0].NganHang, response.data[0].STK, response.data[0].MatKhau, response.data[0].TrangThai);
-                console.log(itemCoSo)
+                // console.log(itemCoSo)
                 return itemCoSo
             })
             .catch(error => {
