@@ -167,7 +167,7 @@ const FormInfoCaNhan = () => {
 
   useEffect(() => {
     stringdiachi= duong+", "+phuong+", "+quan+", "+tinh
-    // console.log(stringdiachi+"aaaaaaa")
+    console.log(stringdiachi+" a")
 
   }, [tinh, quan, phuong, duong]);
 
@@ -178,7 +178,7 @@ const FormInfoCaNhan = () => {
       setCountapi(countapi +1)
       GetPersonalInfoByIdTK(idUser);
       getBank()
-      console.log(getDiaChi)
+      console.log(getDiaChi+" b")
       stringdiachi=getDiaChi
       
     }
