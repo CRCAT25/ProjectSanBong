@@ -207,7 +207,7 @@ const FormInfoCaNhan = () => {
     if(role == 1)
     {
       let list = await getTKUserByIdTK(idTK);
-      // console.log(list)
+      console.log(list)
       setTen(list.Ten)
       setEmail(list.Email)
       setSDT(list.SoDienThoai)
@@ -215,6 +215,7 @@ const FormInfoCaNhan = () => {
       setNganHang(list.NganHang)
       setSTK(list.STK)
       setAnh(list.Anh)
+      console.log(getAnh)
       document.getElementById("anh").src = `./assets/${getAnh}`
       document.getElementById("hoTen").value=getTen
       document.getElementById("email").value=getEmail
@@ -223,7 +224,7 @@ const FormInfoCaNhan = () => {
     else
     {
       let list = await getTKCoSoByIdTK(idTK);
-      
+      console.log(list)
       setTen(list.Ten)
       setEmail(list.Email)
       setSDT(list.SoDienThoai)
@@ -282,8 +283,6 @@ const FormInfoCaNhan = () => {
       // alert(duong+ " duong")
       setduong(location[0])
       document.getElementById("duong").value = duong;
-
-
     }
   }  
 
@@ -326,6 +325,7 @@ const FormInfoCaNhan = () => {
       cancelButtonText:"Kiểm tra lại"
       
     }).then(async (result) => {
+      // console.log(document.getElementById("anh").src.split("/")[4]+"dasdas")
       if (result.isConfirmed) {
         if(role==2)
         {
@@ -347,11 +347,17 @@ const FormInfoCaNhan = () => {
             const formattedDate = currentDate.toISOString().slice(0, 10);
             const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
             uploadAnh(document.getElementById("inputAnh").files)
-            setAnh(`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`)
-            console.log(getAnh)
+            let picName=""
+            
+            if(document.getElementById("inputAnh").files.length > 0)
+            {
+              picName=`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`
+            }
+            else {
+              picName= document.getElementById("anh").src.split("/")[4]
+            }
 
-            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,
-              `${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`,idTK)
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,picName,idTK)
             Swal.fire({
               title: "Cập nhật thông tin thành công",
               icon: "success"
@@ -374,11 +380,17 @@ const FormInfoCaNhan = () => {
             const formattedDate = currentDate.toISOString().slice(0, 10);
             const formattedTime = currentDate.toTimeString().slice(0, 8).replace(/:/g, '-');
             uploadAnh(document.getElementById("inputAnh").files)
-            setAnh(`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`)
-            console.log(getAnh)
             
-            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,
-              `${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`,idTK)
+            let picName=""
+            if(document.getElementById("inputAnh").files.length > 0)
+            {
+              picName=`${formattedDate}_${formattedTime}_${document.getElementById("inputAnh").files[0].name}`
+            }
+            else {
+              picName= document.getElementById("anh").src.split("/")[4]
+            }
+
+            await updateTkByIdTK(getTen,getEmail,getSDT,stringdiachi,getNganHang,getSTK,picName,idTK)
             Swal.fire({
               title: "Cập nhật thông tin thành công",
               icon: "success"
@@ -390,6 +402,11 @@ const FormInfoCaNhan = () => {
     });
     
   }
+
+  const newProfilePic=()=>{
+    
+  }
+
   const checkLocation=()=>
   {
     console.log(tinh+" "+ quan+" "+ phuong+" "+duong+" check")

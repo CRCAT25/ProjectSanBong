@@ -74,9 +74,7 @@ app.post("/getLoaiSanByID", (req, res) => {
   });
 });
 app.post("/getTKByID", (req, res) => {
-  const sql = `SELECT * FROM taikhoan,loaiphanquyen Where 
-  taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and 
-  taikhoan.IDTaiKhoan = ?`;
+  const sql = `select * from taikhoan, loaiphanquyen where taikhoan.IDPhanQuyen = loaiphanquyen.IDPhanQuyen and taikhoan.IDTaiKhoan = ?`;
   db.query(sql, [req.body.idTK], (err, data) => {
     res.json(data);
   });
