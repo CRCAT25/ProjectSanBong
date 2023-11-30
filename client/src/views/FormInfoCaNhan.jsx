@@ -40,6 +40,9 @@ const FormInfoCaNhan = () => {
   const [getSTK,setSTK] = useState("")
   const [getAnh,setAnh] = useState("")
   const [kqapinh, setkqapinh] = useState([]);
+  const [selectedQuan, setSelectedQuan] = useState("");
+  const [selectedPhuong, setSelectedPhuong] = useState("");
+
 
   const idUser= localStorage.getItem("userID")
   const role = localStorage.getItem("userRole")
@@ -69,12 +72,20 @@ const FormInfoCaNhan = () => {
         const sortQuan = response.data.districts.sort((a, b) => {
           return a.name.localeCompare(b.name);
         });
+        alert(countapi)
+
         if(countapi>3)
         {
-          setquan('')
+          // setapiquan('')
+          // setapiphuong('')
+          // setduong('')
+          setSelectedQuan("a")
+          setSelectedPhuong("a")
+
           document.getElementById("duong").value=''
-        }
+        } 
         setapiquan(sortQuan);
+        
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -89,9 +100,9 @@ const FormInfoCaNhan = () => {
         });
         if(countapi>3)
         {
-          setphuong('')
-          setduong('')
-          document.getElementById("duong").value=''
+
+          // setapiphuong('')
+          // document.getElementById("duong").value=''
         }
         setapiphuong(sortPhuong);
       })
@@ -122,6 +133,7 @@ const FormInfoCaNhan = () => {
       fetchPhuong(selectedquan);
       for(let i=0;i<apiquan.length;i++){
         if(selectedquan == apiquan[i].code){
+          setSelectedQuan(apiquan[i].code)
           setquan(apiquan[i].name)
         }
       }
@@ -134,16 +146,19 @@ const FormInfoCaNhan = () => {
     if (selectedphuong) {
       for(let i=0;i<apiphuong.length;i++){
         if(selectedphuong == apiphuong[i].code){
+          setSelectedPhuong(apiphuong[i].code)
           setphuong(apiphuong[i].name)
         }
       }
     }
   };
   const renderOptions = (dataArray) => {
-    return dataArray.map((item, i) => (
-      <option key={i} value={item.code} id={item.code+"-"+item.name} 
-      className="">{item.name}</option>
-    ));
+    if(dataArray!==''){
+      return dataArray.map((item, i) => (
+        <option key={i} value={item.code} id={item.code+"-"+item.name} 
+        className="">{item.name}</option>
+      ));
+    }
   };
   function getBank() {
     const nganHang = async () => {
@@ -165,11 +180,10 @@ const FormInfoCaNhan = () => {
     nganHang();
   }
 
-  useEffect(() => {
-    stringdiachi= duong+", "+phuong+", "+quan+", "+tinh
-    console.log(stringdiachi+" a")
+  // useEffect(() => {
+  //   console.log(stringdiachi+" a")
 
-  }, [tinh, quan, phuong, duong]);
+  // }, [tinh, quan, phuong, duong]);
 
   useEffect(() => {
     if (countapi <= 3 ) {
@@ -242,6 +256,7 @@ const FormInfoCaNhan = () => {
           // console.log(location[2])
           // console.log(apiquan[i].name)
           selectQuan.value=apiquan[i].code
+          setSelectedQuan(apiquan[i].code)
           setquan(apiquan[i].name)
           fetchPhuong(apiquan[i].code)
         }
@@ -254,11 +269,19 @@ const FormInfoCaNhan = () => {
           // console.log(location[1])
           // console.log(apiphuong[i].name)
           selectPhuong.value=apiphuong[i].code
+          setSelectedPhuong(apiphuong[i].code)
           setphuong(apiphuong[i].name)
         }
       }
+      // setduong(location[0])
+      // const selectDuong = document.getElementById("duong")
+      // selectDuong.value="aaa"
+      // alert(location[0])
+      // alert(duong+ " duong")
       setduong(location[0])
       document.getElementById("duong").value = duong;
+
+
     }
   }   
 
@@ -280,11 +303,15 @@ const FormInfoCaNhan = () => {
           // setduong(document.getElementById("duong").value)
           // console.log("asdsad "+duong) 
           if(checkInfo() && checkLocation() && checkNganHang()){
+            stringdiachi= duong+", "+phuong+", "+quan+", "+tinh
+
              // console.log(idTK)
             console.log(getTen)
             console.log(getEmail)
             console.log(getSDT)
-            console.log(stringdiachi)
+            console.log(stringdiachi+" string")
+            console.log(getDiaChi+" getDC")
+
             console.log(getNganHang)   
             console.log(getSTK)
             console.log(getAnh)
@@ -304,7 +331,7 @@ const FormInfoCaNhan = () => {
     
   const checkLocation=()=>
   {
-    console.log(tinh+" "+ quan+" "+ phuong+" "+duong+"check")
+    console.log(tinh+" "+ quan+" "+ phuong+" "+duong+" check")
     if(tinh=="" || quan=="" || phuong==""||duong=="")
     {
       Swal.fire({
@@ -420,8 +447,8 @@ const FormInfoCaNhan = () => {
                             </select>
                             <select type="text" id ="quan"
                             className=" w-[42%] ml-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2  "  
-                            onChange={handleProvinceChangeQuan}>
-                                <option value="" selected>Chọn quận huyện</option>
+                            onChange={handleProvinceChangeQuan} value={selectedQuan}>
+                                <option value="a" selected>Chọn quận huyện</option>
                                 {renderOptions(apiquan)}
                             </select>       
                         </div>
@@ -431,8 +458,8 @@ const FormInfoCaNhan = () => {
                             <div className='w-[15%] text-[19px] h-[auto] my-auto bg-white'></div>
                             <select type="text" id ="phuong"
                                 className="w-[42%] mr-[0.5%] h-[50px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px] pl-2 " 
-                                onChange={handleProvinceChangePhuong}>
-                                <option value="" >Chọn phường xã</option>
+                                onChange={handleProvinceChangePhuong} value={selectedPhuong}>
+                                <option value="a" >Chọn phường xã</option>
                                 {renderOptions(apiphuong)}
                             </select>
                         <input id='duong' 
