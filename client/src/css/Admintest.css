@@ -1220,6 +1220,17 @@ th {
     z-index: 1;
 
 }
+.ipsdtcs {
+    appearance: none;
+    -moz-appearance: textfield; /* Firefox */
+  }
+  
+  /* Hide arrows in WebKit browsers (e.g., Chrome, Safari) */
+  .ipsdtcs::-webkit-inner-spin-button,
+  .ipsdtcs::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
 .ipmkcs {
     padding: 10px;

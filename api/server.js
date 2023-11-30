@@ -488,6 +488,17 @@ app.post("/showallplayer", (req, res) => {
   });
 });
 
+app.post("/showalladmin", (req, res) => {
+  const sql = "SELECT * FROM taikhoan WHERE IDPhanQuyen = 3";
+  db.query(sql, (err, data) => {
+    if (err) return res.json("Error");
+    if (data.length > 0) {
+      console.log(data)
+      return res.json(data);
+    }
+  });
+});
+
 
 app.post("/showimgcoso", (req, res) => {
   const sql = "SELECT * FROM taikhoan WHERE IDTaiKhoan = ?";

@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket, faXmark, faCheck } from "@fortawesome/free-solid-svg-icons"
-import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo, CSearchEmailSdt, CDisableAcc, CEnableAcc, CGetAllPlayer } from "../controllers/CQuanLyTaiKhoan";
+import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo, CSearchEmailSdt, CDisableAcc, CEnableAcc, CGetAllPlayer, CGetAllAdmin } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
 import { VietQR } from 'vietqr';
 import Swal from 'sweetalert2';
@@ -15,6 +15,8 @@ const Admin = () => {
   const [listtenmenu, setListtenmenu] = useState([]);
   const [listCoso, setListCoso] = useState([]);
   const [listPlayer, setlistPlayer] = useState([]);
+  const [listAdmin, setlistAdmin] = useState([]);
+
 
   const [apitinh, setapitinh] = useState([]);
   const [apiquan, setapiquan] = useState([]);
@@ -58,6 +60,7 @@ const Admin = () => {
   useEffect(() => {
     showAllCoSo();
     showAllPlayer();
+    showAllAdmin();
     callAPI(host);
     getNganHang();
   }, []);
@@ -241,23 +244,14 @@ const Admin = () => {
 
   const showAllPlayer = async () => {
     const result = await CGetAllPlayer();
-    console.log(result)
     setlistPlayer(result);
   };
 
-  function formattedDate(date) {
-    const formatted = new Date(date).toLocaleString('en-US', {
-      timeZone: 'Asia/Ho_Chi_Minh',
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
-    });
-
-    return formatted;
-  }
+  const showAllAdmin = async () => {
+    const result = await CGetAllAdmin();
+    setlistAdmin(result);
+  };
+  
 
   function test() {
     alert(idphanquyen)
@@ -265,8 +259,7 @@ const Admin = () => {
 
   const CheckInput = async (index) => {
     const checkaccount = ["idphanquyen", "ten", "email", "sdt", "matkhau"];
-  
-    const checkcoso = index === 2 ? [...checkaccount, "stringdiachi", "nganhangcs", "stkcs"] : checkaccount;
+    const checkcoso = index === 2 ? [...checkaccount, "tinh", "quan", "phuong", "nganhangcs", "stkcs"] : checkaccount;
   
     const checkfail = checkcoso.find(value => eval(value) === "");
   
@@ -286,22 +279,33 @@ const Admin = () => {
     let resultcheck = await CheckInput(index);
     if (index === 2) {
       if(resultcheck == true){
-        alert('a')
         stringdiachi = duong + ", " + phuong + ", " + quan + ", " + tinh;
         let result = await CThemTaiKhoan(idphanquyen, ten, email, sdt, stringdiachi, nganhangcs, stkcs, matkhau)
         ShowResultThem(result)
       }
     } else {
         if(resultcheck == true){
-          alert('b')
           let result = await CThemTaiKhoan(idphanquyen, ten, email, sdt, stringdiachi, nganhangcs, stkcs, matkhau)
           ShowResultThem(result)
         }
     }
   }
+  const resetInputValues = () => {
+    document.getElementById('iptcs').value = '';
+    document.getElementById('ipsdtcs').value = '';
+    document.getElementById('ipmkcs').value = '';
+    document.getElementById('ipemailcs').value = '';
+    // document.getElementById('iptinh').value = '';
+    // document.getElementById('ipquan').value = '';
+    // document.getElementById('ipphuong').value = '';
+    // document.getElementById('ipnh').value = '';
+    document.getElementById('ipstk').value = '';
+    document.getElementById('ipsonha').value = '';
+  };
 
   const ShowResultThem = async (result) => {
     if (result === "Thêm thành công") {
+      resetInputValues();
       Swal.fire({
         title: 'Thêm thành công!',
         text: '',
@@ -309,9 +313,10 @@ const Admin = () => {
         showConfirmButton: false,
         timer: 2000,
       });
-      setTimeout(() => {
+      setTimeout(() => {      
         showAllCoSo();
         showAllPlayer();
+        showAllAdmin();
       }, 1000)
 
     } else {
@@ -323,6 +328,7 @@ const Admin = () => {
       setTimeout(() => {
         showAllCoSo();
         showAllPlayer();
+        showAllAdmin();
       }, 1000)
     }
   }
@@ -367,6 +373,7 @@ const Admin = () => {
           } else if (idphanquyen === 1){
             setlistPlayer(result)
           } else {
+            setlistAdmin(result)
           }
         }
         else {
@@ -375,6 +382,7 @@ const Admin = () => {
     } else{
       showAllCoSo();
       showAllPlayer();
+      showAllAdmin();
     }
   }
 
@@ -397,6 +405,7 @@ const Admin = () => {
           });
           showAllCoSo();
           showAllPlayer();
+          showAllAdmin();
       }
     });
   }
@@ -420,10 +429,17 @@ const Admin = () => {
           });
           showAllCoSo();
           showAllPlayer();
-
+          showAllAdmin();
       }
     });
   }
+
+  const Inputten = (e) => {
+    const inputValue = e.target.value;
+      const sanitizedValue = inputValue.replace(/[0-9]/g, '');
+      setten(sanitizedValue);
+    e.target.value = sanitizedValue;
+  };
 
   return (
     <div>
@@ -456,11 +472,11 @@ const Admin = () => {
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
                     <div className="text-[20px] w-[30%] ">Họ tên:</div>
-                    <input type="text" class="iptcs" onChange={e => setten(e.target.value)} ></input>
+                    <input type="text" class="iptcs" onChange={e => Inputten(e)} ></input>
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Số điện thoại:</div>
-                    <input type="text" class="ipsdtcs" onChange={e => setsdt(e.target.value)}></input>
+                    <input type="number" class="ipsdtcs" onChange={e => setsdt(e.target.value)}></input>
                   </div>
                 </div>
 
@@ -545,11 +561,11 @@ const Admin = () => {
                 <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
                   <div className="col-span-4 flex justify-between">
                     <div className="text-[20px] w-[30%] ">Tên cơ sở:</div>
-                    <input type="text" class="iptcs" onChange={e => setten(e.target.value)} ></input>
+                    <input type="text" class="iptcs" onChange={e => Inputten(e)} />
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] ">Số điện thoại:</div>
-                    <input type="text" class="ipsdtcs" onChange={e => setsdt(e.target.value)}></input>
+                    <input type="number" class="ipsdtcs" onChange={e => setsdt(e.target.value)}></input>
                   </div>
                 </div>
 
@@ -674,6 +690,95 @@ const Admin = () => {
           </div>
 
         </div>
+
+        {/* admin */}
+        <div id="admin" className={`tabcontent ${activeTab === 'admin' ? 'active' : ''}`}>
+        <div className="w-full grid grid-cols-12">
+            <div className="w-full col-span-2">
+              {/* kh co gi o day */}
+            </div>
+            <div className="w-full col-span-10">
+              <div className="w-[82%] border-2 border-[grey] h-[257px] rounded-md absolute translate-x-[10px] translate-y-[-38px] z-0">
+
+              </div>
+              <div id="" className=" w-full mx-auto">
+                <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
+                  <div className="col-span-4 flex justify-between">
+                    <div className="text-[20px] w-[30%] ">Họ tên:</div>
+                    <input type="text" class="iptcs" onChange={e => Inputten(e)} ></input>
+                  </div>
+                  <div className="col-span-2 flex justify-between">
+                    <div className="text-[20px] ">Số điện thoại:</div>
+                    <input type="number" class="ipsdtcs" onChange={e => setsdt(e.target.value)}></input>
+                  </div>
+                </div>
+
+                <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
+                  <div className="col-span-4 flex justify-between">
+                    <div className="text-[20px] w-[30%] ">Mật khẩu:</div>
+                    <input type="text" class="ipmkcs" onChange={e => setmatkhau(e.target.value)}></input>
+                  </div>
+                  <div className="col-span-2 flex justify-between">
+                    <div className="text-[20px] ">Email:</div>
+                    <input type="text" class="ipemailcs" onChange={e => setemail(e.target.value)}></input>
+                  </div>
+                </div>
+
+                <div className="w-full grid grid-cols-6 gap-[10px] mb-[30px] px-[60px]">
+                  <div className="col-span-4 flex justify-between">
+                  </div>
+                  <div className="col-span-2 flex justify-between">
+                  <button id="btnthemcs" className="col-span-2" onClick={() => ThemTaiKhoan(1)}>Thêm tài khoản</button>
+                  </div>
+                </div>
+
+                <div className="w-full flex mt-[120px] px-[60px] justify-center gap-[60px]">
+                  <div className="">
+                    <h3 id="searchpartner">Tìm email hoặc số điện thoại:</h3>
+
+                  </div>
+                  <div className="col-span-1 flex ">
+                    <input type="text" class="input_searchemailsopart" id="rssearch" placeholder="" onChange={e => setstringsearch(e.target.value)}></input>
+                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"}/></div>                  </div>
+
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+          <div className="w-full grid grid-cols-12 bg-[#256eb3] h-[60px] mt-[106px]">
+            <div className="col-span-4 text-[white] text-center pt-[17px]">Họ tên</div>
+            <div className="col-span-4 text-[white] text-center pt-[17px]">Email</div>
+            <div className="col-span-3 text-[white] text-center pt-[17px]">Số điện thoại</div>
+          </div>
+          <div className="overflow-y-scroll h-[251px]">
+            {listAdmin.length > 0 ? (
+              <div className="w-full grid grid-cols-12 bg-[#ffffff] mt-[10px] h-[100px]">
+                {listAdmin.map((admin, i) => (
+                  <React.Fragment key={i}>
+                    <div className=" text-[#000000] text-center pt-[30px] hidden">{admin.IdAccount}</div>
+                    <div className="col-span-4 text-[#000000] text-center pt-[30px]">{admin.Ten}</div>
+                    <div className="col-span-4 text-[#000000] text-center pt-[30px]">{admin.Email}</div>
+                    <div className="col-span-3 text-[#000000] text-center pt-[30px]">{admin.SoDienThoai}</div>
+                    {admin.TrangThai == 1 ? (
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Enable(admin.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"}/></div>
+                      ) : (
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Disable(admin.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"}/></div>
+                    )}
+
+                  </React.Fragment>
+                ))}
+
+              </div>
+            ) : (
+              <p>No player.</p>
+            )
+            }
+          </div>
+
+        </div>      
       </div>
 
 

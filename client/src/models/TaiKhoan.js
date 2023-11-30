@@ -183,8 +183,18 @@ class TaiKhoan {
         return axios.post("http://localhost:8081/showallplayer",{}
         ).then(response => {
             const listPlayer = this.initTaiKhoan(response.data)
-            // console.log(response.data)
             return listPlayer
+        })
+            .catch(error => {
+            console.error(error);
+        })  
+    }
+
+    GetAllAdmin = () =>{
+        return axios.post("http://localhost:8081/showalladmin",{}
+        ).then(response => {
+            const listAdmin = this.initTaiKhoan(response.data)
+            return listAdmin
         })
             .catch(error => {
             console.error(error);
