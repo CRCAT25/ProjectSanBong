@@ -18,9 +18,29 @@ const getAllLoaiSan = async () =>{
    san.DeleteSanByID(id)
     
 } 
-const updateSanByID = async (IDLoaiSan, IDTaiKhoan, TenSan,TrangThai,IDSan) =>{
+const updateSanByID = async (IDLoaiSan, IDTaiKhoan, TenSan,IDSan, newImgs) =>{
    const san = new SanBong()
-   san.UpdateSanByID(IDLoaiSan, IDTaiKhoan, TenSan,TrangThai,IDSan)
+   const anh = new Anh()
+   san.UpdateSanByID(IDLoaiSan, IDTaiKhoan, TenSan,0,IDSan)
+   let oldImgs = await anh.GetAnhsByIDSan(IDSan)
+   let isAdded = false
+   if(newImgs.length > 0){
+      for (let index = 0; index < oldImgs.length; index++){
+         anh.DeletetAnh(oldImgs[index].IdAnh)
+         if(oldImgs.length - 1 == index){
+            isAdded = true;
+            newImgs.forEach(tenAnh => {
+               anh.InsertAnh(IDSan, tenAnh)
+            });
+         }
+      }
+      if(!isAdded){
+         newImgs.forEach(tenAnh => {
+            anh.InsertAnh(IDSan, tenAnh)
+         });
+      }
+   }
+   
 }
  const getAnhsByIDSan = async (id) =>{
    const anh = new Anh()
