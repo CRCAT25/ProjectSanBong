@@ -176,20 +176,12 @@ app.post("/getBillByIDBill", async (req, res) => {
 
 
 // Lấy lịch giao hữu // 
-app.post("/getAllLichGiaoHuu",(req,res) => {
-  const sql = `SELECT
-                hoadon.IDHoaDon ,tk1.Ten,tk1.SoDienThoai, tk2.Ten as CoSo, tk2.DiaChiCoSo, sanbong.TenSan as MaSan, DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay, khunggio.ThoiGian
-              FROM
-                taikhoan as tk1, taikhoan as tk2, hoadon, sanbong, khunggio
-              WHERE
-                hoadon.IDKhungGio = khunggio.IDKhungGio
-                AND hoadon.idDoiThu IS NULL
+app.post("/getLichGiaoHuuToMatch",(req,res) => {
+  const sql = `SELECT *  FROM hoadon 
+                WHERE GiaoHuu=1 and  hoadon.idDoiThu IS NULL
                 AND hoadon.TrangThai = 'Completed'
                 AND hoadon.GiaoHuu = 1
-                AND Ngay > CURRENT_DATE
-              and tk1.IDTaiKhoan = hoadon.IDTaiKhoan 
-                and sanbong.IDSan = hoadon.IDSan
-                and tk2.IDTaiKhoan = sanbong.IDTaiKhoan;`;
+                AND Ngay > CURRENT_DATE;`
   db.query(sql, (err, data) => {
     res.json(data);
   });
@@ -358,12 +350,11 @@ app.post("/updateDoiThuInBill",(req,res)=>{
   const sql=`UPDATE hoadon SET IDDoiThu = ? WHERE hoadon.IDHoaDon = ?`;
   db.query(sql,[req.body.IDDoiThu,req.body.IDHoaDon],(err,data) =>{
     res.json(data);
-
   })
 })
 
 app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
-  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ?`;
+  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ? and TrangThai = 'Completed'`;
   // console.log(req.body.IDTaiKhoan+"   "+ req.body.GiaoHuu)
   db.query(sql,[req.body.IDTaiKhoan, req.body.GiaoHuu],(err,data) =>{
     // console.log(data);
@@ -372,7 +363,7 @@ app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
   })
 })
 
-app.post("/getPersonalBillByIdTK",(req,res)=>{
+app.post("/getAllBillByIdTk",(req,res)=>{
   const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
   // console.log(req.body.IDTaiKhoan)
   db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{

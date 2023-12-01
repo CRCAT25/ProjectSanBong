@@ -32,7 +32,6 @@ class HoaDon{
     initBill(list){
         const resultList = [];
         list.forEach(bill => {
-            
             const taiKhoan = (new TaiKhoan).getTKByID(bill.IDTaiKhoan)
             const khungGio = (new KhungGio).getKhungGioById(bill.IDKhungGio)
             let doiThu=null
@@ -46,6 +45,17 @@ class HoaDon{
         });        
         
         return resultList
+    }
+
+    getAllLichGiaoHuu() {
+        return axios.post("http://localhost:8081/getLichGiaoHuuToMatch", {})
+            .then(response => {
+                const list = this.initBill(response.data);              
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     getBillById(IDHoaDon){
@@ -190,7 +200,7 @@ class HoaDon{
     getAllBillByIdTk(IDTaiKhoan)
     {
         // console.log(IDTaiKhoan+"   "+ GiaoHuu)
-        return axios.post("http://localhost:8081/getPersonalBillByIdTK",{IDTaiKhoan})
+        return axios.post("http://localhost:8081/getAllBillByIdTk",{IDTaiKhoan})
         .then(response => {
             // console.log(response.data)
             const list = this.initBill(response.data);               
