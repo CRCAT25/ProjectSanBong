@@ -30,7 +30,15 @@ class SanBong{
                 console.error(error);
             });
     }
-
+    
+    UpdateTTSan(TrangThai, IDSan){
+        return axios.post("http://localhost:8081/updateTTSan", {TrangThai, IDSan})
+            .then(response => {
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
     getSanByID(idSan) {
         return axios.post("http://localhost:8081/getSanByID", {IdSan: idSan})
             .then(response => {

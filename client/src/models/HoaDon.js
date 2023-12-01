@@ -135,6 +135,14 @@ class HoaDon{
                 console.error(error);
             });
     }
+    UpdateTTHoaDon(TrangThai, IDHoaDon){
+        return axios.post("http://localhost:8081/updateTTHoaDon", {TrangThai, IDHoaDon})
+            .then(response => {
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
     //Tấn - End
     
     getBillByIdCoSo(idCoSo){

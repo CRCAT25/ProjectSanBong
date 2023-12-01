@@ -1,5 +1,6 @@
 import "../css/FieldManager.css";
 import axios from "axios";
+import FormHoanTien from './FormHoanTien';
 import { 
   FontAwesomeIcon 
 } from "@fortawesome/react-fontawesome";
@@ -19,10 +20,10 @@ import {
   getHoaDonByNgayKHIDSan,
   getAllSanByTaiKhoan,
   getAllHoaDonCompletedByCoSo,
-  getBillForRefund,
   getHoaDonsByNgayKGTKTTSanIDSan,
   insertSan,
   updateHoaDon,
+  onRefundHD,
   updateSanByID,
   getSanByID,
   getLoaiSanByID,
@@ -46,6 +47,9 @@ const FieldManage =  () => {
     loadListFields()
     // updateSchedule();
   }, []);
+  
+  const [tongTienText, setTongTienText] = useState(null);
+  const [showHoaDon, setShowHoaDon] = useState(false)
   let idTK = "7"
   const Swal = require('sweetalert2')
   const [getLoaiSans, setLoaiSans] = useState([]);
@@ -54,7 +58,96 @@ const FieldManage =  () => {
   let IDSan = null
   const [getIDSan, setIDSan] = useState(null);
   const [getBillForRefund, setBillForRefund] = useState([]);
-  
+
+
+  const ShowHD = async()=>{
+    if(showHoaDon==true)
+    {
+      setShowHoaDon(false)
+      document.body.style.overflow = 'visible'
+    }
+    else 
+    {
+      setShowHoaDon(true)
+      document.body.style.overflow = 'hidden'
+    }
+
+  }
+  const HuyLichSan = async()=>{
+    Swal.fire({
+      title: "Bạn có chắc muốn hoàn tiền?",
+      showDenyButton: true,
+      confirmButtonText: "Có",
+      denyButtonText: `Không`
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        var hd = await GetBillById(getIDLichSan)
+        onRefundHD(await (await hd.SanBong).IdSan,await hd.IDHoaDon,  "1", "Refunded")
+        Swal.fire({
+          title: "Hoàn tiền thành công!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            ShowHD()
+            resetLichSan()
+          }
+        });
+      }
+    });
+  }
+  const ThoatHuyLichSan = async()=>{
+    ShowHD()
+  }
+  //     const HuyDatCoc = async () => {
+//     await HuyDatSan(newHoaDonID)
+//     HienThiDatCoc()
+//     }
+
+//     const DatCocV = async (NganHang, STK, SoTien) => {
+
+//         let validTTBank = CheckTTBank(NganHang, STK, SoTien)
+//         if (validTTBank == true) {
+//             DatCoc(newHoaDonID)
+//             HienThiThongBaoDatCocTC()
+//         } else {
+//             HienThiThongBaoLoiTT(validTTBank)
+//         }
+
+//     }
+//   const CheckTTBank = (NganHang, STK, SoTien) => {
+//     if (NganHang != "" && STK != "" && SoTien != "") {
+//         if(NganHang == ""){
+//             return ("Vui lòng chọn ngân hàng !")
+//         }
+//         if (STK.length < 10) {
+//             return ("Số tài khoản phải đủ 10 ký tự !")
+//         }
+//         return true
+//     }
+//     else {
+//         return ("Vui lòng nhập đầy đủ thông tin ngân hàng !")
+//     }
+// }
+
+// const HienThiThongBaoDatCocTC = () => {
+//     Swal.fire({
+//         title: "Đặt cọc thành công!",
+//         icon: "success"
+//     });
+//     setTimeout(() => {
+//         Swal.close();
+//         window.location.reload()
+//     }, 1000);
+// }
+
+// const HienThiThongBaoLoiTT = (message) => {
+//     Swal.fire({
+//         title: message,
+//         icon: "error"
+//     });
+//     setTimeout(() => {
+//         Swal.close();
+//     }, 1000);
+// }
   const displayLoaiSanPrice = async () =>{
     if(document.getElementsByClassName("selectLoaiS")[0].value == "none"){
       document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = "Đơn giá"
@@ -142,12 +235,13 @@ const  selectSchedule = async(element) =>{
     IDLichSan = (element.id).split(":")[1]
     setIDLichSan((element.id).split(":")[1])
     var hoadon = await GetBillById(IDLichSan)
-    document.getElementsByClassName("tenKhach")[0].innerHTML = await(await hoadon[0].TaiKhoan).Ten
-    document.getElementsByClassName("soDT")[0].innerHTML = await(await hoadon[0].TaiKhoan).SoDienThoai
-    console.log(await(await hoadon[0].KhungGio).IdKhungGio)
-    document.getElementsByClassName("selectKhungGio")[0].value = await(await hoadon[0].KhungGio).IdKhungGio
-    document.getElementsByClassName("selectTenLS")[0].value = await(await hoadon[0].SanBong).IdSan
-    document.getElementsByClassName("selectGH")[0].value = await hoadon[0].GiaoHuu
+    console.log(hoadon)
+    document.getElementsByClassName("tenKhach")[0].innerHTML = await(await hoadon.TaiKhoan).Ten
+    document.getElementsByClassName("soDT")[0].innerHTML = await(await hoadon.TaiKhoan).SoDienThoai
+    console.log(await(await hoadon.KhungGio).IdKhungGio)
+    document.getElementsByClassName("selectKhungGio")[0].value = await(await hoadon.KhungGio).IdKhungGio
+    document.getElementsByClassName("selectTenLS")[0].value = await(await hoadon.SanBong).IdSan
+    document.getElementsByClassName("selectGH")[0].value = await hoadon.GiaoHuu
   }else if(element.classList.contains("shift-Empty-Future")){
     document.getElementsByClassName("selectKhungGio")[0].value = ((element.id).split("-")[1].split(":")[1])
     document.getElementsByClassName("selectTenLS")[0].value = ((element.id).split("-")[0].split(":")[1])
@@ -689,6 +783,13 @@ const updateLichSan = async() => {
   return (
     
     <div className="landing-fAj" id="257:562">
+      {showHoaDon === true ? 
+          <div class="fixed inset-0 z-50 flex bg-gray-800 bg-opacity-50">
+            <div class="rounded w-[100%]">
+            <FormHoanTien isDatCoc={false} idHD = {getIDLichSan} 
+                        tongTien={tongTienText} HuyDatCoc={ThoatHuyLichSan} DatCoc={HuyLichSan}/>
+            </div>
+          </div>:""}
       <div className="qun-l-sn-dgX" id="257:798">
         <p className="main-advertise-letter-fNK" id="257:861">
           QUẢN LÝ SÂN
@@ -846,7 +947,7 @@ const updateLichSan = async() => {
           <div className="btnCapNhatLich" id="257:939" onClick={updateLichSan}>
             Cập nhật
           </div>
-          <div className="btnHuyLich" id="257:942">
+          <div className="btnHuyLich" id="257:942" onClick={ShowHD}>
             Huỷ
           </div>
         </div>
@@ -910,7 +1011,9 @@ const updateLichSan = async() => {
           <div className="auto-group-kpmu-omd" id="Wa1D1TazzFCfTx5RoHkPmu">
               
           </div>
+          
         </div>
+        
         {/* {getLichSans.length > 0 ? (
                 getLichSans.map((element,i) => (
                   // if(element)

@@ -109,6 +109,18 @@ app.post("/updateHoaDon", async (req, res) => {
   db.query(sql, [req.body.IDSan,req.body.IDKhungGio,req.body.Ngay,req.body.GiaoHuu,req.body.TongTien,req.body.IDHoaDon],(err, data) => {
   });
 });
+app.post("/updateTTHoaDon", async (req, res) => {
+  const sql = ` UPDATE hoadon SET TrangThai = ? WHERE IDHoaDon = ?`
+  db.query(sql, [req.body.TrangThai,req.body.IDHoaDon],(err, data) => {
+    console.log(req.body.TrangThai,req.body.IDHoaDon)
+  });
+});
+app.post("/updateTTSan", async (req, res) => {
+  const sql = ` UPDATE sanbong SET  TrangThai = ? WHERE IDSan = ?`
+  db.query(sql, [req.body.TrangThai,req.body.IDSan],(err, data) => {
+    console.log(req.body.TrangThai,req.body.IDSan)
+  });
+});
 app.post("/insertHoaDon", async (req, res) => {
   const IDTaiKhoan = req.body.IDTaiKhoan;
   const IDSan = req.body.IDSan;

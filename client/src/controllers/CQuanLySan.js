@@ -133,6 +133,13 @@ const updateHoaDon = async (IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, IDHoaDon
    const hoadon = new HoaDon()
    await hoadon.UpdateHoaDon(IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, IDHoaDon)
 }
+const onRefundHD = async (IDSan,IDHoaDon, TrangThaiSan, TrangThaiHD) =>{
+   console.log(IDSan,IDHoaDon, TrangThaiSan, TrangThaiHD)
+   const hoadon = new HoaDon()
+   const san = new SanBong()
+   hoadon.UpdateTTHoaDon(TrangThaiHD, IDHoaDon)
+   san.UpdateTTSan(TrangThaiSan, IDSan)
+}
 const getCostByShiftnTypeField = async (idShift, idTField) =>{
    
    const khungGio = new KhungGio()
@@ -143,6 +150,7 @@ const getCostByShiftnTypeField = async (idShift, idTField) =>{
 }
  export {
     getAllLoaiSan,
+    onRefundHD,
     insertHoaDon,
     getAllSanByTaiKhoan,
     getAllKhungGio,

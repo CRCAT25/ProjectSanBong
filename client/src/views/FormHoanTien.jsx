@@ -21,14 +21,15 @@ const Icon24px = ({classIcon}) => {
     )
 }
 
-const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
+const FormHoanTien = ({isDatCoc, idHD, tongTien, HuyDatCoc, DatCoc}) => {
     let kq = [];
 
     const [kqapinh, setkqapinh] = useState([]);
     const [selectedNganHang, setSelectedNganHang] = useState("")
     const [inputSTK, setInputSTK] = useState("")
     const [getCusBank, setCusBank] = useState("")
-
+    const [tenKH, setTenKH] = useState("")
+    
     function getNganHang () {
         const nganHang = async () => {
             let vietQR = new VietQR({
@@ -48,9 +49,9 @@ const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
         nganHang();
         // alert(kq)
     }
-
     useEffect(()=>{
         getNganHang();
+        getBillByID();
     },[])
 
 
@@ -139,8 +140,8 @@ const formatTime = (timeInSeconds) => {
 
   let idCoSo = localStorage.getItem("userID")
 
-  const getBillByID = async(idBill)=>{
-    let bill = await GetBillById(idBill)
+  const getBillByID = async()=>{
+    let bill = await GetBillById(idHD)
     let khachHang = await bill.TaiKhoan
     let sanBong = await bill.SanBong
     let khungGio = await bill.KhungGio
@@ -162,10 +163,10 @@ const formatTime = (timeInSeconds) => {
     console.log(bill)
     console.log(khachHang)
 
-    document.getElementById("idBank").value=khachHang.NganHang
-    document.getElementById("stk").value=khachHang.STK
-    document.getElementById("tenKhach").value=khachHang.Ten
-    document.getElementById("tienHoan").value=tienHoan
+    document.getElementById("idBank").value= await khachHang.NganHang
+    document.getElementById("stk").value= await khachHang.STK
+    document.getElementById("tenKhach").innerHTML= await khachHang.Ten
+    document.getElementById("tienHoan").innerHTML=tienHoan
     let noiDungHoan=`Cơ sở ${sanBong.TaiKhoan.Ten} - Hoàn tiền\nTrận đấu ngày: ${dateFormatter(bill.Ngay)}\nTên sân: ${sanBong.TenSan}\nKhung giờ: ${khungGio.ThoiGian}`
     document.getElementById("noiDung").value=noiDungHoan
     // console.log(sanBong)
@@ -228,7 +229,7 @@ const formatTime = (timeInSeconds) => {
             </div>
       </>
        ):(
-       <div className='w-[40%] left-1/2 -translate-x-1/2 h-auto p-[30px] relative bg-[#DDFCD2] my-[10%] z-1200'>
+       <div className='w-[100%] left-1/2 -translate-x-1/2 h-auto p-[30px] relative bg-[#DDFCD2] my-[10%] z-1200'>
            <div className='text-center text-[30px] font-[600] text-[#2B790F]'>HOÀN TIỀN</div>
            <div className='w-90% mx-[5%] flex justify-center'>
    
@@ -237,8 +238,8 @@ const formatTime = (timeInSeconds) => {
                onChange={(e) =>{setSelectedNganHang(e.target.value)}}>
            </select>   
            <input id ='stk'className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Số Tài Khoản' onChange={e => setInputSTK(e.target.value)}></input>
-           <input id ='tenKhach'className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Tên Tài Khoản'></input>
-           <input id="tienHoan" className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' value={tongTien} ></input>
+           <div id ='tenKhach' className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px] bg-white flex flex-col justify-center' placeholder='Tên Tài Khoản'></div>
+           <div id="tienHoan" className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px] bg-white flex flex-col justify-center' value={tongTien} ></div>
            <textarea className='w-[90%] h-[120px] mx-[5%] my-[5px] pl-[15px] rounded-[5px] py-[10px]' name="" id="noiDung" rows="3"placeholder='Nội Dung:'></textarea>
            <div className='w-[90%] flex flex-auto justify-around mx-auto'>
            <div class="w-[100%] flex justify-around"> 
