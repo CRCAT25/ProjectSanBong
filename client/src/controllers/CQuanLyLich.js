@@ -1,11 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import LichGiaoHuu from'../models/LichGiaoHuu';
 import HoaDon from'../models/HoaDon';
-import SanBong from'../models/SanBong';
 
 const getAllLichGiaoHuu = async () =>{
-    const lich= new LichGiaoHuu();
+    const lich= new HoaDon();
     let list = await lich.getAllLichGiaoHuu();
     return list;
 }

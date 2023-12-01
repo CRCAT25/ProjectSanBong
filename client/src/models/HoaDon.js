@@ -47,6 +47,17 @@ class HoaDon{
         return resultList
     }
 
+    getAllLichGiaoHuu() {
+        return axios.post("http://localhost:8081/getLichGiaoHuuToMatch", {})
+            .then(response => {
+                const list = this.initBill(response.data);              
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
     getBillById(IDHoaDon){
         return axios.post("http://localhost:8081/getBillByIDBill", {IDHoaDon: IDHoaDon})
             .then(response => {

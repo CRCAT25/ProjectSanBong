@@ -3,6 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faAddressBook
 } from "@fortawesome/free-solid-svg-icons"
 import {VietQR} from 'vietqr';
+import Swal from 'sweetalert2'
 import axios from 'axios';
 import {
     GetBillById
@@ -86,24 +87,92 @@ const formatTime = (timeInSeconds) => {
     getBillByID(15)
   }, []);
 
+//     const HuyDatCoc = async () => {
+//     await HuyDatSan(newHoaDonID)
+//     HienThiDatCoc()
+//     }
+
+//     const DatCocV = async (NganHang, STK, SoTien) => {
+
+//         let validTTBank = CheckTTBank(NganHang, STK, SoTien)
+//         if (validTTBank == true) {
+//             DatCoc(newHoaDonID)
+//             HienThiThongBaoDatCocTC()
+//         } else {
+//             HienThiThongBaoLoiTT(validTTBank)
+//         }
+
+//     }
+//   const CheckTTBank = (NganHang, STK, SoTien) => {
+//     if (NganHang != "" && STK != "" && SoTien != "") {
+//         if(NganHang == ""){
+//             return ("Vui lòng chọn ngân hàng !")
+//         }
+//         if (STK.length < 10) {
+//             return ("Số tài khoản phải đủ 10 ký tự !")
+//         }
+//         return true
+//     }
+//     else {
+//         return ("Vui lòng nhập đầy đủ thông tin ngân hàng !")
+//     }
+// }
+
+// const HienThiThongBaoDatCocTC = () => {
+//     Swal.fire({
+//         title: "Đặt cọc thành công!",
+//         icon: "success"
+//     });
+//     setTimeout(() => {
+//         Swal.close();
+//         window.location.reload()
+//     }, 1000);
+// }
+
+// const HienThiThongBaoLoiTT = (message) => {
+//     Swal.fire({
+//         title: message,
+//         icon: "error"
+//     });
+//     setTimeout(() => {
+//         Swal.close();
+//     }, 1000);
+// }
+
   let idCoSo = localStorage.getItem("userID")
 
   const getBillByID = async(idBill)=>{
-    let list = await GetBillById(idBill)
-    let khachHang = await list.TaiKhoan
-    let sanBong = await list.SanBong
-    let khungGio = await list.KhungGio
-    let tienHoan = await list.TongTien
+    let bill = await GetBillById(idBill)
+    let khachHang = await bill.TaiKhoan
+    let sanBong = await bill.SanBong
+    let khungGio = await bill.KhungGio
+    let tienHoan = await bill.TongTien
     
-    setCusBank(khachHang.STK)
-    console.log("aaaa"+getCusBank)
-    document.getElementById("idBank").value=getCusBank
-    // console.log(list)
+    const dateFormatter  = (date) =>{
+        let time = new Date(date)
+        const formattedDate = time.toLocaleDateString("vi-VN", {
+          weekday: "short", // Abbreviated weekday name (e.g., "Mon")
+          day: "2-digit",   // Two-digit day of the month (e.g., "01")
+          month: "2-digit", // Two-digit month (e.g., "10")
+          year: "numeric",  // Full year (e.g., "2023")
+        });
+        // console.log(formattedDate)
+        return formattedDate
+      }
+    
+
+    console.log(bill)
     console.log(khachHang)
+
+    document.getElementById("idBank").value=khachHang.NganHang
+    document.getElementById("stk").value=khachHang.STK
+    document.getElementById("tenKhach").value=khachHang.Ten
+    document.getElementById("tienHoan").value=tienHoan
+    let noiDungHoan=`Cơ sở ${sanBong.TaiKhoan.Ten} - Hoàn tiền\nTrận đấu ngày: ${dateFormatter(bill.Ngay)}\nTên sân: ${sanBong.TenSan}\nKhung giờ: ${khungGio.ThoiGian}`
+    document.getElementById("noiDung").value=noiDungHoan
     // console.log(sanBong)
     // console.log(khungGio)
-    // console.log(tienHoan)
-    
+    // console.log(tienHoan0
   }
   
   return (
@@ -130,15 +199,15 @@ const formatTime = (timeInSeconds) => {
         <select id='idBank' className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]' 
             onChange={(e) =>{setSelectedNganHang(e.target.value)}}>
         </select>   
-        <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Số Tài Khoản' onChange={e => setInputSTK(e.target.value)}></input>
-        <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Tên Tài Khoản'></input>
+        <input id ='stk'className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Số Tài Khoản' onChange={e => setInputSTK(e.target.value)}></input>
+        <input id ='tenKhach'className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Tên Tài Khoản'></input>
         {isDatCoc == true ? (
             <div className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]  flex flex-col justify-center bg-white'>Số tiền: {tongTien}</div>
         ) : (
-            <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' value={tongTien} ></input>
+            <input id="tienHoan" className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' value={tongTien} ></input>
         )}
         
-        {isDatCoc === true ? "" : (<textarea className='w-[90%] mx-[5%] my-[5px] pl-[15px] rounded-[5px] py-[10px]' name="" id="" rows="3"placeholder='Nội Dung:'></textarea>)}
+        {isDatCoc === true ? "" : (<textarea className='w-[90%] h-[120px] mx-[5%] my-[5px] pl-[15px] rounded-[5px] py-[10px]' name="" id="noiDung" rows="3"placeholder='Nội Dung:'></textarea>)}
         <div className='w-[90%] flex flex-auto justify-around mx-auto'>
             {isDatCoc === true ? (
             <div> 
@@ -146,7 +215,13 @@ const formatTime = (timeInSeconds) => {
             <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={() => {DatCoc(selectedNganHang, inputSTK, tongTien);
             setIsActive(false)}}>Xác nhận</button>
             <div> <b>Lưu ý:</b> Bạn phải thực hiện đặt cọc trong vòng 5 phút nếu không hệ thống sẽ huỷ mọi thao tác vừa rồi của bạn !</div>
-            </div>) : ""}
+            </div>) :(
+            <div class="w-[100%] flex justify-around"> 
+            <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " onClick={() => {HuyDatCoc(); setIsActive(false)}}>Hủy</button>
+            <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={() => {DatCoc(selectedNganHang, inputSTK, tongTien);
+            setIsActive(false)}}>Xác nhận</button>
+             </div>
+            )}
             
         </div>
         

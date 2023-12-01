@@ -88,7 +88,6 @@ class TaiKhoan {
         })
     }
 
-    
     getTKByID = (idTK) =>{
         return axios.post("http://localhost:8081/getTKByID",{idTK}).then(response => {
             const phanQuyen = new PhanQuyen(response.data[0].IDPhanQuyen, response.data[0].TenPhanQuyen)
@@ -96,8 +95,8 @@ class TaiKhoan {
                 response.data[0].SoDienThoai,response.data[0].NganHang, 
                 response.data[0].STK, response.data[0].Anh, response.data[0].MatKhau, response.data[0].TrangThai);
                 
-                console.log(response.data[0].NganHang, 
-                    response.data[0].STK+" asdsadsa")
+                // console.log(response.data[0].NganHang, 
+                //     response.data[0].STK+" asdsadsa")
             return itemCoSo
         })
         .catch(error => {console.error(error);

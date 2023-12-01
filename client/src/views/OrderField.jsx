@@ -274,7 +274,6 @@ export const OrderField = () => {
         }
     }
 
-
     const [showHoaDon, setShowHoaDon] = useState(false)
     const [tongTien, setTongTien] = useState(0)
     const [tongTienText, setTongTienText] = useState("0")
@@ -457,8 +456,10 @@ export const OrderField = () => {
                 <div className="fixed inset-0 z-50 flex  bg-gray-800 bg-opacity-50">
                     <div className="bg-white rounded shadow-md">
                         <FormHoaDon {...valueForHoaDon} HienThiXacNhanDatSan={HienThiXacNhanDatSan} XacNhanDatSanV={XacNhanDatSanV} isDatSan={true} />
-                        {showDatCoc === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> <FormHoanTien isDatCoc={true} tenKH={localStorage.getItem('userName')} tongTien={tongTienText} HuyDatCoc={HuyDatCoc} DatCoc={(selectednganhang, stk, tongtien) => DatCocV(selectednganhang, stk, tongtien)} /> </div>
-
+                        {showDatCoc === true ? (<div className="fixed inset-0 z-51 flex bg-gray-800 bg-opacity-50"> 
+                        <FormHoanTien isDatCoc={true} tenKH={localStorage.getItem('userName')} 
+                        tongTien={tongTienText} HuyDatCoc={HuyDatCoc} DatCoc={(selectednganhang, stk, tongtien) => DatCocV(selectednganhang, stk, tongtien)}/>
+                        </div>
                         ) : ""}
                     </div>
                 </div>) : ""}
@@ -491,11 +492,7 @@ export const OrderField = () => {
                     )) : (<div>{coSoMSG}</div>)}
                     </div>
                     
-
-
                 </div>
-
-
 
                 <div className="col-span-8 border-[#379E13] border-[3px] rounded-[10px] p-5 relative h-[770px]">
                     {
