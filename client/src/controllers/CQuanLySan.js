@@ -18,6 +18,11 @@ const getAllLoaiSan = async () =>{
    san.DeleteSanByID(id)
     
 } 
+const getHoaDonsByNgayKGTKTTSanIDSan = async (day,idKhungGio, idTK, idSan) =>{
+   const hoadon = new HoaDon()
+   var hoadons = await hoadon.GetHoaDonsByNgayKGTTSanIDSan(day,idKhungGio, idTK, idSan)
+   return hoadons;
+}
 const updateSanByID = async (IDLoaiSan, IDTaiKhoan, TenSan,IDSan, newImgs) =>{
    const san = new SanBong()
    const anh = new Anh()
@@ -86,7 +91,7 @@ const getEmptyShiftByDay = async (IDTaiKhoan, ngay) =>{
    let listAllKG = await khungGio.GetAllKhungGio()
    let listKG = []
    for(var i = 0; i < listAllKG.length; i++){
-      let listHD = await hoadon.GetHoaDonsCompleteByNgayKG(ngay, listAllKG[i].IdKhungGio,IDTaiKhoan)
+      let listHD = await hoadon.GetBusyHoaDonsByNgayKGTTSan(ngay, listAllKG[i].IdKhungGio,IDTaiKhoan)
       if(listSan.length != listHD.length){
          listKG.push(listAllKG[i])
       }
@@ -109,7 +114,7 @@ const getEmptyFieldByDayShift = async (iDTaiKhoan, day, iDShift) =>{
    const hoadon = new HoaDon()
    const san = new SanBong()
    let listSan = await san.GetAllSanByTaiKhoan(iDTaiKhoan)
-   let listHD = await hoadon.GetHoaDonsCompleteByNgayKG(day, iDShift,iDTaiKhoan)
+   let listHD = await hoadon.GetBusyHoaDonsByNgayKGTTSan(day, iDShift,iDTaiKhoan)
    let list = []
    for(var i = 0; i < listSan.length; i++){
       let have = true;
@@ -154,5 +159,6 @@ const getCostByShiftnTypeField = async (idShift, idTField) =>{
     getLoaiSanByID,
     deleteSanByID,
     getSanByID,
-    updateSanByID
+    updateSanByID,
+    getHoaDonsByNgayKGTKTTSanIDSan
  }

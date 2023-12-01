@@ -252,9 +252,15 @@ app.post("/getKhungGioByID", (req, res) => {
   });
 });
 
-app.post("/getHoaDonsCompleteByNgayKGTK", (req, res) => {
-  const sql = "SELECT * FROM hoadon, sanbong where hoadon.Ngay = ? and hoadon.IDKhungGio = ? and hoadon.TrangThai = 'Completed' and hoadon.IDSan = sanbong.IDSan and sanbong.IDTaiKhoan = ?";
+app.post("/getBusyHoaDonsByNgayKGTKTTSan", (req, res) => {
+  const sql = "SELECT * FROM hoadon, sanbong where hoadon.Ngay = ? and hoadon.IDKhungGio = ? and (hoadon.TrangThai = 'Completed' or hoadon.TrangThai = 'Pending') and hoadon.IDSan = sanbong.IDSan and sanbong.TrangThai = 0 and sanbong.IDTaiKhoan = ?";
   db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan], (err, data) => {
+    res.json(data);
+  });
+});
+app.post("/getHoaDonsByNgayKGTKTTSanIDSan", (req, res) => {
+  const sql = "SELECT * FROM hoadon, sanbong where hoadon.IDSan = sanbong.IDSan and hoadon.Ngay = ? and hoadon.IDKhungGio = ? and sanbong.TrangThai = 0 and sanbong.IDTaiKhoan = ? and sanbong.IDSan = ?";
+  db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan, req.body.IDSan], (err, data) => {
     res.json(data);
   });
 });
