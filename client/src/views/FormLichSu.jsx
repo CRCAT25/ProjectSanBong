@@ -74,8 +74,8 @@ const FormLichSu = () => {
   const huyDatSanByID = async () =>{   
     // await HuySanByIDHd(idHD)
     let list = await GetBillById(getIdHD)
-    console.log("plapla"+list[0].TrangThai)
-    if(list[0].TrangThai === "Cancelled")
+    console.log("plapla"+list.TrangThai)
+    if(list.TrangThai === "Cancelled")
     {
       Swal.fire({
         title: "Bạn không thể hủy trận đấu này !",
@@ -110,22 +110,23 @@ const FormLichSu = () => {
   
   const hienInfoHoaDon = async(idHD)=>{
       let list = await GetBillById(idHD)
-      let hoaDon = await list[0]
+      let hoaDon = await list
       console.log(hoaDon)
       let taiKhoan = await hoaDon.TaiKhoan;
       let sanBong = await hoaDon.SanBong;
       let khungGio = await hoaDon.KhungGio;
       let date = dateFormatter (hoaDon.Ngay);
       let doiThu = await hoaDon.DoiThu;
-      let khac=""
-      if(hoaDon.GiaoHuu==='1' && doiThu !="")
+      let khac="Trận đấu như bao người"
+      if(hoaDon.GiaoHuu==='1' )
       {
-        khac=doiThu.TaiKhoan.Ten
+        if(doiThu !="")
+        {
+          khac=doiThu.TaiKhoan.Ten
+        }
+        else khac="Cho phép tham gia giao hữu"
       }
-      else{
-        khac="Cho phép tham gia giao hữu"
-      }
-      
+  
       const valueOfHoaDon = {
         TenKH : taiKhoan.Ten,
         SDTKH : taiKhoan.SoDienThoai,
@@ -159,53 +160,59 @@ const FormLichSu = () => {
  
   const loadLich = async (list, selected)=>{
     lichholder.current.innerHTML="";
-    list.map( async(data,i)=>{
-      let hoaDon = await data
-      let sanBong = await data.SanBong
-      let khungGio = await data.KhungGio
-      let date = dateFormatter (hoaDon.Ngay)
-      let doiThu = await data.DoiThu
-      let tenDoiThu
-      doiThu == null ? tenDoiThu = "Không có" :tenDoiThu = doiThu.Ten
-      // console.log(hoaDon)
-      lichholder.current.innerHTML+=`
-      <div class='lich w-[auto] bg-[#9BCE89] h-[auto] p-[10px] m-[10px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
-      <img src="./assets/${sanBong.TaiKhoan.Anh}" alt="" class='w-[150px] h-[150px] col-span-1 rounded-[15px]' />
-        <div class='col-span-1 grid grid-row-2 p-[10px]'>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
-        </div>
-        <div class='col-span-1 grid grid-row-2 p-[10px]'> 
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TaiKhoan.Ten}</div>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TenSan}</div>
-        </div>
-        ${selected != 0 ? ( `<div class='col-span-1 grid grid-row-2 p-[10px]'>
-        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ:</div>
-        <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${tenDoiThu}</div>
-      </div>`):""}
-        <div class='col-span-1 grid grid-row-2 p-[10px]'>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
-        </div>
-        <div class='col-span-1 grid grid-row-2 p-[10px] text-center'>
-          <div class='col-span-1 font-[600] text-[18px] h-[auto] my-auto'>${date}<p>${khungGio.ThoiGian}</p></div>
-          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${hoaDon.TrangThai}</div>
-        </div>
-      </div>`
-
-      if(list.length-1==i){
-        setTimeout( async() => {
-          for(let i = 0; i <  document.getElementsByClassName("lich").length;i++)
-          {
-            document.getElementsByClassName("lich")[i].addEventListener("click",()=>{
-            ShowHD(hoaDon.IDHoaDon)
-            console.log(hoaDon.IDHoaDon)
-            setIdHD(hoaDon.IDHoaDon);
-            })
-          };
-        }, 200);
-      }
-    })
+    if(list.length == 0){
+      lichholder.current.innerHTML= `<div class=" rounded-[10px] h-[150px] w-[100%] my-[17%] text-center py-5
+        text-[#379E13] text-[30px] font-[600] flex flex-col justify-center">BẠN HIỆN KHÔNG CÓ LỊCH ĐÁ NÀO</div>`
+    }
+    else{
+      list.map( async(data,i)=>{
+        let hoaDon = await data
+        let sanBong = await data.SanBong
+        let khungGio = await data.KhungGio
+        let date = dateFormatter (hoaDon.Ngay)
+        let doiThu = await data.DoiThu
+        let tenDoiThu
+        doiThu == null ? tenDoiThu = "Không có" :tenDoiThu = doiThu.Ten
+        // console.log(hoaDon)
+        lichholder.current.innerHTML+=`
+        <div class='lich w-[auto] bg-[#9BCE89] h-[auto] p-[10px] m-[10px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
+        <img src="./assets/${sanBong.TaiKhoan.Anh}" alt="" class='w-[150px] h-[150px] col-span-1 rounded-[15px]' />
+          <div class='col-span-1 grid grid-row-2 p-[10px]'>
+            <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
+            <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Mã sân:</div>
+          </div>
+          <div class='col-span-1 grid grid-row-2 p-[10px]'> 
+            <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TaiKhoan.Ten}</div>
+            <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${sanBong.TenSan}</div>
+          </div>
+          ${selected != 0 ? ( `<div class='col-span-1 grid grid-row-2 p-[10px]'>
+          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Đối thủ:</div>
+          <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${tenDoiThu}</div>
+        </div>`):""}
+          <div class='col-span-1 grid grid-row-2 p-[10px]'>
+            <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Ngày - giờ đặt:</div>
+            <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Trạng thái:</div>
+          </div>
+          <div class='col-span-1 grid grid-row-2 p-[10px] text-center'>
+            <div class='col-span-1 font-[600] text-[18px] h-[auto] my-auto'>${date}<p>${khungGio.ThoiGian}</p></div>
+            <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>${hoaDon.TrangThai}</div>
+          </div>
+        </div>`
+        if(list.length-1==i){
+          setTimeout( async() => {
+            for(let i = 0; i <  document.getElementsByClassName("lich").length;i++)
+            {
+              document.getElementsByClassName("lich")[i].addEventListener("click",()=>{
+              ShowHD(hoaDon.IDHoaDon)
+              console.log("hoaDon.IDHoaDon")
+              console.log(hoaDon.IDHoaDon)
+              setIdHD(hoaDon.IDHoaDon);
+              })
+            };
+          }, 200);
+        }
+      })
+    }
   }
   return (
    
@@ -213,13 +220,13 @@ const FormLichSu = () => {
       <div className='font-[600] text-[36px] text-center h-[50px] py-[5%] text-[#379E13]'>LỊCH SỬ CÁ NHÂN</div>
       <div className='flex flex-row my-[2%] mx-auto w-[90%]'>
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' 
-        onClick={()=> loadSelectedLich(0)}> Sân đã đặt</div>
+        onClick={()=> loadSelectedLich(0)}>Sân đã đặt</div>
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] mx-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]'
-        onClick={()=> loadSelectedLich(1)}> Trận giao hữu</div>
+        onClick={()=> loadSelectedLich(1)}>Trận giao hữu</div>
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' 
-        onClick={()=> loadSelectedLich(2)}> Đã hoàn thành</div>
+        onClick={()=> loadSelectedLich(2)}>Đã hoàn thành</div>
       </div>
-      <div ref={lichholder} id= 'lich'className='bg-[#D9D9D9] w-[90%] h-[620px] mx-auto py-[15px] rounded-[15px] flex flex-col align-middle overflow-y-visible overflow-x-hidden overflow-scroll'> 
+      <div ref={lichholder} id= 'lich'className='bg-[#D9D9D9] w-[90%] h-[570px] mx-auto py-[15px] rounded-[15px] flex flex-col align-middle overflow-y-visible overflow-x-hidden overflow-scroll'> 
         {/* {gotPersonalInfo === true ? async ()=> {               
           getPersonalLich.map(async (data, i) => {
           })

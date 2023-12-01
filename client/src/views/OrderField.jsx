@@ -259,18 +259,20 @@ export const OrderField = () => {
                 Swal.close();
             }, 1000);
         }else{
+            
             CheckBoxChecked();
         }
         
     }
 
     const CheckBoxChecked = () =>{
+        
         if (isCheckBoxChecked == 0) {
             setIsCheckBoxChecked(1)
             setTextForGiaoHuu("Cho phép tham gia giao hữu !")
         } else {
             setIsCheckBoxChecked(0)
-            setTextForGiaoHuu("")
+            setTextForGiaoHuu("Trận đấu như bao người")
         }
     }
 
@@ -279,6 +281,7 @@ export const OrderField = () => {
     const [tongTienText, setTongTienText] = useState("0")
     const [valueForHoaDon, setValueForHoaDon] = useState({})
     const DatSan = async () => {
+        
         if (isDangNhap == true) {
             const checkKhungGio = checkSelectKhungGio()
             if (!checkKhungGio) {

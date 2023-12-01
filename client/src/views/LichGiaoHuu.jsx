@@ -130,9 +130,9 @@ const LichGiaoHuu = () =>{
             </div>
             </div>  
           )): 
-          (<div className="flex flex-col justify-center">Không có trận giao hữu nào</div>)}
+          (<div className=" rounded-[10px] h-[150px] w-[100%] my-[17%] text-center py-5
+           text-[#379E13] text-[30px] font-[600] flex flex-col justify-center">KHÔNG CÓ LỊCH GIAO HỮU NÀO</div>)}
          
-          
         </div>
 
         
