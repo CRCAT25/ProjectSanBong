@@ -81,24 +81,12 @@ const getLoaiSanByID = async (id) =>{
    const khungGio = new KhungGio()
    let list = await khungGio.GetAllKhungGio()
    return list
-   
 }
-const getEmptyShiftByDay = async (IDTaiKhoan, ngay) =>{
+const getHoaDonByNgayKHIDSan = async (date, shift, idSan) =>{
    const hoadon = new HoaDon()
-   const khungGio = new KhungGio()
-   const san = new SanBong()
-   let listSan = await san.GetAllSanByTaiKhoan(IDTaiKhoan)
-   let listAllKG = await khungGio.GetAllKhungGio()
-   let listKG = []
-   for(var i = 0; i < listAllKG.length; i++){
-      let listHD = await hoadon.GetBusyHoaDonsByNgayKGTTSan(ngay, listAllKG[i].IdKhungGio,IDTaiKhoan)
-      if(listSan.length != listHD.length){
-         listKG.push(listAllKG[i])
-      }
-   }
-   return listKG
+   let list = await hoadon.GetHoaDonsByNgayKGIDSan(date, shift, idSan);
+   return list;
 }
-
 const getAllHoaDonCompletedByCoSo = async(idCoSo)=>{
    const hoadon = new HoaDon();
    let listNeeded = await hoadon.getBillByIdCoSo(idCoSo);
@@ -136,6 +124,15 @@ const getLoaiSanByIdField = async (idField) =>{
    return san.LoaiSan
    
 }
+const insertHoaDon = async (IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien) =>{
+   const hoadon = new HoaDon()
+   await hoadon.InsertHoaDon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien)
+   
+}
+const updateHoaDon = async (IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, IDHoaDon) =>{
+   const hoadon = new HoaDon()
+   await hoadon.UpdateHoaDon(IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, IDHoaDon)
+}
 const getCostByShiftnTypeField = async (idShift, idTField) =>{
    
    const khungGio = new KhungGio()
@@ -146,19 +143,21 @@ const getCostByShiftnTypeField = async (idShift, idTField) =>{
 }
  export {
     getAllLoaiSan,
+    insertHoaDon,
     getAllSanByTaiKhoan,
     getAllKhungGio,
-    getEmptyShiftByDay,
     getEmptyFieldByDayShift,
     getLoaiSanByIdField,
     getAllHoaDonCompletedByCoSo,
     getBillForRefund,
     getCostByShiftnTypeField,
     insertSan,
+    updateHoaDon,
     getAnhsByIDSan,
     getLoaiSanByID,
     deleteSanByID,
     getSanByID,
     updateSanByID,
-    getHoaDonsByNgayKGTKTTSanIDSan
+    getHoaDonsByNgayKGTKTTSanIDSan,
+    getHoaDonByNgayKHIDSan
  }

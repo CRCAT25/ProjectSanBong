@@ -104,7 +104,23 @@ app.post("/getSanByIDnCate", (req, res) => {
 
   });
 });
-
+app.post("/updateHoaDon", async (req, res) => {
+  const sql = ` UPDATE hoadon SET IDSan = ? , IDKhungGio = ? , Ngay = ? , GiaoHuu = ? , TongTien = ? WHERE IDHoaDon = ?`
+  db.query(sql, [req.body.IDSan,req.body.IDKhungGio,req.body.Ngay,req.body.GiaoHuu,req.body.TongTien,req.body.IDHoaDon],(err, data) => {
+  });
+});
+app.post("/insertHoaDon", async (req, res) => {
+  const IDTaiKhoan = req.body.IDTaiKhoan;
+  const IDSan = req.body.IDSan;
+  const IDKhungGio = req.body.IDKhungGio;
+  const Ngay = req.body.Ngay;
+  const GiaoHuu = req.body.GiaoHuu;
+  const TongTien = req.body.TongTien;
+  const sql = ` INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat, TrangThai)
+  VALUES(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}', NOW(), 'Completed');`
+  db.query(sql, (err, data) => {
+  });
+});
 app.post("/datSan", async (req, res) => {
   const IDTaiKhoan = req.body.IDTaiKhoan;
   const IDSan = req.body.IDSan;
@@ -239,7 +255,7 @@ app.post("/getLoaiSanByID", (req, res) => {
   });
 });
 app.post("/getAllKhungGio", (req, res) => {
-  const sql = "SELECT * FROM khunggio";
+  const sql = "SELECT * FROM khunggio order by IDKhungGio ASC";
   db.query(sql, (err, data) => {
     res.json(data);
   });
@@ -258,8 +274,14 @@ app.post("/getBusyHoaDonsByNgayKGTKTTSan", (req, res) => {
     res.json(data);
   });
 });
+app.post("/getHoaDonsByNgayKGIDSan", (req, res) => {
+  const sql = "SELECT * FROM hoadon, sanbong where hoadon.Ngay = ? and hoadon.IDKhungGio = ? and hoadon.IDSan = sanbong.IDSan and hoadon.IDSan = ? and sanbong.TrangThai = 0";
+  db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDSan], (err, data) => {
+    res.json(data);
+  });
+});
 app.post("/getHoaDonsByNgayKGTKTTSanIDSan", (req, res) => {
-  const sql = "SELECT * FROM hoadon, sanbong where hoadon.IDSan = sanbong.IDSan and hoadon.Ngay = ? and hoadon.IDKhungGio = ? and sanbong.TrangThai = 0 and sanbong.IDTaiKhoan = ? and sanbong.IDSan = ?";
+  const sql = "SELECT *, hoadon.TrangThai FROM hoadon, sanbong where hoadon.IDSan = sanbong.IDSan and hoadon.Ngay = ? and hoadon.IDKhungGio = ? and sanbong.TrangThai = 0 and sanbong.IDTaiKhoan = ? and hoadon.IDSan = ?";
   db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan, req.body.IDSan], (err, data) => {
     res.json(data);
   });

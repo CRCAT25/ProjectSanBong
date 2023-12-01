@@ -15,13 +15,14 @@ import {
   getCostByShiftnTypeField, 
   getLoaiSanByIdField, 
   getAllLoaiSan, 
-  getEmptyFieldByDayShift, 
-  getEmptyShiftByDay,
+  insertHoaDon,
+  getHoaDonByNgayKHIDSan,
   getAllSanByTaiKhoan,
   getAllHoaDonCompletedByCoSo,
   getBillForRefund,
   getHoaDonsByNgayKGTKTTSanIDSan,
   insertSan,
+  updateHoaDon,
   updateSanByID,
   getSanByID,
   getLoaiSanByID,
@@ -30,8 +31,9 @@ import {
   getAllKhungGio
 } from "../controllers/CQuanLySan";
 import Swal from 'sweetalert2'
-
-
+import { 
+  GetBillById
+} from "../controllers/CQuanLyLich";
 
 
 const FieldManage =  () => {
@@ -42,12 +44,13 @@ const FieldManage =  () => {
     document.getElementsByClassName("ngayLS")[0].value = getCurrentDate()
     handleDateChange()
     loadListFields()
-    loadListLS()
+    // updateSchedule();
   }, []);
   let idTK = "7"
   const Swal = require('sweetalert2')
   const [getLoaiSans, setLoaiSans] = useState([]);
-  const [getLichSans, setLichSans] = useState([]);
+  let IDLichSan = null
+  const [getIDLichSan, setIDLichSan] = useState(null);
   let IDSan = null
   const [getIDSan, setIDSan] = useState(null);
   const [getBillForRefund, setBillForRefund] = useState([]);
@@ -59,44 +62,214 @@ const FieldManage =  () => {
       document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = (await getLoaiSanByID(document.getElementsByClassName("selectLoaiS")[0].value)).GiaTien
     }
   }
-  const loadListLS = async()  =>{
-    document.getElementById("Wa1D1TazzFCfTx5RoHkPmu").innerHTML =""
-    var listSan = await getAllSanByTaiKhoan(idTK)
-    var listCa = await getAllKhungGio()
-    var string = ""
-    listSan.forEach(san => {
-      string +=  `<div className="rowSan" id="rowSan-${san.IdSan}">
-      <div className="tenSanLS">
-        <div>${san.TenSan}</div>
-      </div>
-      <div className="schedule">`
-      listCa.forEach(async (ca) => {
-        var listHD = await getHoaDonsByNgayKGTKTTSanIDSan(document.getElementsByClassName("ngayLS")[0].value,ca.IdKhungGio,idTK,san.IdSan)
-
-        if(listHD.length > 0){
-          listHD.forEach(hoaDon => {
-            string += `<div className="shift "></div>`
-          });
+  async function updateSchedule() {
+    document.getElementById("Wa1D1TazzFCfTx5RoHkPmu").innerHTML = ""
+    var listSan = await getAllSanByTaiKhoan(idTK);
+    var listCa = await getAllKhungGio();
+    var date = document.getElementsByClassName("ngayLS")[0].value
+    var currentHour = (new Date()).getHours();
+    var currentDate = (new Date()).toISOString().slice(0, 10);
+    console.log(listSan)
+    for (let j = 0; j < listSan.length; j++) {
+      var san = listSan[j];
+      let htmlString = "";
+      for (let i = 0; i < listCa.length; i++) {
+        var ca = listCa[i];
+        var listHD = await getHoaDonsByNgayKGTKTTSanIDSan(date, ca.IdKhungGio, idTK, san.IdSan);
+        if(date > currentDate){
+          if (listHD.length > 0) {
+            if (listHD[listHD.length - 1].TrangThai == "Completed" || listHD[listHD.length - 1].TrangThai == "Pending") {
+              htmlString += `<div class="shift shift-Busy-Future shift-clickable" id="hd:${listHD[listHD.length - 1].IDHoaDon}"></div>`;
+            }else {
+              htmlString += `<div class="shift shift-Empty-Future shift-clickable" id="san:${san.IdSan}-ca:${ca.IdKhungGio}"></div>`;
+            }
+          } else {
+            htmlString += `<div class="shift shift-Empty-Future shift-clickable" id="san:${san.IdSan}-ca:${ca.IdKhungGio}"></div>`;
+          }
         }else{
-
+          if (ca.ThoiGian.split("-")[0].split(":")[0] > currentHour) {
+            //future
+            if (listHD.length > 0) {
+              if (listHD[listHD.length - 1].TrangThai == "Completed" || listHD[listHD.length - 1].TrangThai == "Pending") {
+                htmlString += `<div class="shift shift-Busy-Future shift-clickable" id="hd:${listHD[listHD.length - 1].IDHoaDon}"></div>`;
+              }else {
+                htmlString += `<div class="shift shift-Empty-Future shift-clickable" id="san:${san.IdSan}-ca:${ca.IdKhungGio}"></div>`;
+              }
+            } else {
+                htmlString += `<div class="shift shift-Empty-Future shift-clickable" id="san:${san.IdSan}-ca:${ca.IdKhungGio}"></div>`;
+            }
+          } else {
+              //pass
+              if (listHD.length > 0) {
+                if (listHD[listHD.length - 1].TrangThai == "Completed" || listHD[listHD.length - 1].TrangThai == "Pending") {
+                  htmlString += `<div class="shift shift-Busy-Pass shift-clickable" id="${listHD[listHD.length - 1].IDHoaDon}"></div>`;
+                }else {
+                  htmlString += `<div class="shift shift-Empty-Pass"></div>`;
+                }
+              } else {
+                  htmlString += `<div class="shift shift-Empty-Pass"></div>`;
+              }
+          }
+        }
+        if (listCa.length - 1 == i) {
+            htmlString += `<hr class="line" />`;
+        }
+      }
+      document.getElementById("Wa1D1TazzFCfTx5RoHkPmu").innerHTML += `
+      <div class="rowSan">
+          <div class="tenSanLS">
+              <div>${san.TenSan}</div>
+          </div>
+          <div class="schedule">${htmlString}</div>
+      </div>`;
+      if(listSan.length - 1 == j){
+        for (let index = 0; index < document.getElementsByClassName("shift-clickable").length; index++) {
+          document.getElementsByClassName("shift-clickable")[index].addEventListener("click",()=>{
+            selectSchedule(document.getElementsByClassName("shift-clickable")[index])
+          })
+          
+        }
+      }
+    }
+  }
+const  selectSchedule = async(element) =>{
+  IDLichSan = null
+  setIDLichSan(null)
+  document.getElementsByClassName("tenKhach")[0].innerHTML = "Tên khách"
+  document.getElementsByClassName("soDT")[0].innerHTML = "Số điện thoại"
+  document.getElementById("257:945").scrollIntoView({ behavior: 'smooth' });
+  if(element.classList.contains("shift-Busy-Pass") || element.classList.contains("shift-Busy-Future")){
+    IDLichSan = (element.id).split(":")[1]
+    setIDLichSan((element.id).split(":")[1])
+    var hoadon = await GetBillById(IDLichSan)
+    document.getElementsByClassName("tenKhach")[0].innerHTML = await(await hoadon[0].TaiKhoan).Ten
+    document.getElementsByClassName("soDT")[0].innerHTML = await(await hoadon[0].TaiKhoan).SoDienThoai
+    console.log(await(await hoadon[0].KhungGio).IdKhungGio)
+    document.getElementsByClassName("selectKhungGio")[0].value = await(await hoadon[0].KhungGio).IdKhungGio
+    document.getElementsByClassName("selectTenLS")[0].value = await(await hoadon[0].SanBong).IdSan
+    document.getElementsByClassName("selectGH")[0].value = await hoadon[0].GiaoHuu
+  }else if(element.classList.contains("shift-Empty-Future")){
+    document.getElementsByClassName("selectKhungGio")[0].value = ((element.id).split("-")[1].split(":")[1])
+    document.getElementsByClassName("selectTenLS")[0].value = ((element.id).split("-")[0].split(":")[1])
+  }
+  setLoaiSanLS()
+}
+function resetLichSan(){
+  handleDateChange()
+    document.getElementsByClassName("selectGH")[0].value = 0
+}
+const insertLichSan = async () =>{
+  var date = document.getElementsByClassName("ngayLS")[0].value
+  var idKhungGio = document.getElementsByClassName("selectKhungGio")[0].value
+  var idSan = document.getElementsByClassName("selectTenLS")[0].value
+  var giaoHuu = document.getElementsByClassName("selectGH")[0].value
+  var tongTien = (document.getElementsByClassName("tongTien")[0].innerHTML).substring(0,(document.getElementsByClassName("tongTien")[0].innerHTML).length - 3)
+  if(idKhungGio != "none"){
+    if(idSan != "none"){
+      if((await getHoaDonByNgayKHIDSan(date,idKhungGio,idSan)).length == 0){
+        Swal.fire({
+          title: "Bạn có chắc muốn thêm?",
+          showDenyButton: true,
+          confirmButtonText: "Có",
+          denyButtonText: `Không`
+        }).then((result) => {
+          if (result.isConfirmed) {
+            insertHoaDon(idTK,idSan,idKhungGio,date,giaoHuu,tongTien)
+    
+            Swal.fire({
+              title: "Thêm thành công!"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                resetLichSan()
+              }
+            });
+          }
+        });
+      }else{
+        Swal.fire({
+          title: "Sân đã được đặt trước!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById("257:945").scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      }
+    }else{
+      Swal.fire({
+        title: "Chọn sân!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementsByClassName("selectTenLS")[0].scrollIntoView({ behavior: 'smooth' });
         }
       });
-      
-      
-      
-    //   `<div className="shift-${idca[0]}"></div>
-    //     <div className="shift-${idca[0]}"></div>
-    //     <div className="shift-${idca[0]}"></div>
-    //     <div className="shift-${idca[0]}"></div>
-    //     <div className="shift-${idca[0]}"></div>
-    //     <div className="shift-${idca[0]}"></div>`
-        string +=`<hr className="line" />
-        </div>
-      </div>`
+    }
+  }else{
+    Swal.fire({
+      title: "Chọn khung giờ!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementsByClassName("selectKhungGio")[0].scrollIntoView({ behavior: 'smooth' });
+      }
     });
-
-   
   }
+  
+}
+const updateLichSan = async() => {
+  var date = document.getElementsByClassName("ngayLS")[0].value
+  var idKhungGio = document.getElementsByClassName("selectKhungGio")[0].value
+  var idSan = document.getElementsByClassName("selectTenLS")[0].value
+  var giaoHuu = document.getElementsByClassName("selectGH")[0].value
+  var tongTien = (document.getElementsByClassName("tongTien")[0].innerHTML).substring(0,(document.getElementsByClassName("tongTien")[0].innerHTML).length - 3)
+  if(idKhungGio != "none"){
+    if(idSan != "none"){
+      if(getIDLichSan != null){
+        Swal.fire({
+          title: "Bạn có chắc muốn cập nhật?",
+          showDenyButton: true,
+          confirmButtonText: "Cập nhật",
+          denyButtonText: `Không`
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // console.log(idSan,idKhungGio,date,giaoHuu,tongTien,getIDLichSan)
+            updateHoaDon(idSan,idKhungGio,date,giaoHuu,tongTien,getIDLichSan)
+            Swal.fire({
+              title: "Cập nhật thành công!"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                resetLichSan()
+              }
+            });
+          }
+        });
+      }else{
+        Swal.fire({
+          title: "Yêu cầu chọn hoá đơn màu cam!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById("257:945").scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      }
+    }else{
+      Swal.fire({
+        title: "Chọn sân!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementsByClassName("selectTenLS")[0].scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+  }else{
+    Swal.fire({
+      title: "Chọn khung giờ!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementsByClassName("selectKhungGio")[0].scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+  
+}
  function deleteSanMainBTN() {
   if(getIDSan){
     deleteSan(getIDSan)
@@ -232,6 +405,7 @@ const FieldManage =  () => {
     document.getElementsByClassName("item-4-cfD")[0].innerHTML = document.getElementsByClassName("ngayLS")[0].value.split("-")[2]
     setSelectKGByNgay()
     setSelectSanByNgayKG()
+    updateSchedule()
   };
 
 
@@ -241,7 +415,7 @@ const FieldManage =  () => {
       slect.removeChild(slect.firstChild);
     }
     slect.innerHTML = `<option value="none">--Khung giờ--</option>`
-    ;(await getEmptyShiftByDay(idTK, await document.getElementsByClassName("ngayLS")[0].value)).map((khunggio, i)=>{
+    ;(await getAllKhungGio()).map((khunggio, i)=>{
       slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
     })
   }
@@ -256,18 +430,10 @@ const FieldManage =  () => {
     while (slect.hasChildNodes()) {
       slect.removeChild(slect.firstChild);
     }
-    if(document.getElementsByClassName("selectKhungGio")[0].value != "none"){
-      slect.innerHTML = `<option value="none">--Sân--</option>`
-      ;(await getEmptyFieldByDayShift(
-        idTK, 
-        await document.getElementsByClassName("ngayLS")[0].value,
-        await document.getElementsByClassName("selectKhungGio")[0].value)
-        ).map((san, i)=>{
+    slect.innerHTML = `<option value="none">--Sân--</option>`
+      ;(await getAllSanByTaiKhoan(idTK)).map(san=>{
           slect.innerHTML += `<option value="${san.IdSan}" >${san.TenSan}</option>`
       })
-    }else{
-      slect.innerHTML += `<option value="none" >------------</option>`
-    }
     setLoaiSanLS()
   }
   const setLoaiSanLS = async () =>{
@@ -278,7 +444,7 @@ const FieldManage =  () => {
         (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).IdLoaiSan
       document.getElementsByClassName("tongTien")[0].innerHTML = 
         await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value, 
-                                        await document.getElementsByClassName("loaiSanLS")[0].value) +".000 VND"
+                                        await document.getElementsByClassName("loaiSanLS")[0].value) +"VND"
     }else{
       document.getElementsByClassName("loaiSanLS")[0].innerHTML = "------"
       document.getElementsByClassName("loaiSanLS")[0].value = null
@@ -674,14 +840,14 @@ const FieldManage =  () => {
           </div>
         </div>
         <div className="auto-group-hhjs-nKm" id="Wa1AjrhcdDA61eXwBb9nwD">
-          <div className="btnThemLich" id="257:900">
+          <div className="btnThemLich" id="257:900" onClick={insertLichSan}>
             Thêm
           </div>
-          <div className="btnCapNhatLich" id="257:939">
+          <div className="btnCapNhatLich" id="257:939" onClick={updateLichSan}>
             Cập nhật
           </div>
-          <div className="btnXoaLich" id="257:942">
-            Xóa
+          <div className="btnHuyLich" id="257:942">
+            Huỷ
           </div>
         </div>
       </div>
