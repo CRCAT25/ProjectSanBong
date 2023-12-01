@@ -44,8 +44,8 @@ const FormHoaDon = ({TenKH, SDTKH, KhungGio, NgayDat, TenSan, DiaDiem, SDTSan, M
         
         {isDatSan === true ? (
             <div className='w-[90%] flex flex-auto justify-around p-10 mx-auto '>
-        <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000]" onClick={HienThiXacNhanDatSan}>Hủy</button>
         <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff]" onClick={XacNhanDatSanV} >Tiếp tục</button>
+        <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000]" onClick={HienThiXacNhanDatSan}>Hủy</button>
             </div>) :(
         <div className='w-[90%] flex flex-auto justify-around p-10 mx-auto '> 
         <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " onClick={HienThiXacNhanDatSan}>Xác nhận</button>

@@ -174,64 +174,39 @@ const formatTime = (timeInSeconds) => {
   }
   
   return (
-    <div className='w-[40%] left-1/2 -translate-x-1/2 h-auto p-[30px] relative bg-[#DDFCD2] my-[10%] z-1200'>
+    <div className='w-[35%] left-1/2 -translate-x-1/2 h-auto p-[30px] relative bg-[#DDFCD2] my-[10%] z-1200'>
     {isDatCoc == true ? (
         <>
         <div>
           <div className='text-center text-[30px] font-[600] text-[#2B790F] mb-10'>ĐẶT CỌC</div>
-          
         </div>
-        <div className='w-90% mx-[5%] flex justify-center'>
+        <div className='w-[91%] mx-[5%] flex justify-center'>
           <div className='w-[100%] h-[50px] my-[5px] mr-[5px] pl-[15px] rounded-[5px] flex flex-col justify-center bg-white'>
             Tên KH: {tenKH}
           </div>
         </div>
-        <select
-          id='idBank'
-          className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]'
-          onChange={(e) => {
-            setSelectedNganHang(e.target.value);
-          }}
-        ></select>
-        <input
-          id='stk'
-          className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]'
-          placeholder='Số Tài Khoản'
-          onChange={(e) => setInputSTK(e.target.value)}
-        ></input>
-        {/* <input
-          id='tenKhach'
-          className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]'
-          placeholder='Tên Tài Khoản'
-        ></input> */}
+        <select id='idBank'className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]'
+          onChange={(e) => {setSelectedNganHang(e.target.value);}}></select>
+        <input id='stk'className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]'placeholder='Số Tài Khoản'
+          onChange={(e) => setInputSTK(e.target.value)}></input>
         <div className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]  flex flex-col justify-center bg-white'>
           Số tiền: {tongTien}
         </div>
-        <div className='w-[90%] mt-[20px] flex flex-row justify-around mx-auto '>
-            <button
-              class='bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px]  text-[#000]'
-              onClick={() => {
-                HuyDatCoc();
-                setIsActive(false);
-              }}>Hủy</button>
-            <button
-              class='bg-[#379E13] rounded-[5px] w-[150px] h-[50px]  text-[#fff]'
-              onClick={() => {
-                DatCoc(selectedNganHang, inputSTK, tongTien);
-                setIsActive(false);
-              }}>Xác nhận
-            </button>
+        <div className='w-[95%] mt-[20px] flex flex-row justify-around mx-auto '>
+          <button class='bg-[#379E13] rounded-[5px] w-[45%] h-[50px]  text-[#fff]'
+                onClick={() => {DatCoc(selectedNganHang, inputSTK, tongTien);setIsActive(false);}}>Xác nhận</button>
+          <button class='bg-[#D9D9D9] rounded-[5px] w-[45%] h-[50px]  text-[#000]'
+            onClick={() => {HuyDatCoc();setIsActive(false);}}>Hủy</button>
         </div>
         <div className='text-[20px] my-[10px] w-[auto] text-center'>
-                <div className='font-[600] my-[10px] w-[auto] text-center text-[30px] top-5 right-8 text-[#FF0000]'>{formatTime(seconds)}</div>
+                <div className=' font-[600] my-[10px] mx-auto w-[40%] flex flex-row justify-center text-[30px] text-[#FF0000]'>
+                  {formatTime(seconds)}</div>
                 <b >Lưu ý:</b> Bạn phải thực hiện đặt cọc trong vòng 5 phút nếu không hệ thống sẽ huỷ mọi thao tác vừa rồi của bạn!
-            </div>
-      </>
+            </div></>
        ):(
        <div className='w-[40%] left-1/2 -translate-x-1/2 h-auto p-[30px] relative bg-[#DDFCD2] my-[10%] z-1200'>
            <div className='text-center text-[30px] font-[600] text-[#2B790F]'>HOÀN TIỀN</div>
            <div className='w-90% mx-[5%] flex justify-center'>
-   
            </div>
            <select id='idBank' className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]' 
                onChange={(e) =>{setSelectedNganHang(e.target.value)}}>
@@ -242,10 +217,11 @@ const formatTime = (timeInSeconds) => {
            <textarea className='w-[90%] h-[120px] mx-[5%] my-[5px] pl-[15px] rounded-[5px] py-[10px]' name="" id="noiDung" rows="3"placeholder='Nội Dung:'></textarea>
            <div className='w-[90%] flex flex-auto justify-around mx-auto'>
            <div class="w-[100%] flex justify-around"> 
-               <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " onClick={() => {HuyDatCoc(); setIsActive(false)}}>Hủy</button>
-               <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={() => {DatCoc(selectedNganHang, inputSTK, tongTien);
-               setIsActive(false)}}>Xác nhận</button>
-                </div>
+              <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " 
+              onClick={() => {DatCoc(selectedNganHang, inputSTK, tongTien);setIsActive(false)}}>Xác nhận</button>
+               <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " 
+              onClick={() => {HuyDatCoc(); setIsActive(false)}}>Hủy</button>
+              </div>
            </div>
        </div>
         )}

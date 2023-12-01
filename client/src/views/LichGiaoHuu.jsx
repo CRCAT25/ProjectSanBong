@@ -125,7 +125,7 @@ const LichGiaoHuu = () =>{
             <div class="col-span-1 px-5 flex flex-col justify-center">{data.TenSan}</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">{data.Ngay}<br/>{data.KhungGio}</div>
             <div className="relative">
-              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3 font-bold" 
+              <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[5px] w-[150px] h-[60px] justify-center text-[#000] my-3 font-[600]" 
               onClick={() => conFirmClicked(data.IdHD,idUser,data.IdNgDat)}>Tham gia</button>
             </div>
             </div>  
