@@ -13,7 +13,7 @@ const getAllLichGiaoHuu = async () =>{
 const GetBillById = async (idBill) =>{
     const hoadon= new HoaDon();
     let list = await hoadon.getBillById(idBill);
-    return list;
+    return list[0];
 }
 
 const updateBillDoiThuByIdBill = async (idBill,idDoiThu) =>{

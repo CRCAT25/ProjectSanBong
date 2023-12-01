@@ -32,7 +32,6 @@ class HoaDon{
     initBill(list){
         const resultList = [];
         list.forEach(bill => {
-            
             const taiKhoan = (new TaiKhoan).getTKByID(bill.IDTaiKhoan)
             const khungGio = (new KhungGio).getKhungGioById(bill.IDKhungGio)
             let doiThu=null

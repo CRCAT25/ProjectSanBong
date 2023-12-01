@@ -4,6 +4,9 @@ import {faAddressBook
 } from "@fortawesome/free-solid-svg-icons"
 import {VietQR} from 'vietqr';
 import axios from 'axios';
+import {
+    GetBillById
+}from "../controllers/CQuanLyLich.js"
 
 // const host = 'https://api.vietqr.io/v2/banks';
 
@@ -17,12 +20,14 @@ const Icon24px = ({classIcon}) => {
     )
 }
 
-
-
 const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
     let kq = [];
+
+    const [kqapinh, setkqapinh] = useState([]);
     const [selectedNganHang, setSelectedNganHang] = useState("")
     const [inputSTK, setInputSTK] = useState("")
+    const [getCusBank, setCusBank] = useState("")
+
     function getNganHang () {
         const nganHang = async () => {
             let vietQR = new VietQR({
@@ -42,12 +47,13 @@ const FormHoanTien = ({isDatCoc, tenKH, tongTien, HuyDatCoc, DatCoc}) => {
         nganHang();
         // alert(kq)
     }
+
     useEffect(()=>{
         getNganHang();
     },[])
 
 
-    const [seconds, setSeconds] = useState(300);
+const [seconds, setSeconds] = useState(300);
 const [isActive, setIsActive] = useState(true);
 
 const formatTime = (timeInSeconds) => {
@@ -76,31 +82,60 @@ const formatTime = (timeInSeconds) => {
       window.location.reload();
     }
   }, [seconds]);
+  useEffect(() => {
+    getBillByID(15)
+  }, []);
+
+  let idCoSo = localStorage.getItem("userID")
+
+  const getBillByID = async(idBill)=>{
+    let list = await GetBillById(idBill)
+    let khachHang = await list.TaiKhoan
+    let sanBong = await list.SanBong
+    let khungGio = await list.KhungGio
+    let tienHoan = await list.TongTien
+    
+    setCusBank(khachHang.STK)
+    console.log("aaaa"+getCusBank)
+    document.getElementById("idBank").value=getCusBank
+    // console.log(list)
+    console.log(khachHang)
+    // console.log(sanBong)
+    // console.log(khungGio)
+    // console.log(tienHoan)
+    
+  }
+  
   return (
     <div className='w-[40%] left-1/2 -translate-x-1/2 h-auto p-[30px] relative bg-[#DDFCD2] my-[10%] z-1200'>
-        {isDatCoc === true ? (<div className='text-center text-[30px] font-[600] text-[#2B790F] mb-10'>ĐẶT CỌC</div>) : (<div className='text-center text-[30px] font-[600] text-[#2B790F]'>HOÀN TIỀN</div>)}
-        <div className='text-[20px] font-[600] absolute top-5 right-8 text-[#FF0000] font-bold'>{formatTime(seconds)}</div>
+        {isDatCoc == true ? (
+        <div>
+        <div className='text-center text-[30px] font-[600] text-[#2B790F] mb-10'>ĐẶT CỌC</div>
+        <div className='text-[20px] font-[600] absolute top-5 right-8 text-[#FF0000] '>{formatTime(seconds)}</div>
+        </div>
+        ) : (
+        <div className='text-center text-[30px] font-[600] text-[#2B790F]'>HOÀN TIỀN</div>)}
         <div className='w-90% mx-[5%] flex justify-center'>
             {isDatCoc == true ? (
                 <div className='w-[100%] h-[50px] my-[5px] mr-[5px] pl-[15px] rounded-[5px] flex flex-col justify-center bg-white'>Tên KH: {tenKH}</div>
             ) : (
-                <div>
-                    <input className='w-[90%] h-[50px] my-[5px] mr-[5px] pl-[15px] rounded-[5px]' value={tenKH} disabled></input>
-                    <div className='w-[10%] ml-[5px] h-[50px] my-[5px] rounded-[5px] text-center flex flex-col justify-center bg-white' >
-                    <Icon24px classIcon={faAddressBook}/>
-                    </div>
+                <div class='w-[100%] flex flex-row justify-center'>
+                    {/* <input className=' w-[90%] h-[50px] my-[5px] mr-[5px] pl-[15px] rounded-[5px]' value={tenKH} ></input>
+                    <div className=' w-[10%] h-[50px] my-[5px] rounded-[5px] text-center flex flex-col justify-center bg-white' onClick={getCustomerFromHDByIdCoSo(idCoSo)}>
+                    <Icon24px classIcon={faAddressBook} />
+                    </div> */}
                 </div>
-                
             )}
         </div>
-        <select id='idBank' className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]' onChange={(e) =>{setSelectedNganHang(e.target.value)}}>
+        <select id='idBank' className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]' 
+            onChange={(e) =>{setSelectedNganHang(e.target.value)}}>
         </select>   
         <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Số Tài Khoản' onChange={e => setInputSTK(e.target.value)}></input>
         <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' placeholder='Tên Tài Khoản'></input>
         {isDatCoc == true ? (
             <div className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]  flex flex-col justify-center bg-white'>Số tiền: {tongTien}</div>
         ) : (
-            <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' value={tongTien} disabled></input>
+            <input className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]' value={tongTien} ></input>
         )}
         
         {isDatCoc === true ? "" : (<textarea className='w-[90%] mx-[5%] my-[5px] pl-[15px] rounded-[5px] py-[10px]' name="" id="" rows="3"placeholder='Nội Dung:'></textarea>)}
