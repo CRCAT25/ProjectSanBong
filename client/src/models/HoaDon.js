@@ -98,12 +98,38 @@ class HoaDon{
             .catch(error => {
                 console.error(error);
             });
-    }
+    }getHoaDonsByNgayKGIDSan
     GetHoaDonsByNgayKGTTSanIDSan(day,idKhungGio, idTK, idSan) {
         return axios.post("http://localhost:8081/getHoaDonsByNgayKGTKTTSanIDSan", {Ngay: day, IDKhungGio: idKhungGio, IDTaiKhoan: idTK, IDSan:idSan})
             .then(response => {
                 const list = this.initBill(response.data);                  
                 return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    GetHoaDonsByNgayKGIDSan(day,idKhungGio, idSan) {
+        return axios.post("http://localhost:8081/getHoaDonsByNgayKGIDSan", {Ngay: day, IDKhungGio: idKhungGio, IDSan:idSan})
+            .then(response => {
+                const list = this.initBill(response.data);                  
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    InsertHoaDon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien){
+        return axios.post("http://localhost:8081/insertHoaDon", {IDTaiKhoan, IDSan ,  IDKhungGio,  Ngay,  GiaoHuu, TongTien})
+            .then(response => {
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    UpdateHoaDon(IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, IDHoaDon){
+        return axios.post("http://localhost:8081/updateHoaDon", {IDSan ,  IDKhungGio,  Ngay,  GiaoHuu, TongTien,  IDHoaDon})
+            .then(response => {
             })
             .catch(error => {
                 console.error(error);
