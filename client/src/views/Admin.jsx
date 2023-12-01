@@ -2,13 +2,16 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket, faXmark, faCheck, faClipboardCheck, faPiggyBank } from "@fortawesome/free-solid-svg-icons"
-import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo, CSearchEmailSdt, CDisableAcc, CEnableAcc, CGetAllPlayer, CGetAllAdmin } from "../controllers/CQuanLyTaiKhoan";
+import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo, CSearchEmailSdt, CDisableAcc, CEnableAcc, CGetAllPlayer, CGetAllAdmin, CGetAllBillComplete } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
 import { VietQR } from 'vietqr';
 import Swal from 'sweetalert2';
 import Chart from "chart.js/auto";
 
-
+const generateDaysArray = (year, month) => {
+  const daysInMonth = new Date(year, month, 0).getDate();
+  return Array.from({ length: daysInMonth }, (_, index) => index + 1);
+};
 
 
 const Admin = () => {
@@ -18,6 +21,8 @@ const Admin = () => {
   const [listCoso, setListCoso] = useState([]);
   const [listPlayer, setlistPlayer] = useState([]);
   const [listAdmin, setlistAdmin] = useState([]);
+  const [listBill, setlistBill] = useState([]);
+
 
 
   const [apitinh, setapitinh] = useState([]);
@@ -42,11 +47,27 @@ const Admin = () => {
   //Doanh thu
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalPriceAfter, setTotalPriceAfter] = useState(0);
-  const [selectedMonth, setSelectedMonth] = useState("all"); // Default is all
-  const [selectedYear, setSelectedYear] = useState("2023");
+  const [selectedMonth, setSelectedMonth] = useState("all");
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()+"");
+  const [selectedDay, setSelectedDay] = useState("all");
+
+  const [chart, setchart] = useState([]);
+  const [rerunchart, setrerunchart] = useState(true);
+  const [searchhdbydate, setsearchhdbydate] = useState('');
 
 
-  // Define xValues, yValues, and barColors here
+
+  const [years, setYears] = useState([]);
+
+  useEffect(() => {
+    const currentYear = new Date().getFullYear();
+    const yearsArray = Array.from({ length: 4 }, (_, index) => currentYear - index);
+    setYears(yearsArray);
+  }, []);
+
+  const monthsArray = Array.from({ length: 12 }, (_, index) => index + 1);
+  const daysArray = generateDaysArray(Number(selectedYear), Number(selectedMonth));
+
   const xValues = [
     "Tháng 1",
     "Tháng 2",
@@ -109,21 +130,50 @@ const Admin = () => {
       });
     }
   }, [chartData]);
-  
+
   useEffect(() => {
 
   }, []);
-  
+
   const filterDataByYear = (data, year) => {
     if (year === "all") {
       return data;
     }
 
     return data.filter((item) => {
-      const TimeInsertYear = new Date(item.TimeInsert).getFullYear();
+      const TimeInsertYear = new Date(item.Ngay).getFullYear();
       return TimeInsertYear.toString() === year;
     });
   };
+
+  const filterDataByMonth = (data, month) => {
+    if (month === "all") {
+      return data;
+    }
+
+    return data.filter((item) => {
+      const TimeInsertMonth = new Date(item.Ngay).getMonth() + 1;
+      console.log(TimeInsertMonth)
+      return TimeInsertMonth.toString() === month;
+    });
+  };
+
+  const filterDataByDay = (data, day) => {
+    console.log(data,day)
+
+    if (day === "all") {
+      return data;
+    }
+
+    return data.filter((item) => {
+      const TimeInsertDay = new Date(item.Ngay).getDay() + 1;
+      console.log(TimeInsertDay)
+      console.log(item.Ngay)
+      return TimeInsertDay.toString() === day;
+    });
+  };
+
+
   //
 
 
@@ -148,6 +198,7 @@ const Admin = () => {
     showAllCoSo();
     showAllPlayer();
     showAllAdmin();
+    showAllBillComplete();
     callAPI(host);
     getNganHang();
   }, []);
@@ -175,16 +226,7 @@ const Admin = () => {
   }, [idphanquyen, activeTab]);
 
 
-  const Icon18px = ({ classIcon }) => {
-    const iconSize = {
-      width: "18px",
-      height: "18px",
-      color: "#black",
-    };
-    return (
-      <span><FontAwesomeIcon icon={classIcon} style={iconSize} /></span>
-    )
-  }
+
   const Iconpx = ({ classIcon, width, height, marginRight, marginLeft, color }) => {
     const iconSize = {
       width: width,
@@ -339,6 +381,101 @@ const Admin = () => {
     setlistAdmin(result);
   };
 
+  const showAllBillComplete = async () => {
+    const list = await CGetAllBillComplete();
+
+    const allBills = [];
+
+    for (let i = 0; i < list.length; i++) {
+      let hoaDon = list[i];
+      let sanBong = await hoaDon.SanBong;
+      let dateFM = dateFormatter(hoaDon.Ngay);
+      let date = hoaDon.Ngay;
+
+      let tongTien = hoaDon.TongTien * 0.1;
+
+
+      const valueOfHoaDon = {
+        IdHD: hoaDon.IDHoaDon,
+        NgayFM: dateFM,
+        Ngay: date,
+        Ten: sanBong.TaiKhoan.Ten,
+        EmailCoSo: sanBong.TaiKhoan.Email,
+        SdtCoSo: sanBong.TaiKhoan.SoDienThoai,
+        TongTien: tongTien,
+      };
+
+      // console.log(valueOfHoaDon);
+
+      allBills.push(valueOfHoaDon);
+    }
+
+    setlistBill(allBills);
+    setchart(allBills);
+  };
+
+
+  useEffect(() => {
+    // const showBillByMonth = ()=>{
+    const filteredDataByYear = filterDataByYear(
+      listBill,
+      selectedYear
+    );
+    const filteredDataByMonth = filterDataByMonth(
+      filteredDataByYear,
+      selectedMonth
+    );
+    const filterdDataByDay = filterDataByDay(
+      filteredDataByMonth,
+      selectedDay
+    );
+
+    const yearlyRevenue = Array.from({ length: 12 }, () => 0);
+
+    filteredDataByYear.forEach((order) => {
+      const TimeInsertMonth = new Date(order.Ngay).getMonth();
+      yearlyRevenue[TimeInsertMonth] += order.TongTien;
+    });
+
+    setTotalOrders(filterdDataByDay.length);
+    setTotalPriceAfter(
+      filteredDataByMonth.reduce((acc, order) => acc + order.TongTien, 0)
+    );
+
+    if (rerunchart == true) {
+      setChartData({
+        labels: xValues,
+        datasets: [
+          {
+            backgroundColor: barColors,
+            data: yearlyRevenue,
+          },
+        ],
+      });
+      setTimeout(() => {
+        setrerunchart(false)
+      }, 600);
+
+    }
+    setlistBill(filterdDataByDay);
+    // }
+
+  }, [chart]);
+
+
+  const dateFormatter = (date) => {
+    let time = new Date(date)
+    const formattedDate = time.toLocaleDateString("vi-VN", {
+      day: "2-digit",   // Two-digit day of the month (e.g., "01")
+      month: "2-digit", // Two-digit month (e.g., "10")
+      year: "numeric",  // Full year (e.g., "2023")
+    });
+    return formattedDate
+  }
+
+  const formatCurrency = (value) => {
+    return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  };
 
   function test() {
     alert(idphanquyen)
@@ -424,7 +561,6 @@ const Admin = () => {
   const GetIdTaiKhoan = async (idtaikhoan) => {
     try {
       const response = await ShowImgCoSo(idtaikhoan)
-      console.log(response.Anh)
       if (response.Anh !== "null" && response.Anh !== null) {
         Swal.fire({
           title: `Ảnh của cơ sở ${response.Ten} `,
@@ -528,6 +664,10 @@ const Admin = () => {
     setten(sanitizedValue);
     e.target.value = sanitizedValue;
   };
+
+  useEffect(() => {
+    showAllBillComplete()
+  }, [selectedDay,selectedMonth, selectedYear])
 
   return (
     <div>
@@ -878,54 +1018,150 @@ const Admin = () => {
             </div>
             <div className="w-full col-span-10">
               <div className="w-full h-[530px] grid grid-cols-12 mt-[-60px]">
-                  <div className="w-full h-[530px] col-span-9 bg-[#ffffff]" >
+                <div className="w-full col-span-9 bg-[#fcfcfc]" >
                   <div //sơ đồ
-            style={{
-              width: "95%",
-              height: "500px",
-              border: "1px solid red",
-            }}
-          >
-            <canvas
-              id="myChart"
-              style={{ maxWidth: "100%", maxHeight: "500px", }} // Add maxWidth property
-            ></canvas>
-          </div>
+                    style={{
+                      width: "95%",
+                      height: "500px",
+                      border: "1px solid black",
+                    }}
+                  >
+                    <canvas
+                      id="myChart"
+                      style={{
+                        maxWidth: "100%", marginLeft: "50px", marginTop: "-10px"
+                      }} // Add maxWidth property
+                    ></canvas>
                   </div>
+                </div>
 
 
-                  <div className="w-full h-[530px] col-span-3 bg-[#f14141]">
+                <div className="w-full col-span-3">
+                  {/* <select
+            className="w-[87%] h-[40px] border-[1px]  border-[black] "
+            value={selectedYear}
+            onChange={e => {
+              setSelectedYear(e.target.value);
+              setrerunchart(true);
+            }}>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+          </select>                  
+            <select className="w-[87%] h-[40px] border-[1px] mt-[30px] border-[black] "value={selectedMonth}onChange={(e) => setSelectedMonth(e.target.value)}>
+            <option value="1">Tháng 1</option>
+            <option value="2">Tháng 2</option>
+            <option value="3">Tháng 3</option>
+            <option value="4">Tháng 4</option>
+            <option value="5">Tháng 5</option>
+            <option value="6">Tháng 6</option>
+            <option value="7">Tháng 7</option>
+            <option value="8">Tháng 8</option>
+            <option value="9">Tháng 9</option>
+            <option value="10">Tháng 10</option>
+            <option value="11">Tháng 11</option>
+            <option value="12">Tháng 12</option>
+            <option value="all">Cả năm</option>
+          </select>
+          <select className="w-[87%] h-[40px] border-[1px] mt-[30px] border-[black] "value={selectedMonth}onChange={(e) => setSelectedMonth(e.target.value)}>
+            <option value="1">Ngày 1</option>
+            <option value="2">Ngày 2</option>
+            <option value="3">Ngày 3</option>
+            <option value="all">Chọn ngày</option>
+          </select> */}
+                  <select
+                    className="w-[87%] h-[40px] border-[1px] border-[black]"
+                    value={selectedYear}
+                    onChange={(e) => {
+                      setSelectedYear(e.target.value);
+                      setrerunchart(true)
+                      setSelectedMonth("all");
+                      setSelectedDay("all");
+                    }}
+                  >
+                    {years.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    className="w-[87%] h-[40px] border-[1px] mt-[30px] border-[black]"
+                    value={selectedMonth}
+                    onChange={(e) => {
+                      setSelectedMonth(e.target.value);
+                      setSelectedDay("all");
+                    }}
+                  >
+                    <option value="all">
+                      Chọn tháng
+                    </option>
+                    {monthsArray.map((month) => (
+                      <option key={month} value={month}>
+                        Tháng {month}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    className="w-[87%] h-[40px] border-[1px] mt-[30px] border-[black]"
+                    value={selectedDay}
+                    onChange={(e) => setSelectedDay(e.target.value)}
+                  >
+                    <option value="all">Chọn ngày</option>
+                    {daysArray.map((day) => (
+                      <option key={day} value={day}>
+                        Ngày {day}
+                      </option>
+                    ))}
+                  </select>
+
+
+
+                  <div className="w-[87%] h-[40px] border-[1px] grid grid-cols-12 mt-[30px] border-[black] text-[18px]">
+                    <div className="col-span-3 ml-[70px] mt-[5px]" ><Iconpx classIcon={faClipboardCheck} width={"25px"} height={"25px"} marginRight={"0px"} marginLeft={"0px"} color={"black"} /></div>
+                    <div className="col-span-9 ml-[20px] mt-[5px] ">Đơn hoàn thành: {totalOrders}</div>
                   </div>
+                  <div className="w-[87%] h-[40px] border-[1px] grid grid-cols-12 mt-[30px] border-[black] text-[18px] ">
+                    <div className="col-span-3 ml-[70px] mt-[5px]" ><Iconpx classIcon={faPiggyBank} width={"25px"} height={"25px"} marginRight={"0px"} marginLeft={"0px"} color={"black"} /></div>
+                    <div className="col-span-9 ml-[20px] mt-[5px]">Doanh thu: {formatCurrency(totalPriceAfter)}</div>
+                  </div>
+                    <h3 className="mt-[30px] ml-[30px] text-[19px]">Tìm email hoặc số điện thoại:</h3>
+                  <div className="col-span-1 flex mt-[10px]">
+                    <input type="text" className="w-[87%] h-[40px] text-center border-[1px] grid grid-cols-12 border-[black]" id="rssearch" placeholder="" onChange={e => setstringsearch(e.target.value)}></input>
+                    <div className="ml-[-12px] mt-[8px] hover:cursor-pointer" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>
+                    </div>
+                </div>
               </div>
             </div>
 
           </div>
           <div className="w-full grid grid-cols-12 bg-[#256eb3] h-[60px]">
-            <div className="col-span-4 text-[white] text-center pt-[17px]">Họ tên</div>
-            <div className="col-span-4 text-[white] text-center pt-[17px]">Email</div>
-            <div className="col-span-3 text-[white] text-center pt-[17px]">Số điện thoại</div>
+            <div className="col-span-3 text-[white] text-center pt-[17px]">Cơ sở</div>
+            <div className="col-span-3 text-[white] text-center pt-[17px]">Email</div>
+            <div className="col-span-2 text-[white] text-center pt-[17px]">Số điện thoại</div>
+            <div className="col-span-2 text-[white] text-center pt-[17px]">Ngày</div>
+            <div className="col-span-2 text-[white] text-center pt-[17px]">Tổng Tiền</div>
+
           </div>
           <div className="overflow-y-scroll h-[251px]">
-            {listAdmin.length > 0 ? (
+            {listBill.length > 0 ? (
               <div className="w-full grid grid-cols-12 bg-[#ffffff] mt-[10px] h-[100px]">
-                {listAdmin.map((admin, i) => (
+                {listBill.map((bill, i) => (
                   <React.Fragment key={i}>
-                    <div className=" text-[#000000] text-center pt-[30px] hidden">{admin.IdAccount}</div>
-                    <div className="col-span-4 text-[#000000] text-center pt-[30px]">{admin.Ten}</div>
-                    <div className="col-span-4 text-[#000000] text-center pt-[30px]">{admin.Email}</div>
-                    <div className="col-span-3 text-[#000000] text-center pt-[30px]">{admin.SoDienThoai}</div>
-                    {admin.TrangThai == 1 ? (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Enable(admin.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"} /></div>
-                    ) : (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Disable(admin.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"} /></div>
-                    )}
-
+                    <div className=" text-[#000000] text-center pt-[30px] hidden">{bill.IdHD}</div>
+                    <div className="col-span-3 text-[#000000] text-center pt-[30px]">{bill.Ten}</div>
+                    <div className="col-span-3 text-[#000000] text-center pt-[30px]">{bill.EmailCoSo}</div>
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]">{bill.SdtCoSo}</div>
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]">{bill.NgayFM}</div>
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]">{formatCurrency(bill.TongTien)}</div>
                   </React.Fragment>
                 ))}
 
               </div>
             ) : (
-              <p>No player.</p>
+              <p>No bill.</p>
             )
             }
           </div>

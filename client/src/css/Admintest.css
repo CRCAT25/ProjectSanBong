@@ -2180,7 +2180,6 @@ th {
     width: 20%;
 }
 #searchpartner {
-    /* transform: translate(200px,0px); */
     font-size: 19px;
 }
 
@@ -2191,6 +2190,25 @@ th {
     height: 50px !important;
     background: none;
     border: #000000 solid 3px;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px !important;
+    color: #1e1d1d !important;
+    outline: none;
+    text-align: center;
+    background-color: #ffffff;
+
+}
+
+.input_searchemailsohd {
+    padding: 10px;
+    margin-top: -5px;
+    width: 87%;
+    height: 50px !important;
+    background: none;
+    border: #000000 solid 1px;
     border-radius: 5px !important;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;

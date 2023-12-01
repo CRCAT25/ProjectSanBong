@@ -187,5 +187,17 @@ class HoaDon{
 
     }
 
+    GetAllBillComplete() {
+        return axios.post("http://localhost:8081/getallbillcomplete", {})
+            .then(response => {
+                const list = this.initBill(response.data);    
+                console.log(list)
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
 }
 export default HoaDon

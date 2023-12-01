@@ -115,7 +115,7 @@ app.post("/datSan", async (req, res) => {
   const sql = `CALL InsertAndReturnHoaDon(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}')`;
   
   db.query(sql, (err, data) => {
-    console.log(data[0])
+    // console.log(data[0])
     const sql2 = `CREATE EVENT delete_hoadon_event_${data[0][0].IDHoaDon}
     ON SCHEDULE AT 
     CURRENT_TIMESTAMP + INTERVAL 5 MINUTE
@@ -519,7 +519,6 @@ app.post("/showalladmin", (req, res) => {
   db.query(sql, (err, data) => {
     if (err) return res.json("Error");
     if (data.length > 0) {
-      console.log(data)
       return res.json(data);
     }
   });
@@ -557,7 +556,6 @@ db.query(
     if (insertErr) {
       console.log(insertErr);
     } else {
-      console.log("Thêm thành công")
       return res.json("Thêm thành công");
     }
   }
@@ -596,12 +594,10 @@ app.post("/enableacc", async (req, res) => {
   });
 });
 
-app.post("/showdonhhoanthanh",(req,res) => {
-  const sql = `SELECT hoadon.IDHoaDon, tk1.Ten, tk1.SoDienThoai, tk2.Ten AS CoSo,
-   tk2.DiaChiCoSo, sanbong.TenSan AS MaSan, DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay 
-   FROM hoadon JOIN taikhoan AS tk1 ON tk1.IDTaiKhoan = hoadon.IDTaiKhoan JOIN sanbong ON sanbong.IDSan = hoadon.IDSan JOIN taikhoan AS tk2 ON tk2.IDTaiKhoan = sanbong.IDTaiKhoan 
-   WHERE hoadon.TrangThai <> 'Refund' AND Ngay < CURRENT_DATE;;`;
+app.post("/getallbillcomplete",(req,res) => {
+  const sql = `SELECT * FROM hoadon WHERE hoadon.TrangThai <> 'Refund' AND hoadon.Ngay < CURRENT_DATE`;
   db.query(sql, (err, data) => {
+    // console.log(data)
     res.json(data);
   });
 })

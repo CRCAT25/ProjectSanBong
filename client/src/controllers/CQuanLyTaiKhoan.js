@@ -1,4 +1,5 @@
 import CoSoSan from '../models/CoSoSan'
+import HoaDon from '../models/HoaDon'
 import Account from '../models/TaiKhoan'
 
 const getAllCoSo = async () =>{
@@ -70,13 +71,22 @@ const CGetAllPlayer = async () =>{
    return result
 }
 
-const CGetAllAdmin= async () =>{
+const CGetAllAdmin = async () =>{
    let account = new Account();
    let result = await account.GetAllAdmin()
    console.log(result)
 
    return result
 }
+
+const CGetAllBillComplete = async () =>{
+   let hoadon = new HoaDon();
+   let result = await hoadon.GetAllBillComplete()
+   console.log(result)
+
+   return result
+}
+
 
  export {
    getAllCoSo,
@@ -88,4 +98,5 @@ const CGetAllAdmin= async () =>{
    CEnableAcc,
    CGetAllPlayer,
    CGetAllAdmin,
+   CGetAllBillComplete,
 }
