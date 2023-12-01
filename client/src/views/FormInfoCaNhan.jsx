@@ -403,10 +403,6 @@ const FormInfoCaNhan = () => {
     
   }
 
-  const newProfilePic=()=>{
-    
-  }
-
   const checkLocation=()=>
   {
     console.log(tinh+" "+ quan+" "+ phuong+" "+duong+" check")

@@ -103,7 +103,7 @@ select{
 
 
 }
-.btnThemSan, .btnCapNhatSan, .btXoaSan, .btnThemLich, .btnCapNhatLich, .btnXoaLich{
+.btnThemSan, .btnCapNhatSan, .btXoaSan, .btnThemLich, .btnCapNhatLich, .btnHuyLich{
   width: 30%;
   background-color: #9BCE89;
   font-size: 20px;
@@ -113,7 +113,7 @@ select{
   border: #9BCE89 solid 1px;
 }
 .btnThemSan:hover, .btnCapNhatSan:hover, .btXoaSan:hover,
-.btnThemLich:hover, .btnCapNhatLich:hover, .btnXoaLich:hover{
+.btnThemLich:hover, .btnCapNhatLich:hover, .btnHuyLich:hover{
   background-color: #2B790F;
   color: white;
   cursor: pointer;
@@ -350,21 +350,14 @@ select{
   border-radius: 50%;
   z-index: 10;
 }
-.shift:hover{
+.shift-clickable:hover{
   cursor: pointer;
-  background-color: lightgreen;
-
+  outline: 1px solid #000;
 }
-
 .shift-Busy-Pass{
-  background-color: gray;
+  background-color: #9BCE89;
 }
-.shift-Empty-Pass{
-  opacity: 0;
-}
-.shift-Empty-Pass:hover{
-  cursor: default;
-}
+
 .shift-Empty-Future{
   background-color: yellowgreen;
 }
@@ -373,7 +366,9 @@ select{
 }
 
 
-
+.shift-Empty-Pass{
+  background-color: gray;
+}
 
 .item-4-cfD{
   font-size: 60px;

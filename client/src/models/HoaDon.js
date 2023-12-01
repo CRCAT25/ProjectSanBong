@@ -32,7 +32,6 @@ class HoaDon{
     initBill(list){
         const resultList = [];
         list.forEach(bill => {
-            
             const taiKhoan = (new TaiKhoan).getTKByID(bill.IDTaiKhoan)
             const khungGio = (new KhungGio).getKhungGioById(bill.IDKhungGio)
             let doiThu=null
@@ -46,6 +45,17 @@ class HoaDon{
         });        
         
         return resultList
+    }
+
+    getAllLichGiaoHuu() {
+        return axios.post("http://localhost:8081/getLichGiaoHuuToMatch", {})
+            .then(response => {
+                const list = this.initBill(response.data);              
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     getBillById(IDHoaDon){
@@ -88,12 +98,46 @@ class HoaDon{
             .catch(error => {
                 console.error(error);
             });
-    }
+    }getHoaDonsByNgayKGIDSan
     GetHoaDonsByNgayKGTTSanIDSan(day,idKhungGio, idTK, idSan) {
         return axios.post("http://localhost:8081/getHoaDonsByNgayKGTKTTSanIDSan", {Ngay: day, IDKhungGio: idKhungGio, IDTaiKhoan: idTK, IDSan:idSan})
             .then(response => {
                 const list = this.initBill(response.data);                  
                 return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    GetHoaDonsByNgayKGIDSan(day,idKhungGio, idSan) {
+        return axios.post("http://localhost:8081/getHoaDonsByNgayKGIDSan", {Ngay: day, IDKhungGio: idKhungGio, IDSan:idSan})
+            .then(response => {
+                const list = this.initBill(response.data);                  
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    InsertHoaDon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien){
+        return axios.post("http://localhost:8081/insertHoaDon", {IDTaiKhoan, IDSan ,  IDKhungGio,  Ngay,  GiaoHuu, TongTien})
+            .then(response => {
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    UpdateHoaDon(IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, IDHoaDon){
+        return axios.post("http://localhost:8081/updateHoaDon", {IDSan ,  IDKhungGio,  Ngay,  GiaoHuu, TongTien,  IDHoaDon})
+            .then(response => {
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    UpdateTTHoaDon(TrangThai, IDHoaDon){
+        return axios.post("http://localhost:8081/updateTTHoaDon", {TrangThai, IDHoaDon})
+            .then(response => {
             })
             .catch(error => {
                 console.error(error);
@@ -164,7 +208,7 @@ class HoaDon{
     getAllBillByIdTk(IDTaiKhoan)
     {
         // console.log(IDTaiKhoan+"   "+ GiaoHuu)
-        return axios.post("http://localhost:8081/getPersonalBillByIdTK",{IDTaiKhoan})
+        return axios.post("http://localhost:8081/getAllBillByIdTk",{IDTaiKhoan})
         .then(response => {
             // console.log(response.data)
             const list = this.initBill(response.data);               

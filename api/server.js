@@ -104,7 +104,35 @@ app.post("/getSanByIDnCate", (req, res) => {
 
   });
 });
-
+app.post("/updateHoaDon", async (req, res) => {
+  const sql = ` UPDATE hoadon SET IDSan = ? , IDKhungGio = ? , Ngay = ? , GiaoHuu = ? , TongTien = ? WHERE IDHoaDon = ?`
+  db.query(sql, [req.body.IDSan,req.body.IDKhungGio,req.body.Ngay,req.body.GiaoHuu,req.body.TongTien,req.body.IDHoaDon],(err, data) => {
+  });
+});
+app.post("/updateTTHoaDon", async (req, res) => {
+  const sql = ` UPDATE hoadon SET TrangThai = ? WHERE IDHoaDon = ?`
+  db.query(sql, [req.body.TrangThai,req.body.IDHoaDon],(err, data) => {
+    console.log(req.body.TrangThai,req.body.IDHoaDon)
+  });
+});
+app.post("/updateTTSan", async (req, res) => {
+  const sql = ` UPDATE sanbong SET  TrangThai = ? WHERE IDSan = ?`
+  db.query(sql, [req.body.TrangThai,req.body.IDSan],(err, data) => {
+    console.log(req.body.TrangThai,req.body.IDSan)
+  });
+});
+app.post("/insertHoaDon", async (req, res) => {
+  const IDTaiKhoan = req.body.IDTaiKhoan;
+  const IDSan = req.body.IDSan;
+  const IDKhungGio = req.body.IDKhungGio;
+  const Ngay = req.body.Ngay;
+  const GiaoHuu = req.body.GiaoHuu;
+  const TongTien = req.body.TongTien;
+  const sql = ` INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat, TrangThai)
+  VALUES(${IDTaiKhoan}, ${IDSan}, ${IDKhungGio}, '${Ngay}', ${GiaoHuu}, '${TongTien}', NOW(), 'Completed');`
+  db.query(sql, (err, data) => {
+  });
+});
 app.post("/datSan", async (req, res) => {
   const IDTaiKhoan = req.body.IDTaiKhoan;
   const IDSan = req.body.IDSan;
@@ -160,20 +188,12 @@ app.post("/getBillByIDBill", async (req, res) => {
 
 
 // Lấy lịch giao hữu // 
-app.post("/getAllLichGiaoHuu",(req,res) => {
-  const sql = `SELECT
-                hoadon.IDHoaDon ,tk1.Ten,tk1.SoDienThoai, tk2.Ten as CoSo, tk2.DiaChiCoSo, sanbong.TenSan as MaSan, DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay, khunggio.ThoiGian
-              FROM
-                taikhoan as tk1, taikhoan as tk2, hoadon, sanbong, khunggio
-              WHERE
-                hoadon.IDKhungGio = khunggio.IDKhungGio
-                AND hoadon.idDoiThu IS NULL
+app.post("/getLichGiaoHuuToMatch",(req,res) => {
+  const sql = `SELECT *  FROM hoadon 
+                WHERE GiaoHuu=1 and  hoadon.idDoiThu IS NULL
                 AND hoadon.TrangThai = 'Completed'
                 AND hoadon.GiaoHuu = 1
-                AND Ngay > CURRENT_DATE
-              and tk1.IDTaiKhoan = hoadon.IDTaiKhoan 
-                and sanbong.IDSan = hoadon.IDSan
-                and tk2.IDTaiKhoan = sanbong.IDTaiKhoan;`;
+                AND Ngay > CURRENT_DATE;`
   db.query(sql, (err, data) => {
     res.json(data);
   });
@@ -239,7 +259,7 @@ app.post("/getLoaiSanByID", (req, res) => {
   });
 });
 app.post("/getAllKhungGio", (req, res) => {
-  const sql = "SELECT * FROM khunggio";
+  const sql = "SELECT * FROM khunggio order by IDKhungGio ASC";
   db.query(sql, (err, data) => {
     res.json(data);
   });
@@ -258,8 +278,14 @@ app.post("/getBusyHoaDonsByNgayKGTKTTSan", (req, res) => {
     res.json(data);
   });
 });
+app.post("/getHoaDonsByNgayKGIDSan", (req, res) => {
+  const sql = "SELECT * FROM hoadon, sanbong where hoadon.Ngay = ? and hoadon.IDKhungGio = ? and hoadon.IDSan = sanbong.IDSan and hoadon.IDSan = ? and sanbong.TrangThai = 0";
+  db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDSan], (err, data) => {
+    res.json(data);
+  });
+});
 app.post("/getHoaDonsByNgayKGTKTTSanIDSan", (req, res) => {
-  const sql = "SELECT * FROM hoadon, sanbong where hoadon.IDSan = sanbong.IDSan and hoadon.Ngay = ? and hoadon.IDKhungGio = ? and sanbong.TrangThai = 0 and sanbong.IDTaiKhoan = ? and sanbong.IDSan = ?";
+  const sql = "SELECT *, hoadon.TrangThai FROM hoadon, sanbong where hoadon.IDSan = sanbong.IDSan and hoadon.Ngay = ? and hoadon.IDKhungGio = ? and sanbong.TrangThai = 0 and sanbong.IDTaiKhoan = ? and hoadon.IDSan = ?";
   db.query(sql, [req.body.Ngay, req.body.IDKhungGio, req.body.IDTaiKhoan, req.body.IDSan], (err, data) => {
     res.json(data);
   });
@@ -336,12 +362,11 @@ app.post("/updateDoiThuInBill",(req,res)=>{
   const sql=`UPDATE hoadon SET IDDoiThu = ? WHERE hoadon.IDHoaDon = ?`;
   db.query(sql,[req.body.IDDoiThu,req.body.IDHoaDon],(err,data) =>{
     res.json(data);
-
   })
 })
 
 app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
-  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ?`;
+  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ? and TrangThai = 'Completed'`;
   // console.log(req.body.IDTaiKhoan+"   "+ req.body.GiaoHuu)
   db.query(sql,[req.body.IDTaiKhoan, req.body.GiaoHuu],(err,data) =>{
     // console.log(data);
@@ -350,7 +375,7 @@ app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
   })
 })
 
-app.post("/getPersonalBillByIdTK",(req,res)=>{
+app.post("/getAllBillByIdTk",(req,res)=>{
   const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
   // console.log(req.body.IDTaiKhoan)
   db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
