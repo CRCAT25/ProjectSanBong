@@ -590,7 +590,7 @@ app.post("/enableacc", async (req, res) => {
   });
 });
 
-app.post("/showdon",(req,res) => {
+app.post("/showdonhhoanthanh",(req,res) => {
   const sql = `SELECT hoadon.IDHoaDon, tk1.Ten, tk1.SoDienThoai, tk2.Ten AS CoSo,
    tk2.DiaChiCoSo, sanbong.TenSan AS MaSan, DATE_FORMAT(hoadon.Ngay, '%d/%m/%Y') AS Ngay 
    FROM hoadon JOIN taikhoan AS tk1 ON tk1.IDTaiKhoan = hoadon.IDTaiKhoan JOIN sanbong ON sanbong.IDSan = hoadon.IDSan JOIN taikhoan AS tk2 ON tk2.IDTaiKhoan = sanbong.IDTaiKhoan 
