@@ -16,12 +16,12 @@ const LichGiaoHuu = () =>{
   const [getIdDoiThu, setIDDoiThu] = useState([]);
   const idUser= localStorage.getItem("userID")
 
-  useEffect(async () => {
-    await GetAllLichGiaoHuu()
+  useEffect( () => {
+     GetAllLichGiaoHuu()
   }, []);
 
-  const conFirmClicked=(IdBill,idTk)=>{
-    console.log("lmao:"+idUser)
+  const conFirmClicked=(IdBill,idTk,idNgdat)=>{
+    
     Swal.fire({
       title: "Bạn có muốn tham gia vào trận đấu này ?",
       icon: "question",
@@ -31,9 +31,9 @@ const LichGiaoHuu = () =>{
       confirmButtonText: "Đồng ý, tôi tham gia!",
       cancelButtonText:"Hủy"
       
-    }).then((result) => {
+    }).then((result)  => {
       if (result.isConfirmed) {
-        if(idTk == idUser)
+        if(idTk == idNgdat)
         {
           Swal.fire({
             title:"Thất bại",
@@ -42,12 +42,16 @@ const LichGiaoHuu = () =>{
           });
         }
         else{
+          console.log("lmao:"+IdBill)
+          console.log("lmao:"+idTk)
+          console.log("lmao:"+idNgdat)
+          ThamGiaGiaoHuu(idTk,IdBill);
+
           Swal.fire({
             title:"Thành công",
             text: "Bạn có thể xem thông tin trận tại lịch sử",
             icon: "success",
           });
-          ThamGiaGiaoHuu(IdBill,idTk);
           GetAllLichGiaoHuu();
         }
       }
@@ -79,6 +83,7 @@ const LichGiaoHuu = () =>{
         
       const valueOfLich = {
         NgDat: nguoiDat.Ten,
+        IdNgDat:nguoiDat.IdAccount,
         IdHD: hoaDon.IDHoaDon,
         LienHe: nguoiDat.SoDienThoai,
         CoSo: sanBong.TaiKhoan.Ten,
@@ -91,10 +96,6 @@ const LichGiaoHuu = () =>{
     }
     setLichs(allLichs)
   }  
-
-  useEffect(() => {
-    console.log(getLichs)
-  }, [getLichs]);
 
   const ThamGiaGiaoHuu = async (IdBill,IdTK) =>{
     await updateBillDoiThuByIdBill(IdBill,IdTK)
@@ -118,13 +119,14 @@ const LichGiaoHuu = () =>{
             <div key={i} className="mt-3 rounded-[10px] grid grid-cols-7 bg-[#379E13] w-[100%] text-center justify-center py-5 text-[#fff] text-[20px]" >
             <div className="col-span-1 px-5 flex flex-col justify-center">{data.NgDat}</div>
             <div className="hidden">{data.IdHD}</div>
+            <div className="hidden">{data.IdNgDat}</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">{data.LienHe}</div>
             <div class="col-span-2 px-5 flex flex-col justify-center">{data.CoSo}<br/>{data.DiaChi}</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">{data.TenSan}</div>
             <div class="col-span-1 px-5 flex flex-col justify-center">{data.Ngay}<br/>{data.KhungGio}</div>
             <div className="relative">
               <button class="col-span-1 px-5 bg-[#FFEB37] rounded-[15px] w-[150px] h-[60px] justify-center text-[#000] my-3 font-bold" 
-              onClick={() => conFirmClicked(data.IDBill,2)}>Tham gia</button>
+              onClick={() => conFirmClicked(data.IdHD,idUser,data.IdNgDat)}>Tham gia</button>
             </div>
             </div>  
           )): 

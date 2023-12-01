@@ -41,6 +41,9 @@ const FormLichSu = () => {
       list = await GetAllBillByIDTk(idTK)
       // console.log("need"+list)
     }
+    else if(selected == 1){
+     list = await GetPersonalLichFromBillByIdTK(idTK,selected)
+    }
     else{
       list = await GetPersonalLichFromBillByIdTK(idTK,selected)
     }
@@ -56,7 +59,6 @@ const FormLichSu = () => {
     loadLich(getSelectedList, getSelectedBtn);
       },[getSelectedList])
       
-
   const dateFormatter  = (date) =>{
     let time = new Date(date)
     const formattedDate = time.toLocaleDateString("vi-VN", {
@@ -107,14 +109,22 @@ const FormLichSu = () => {
   }
   
   const hienInfoHoaDon = async(idHD)=>{
-
       let list = await GetBillById(idHD)
       let hoaDon = await list[0]
-      let taiKhoan = await list[0].TaiKhoan
-      let sanBong = await list[0].SanBong
-      let khungGio = await list[0].KhungGio
-      let date = dateFormatter (hoaDon.Ngay)
-      let doiThu = await list[0].DoiThu
+      console.log(hoaDon)
+      let taiKhoan = await hoaDon.TaiKhoan;
+      let sanBong = await hoaDon.SanBong;
+      let khungGio = await hoaDon.KhungGio;
+      let date = dateFormatter (hoaDon.Ngay);
+      let doiThu = await hoaDon.DoiThu;
+      let khac=""
+      if(hoaDon.GiaoHuu==='1' && doiThu !="")
+      {
+        khac=doiThu.TaiKhoan.Ten
+      }
+      else{
+        khac="Cho phép tham gia giao hữu"
+      }
       
       const valueOfHoaDon = {
         TenKH : taiKhoan.Ten,
@@ -126,7 +136,7 @@ const FormLichSu = () => {
         SDTSan: sanBong.TaiKhoan.SoDienThoai, 
         MaSan : sanBong.TenSan, 
         LoaiSan : sanBong.LoaiSan.TenLoaiSan, 
-        GiaoHuu : hoaDon.GiaoHuu, 
+        GiaoHuu : khac, 
         TongTien : hoaDon.TongTien,
       }
       setValueForHoaDon(valueOfHoaDon)
@@ -157,7 +167,7 @@ const FormLichSu = () => {
       let doiThu = await data.DoiThu
       let tenDoiThu
       doiThu == null ? tenDoiThu = "Không có" :tenDoiThu = doiThu.Ten
-      console.log(hoaDon)
+      // console.log(hoaDon)
       lichholder.current.innerHTML+=`
       <div class='lich w-[auto] bg-[#9BCE89] h-[auto] p-[10px] m-[10px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
       <img src="./assets/${sanBong.TaiKhoan.Anh}" alt="" class='w-[150px] h-[150px] col-span-1 rounded-[15px]' />
@@ -207,7 +217,7 @@ const FormLichSu = () => {
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] mx-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]'
         onClick={()=> loadSelectedLich(1)}> Trận giao hữu</div>
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' 
-        onClick={()=> loadSelectedLich(2)}> Đã tham gia</div>
+        onClick={()=> loadSelectedLich(2)}> Đã hoàn thành</div>
       </div>
       <div ref={lichholder} id= 'lich'className='bg-[#D9D9D9] w-[90%] h-[620px] mx-auto py-[15px] rounded-[15px] flex flex-col align-middle overflow-y-visible overflow-x-hidden overflow-scroll'> 
         {/* {gotPersonalInfo === true ? async ()=> {               

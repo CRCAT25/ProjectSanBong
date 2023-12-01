@@ -14,9 +14,10 @@ const GetBillById = async (idBill) =>{
     return list[0];
 }
 
-const updateBillDoiThuByIdBill = async (idBill,idDoiThu) =>{
+const updateBillDoiThuByIdBill = async (idDoiThu,idBill) =>{
     const bill = new HoaDon()
-    bill.UpdateBillDoiThuByIdBill(idBill,idDoiThu);
+    console.log(idBill+""+idDoiThu)
+    bill.UpdateBillDoiThuByIdBill(idDoiThu,idBill);
     getAllLichGiaoHuu()
 }
 

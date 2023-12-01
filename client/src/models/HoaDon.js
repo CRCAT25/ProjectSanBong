@@ -174,7 +174,7 @@ class HoaDon{
     getAllBillByIdTk(IDTaiKhoan)
     {
         // console.log(IDTaiKhoan+"   "+ GiaoHuu)
-        return axios.post("http://localhost:8081/getPersonalBillByIdTK",{IDTaiKhoan})
+        return axios.post("http://localhost:8081/getAllBillByIdTk",{IDTaiKhoan})
         .then(response => {
             // console.log(response.data)
             const list = this.initBill(response.data);               

@@ -328,12 +328,11 @@ app.post("/updateDoiThuInBill",(req,res)=>{
   const sql=`UPDATE hoadon SET IDDoiThu = ? WHERE hoadon.IDHoaDon = ?`;
   db.query(sql,[req.body.IDDoiThu,req.body.IDHoaDon],(err,data) =>{
     res.json(data);
-
   })
 })
 
 app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
-  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ?`;
+  const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ? and TrangThai = 'Completed'`;
   // console.log(req.body.IDTaiKhoan+"   "+ req.body.GiaoHuu)
   db.query(sql,[req.body.IDTaiKhoan, req.body.GiaoHuu],(err,data) =>{
     // console.log(data);
@@ -342,7 +341,7 @@ app.post("/getPersonalLichFromBillByIdTK",(req,res)=>{
   })
 })
 
-app.post("/getPersonalBillByIdTK",(req,res)=>{
+app.post("/getAllBillByIdTk",(req,res)=>{
   const sql=`SELECT * FROM hoadon WHERE IDTaiKhoan= ?`;
   // console.log(req.body.IDTaiKhoan)
   db.query(sql,[req.body.IDTaiKhoan],(err,data) =>{
