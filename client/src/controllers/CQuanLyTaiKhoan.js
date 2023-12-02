@@ -74,16 +74,18 @@ const CGetAllPlayer = async () =>{
 const CGetAllAdmin = async () =>{
    let account = new Account();
    let result = await account.GetAllAdmin()
-   console.log(result)
-
    return result
 }
 
 const CGetAllBillComplete = async () =>{
    let hoadon = new HoaDon();
    let result = await hoadon.GetAllBillComplete()
-   console.log(result)
+   return result
+}
 
+const CSearchHoaDonByDateAdmin = async (search, date) =>{
+   let hoadon = new HoaDon();
+   let result = await hoadon.SearchHoaDonByDateAdmin(search, date)
    return result
 }
 
@@ -99,4 +101,5 @@ const CGetAllBillComplete = async () =>{
    CGetAllPlayer,
    CGetAllAdmin,
    CGetAllBillComplete,
+   CSearchHoaDonByDateAdmin,
 }

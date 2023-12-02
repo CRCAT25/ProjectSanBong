@@ -563,8 +563,14 @@ app.post("/showimgcoso", (req, res) => {
 
 
 app.post("/addtk", (req, res) => {
+  let anh = "";
+  if(req.body.idphanquyen=== 2){
+    anh = "coso1.jpg"
+  } else {
+    anh = "unknow.jpg"
+  }
   const insertSql =
-"INSERT INTO taikhoan (IDPhanQuyen, Ten, Email, SoDienThoai, DiaChiCoSo, NganHang, STK, MatKhau) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+"INSERT INTO taikhoan (IDPhanQuyen, Ten, Email, SoDienThoai, DiaChiCoSo, NganHang, STK, Anh, MatKhau) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 db.query(
   insertSql,
   [
@@ -575,6 +581,7 @@ db.query(
     req.body.diachics,
     req.body.nganhangcs,
     req.body.stkcs,
+    anh,
     req.body.matkhau,
   ],
   (insertErr, insertResult) => {
@@ -626,6 +633,32 @@ app.post("/getallbillcomplete",(req,res) => {
     res.json(data);
   });
 })
+
+app.post("/searchemailsdthdadmin", (req, res) => {
+  const sql = `SELECT * from hoadon JOIN sanbong ON sanbong.IDSan = hoadon.IDSan JOIN taikhoan ON sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan WHERE (taikhoan.Email = ? 
+  OR taikhoan.SoDienThoai = ?) AND hoadon.Ngay = ?`;
+  const sqlnull = `SELECT * from hoadon JOIN sanbong ON sanbong.IDSan = hoadon.IDSan JOIN taikhoan ON sanbong.IDTaiKhoan = taikhoan.IDTaiKhoan WHERE hoadon.Ngay = ?`;
+  if(req.body.search !== ""){
+    db.query(sql, [req.body.search ,req.body.search, req.body.date], (err, data) => {
+      if (err) return res.json("Error");
+      if (data.length > 0) {
+        res.json(data);
+      }else {
+        res.json(data)
+      }
+    });
+  } else {
+    db.query(sqlnull, [req.body.date], (err, data) => {
+      if (err) return res.json("Error");
+      if (data.length > 0) {
+        res.json(data);
+      }else {
+        res.json(data)
+      }
+    });
+  }
+});
+
 
 
 

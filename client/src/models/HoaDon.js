@@ -235,7 +235,17 @@ class HoaDon{
         return axios.post("http://localhost:8081/getallbillcomplete", {})
             .then(response => {
                 const list = this.initBill(response.data);    
-                console.log(list)
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    SearchHoaDonByDateAdmin(search, date) {
+        return axios.post("http://localhost:8081/searchemailsdthdadmin", {search, date})
+            .then(response => {
+                const list = this.initBill(response.data);    
                 return list;
             })
             .catch(error => {

@@ -1366,6 +1366,19 @@ th {
     z-index: 1;
 
 }
+
+.ipstk {
+    appearance: none;
+    -moz-appearance: textfield; /* Firefox */
+  }
+  
+  /* Hide arrows in WebKit browsers (e.g., Chrome, Safari) */
+  .ipstk::-webkit-inner-spin-button,
+  .ipstk::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
 .ipsonha {
     padding: 10px;
     margin-top: -5px;

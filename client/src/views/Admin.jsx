@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import "../css/Admintest.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass, faUser, faUserShield, faUserTie, faChartColumn, faArrowRightFromBracket, faXmark, faCheck, faClipboardCheck, faPiggyBank } from "@fortawesome/free-solid-svg-icons"
-import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo, CSearchEmailSdt, CDisableAcc, CEnableAcc, CGetAllPlayer, CGetAllAdmin, CGetAllBillComplete } from "../controllers/CQuanLyTaiKhoan";
+import { getAllCoSo, CThemTaiKhoan, ShowImgCoSo, CSearchEmailSdt, CDisableAcc, CEnableAcc, CGetAllPlayer, CGetAllAdmin, CGetAllBillComplete, CSearchHoaDonByDateAdmin } from "../controllers/CQuanLyTaiKhoan";
 import axios from "axios";
 import { VietQR } from 'vietqr';
 import Swal from 'sweetalert2';
@@ -17,7 +17,7 @@ const generateDaysArray = (year, month) => {
 const Admin = () => {
 
   const [activeTab, setActiveTab] = useState('khachhang');
-  const [listtenmenu, setListtenmenu] = useState([]);
+  const [checklogin, setCheckLogin] = useState(false);
   const [listCoso, setListCoso] = useState([]);
   const [listPlayer, setlistPlayer] = useState([]);
   const [listAdmin, setlistAdmin] = useState([]);
@@ -48,12 +48,13 @@ const Admin = () => {
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalPriceAfter, setTotalPriceAfter] = useState(0);
   const [selectedMonth, setSelectedMonth] = useState("all");
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()+"");
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear() + "");
   const [selectedDay, setSelectedDay] = useState("all");
 
   const [chart, setchart] = useState([]);
   const [rerunchart, setrerunchart] = useState(true);
   const [searchhdbydate, setsearchhdbydate] = useState('');
+
 
 
 
@@ -103,7 +104,7 @@ const Admin = () => {
     datasets: [
       {
         backgroundColor: barColors,
-        data: yValues, // Change this to monthlyRevenue
+        data: yValues,
       },
     ],
   });
@@ -118,7 +119,7 @@ const Admin = () => {
 
       new Chart(ctx, {
         type: "bar",
-        data: chartData, // Use the chartData state here
+        data: chartData,
         options: {
           plugins: {
             legend: { display: false },
@@ -153,26 +154,80 @@ const Admin = () => {
 
     return data.filter((item) => {
       const TimeInsertMonth = new Date(item.Ngay).getMonth() + 1;
-      console.log(TimeInsertMonth)
       return TimeInsertMonth.toString() === month;
     });
   };
 
   const filterDataByDay = (data, day) => {
-    console.log(data,day)
-
     if (day === "all") {
       return data;
     }
 
     return data.filter((item) => {
-      const TimeInsertDay = new Date(item.Ngay).getDay() + 1;
-      console.log(TimeInsertDay)
-      console.log(item.Ngay)
+      const TimeInsertDay = new Date(item.Ngay).getDate();
       return TimeInsertDay.toString() === day;
     });
   };
 
+  useEffect(() => {
+    const filteredDataByYear = filterDataByYear(
+      listBill,
+      selectedYear
+    );
+    const filteredDataByMonth = filterDataByMonth(
+      filteredDataByYear,
+      selectedMonth
+    );
+    const filterdDataByDay = filterDataByDay(
+      filteredDataByMonth,
+      selectedDay
+    );
+
+    const yearlyRevenue = Array.from({ length: 12 }, () => 0);
+
+    filteredDataByYear.forEach((order) => {
+      const TimeInsertMonth = new Date(order.Ngay).getMonth();
+      yearlyRevenue[TimeInsertMonth] += order.TongTien;
+    });
+
+    setTotalOrders(filterdDataByDay.length);
+    setTotalPriceAfter(
+      filterdDataByDay.reduce((acc, order) => acc + order.TongTien, 0)
+    );
+
+    if (rerunchart == true) {
+      setChartData({
+        labels: xValues,
+        datasets: [
+          {
+            backgroundColor: barColors,
+            data: yearlyRevenue,
+          },
+        ],
+      });
+      setTimeout(() => {
+        setrerunchart(false)
+      }, 600);
+
+    }
+    setlistBill(filterdDataByDay);
+
+  }, [chart]);
+
+
+  const dateFormatter = (date) => {
+    let time = new Date(date)
+    const formattedDate = time.toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+    return formattedDate
+  }
+
+  useEffect(() => {
+    showAllBillComplete()
+  }, [selectedDay, selectedMonth, selectedYear])
 
   //
 
@@ -195,6 +250,7 @@ const Admin = () => {
   // };
 
   useEffect(() => {
+    checkloginadmin();
     showAllCoSo();
     showAllPlayer();
     showAllAdmin();
@@ -203,6 +259,17 @@ const Admin = () => {
     getNganHang();
   }, []);
 
+  const checkloginadmin=() =>{
+    if(localStorage.getItem("userID") === "" || localStorage.getItem("userRole") !== "3" ){
+      setCheckLogin(true);
+      Swal.fire({
+        icon: 'error',
+        text: 'Không đủ thẩm quyền để truy cập',
+      }).then(() => {
+        window.location.href="http://localhost:3000"
+      });
+    }
+}
   const openTab = (tab, index, idpq) => {
     setActiveTab(tab);
     changeclassname(index);
@@ -409,81 +476,25 @@ const Admin = () => {
 
       allBills.push(valueOfHoaDon);
     }
-
-    setlistBill(allBills);
     setchart(allBills);
+    setlistBill(allBills);
+
   };
 
 
-  useEffect(() => {
-    // const showBillByMonth = ()=>{
-    const filteredDataByYear = filterDataByYear(
-      listBill,
-      selectedYear
-    );
-    const filteredDataByMonth = filterDataByMonth(
-      filteredDataByYear,
-      selectedMonth
-    );
-    const filterdDataByDay = filterDataByDay(
-      filteredDataByMonth,
-      selectedDay
-    );
-
-    const yearlyRevenue = Array.from({ length: 12 }, () => 0);
-
-    filteredDataByYear.forEach((order) => {
-      const TimeInsertMonth = new Date(order.Ngay).getMonth();
-      yearlyRevenue[TimeInsertMonth] += order.TongTien;
-    });
-
-    setTotalOrders(filterdDataByDay.length);
-    setTotalPriceAfter(
-      filteredDataByMonth.reduce((acc, order) => acc + order.TongTien, 0)
-    );
-
-    if (rerunchart == true) {
-      setChartData({
-        labels: xValues,
-        datasets: [
-          {
-            backgroundColor: barColors,
-            data: yearlyRevenue,
-          },
-        ],
-      });
-      setTimeout(() => {
-        setrerunchart(false)
-      }, 600);
-
-    }
-    setlistBill(filterdDataByDay);
-    // }
-
-  }, [chart]);
-
-
-  const dateFormatter = (date) => {
-    let time = new Date(date)
-    const formattedDate = time.toLocaleDateString("vi-VN", {
-      day: "2-digit",   // Two-digit day of the month (e.g., "01")
-      month: "2-digit", // Two-digit month (e.g., "10")
-      year: "numeric",  // Full year (e.g., "2023")
-    });
-    return formattedDate
-  }
 
   const formatCurrency = (value) => {
     return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   };
 
-  function test() {
-    alert(idphanquyen)
+  function logout() {
+    localStorage.clear();
+    window.location.href="http://localhost:3000"
   }
 
   const CheckInput = async (index) => {
     const checkaccount = ["idphanquyen", "ten", "email", "sdt", "matkhau"];
-    const checkcoso = index === 2 ? [...checkaccount, "tinh", "quan", "phuong", "nganhangcs", "stkcs"] : checkaccount;
+    const checkcoso = index === 2 ? [...checkaccount, "duong", "tinh", "quan", "phuong", "nganhangcs", "stkcs"] : checkaccount;
 
     const checkfail = checkcoso.find(value => eval(value) === "");
 
@@ -665,12 +676,55 @@ const Admin = () => {
     e.target.value = sanitizedValue;
   };
 
-  useEffect(() => {
-    showAllBillComplete()
-  }, [selectedDay,selectedMonth, selectedYear])
+  const SearchHoaDonByDateAdmin = async () => {
+    if (selectedMonth !== "all" && selectedDay !== "all") {
+      let stringdate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+        let result = await CSearchHoaDonByDateAdmin(searchhdbydate, stringdate)
+        if (result.length > 0) {
+          console.log(result.length)
+          const searchBill = [];
+
+          for (let i = 0; i < result.length; i++) {
+            let hoaDon = result[i];
+            let sanBong = await hoaDon.SanBong;
+            let dateFM = dateFormatter(hoaDon.Ngay);
+            let date = hoaDon.Ngay;
+
+            let tongTien = hoaDon.TongTien * 0.1;
+
+            const valueOfHoaDon = {
+              IdHD: hoaDon.IDHoaDon,
+              NgayFM: dateFM,
+              Ngay: date,
+              Ten: sanBong.TaiKhoan.Ten,
+              EmailCoSo: sanBong.TaiKhoan.Email,
+              SdtCoSo: sanBong.TaiKhoan.SoDienThoai,
+              TongTien: tongTien,
+            };
+            searchBill.push(valueOfHoaDon);
+          }
+          setchart(searchBill);
+          setlistBill(searchBill);
+        }
+        else {
+          Swal.fire('Không có hóa đơn muốn tìm')
+        }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        text: 'Vui lòng chọn đủ ngày, tháng năm',
+      });
+    }
+  }
+
+
 
   return (
     <div>
+    {checklogin ? (
+      <div className="bg-[black]"></div>
+    ) : (
+      <div>
       <div className="w-[300px] h-[96px]  fixed  top-0 bg-white">
         <div className=" item-center justify-center w-full">
           <div className=" gap-3 justify-center bg-[#E2EDFF] h-[570px]">
@@ -679,7 +733,7 @@ const Admin = () => {
             <button id="tablink" className={`tablink ${activeTab === 'coso' ? 'active' : ''}`} data-electronic="coso" onClick={() => openTab('coso', 1, 2)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserTie} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-40px"} color={"black"} />Partner</div></button>
             <button id="tablink" className={`tablink ${activeTab === 'admin' ? 'active' : ''}`} data-electronic="admin" onClick={() => openTab('admin', 2, 3)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faUserShield} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-65px"} color={"black"} />Admin</div></button>
             <button id="tablink" className={`tablink ${activeTab === 'baocao' ? 'active' : ''}`} data-electronic="baocao" onClick={() => openTab('baocao', 3, 0)}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faChartColumn} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-46px"} color={"black"} />Báo cáo</div></button>
-            <button id="logout" onClick={test}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faArrowRightFromBracket} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} />Đăng xuất</div></button>
+            <button id="logout" onClick={logout}><div id="tenmenu" className="tenmenu"><Iconpx classIcon={faArrowRightFromBracket} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} />Đăng xuất</div></button>
           </div>
         </div>
       </div>
@@ -847,7 +901,7 @@ const Admin = () => {
                   </div>
                   <div className="col-span-2 flex justify-between">
                     <div className="text-[20px] translate-x-[5px] ">Số tài khoản:</div>
-                    <input type="text" class="ipstk" onChange={e => setstkcs(e.target.value)}></input>
+                    <input type="number" class="ipstk" onChange={e => setstkcs(e.target.value)}></input>
                   </div>
                 </div>
 
@@ -1037,38 +1091,6 @@ const Admin = () => {
 
 
                 <div className="w-full col-span-3">
-                  {/* <select
-            className="w-[87%] h-[40px] border-[1px]  border-[black] "
-            value={selectedYear}
-            onChange={e => {
-              setSelectedYear(e.target.value);
-              setrerunchart(true);
-            }}>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-          </select>                  
-            <select className="w-[87%] h-[40px] border-[1px] mt-[30px] border-[black] "value={selectedMonth}onChange={(e) => setSelectedMonth(e.target.value)}>
-            <option value="1">Tháng 1</option>
-            <option value="2">Tháng 2</option>
-            <option value="3">Tháng 3</option>
-            <option value="4">Tháng 4</option>
-            <option value="5">Tháng 5</option>
-            <option value="6">Tháng 6</option>
-            <option value="7">Tháng 7</option>
-            <option value="8">Tháng 8</option>
-            <option value="9">Tháng 9</option>
-            <option value="10">Tháng 10</option>
-            <option value="11">Tháng 11</option>
-            <option value="12">Tháng 12</option>
-            <option value="all">Cả năm</option>
-          </select>
-          <select className="w-[87%] h-[40px] border-[1px] mt-[30px] border-[black] "value={selectedMonth}onChange={(e) => setSelectedMonth(e.target.value)}>
-            <option value="1">Ngày 1</option>
-            <option value="2">Ngày 2</option>
-            <option value="3">Ngày 3</option>
-            <option value="all">Chọn ngày</option>
-          </select> */}
                   <select
                     className="w-[87%] h-[40px] border-[1px] border-[black]"
                     value={selectedYear}
@@ -1127,11 +1149,11 @@ const Admin = () => {
                     <div className="col-span-3 ml-[70px] mt-[5px]" ><Iconpx classIcon={faPiggyBank} width={"25px"} height={"25px"} marginRight={"0px"} marginLeft={"0px"} color={"black"} /></div>
                     <div className="col-span-9 ml-[20px] mt-[5px]">Doanh thu: {formatCurrency(totalPriceAfter)}</div>
                   </div>
-                    <h3 className="mt-[30px] ml-[30px] text-[19px]">Tìm email hoặc số điện thoại:</h3>
+                  <h3 className="mt-[30px] ml-[30px] text-[19px]">Tìm email hoặc số điện thoại:</h3>
                   <div className="col-span-1 flex mt-[10px]">
-                    <input type="text" className="w-[87%] h-[40px] text-center border-[1px] grid grid-cols-12 border-[black]" id="rssearch" placeholder="" onChange={e => setstringsearch(e.target.value)}></input>
-                    <div className="ml-[-12px] mt-[8px] hover:cursor-pointer" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>
-                    </div>
+                    <input type="text" className="w-[87%] h-[40px] text-center border-[1px] grid grid-cols-12 border-[black]" id="rssearch" placeholder="" onChange={e => setsearchhdbydate(e.target.value)}></input>
+                    <div className="ml-[-12px] mt-[8px] hover:cursor-pointer" onClick={SearchHoaDonByDateAdmin}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1161,7 +1183,7 @@ const Admin = () => {
 
               </div>
             ) : (
-              <p>No bill.</p>
+              <p className=" mt-[7%] grid justify-items-center">No Bill</p>
             )
             }
           </div>
@@ -1172,6 +1194,9 @@ const Admin = () => {
 
 
 
+    </div>
+    )
+    }
     </div>
   )
 }
