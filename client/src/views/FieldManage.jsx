@@ -9,9 +9,11 @@ import {
   faChevronLeft,
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
-import { 
-  useEffect, useState 
-} from "react";
+import React, {
+  useState,
+   useEffect, 
+  } from "react";
+
 import { 
   getCostByShiftnTypeField, 
   getLoaiSanByIdField, 
@@ -29,13 +31,24 @@ import {
   getLoaiSanByID,
   getAnhsByIDSan,
   deleteSanByID,
-  getAllKhungGio
+  getAllKhungGio,
+  getAllBillCompleteByCoso
 } from "../controllers/CQuanLySan";
 import Swal from 'sweetalert2'
 import { 
   GetBillById
 } from "../controllers/CQuanLyLich";
+import Chart from "chart.js/auto";
+import {searchHoaDonByDateCoso } from "../controllers/CQuanLySan";
+import { faMagnifyingGlass,faXmark, faCheck,faClipboardCheck, faPiggyBank } from "@fortawesome/free-solid-svg-icons"
 
+
+
+
+const generateDaysArray = (year, month) => {
+  const daysInMonth = new Date(year, month, 0).getDate();
+  return Array.from({ length: daysInMonth }, (_, index) => index + 1);
+};
 
 const FieldManage =  () => {
   useEffect(() => {
@@ -50,7 +63,7 @@ const FieldManage =  () => {
   
   const [tongTienText, setTongTienText] = useState(null);
   const [showHoaDon, setShowHoaDon] = useState(false)
-  let idTK = "7"
+  let idTK = localStorage.getItem("userID")
   const Swal = require('sweetalert2')
   const [getLoaiSans, setLoaiSans] = useState([]);
   let IDLichSan = null
@@ -58,6 +71,7 @@ const FieldManage =  () => {
   let IDSan = null
   const [getIDSan, setIDSan] = useState(null);
   const [getBillForRefund, setBillForRefund] = useState([]);
+  const [listBill, setlistBill] = useState([]);
 
 
   const ShowHD = async()=>{
@@ -780,6 +794,291 @@ const updateLichSan = async() => {
     console.log(await getBillForRefund(1));
   }
 
+   //Doanh thu
+   const [totalOrders, setTotalOrders] = useState(0);
+   const [totalPriceAfter, setTotalPriceAfter] = useState(0);
+   const [selectedMonth, setSelectedMonth] = useState("all");
+   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear() + "");
+   const [selectedDay, setSelectedDay] = useState("all");
+ 
+   const [chart, setchart] = useState([]);
+   const [rerunchart, setrerunchart] = useState(true);
+   const [searchhdbydate, setsearchhdbydate] = useState('');
+ 
+ 
+ 
+ 
+   const [years, setYears] = useState([]);
+ 
+   useEffect(() => {
+     const currentYear = new Date().getFullYear();
+     const yearsArray = Array.from({ length: 4 }, (_, index) => currentYear - index);
+     setYears(yearsArray);
+   }, []);
+ 
+   const monthsArray = Array.from({ length: 12 }, (_, index) => index + 1);
+   const daysArray = generateDaysArray(Number(selectedYear), Number(selectedMonth));
+ 
+   const xValues = [
+     "Tháng 1",
+     "Tháng 2",
+     "Tháng 3",
+     "Tháng 4",
+     "Tháng 5",
+     "Tháng 6",
+     "Tháng 7",
+     "Tháng 8",
+     "Tháng 9",
+     "Tháng 10",
+     "Tháng 11",
+     "Tháng 12",
+   ];
+   const yValues = [];
+   const barColors = [
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+     "#4FC3F7",
+   ];
+ 
+   const [chartData, setChartData] = useState({
+     labels: xValues,
+     datasets: [
+       {
+         backgroundColor: barColors,
+         data: yValues,
+       },
+     ],
+   });
+ 
+   useEffect(() => {
+     const ctx = document.getElementById("myChart");
+     if (ctx) {
+       const existingChart = Chart.getChart(ctx);
+       if (existingChart) {
+         existingChart.destroy();
+       }
+ 
+       new Chart(ctx, {
+         type: "bar",
+         data: chartData,
+         options: {
+           plugins: {
+             legend: { display: false },
+             title: {
+               display: true,
+             },
+           },
+         },
+       });
+     }
+   }, [chartData]);
+ 
+   useEffect(() => {
+ 
+   }, []);
+ 
+   const filterDataByYear = (data, year) => {
+     if (year === "all") {
+       return data;
+     }
+ 
+     return data.filter((item) => {
+       const TimeInsertYear = new Date(item.Ngay).getFullYear();
+       return TimeInsertYear.toString() === year;
+     });
+   };
+ 
+   const filterDataByMonth = (data, month) => {
+     if (month === "all") {
+       return data;
+     }
+ 
+     return data.filter((item) => {
+       const TimeInsertMonth = new Date(item.Ngay).getMonth() + 1;
+       return TimeInsertMonth.toString() === month;
+     });
+   };
+ 
+   const filterDataByDay = (data, day) => {
+     if (day === "all") {
+       return data;
+     }
+ 
+     return data.filter((item) => {
+       const TimeInsertDay = new Date(item.Ngay).getDate();
+       return TimeInsertDay.toString() === day;
+     });
+   };
+ 
+   useEffect(() => {
+     const filteredDataByYear = filterDataByYear(
+       listBill,
+       selectedYear
+     );
+     const filteredDataByMonth = filterDataByMonth(
+       filteredDataByYear,
+       selectedMonth
+     );
+     const filterdDataByDay = filterDataByDay(
+       filteredDataByMonth,
+       selectedDay
+     );
+ 
+     const yearlyRevenue = Array.from({ length: 12 }, () => 0);
+ 
+     filteredDataByYear.forEach((order) => {
+       const TimeInsertMonth = new Date(order.Ngay).getMonth();
+       yearlyRevenue[TimeInsertMonth] += order.TongTien;
+     });
+ 
+     setTotalOrders(filterdDataByDay.length);
+     setTotalPriceAfter(
+       filterdDataByDay.reduce((acc, order) => acc + order.TongTien, 0)
+     );
+ 
+     if (rerunchart == true) {
+       setChartData({
+         labels: xValues,
+         datasets: [
+           {
+             backgroundColor: barColors,
+             data: yearlyRevenue,
+           },
+         ],
+       });
+       setTimeout(() => {
+         setrerunchart(false)
+       }, 600);
+ 
+     }
+     setlistBill(filterdDataByDay);
+ 
+   }, [chart]);
+ 
+ 
+   const dateFormatter = (date) => {
+     let time = new Date(date)
+     const formattedDate = time.toLocaleDateString("vi-VN", {
+       day: "2-digit",
+       month: "2-digit",
+       year: "numeric",
+     });
+     return formattedDate
+   }
+ 
+   useEffect(() => {
+     showAllBillComplete()
+   }, [selectedDay, selectedMonth, selectedYear])
+ 
+
+   const showAllBillComplete = async () => {
+    const list = await getAllBillCompleteByCoso(idTK);
+
+    const allBills = [];
+
+    for (let i = 0; i < list.length; i++) {
+      let hoaDon = list[i];
+      let taikhoan = await hoaDon.TaiKhoan
+      let sanBong = await hoaDon.SanBong;
+      let khungGio = await hoaDon.KhungGio;
+      let dateFM = dateFormatter(hoaDon.Ngay);
+      let date = hoaDon.Ngay;
+
+      const valueOfHoaDon = {
+        IdHD: hoaDon.IDHoaDon,
+        NgayFM: dateFM,
+        Ngay: date,
+        Ten: taikhoan.Ten,
+        TenSan: sanBong.TenSan,
+        Email: taikhoan.Email,
+        Sdt: taikhoan.SoDienThoai,
+        KhungGio: khungGio.ThoiGian,
+        TongTien: hoaDon.TongTien,
+        GiaoHuu: hoaDon.GiaoHuu
+      };
+
+
+      allBills.push(valueOfHoaDon);
+    }
+    setchart(allBills);
+    setlistBill(allBills);
+
+  };
+
+
+
+  const formatCurrency = (value) => {
+    return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  };
+
+  const Iconpx = ({ classIcon, width, height, marginRight, marginLeft, color }) => {
+    const iconSize = {
+      width: width,
+      height: height,
+      color: color,
+      marginRight: marginRight,
+      marginLeft: marginLeft,
+
+    };
+    return (
+      <span><FontAwesomeIcon icon={classIcon} style={iconSize} /></span>
+    )
+  }
+  const SearchHoaDonByDateAdmin = async () => {
+    if (selectedMonth !== "all" && selectedDay !== "all") {
+      let stringdate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+        let result = await searchHoaDonByDateCoso( idTK, searchhdbydate, stringdate)
+        if (result.length > 0) {
+          const searchBill = [];
+
+          for (let i = 0; i < result.length; i++) {
+            let hoaDon = result[i];
+            let taikhoan = await hoaDon.TaiKhoan
+            let sanBong = await hoaDon.SanBong;
+            let khungGio = await hoaDon.KhungGio;
+            let dateFM = dateFormatter(hoaDon.Ngay);
+            let date = hoaDon.Ngay;
+      
+            const valueOfHoaDon = {
+              IdHD: hoaDon.IDHoaDon,
+              NgayFM: dateFM,
+              Ngay: date,
+              Ten: taikhoan.Ten,
+              TenSan: sanBong.TenSan,
+              Email: taikhoan.Email,
+              Sdt: taikhoan.SoDienThoai,
+              KhungGio: khungGio.ThoiGian,
+              TongTien: hoaDon.TongTien,
+              GiaoHuu: hoaDon.GiaoHuu
+            };
+            searchBill.push(valueOfHoaDon);
+          }
+          setchart(searchBill);
+          setlistBill(searchBill);
+        }
+        else {
+          Swal.fire('Không có hóa đơn muốn tìm')
+        }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        text: 'Vui lòng chọn đủ ngày, tháng năm',
+      });
+    }
+  }
+
+
+   //Doanh thu
+
   return (
     
     <div className="landing-fAj" id="257:562">
@@ -1077,6 +1376,135 @@ const updateLichSan = async() => {
           </div>
         </div> */}
       </div>
+      <hr className="divideLine"/>
+      {/* Doanh Thu */}
+      <p className="main-advertise-letter-fNK  mt-[60px]" id="257:861">
+          THỐNG KÊ BÁO CÁO
+        </p>
+      <div className="w-full h-[530px] grid grid-cols-12 mt-[60px]">
+                <div className="w-full col-span-9 ml-[100px] " >
+                  <div //sơ đồ
+                    style={{
+                      width: "78%",
+                      height: "500px",
+                      border: "1px solid black",
+                    }}
+                  >
+                    <canvas
+                      id="myChart"
+                      style={{
+                        maxWidth: "100%", marginLeft: "50px", marginTop: "-10px"
+                      }} // Add maxWidth property
+                    ></canvas>
+                  </div>
+                </div>
+
+
+                <div className="w-full col-span-3 ml-[-40px]">
+                  <select
+                    className="w-[87%] h-[40px] border-[1px] mt-[40px]  border-[black]"
+                    value={selectedYear}
+                    onChange={(e) => {
+                      setSelectedYear(e.target.value);
+                      setrerunchart(true)
+                      setSelectedMonth("all");
+                      setSelectedDay("all");
+                    }}
+                  >
+                    {years.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    className="w-[87%] h-[40px] border-[1px] mt-[30px] border-[black]"
+                    value={selectedMonth}
+                    onChange={(e) => {
+                      setSelectedMonth(e.target.value);
+                      setSelectedDay("all");
+                    }}
+                  >
+                    <option value="all">
+                      Chọn tháng
+                    </option>
+                    {monthsArray.map((month) => (
+                      <option key={month} value={month}>
+                        Tháng {month}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    className="w-[87%] h-[40px] border-[1px] mt-[30px] border-[black]"
+                    value={selectedDay}
+                    onChange={(e) => setSelectedDay(e.target.value)}
+                  >
+                    <option value="all">Chọn ngày</option>
+                    {daysArray.map((day) => (
+                      <option key={day} value={day}>
+                        Ngày {day}
+                      </option>
+                    ))}
+                  </select>
+
+
+
+                  <div className="w-[87%] h-[40px] border-[1px] grid grid-cols-12 mt-[30px] border-[black] bg-white text-[18px]">
+                    <div className="col-span-3 ml-[70px] mt-[5px]" ><Iconpx classIcon={faClipboardCheck} width={"25px"} height={"25px"} marginRight={"0px"} marginLeft={"0px"} color={"black"} /></div>
+                    <div className="col-span-9 ml-[20px] mt-[5px] ">Đơn hoàn thành: {totalOrders}</div>
+                  </div>
+                  <div className="w-[87%] h-[40px] border-[1px] grid grid-cols-12 mt-[30px] border-[black] bg-white text-[18px] ">
+                    <div className="col-span-3 ml-[70px] mt-[5px]" ><Iconpx classIcon={faPiggyBank} width={"25px"} height={"25px"} marginRight={"0px"} marginLeft={"0px"} color={"black"} /></div>
+                    <div className="col-span-9 ml-[20px] mt-[5px]">Doanh thu: {formatCurrency(totalPriceAfter)}</div>
+                  </div>
+                  <h3 className="mt-[30px] ml-[75px] text-[19px]">Tìm email hoặc số điện thoại:</h3>
+                  <div className="col-span-1 flex mt-[10px]">
+                    <input type="text" className="w-[87%] h-[40px] text-center border-[1px] grid grid-cols-12 border-[black]" id="rssearch" placeholder="" onChange={e => setsearchhdbydate(e.target.value)}></input>
+                    <div className="ml-[-12px] mt-[8px] hover:cursor-pointer" onClick={SearchHoaDonByDateAdmin}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>
+                  </div>
+                </div>
+      </div>
+      <div className="w-full grid grid-cols-12 bg-[#256eb3] h-[60px] font-bold pr-[10px]">
+            <div className="col-span-2 text-[white] text-center pt-[17px]">Họ tên</div>
+            <div className="col-span-2 text-[white] text-center pt-[17px]">Số điện thoại</div>
+            <div className="col-span-1 text-[white] text-center pt-[17px]">Tên sân</div>
+            <div className="col-span-2 text-[white] text-center pt-[17px]">Ngày</div>
+            <div className="col-span-2 text-[white] text-center pt-[17px]">Khung giờ</div>
+            <div className="col-span-1 text-[white] text-center pt-[17px]">Giao hữu</div>
+            <div className="col-span-2 text-[white] text-center pt-[17px]">Tổng Tiền</div>
+
+          </div>
+          <div className="overflow-y-scroll h-[251px]">
+            {listBill.length > 0 ? (
+              <div className="w-full grid grid-cols-12 mt-[10px] h-[100px]">
+                {listBill.map((bill, i) => (
+                  <React.Fragment key={i}>
+                    <div className=" text-[#000000] text-center pt-[30px] hidden">{bill.IdHD}</div>
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]">{bill.Ten}</div>
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]">{bill.Sdt}</div>
+                    <div className="col-span-1 text-[#000000] text-center pt-[30px]">{bill.TenSan}</div>
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]">{bill.NgayFM}</div>
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]">{bill.KhungGio}</div>
+                    {bill.GiaoHuu == 1?(
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px]"><Iconpx classIcon={faXmark} width={"25px"} height={"25px"} marginRight={"0px"} marginLeft={"0px"} color={"red"} /></div>
+
+                    ):(
+                      <div className="col-span-1 text-[#000000] text-center pt-[30px]"><Iconpx classIcon={faCheck} width={"25px"} height={"25px"} marginRight={"0px"} marginLeft={"0px"} color={"green"} /></div>
+                    )}
+
+                    <div className="col-span-2 text-[#000000] text-center pt-[30px]">{formatCurrency(bill.TongTien)}</div>
+                  </React.Fragment>
+                ))}
+
+              </div>
+            ) : (
+              <p className=" mt-[7%] grid justify-items-center">No Bill</p>
+            )
+            }
+          </div>
+      {/* Doanh Thu */}
     </div>
   );
 };

@@ -148,6 +148,19 @@ const getCostByShiftnTypeField = async (idShift, idTField) =>{
    let typeField = await loaiSan.GetLoaiSanByID(idTField)
    return shift.GiaTien + typeField.GiaTien
 }
+
+const getAllBillCompleteByCoso = async (IDTaiKhoan) =>{
+   let hoadon = new HoaDon();
+   let result = await hoadon.GetAllBillCompleteByCoso(IDTaiKhoan)
+   return result
+}
+
+const searchHoaDonByDateCoso = async (idtaikhoan, search, date) =>{
+   let hoadon = new HoaDon();
+   let result = await hoadon.SearchHoaDonByDateCoso(idtaikhoan, search, date)
+   return result
+}
+
  export {
     getAllLoaiSan,
     onRefundHD,
@@ -167,5 +180,7 @@ const getCostByShiftnTypeField = async (idShift, idTField) =>{
     getSanByID,
     updateSanByID,
     getHoaDonsByNgayKGTKTTSanIDSan,
-    getHoaDonByNgayKHIDSan
+    getHoaDonByNgayKHIDSan,
+    getAllBillCompleteByCoso,
+    searchHoaDonByDateCoso
  }

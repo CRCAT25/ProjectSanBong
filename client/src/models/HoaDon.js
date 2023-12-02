@@ -210,7 +210,6 @@ class HoaDon{
         // console.log(IDTaiKhoan+"   "+ GiaoHuu)
         return axios.post("http://localhost:8081/getAllBillByIdTk",{IDTaiKhoan})
         .then(response => {
-            // console.log(response.data)
             const list = this.initBill(response.data);               
             return list;
         })
@@ -246,6 +245,30 @@ class HoaDon{
         return axios.post("http://localhost:8081/searchemailsdthdadmin", {search, date})
             .then(response => {
                 const list = this.initBill(response.data);    
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    GetAllBillCompleteByCoso(IDTaiKhoan) {
+        return axios.post("http://localhost:8081/getallbillcompletebycoso", {IDTaiKhoan})
+            .then(response => {
+                const list = this.initBill(response.data);    
+                return list;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    SearchHoaDonByDateCoso(idtaikhoan, search, date) {
+        return axios.post("http://localhost:8081/searchemailsdthdcoso", {idtaikhoan, search, date})
+            .then(response => {
+                console.log(response.data) 
+
+                const list = this.initBill(response.data);
                 return list;
             })
             .catch(error => {
