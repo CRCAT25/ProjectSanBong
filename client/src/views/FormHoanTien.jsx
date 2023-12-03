@@ -163,12 +163,17 @@ const formatTime = (timeInSeconds) => {
     console.log(bill)
     console.log(khachHang)
 
-    document.getElementById("idBank").value= await khachHang.NganHang
-    document.getElementById("stk").value= await khachHang.STK
     document.getElementById("tenKhach").innerHTML= await khachHang.Ten
     document.getElementById("tienHoan").innerHTML=tienHoan
-    let noiDungHoan=`Cơ sở ${sanBong.TaiKhoan.Ten} - Hoàn tiền\nTrận đấu ngày: ${dateFormatter(bill.Ngay)}\nTên sân: ${sanBong.TenSan}\nKhung giờ: ${khungGio.ThoiGian}`
-    document.getElementById("noiDung").value=noiDungHoan
+    if(await khachHang.STK){
+      document.getElementById("idBank").value= await khachHang.NganHang
+      document.getElementById("stk").value= await khachHang.STK
+    }
+    if(document.getElementById("noiDung")){
+      let noiDungHoan=`Cơ sở ${sanBong.TaiKhoan.Ten} - Hoàn tiền\nTrận đấu ngày: ${dateFormatter(bill.Ngay)}\nTên sân: ${sanBong.TenSan}\nKhung giờ: ${khungGio.ThoiGian}`
+      document.getElementById("noiDung").value=noiDungHoan
+    }
+    
     // console.log(sanBong)
     // console.log(khungGio)
     // console.log(tienHoan0
@@ -182,16 +187,16 @@ const formatTime = (timeInSeconds) => {
           <div className='text-center text-[30px] font-[600] text-[#2B790F] mb-10'>ĐẶT CỌC</div>
         </div>
         <div className='w-[91%] mx-[5%] flex justify-center'>
-          <div className='w-[100%] h-[50px] my-[5px] mr-[5px] pl-[15px] rounded-[5px] flex flex-col justify-center bg-white'>
-            Tên KH: {tenKH}
+          <div className='w-[100%] h-[50px] my-[5px] mr-[5px] pl-[15px] rounded-[5px] flex flex-col justify-center bg-white' id ='tenKhach'>
+            Tên KH: 
           </div>
         </div>
         <select id='idBank'className='w-[90%] mx-[5%] h-[50px] my-[5px] rounded-[5px]'
           onChange={(e) => {setSelectedNganHang(e.target.value);}}></select>
         <input id='stk'className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]'placeholder='Số Tài Khoản'
           onChange={(e) => setInputSTK(e.target.value)}></input>
-        <div className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]  flex flex-col justify-center bg-white'>
-          Số tiền: {tongTien}
+        <div className='w-[90%] mx-[5%] h-[50px] my-[5px] pl-[15px] rounded-[5px]  flex flex-col justify-center bg-white' id="tienHoan">
+          Số tiền:
         </div>
         <div className='w-[95%] mt-[20px] flex flex-row justify-around mx-auto '>
           <button class='bg-[#379E13] rounded-[5px] w-[45%] h-[50px]  text-[#fff]'

@@ -47,12 +47,39 @@ const FormInfoCaNhan = () => {
   const idUser= localStorage.getItem("userID")
   const role = localStorage.getItem("userRole")
 
+
+  
+
+
   const host = 'https://provinces.open-api.vn/api/';
   let stringdiachi = "";
 
+
   useEffect(() => {
-    callAPI('https://provinces.open-api.vn/api/?depth=2');
+    if(localStorage.getItem("userID") == null || localStorage.getItem("userRole") !== "1" ){
+      Checklogin();
+    } else {
+      callAPI('https://provinces.open-api.vn/api/?depth=2');
+      GetPersonalInfoByIdTK(idUser)
+    }
   }, []);
+
+  const Checklogin=() =>{
+      Swal.fire({
+        icon: 'error',
+        text: 'Không đủ thẩm quyền để truy cập',
+      }).then((result) => {
+        if(result.isConfirmed){
+          if(localStorage.getItem("userRole") === "3"){
+            window.location.href = "http://localhost:3000/admin"
+          } else{
+            window.location.href = "http://localhost:3000"
+          }
+        }
+      });
+}
+
+
   const callAPI = (api) => {
     return axios.get(api)
       .then((response) => {
@@ -184,7 +211,7 @@ const FormInfoCaNhan = () => {
   // }, [tinh, quan, phuong, duong]);
 
   useEffect(() => {
-    if (countapi <= 3 ) {
+    if (countapi <= 3) {
       // console.log('a')
       // console.log(countapi)
       setCountapi(countapi +1)
@@ -200,9 +227,7 @@ const FormInfoCaNhan = () => {
     setEffectActive(false);  
   };
 
-  useEffect(()=>{
-      GetPersonalInfoByIdTK(idUser)
-  },[])
+
   const GetPersonalInfoByIdTK= async(idTK)=>{
     if(role == 1)
     {
@@ -221,7 +246,7 @@ const FormInfoCaNhan = () => {
       document.getElementById("email").value=getEmail
       document.getElementById("sdt").value=getSDT
     }
-    else
+    else if(role === 2)
     {
       let list = await getTKCoSoByIdTK(idTK);
       console.log(list)
@@ -283,6 +308,7 @@ const FormInfoCaNhan = () => {
       // alert(duong+ " duong")
       setduong(location[0])
       document.getElementById("duong").value = duong;
+    } else{
     }
   }  
 
@@ -296,7 +322,8 @@ const FormInfoCaNhan = () => {
       reader.readAsDataURL(files[0]);
     
     }else{
-      document.getElementById("anh")[0].src = `./assets/unknow.jpg`
+      setAnh("unknow.jpg")
+      document.getElementById("anh").src = `./assets/unknow.jpg`
     }
   }
  
@@ -449,6 +476,10 @@ const FormInfoCaNhan = () => {
   }
    
   return (
+    <div>
+    {localStorage.getItem("userRole") !== "1" ? (
+      <></>
+    ) : (
     <div className='w-[80%] mx-auto bg-[#379E13] border-[3px] border-[#F00000] h-[500px] rounded-[10px] my-[5%]'>
       <input type="file" id ="inputAnh" name="files" accept="image/*" style={{opacity: 0}} onChange={readURL}/>
         <div className='mx-auto w-auto font-[600] text-[36px] text-center text-white p-10'>THÔNG TIN CÁ NHÂN</div>
@@ -456,7 +487,6 @@ const FormInfoCaNhan = () => {
             <img id ='anh' className='col-span-2 h-[250px] w-[250px] border-[3px] border-[#FFFFFF] rounded-[10px] m-5 bg-white text-center flex flex-col justify-center'
             alt="" onClick={()=>{document.getElementById("inputAnh").click()}}/>
               {/* <Icon24px classIcon={faImage}/> */}
-            
             
             <div className='col-span-4 h-[auto] w-[100%] my-[auto]'>
                 <div className='grid grid-rows-2 w-[100%] h-[50%]'>
@@ -474,8 +504,21 @@ const FormInfoCaNhan = () => {
                             onChange={e=>setSDT(e.target.value)} type="number-moz-appearance: textfield" />
                           </div>
                     </div>
-                    {role == 1 ? (<></>) : (<>
-                    <div className='row-span-1 h-[auto] my-[5px] '>
+                    <div className='row-span-1 h-[auto] my-[5px]'>
+                        <div className='mx-5 flex justify-between '>
+                            <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Email:</div>
+                            <input id='email' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'  
+                            onChange={e=>setEmail(e.target.value)} type="text" />
+                        </div>
+                    </div>  
+                    
+                    
+                </div>
+            </div> 
+            <div className='col-span-5 h-[auto] w-[100%] my-[auto]'>
+                <div className='grid grid-rows-2 w-[100%] h[50%]'>
+                    {role == 1 ? (<>
+                      <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 flex justify-between'>
                             <div className='w-[30%] text-[19px] h-[auto] my-auto text-white'>Ngân hàng:</div>
                             <select class='w-[70%] h-[50px] pl-[10px] font-[600] 
@@ -496,19 +539,8 @@ const FormInfoCaNhan = () => {
                             <input id='stk' className='w-[70%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'
                             onChange={e=>setSTK(e.target.value)} type="number-moz-appearance: textfield"  />
                         </div>
-                    </div></>)}
-                </div>
-            </div> 
-            <div className='col-span-5 h-[auto] w-[100%] my-[auto]'>
-                <div className='grid grid-rows-2 w-[100%] h[50%]'>
-                    <div className='row-span-1 h-[auto] my-[5px]'>
-                        <div className='mx-5 ml-0 flex justify-between '>
-                            <div className='w-[15%] text-[19px] h-[auto] my-auto text-white'>Email:</div>
-                            <input id='email' className='w-[85%] h-[50px] pl-[10px] font-[600] text-[black] text-[19px] bg-[#D9D9D9] rounded-[5px]'  
-                            onChange={e=>setEmail(e.target.value)} type="text" />
-                        </div>
-                    </div>  
-                    {role == 1 ? (<></>) : (<>
+                    </div>
+                    </>) : (<>
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 ml-0 flex justify-between'>
                             <div className='w-[15%] text-[19px] h-[auto] my-auto text-white'>Địa chỉ:</div>
@@ -545,10 +577,10 @@ const FormInfoCaNhan = () => {
                     
                     <div className='row-span-1 h-[auto] my-[5px] '>
                         <div className='mx-5 ml-0 flex justify-between font-[600]'>
-                            <div className='w-[15%] text-[19px] h-[auto] my-auto'></div>
-                            <button class=" w-[42%] mr-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] "
+                            <div className='w-[30%] text-[19px] h-[auto] my-auto'></div>
+                            <button class=" w-[32.5%] mr-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] "
                             onClick={()=>{}}>Đổi mật khẩu</button>
-                            <button class=" w-[42%] ml-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] "
+                            <button class=" w-[32.5%] ml-[0.5%] h-[50px] text-[15px] text-[#FFFFFF] bg-[#6BA6FF] font-[600] rounded-[5px] "
                             onClick={()=>{updateInfoCaNhanByID(idUser,role)}}>CẬP NHẬT</button>
                         </div>
                     </div>
@@ -558,6 +590,9 @@ const FormInfoCaNhan = () => {
         </div>
       
               
+    </div>
+    )
+  }
     </div>
   )
 }

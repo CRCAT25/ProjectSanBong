@@ -8,6 +8,8 @@ import FormLogin from './FormLogin'
 import FormSignUp from './FormSignUp'
 import FormResPass from './FormResPass'
 import { GetPersonalBillByIdAccount } from '../controllers/CQuanLyLich'
+import Swal from 'sweetalert2'
+
 
 const Icon24px = ({ classIcon, color }) => {
     const iconSize = {
@@ -34,6 +36,23 @@ const IconClose = () => {
 
 
 export default function Header() {
+
+    useEffect( ()=>{
+        Checklogin();
+        },[])
+    
+        const Checklogin=() =>{
+            if(localStorage.getItem("userRole") === "3" ){
+              Swal.fire({
+              icon: 'error',
+              text: 'Không đủ thẩm quyền để truy cập',
+              timer: 1000
+            }).then(() => {
+              window.location.href="http://localhost:3000/admin"
+            });
+          }
+      }
+
     const navigate = useNavigate();
 
     const OpenFormLogin = () => {
