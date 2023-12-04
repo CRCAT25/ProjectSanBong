@@ -13,7 +13,7 @@ import FormHoaDon from './FormHoaDon';
 
 const FormLichSu = () => {  
   
-  const [getSelectedBtn, setSelectedBtn] = useState(1)
+  const [getSelectedBtn, setSelectedBtn] = useState(0)
   const [getSelectedList,setSelectedList] = useState([])
   const [showHoaDon, setShowHoaDon] = useState(false)
   const [valueForHoaDon, setValueForHoaDon] = useState({})
@@ -194,7 +194,7 @@ const FormLichSu = () => {
         doiThu == null ? tenDoiThu = "Không có" :tenDoiThu = doiThu.Ten
         // console.log(hoaDon)
         lichholder.current.innerHTML+=`
-        <div class='lich w-[auto] bg-[#9BCE89] h-[auto] p-[10px] m-[10px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
+        <div class='lich w-[auto] bg-[#9BCE89] h-[auto] p-[10px] mt-3 m-[10px] my-[5px] rounded-[15px] grid grid-cols-${selected != 0 ? '6' : '5'}' >
         <img src="./assets/${sanBong.TaiKhoan.Anh}" alt="" class='w-[150px] h-[150px] col-span-1 rounded-[15px]' />
           <div class='col-span-1 grid grid-row-2 p-[10px]'>
             <div class='col-span-1 font-[600] text-[20px] h-[auto] my-auto'>Cơ sở sân:</div>
@@ -248,7 +248,7 @@ const FormLichSu = () => {
         <div className='w-[200px] text-center h-[60px] p-[15px] text-[20px] font-[600] rounded-[10px] bg-[#D9D9D9]' 
         onClick={()=> loadSelectedLich(2)}>Đã hoàn thành</div>
       </div>
-      <div ref={lichholder} id= 'lich'className='bg-[#D9D9D9] w-[90%] h-[570px] mx-auto py-[15px] rounded-[15px] flex flex-col align-middle overflow-y-visible overflow-x-hidden overflow-scroll'> 
+      <div ref={lichholder} id= 'lich'className='bg-[#D9D9D9] w-[90%] h-[570px] mx-auto rounded-[15px] flex flex-col align-middle overflow-y-visible overflow-x-hidden'> 
         {/* {gotPersonalInfo === true ? async ()=> {               
           getPersonalLich.map(async (data, i) => {
           })
