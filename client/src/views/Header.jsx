@@ -176,6 +176,7 @@ export default function Header() {
                     let trangthai = await list[i].TrangThai;
                     if (trangthai == "Completed") trangthai = "Đã đặt sân thành công";
                     if (trangthai == "Refunded") trangthai = "Đã hoàn tiền thành công";
+                    if (trangthai == "Cancelled") trangthai = "Đã hủy sân thành công";
                     let giaohuu = await list[i].GiaoHuu;
                     let doiThu, tenDoiThu;
 
