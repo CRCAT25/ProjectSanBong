@@ -71,28 +71,29 @@ const LichGiaoHuu = () =>{
 
   const GetAllLichGiaoHuu = async () =>{
     let list = await getAllLichGiaoHuu()
-    console.log(list)
     const allLichs = [];
-  
-    for (let i = 0; i < list.length; i++) {
-      let hoaDon = list[i];
-      let sanBong = await hoaDon.SanBong;
-      let khungGio = await hoaDon.KhungGio;
-      let nguoiDat = await hoaDon.TaiKhoan;
-      let date = dateFormatter(await hoaDon.Ngay);
-        
-      const valueOfLich = {
-        NgDat: nguoiDat.Ten,
-        IdNgDat:nguoiDat.IdAccount,
-        IdHD: hoaDon.IDHoaDon,
-        LienHe: nguoiDat.SoDienThoai,
-        CoSo: sanBong.TaiKhoan.Ten,
-        DiaChi: sanBong.TaiKhoan.DiaChiCoSo,
-        TenSan: sanBong.TenSan,
-        Ngay: date,
-        KhungGio: khungGio.ThoiGian
-      };
-      allLichs.push(valueOfLich);
+    if(list != null){
+      for (let i = 0; i < list.length; i++) {
+        let hoaDon = list[i];
+        let sanBong = await hoaDon.SanBong;
+        let khungGio = await hoaDon.KhungGio;
+        let nguoiDat = await hoaDon.TaiKhoan;
+        let date = dateFormatter(await hoaDon.Ngay);
+          
+        const valueOfLich = {
+          NgDat: nguoiDat.Ten,
+          IdNgDat:nguoiDat.IdAccount,
+          IdHD: hoaDon.IDHoaDon,
+          LienHe: nguoiDat.SoDienThoai,
+          CoSo: sanBong.TaiKhoan.Ten,
+          DiaChi: sanBong.TaiKhoan.DiaChiCoSo,
+          TenSan: sanBong.TenSan,
+          Ngay: date,
+          KhungGio: khungGio.ThoiGian
+        };
+        allLichs.push(valueOfLich);
+    }
+    
     }
     setLichs(allLichs)
   }  

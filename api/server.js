@@ -225,7 +225,7 @@ app.post("/getAllSanByTaiKhoan", (req, res) => {
                 sanbong.IDLoaiSan = loaisan.IDLoaiSan and  
                 sanbong.TrangThai = 0 and
                 sanbong.IDTaiKhoan = ?
-              ORDER BY sanbong.IDSan DESC`;
+              ORDER BY sanbong.IDSan ASC`;
   db.query(sql, [req.body.IDTaiKhoan], (err, data) => {
     res.json(data);
   });
