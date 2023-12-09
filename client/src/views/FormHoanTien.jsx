@@ -84,61 +84,6 @@ const formatTime = (timeInSeconds) => {
       window.location.reload();
     }
   }, [seconds]);
-  
-
-//     const HuyDatCoc = async () => {
-//     await HuyDatSan(newHoaDonID)
-//     HienThiDatCoc()
-//     }
-
-//     const DatCocV = async (NganHang, STK, SoTien) => {
-
-//         let validTTBank = CheckTTBank(NganHang, STK, SoTien)
-//         if (validTTBank == true) {
-//             DatCoc(newHoaDonID)
-//             HienThiThongBaoDatCocTC()
-//         } else {
-//             HienThiThongBaoLoiTT(validTTBank)
-//         }
-
-//     }
-//   const CheckTTBank = (NganHang, STK, SoTien) => {
-//     if (NganHang != "" && STK != "" && SoTien != "") {
-//         if(NganHang == ""){
-//             return ("Vui lòng chọn ngân hàng !")
-//         }
-//         if (STK.length < 10) {
-//             return ("Số tài khoản phải đủ 10 ký tự !")
-//         }
-//         return true
-//     }
-//     else {
-//         return ("Vui lòng nhập đầy đủ thông tin ngân hàng !")
-//     }
-// }
-
-// const HienThiThongBaoDatCocTC = () => {
-//     Swal.fire({
-//         title: "Đặt cọc thành công!",
-//         icon: "success"
-//     });
-//     setTimeout(() => {
-//         Swal.close();
-//         window.location.reload()
-//     }, 1000);
-// }
-
-// const HienThiThongBaoLoiTT = (message) => {
-//     Swal.fire({
-//         title: message,
-//         icon: "error"
-//     });
-//     setTimeout(() => {
-//         Swal.close();
-//     }, 1000);
-// }
-
-  let idCoSo = localStorage.getItem("userID")
 
   const getBillByID = async()=>{
     let bill = await GetBillById(idHD)
@@ -158,8 +103,6 @@ const formatTime = (timeInSeconds) => {
         // console.log(formattedDate)
         return formattedDate
       }
-    
-
     console.log(bill)
     console.log(khachHang)
 

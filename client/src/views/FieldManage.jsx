@@ -80,8 +80,6 @@ const FieldManage = () => {
   const [getBillForRefund, setBillForRefund] = useState([]);
   const [listBill, setlistBill] = useState([]);
 
-
-
   const Checklogin = () => {
     setCheckLogin(true);
     Swal.fire({
@@ -828,9 +826,6 @@ const FieldManage = () => {
   const [rerunchart, setrerunchart] = useState(true);
   const [searchhdbydate, setsearchhdbydate] = useState('');
 
-
-
-
   const [years, setYears] = useState([]);
 
   useEffect(() => {
@@ -1037,8 +1032,6 @@ const FieldManage = () => {
 
   };
 
-
-
   const formatCurrency = (value) => {
     return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   };
@@ -1098,7 +1091,6 @@ const FieldManage = () => {
       });
     }
   }
-
 
   //Doanh thu
 
