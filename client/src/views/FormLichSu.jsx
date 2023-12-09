@@ -7,7 +7,9 @@ import {
   GetPersonalLichFromBillByIdTK,
   GetAllBillByIDTk,
   GetBillById,
-  HuySanByIDHd
+  GetPersonalGiaoHuuFromBillByIdTK,
+  HuySanByIDHd,
+  removeDoiThuByIdBill
 } from "../controllers/CQuanLyLich";
 import FormHoaDon from './FormHoaDon';
 
@@ -59,7 +61,7 @@ const FormLichSu = () => {
       // console.log("need"+list)
     }
     else if(selected == 1){
-     list = await GetPersonalLichFromBillByIdTK(idTK,selected)
+     list = await GetPersonalGiaoHuuFromBillByIdTK(idTK,selected)
     }
     else{
       list = await GetPersonalLichFromBillByIdTK(idTK,selected)
@@ -93,8 +95,10 @@ const FormLichSu = () => {
   const huyDatSanByID = async () =>{   
     // await HuySanByIDHd(idHD)
     let list = await GetBillById(getIdHD)
-    console.log("plapla"+list.TrangThai)
-    if(list.TrangThai === "Cancelled")
+    let date = dateFormatter (hoaDon.Ngay);
+    let currentDate = new Date()
+    // console.log("plapla"+list.TrangThai)
+    if(list.TrangThai === "Cancelled" || new Date(date) <= currentDate)
     {
       Swal.fire({
         title: "Bạn không thể hủy trận đấu này !",
@@ -116,12 +120,20 @@ const FormLichSu = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            title:"Hủy sân thành công",
+            title:"Hủy trận thành công",
             icon: "success",
           });
-          await HuySanByIDHd(getIdHD);
-          setShowHoaDon(false)
-          getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+          if(idUser == list.DoiThu)
+          {
+            await removeDoiThuByIdBill(getIdHD)
+            setShowHoaDon(false)
+            getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+          }
+          else{
+            await HuySanByIDHd(getIdHD);
+            setShowHoaDon(false)
+            getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+          }
         }
       });
     }
