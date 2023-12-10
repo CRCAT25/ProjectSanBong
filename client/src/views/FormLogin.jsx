@@ -26,6 +26,8 @@ const FormLogin = () => {
     const [userName, setUserName] = useState("");
     const [passWord, setpassWord] = useState("");
 
+    const goAdmin = () => {window.location.href="http://localhost:3000/admin"};
+
     // Đăng nhập
     const DangNhap = async () => {
         let result = await (Login(userName, passWord))
@@ -59,7 +61,7 @@ const FormLogin = () => {
             localStorage.setItem("userSDT", result.SoDienThoai);
             localStorage.setItem("userRole", result.PhanQuyen);
             if(result.PhanQuyen === 3){
-                window.location.href="http://localhost:3000/admin";
+                goAdmin();
             } else {
                 setTimeout(() => {
                     Swal.close();
