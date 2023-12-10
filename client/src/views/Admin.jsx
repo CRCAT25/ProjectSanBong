@@ -788,7 +788,8 @@ const Admin = () => {
                   </div>
                   <div className="col-span-1 flex ">
                     <input type="text" class="input_searchemailsopart" id="rssearch" placeholder="" onChange={e => setstringsearch(e.target.value)}></input>
-                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>                  </div>
+                    <div className="ml-[-12px] hover:cursor-pointer mt-[10px]" onClick={() => SearchSdtEmail(idphanquyen)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>
+                  </div>
 
                 </div>
 
