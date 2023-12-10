@@ -1121,14 +1121,11 @@ th {
     font-size: 18px;
     text-transform: uppercase;
     font-weight: 600;
-    transition: 0.2s ease;
-    margin-top: 53%;
-    padding: 1rem;
+    margin-top: 62.5%;
 }
 #logout:hover {
     background-color: #ACE2F6;
     border-radius: 10px;
-
 }
 
 .optionphanquyen {

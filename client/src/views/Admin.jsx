@@ -287,6 +287,10 @@ const Admin = () => {
     elements[index].classList.add('tenmenu2');
   }
 
+  useEffect(() => {
+    // alert(activeTab);
+    // alert(idphanquyen + " b");
+  }, [idphanquyen, activeTab]);
 
 
 
@@ -1042,9 +1046,19 @@ const Admin = () => {
                     <div className="col-span-4 text-[#000000] text-center pt-[30px]">{admin.Email}</div>
                     <div className="col-span-3 text-[#000000] text-center pt-[30px]">{admin.SoDienThoai}</div>
                     {admin.TrangThai == 1 ? (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Enable(admin.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"} /></div>
+                      <div className="col-span-1 flex">
+                      <div className="text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Enable(admin.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"} /></div>
+                      {admin.IdAccount == localStorage.getItem("userID") ? (
+                        <div className="pt-[30px] hover:text-[red] cursor-pointer underline">Chỉnh sửa</div>
+                      ):(<></>)}
+                      </div>
                     ) : (
-                      <div className="col-span-1 text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Disable(admin.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"} /></div>
+                      <div className="col-span-1 flex">
+                      <div className="text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => Disable(admin.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"} /></div>
+                      {admin.IdAccount == localStorage.getItem("userID") ? (
+                        <div className="pt-[30px] hover:text-[red] cursor-pointer underline">Chỉnh sửa</div>
+                      ):(<></>)}
+                      </div>
                     )}
 
                   </React.Fragment>

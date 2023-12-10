@@ -72,7 +72,7 @@ const FormLogin = () => {
             localStorage.setItem("userSDT", result.SoDienThoai);
             localStorage.setItem("userRole", result.PhanQuyen);
             if(result.PhanQuyen === 3){
-                goAdmin();
+                window.location.href="http://localhost:3000/admin"
             } else {
                 setTimeout(() => {
                     Swal.close();
