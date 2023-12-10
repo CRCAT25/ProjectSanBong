@@ -44,15 +44,5 @@ class KhungGio{
                 console.error(error);
             });
     }
-    getKhungGioById(idKhungGio){
-        return axios.post("http://localhost:8081/getKhungGioByID", {ID:idKhungGio})
-            .then(response => {
-                const khungGio =  new KhungGio(response.data[0].IDKhungGio, response.data[0].ThoiGian, response.data[0].GiaTien)
-                return khungGio
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
 }
 export default KhungGio
