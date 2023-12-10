@@ -31,6 +31,7 @@ const Login = async (userName, passWord) =>{
         if(authUser == null || authUser == ''){
             return "khong"
         }
+        if(authUser == "vohieu") return "vohieu"
         else{
             return authUser
         }

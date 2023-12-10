@@ -287,10 +287,6 @@ const Admin = () => {
     elements[index].classList.add('tenmenu2');
   }
 
-  useEffect(() => {
-    // alert(activeTab);
-    // alert(idphanquyen + " b");
-  }, [idphanquyen, activeTab]);
 
 
 

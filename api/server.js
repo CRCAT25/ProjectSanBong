@@ -438,8 +438,10 @@ app.post("/loginUser", (req, res) => {
   const userName = req.body.userName;
   const passWord = req.body.passWord;
 
+
   const sql = `SELECT * FROM taikhoan where (SoDienThoai = "${userName}" or Email = "${userName}") and MatKhau = "${passWord}"`;
   db.query(sql, (err, data) => {
+    console.log(data)
     res.json(data)
   });
 });

@@ -49,6 +49,17 @@ const FormLogin = () => {
                 Swal.close();
             }, 1000);
         }
+        else if (result === "vohieu") {
+            Swal.fire({
+                title: "Tài khoản đã bị vô hiệu hóa",
+                icon: "error"
+            });
+            document.getElementsByClassName('inputUserName')[0].value = ""
+            document.getElementsByClassName('inputPassWord')[0].value = ""
+            setTimeout(() => {
+                Swal.close();
+            }, 1000);
+        }
         else {
             Swal.fire({
                 title: "Đăng nhập thành công",
