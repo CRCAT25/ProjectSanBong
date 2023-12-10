@@ -27,24 +27,24 @@ const FormLichSu = () => {
 
 
   useEffect( ()=>{
-    Checklogin();
+    // Checklogin();
     loadSelectedLich(0);
     },[])
 
-    const Checklogin=() =>{
-        if(localStorage.getItem("userID") == null || localStorage.getItem("userRole") !== "1" ){
-          Swal.fire({
-          icon: 'error',
-          text: 'Không đủ thẩm quyền để truy cập',
-        }).then(() => {
-          if(localStorage.getItem("userRole") === "3"){
-            window.location.href = "http://localhost:3000/admin"
-          } else{
-            window.location.href = "http://localhost:3000"
-          }
-        });
-      }
-  }
+  //   const Checklogin=() =>{
+  //       if(localStorage.getItem("userID") == null || localStorage.getItem("userRole") !== "1" ){
+  //         Swal.fire({
+  //         icon: 'error',
+  //         text: 'Không đủ thẩm quyền để truy cập',
+  //       }).then(() => {
+  //         if(localStorage.getItem("userRole") === "3"){
+  //           window.location.href = "http://localhost:3000/admin"
+  //         } else{
+  //           window.location.href = "http://localhost:3000"
+  //         }
+  //       });
+  //     }
+  // }
 
   const loadSelectedLich = async (idSelected)=>{
     let selected = idSelected
@@ -95,7 +95,7 @@ const FormLichSu = () => {
   const huyDatSanByID = async () =>{   
     // await HuySanByIDHd(idHD)
     let list = await GetBillById(getIdHD)
-    let date = dateFormatter (hoaDon.Ngay);
+    let date = dateFormatter (list);
     let currentDate = new Date()
     // console.log("plapla"+list.TrangThai)
     if(list.TrangThai === "Cancelled" || new Date(date) <= currentDate)
@@ -247,9 +247,6 @@ const FormLichSu = () => {
   }
   return (
   <div>
-    {localStorage.getItem("userRole") !== '1' ? (
-      <></>
-    ) : (
     <div className='w-[80%] mx-auto bg-[#FFF] border-[3px] border-[#379E13] pb-[3%] rounded-[10px]'>
       <div className='font-[600] text-[36px] text-center h-[50px] py-[5%] text-[#379E13]'>LỊCH SỬ CÁ NHÂN</div>
       <div className='flex flex-row my-[2%] mx-auto w-[90%]'>
@@ -274,8 +271,6 @@ const FormLichSu = () => {
             </div>
           </div>:""}
     </div>
-    )
-      }
       </div>
   )
 }
