@@ -397,7 +397,7 @@ const FieldManage = () => {
     }
 
   }
-  function deleteSanMainBTN() {
+  function DeleteSan() {
     if (getIDSan) {
       deleteSan(getIDSan)
     } else {
@@ -1161,7 +1161,7 @@ const FieldManage = () => {
                 <button className="btnCapNhatSan" id="257:818" onClick={updateSan}>
                   Cập nhật
                 </button>
-                <button className="btXoaSan" id="257:821" onClick={deleteSanMainBTN}>
+                <button className="btXoaSan" id="257:821" onClick={DeleteSan}>
                   Xóa
                 </button>
               </div>

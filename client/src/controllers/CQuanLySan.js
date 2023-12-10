@@ -60,7 +60,7 @@ const getSanByID = async (id) =>{
 }
 const getLoaiSanByID = async (id) =>{
    const loaiSan = new LoaiSan()
-   return loaiSan.GetLoaiSan(id)
+   return loaiSan.GetLoaiSanByID(id)
     
 }
  const insertSan = async (idTK, idLS, tenSan, anhs) =>{
