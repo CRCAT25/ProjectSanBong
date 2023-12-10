@@ -28,7 +28,7 @@ const GetInfoSanBong = async (idSan) =>{
 
 const GetTenLoaiSan = async (idLoaiSan) => {
     let result
-    result = await loaiSan.GetLoaiSan(idLoaiSan)
+    result = await loaiSan.GetLoaiSanByID(idLoaiSan)
     return result.TenLoaiSan
 } 
 
