@@ -98,8 +98,8 @@ const LichGiaoHuu = () =>{
     setLichs(allLichs)
   }  
 
-  const ThamGiaGiaoHuu = async (IdBill,IdTK) =>{
-    await updateBillDoiThuByIdBill(IdBill,IdTK)
+  const ThamGiaGiaoHuu = async (IdTK,IdBill) =>{
+    await updateBillDoiThuByIdBill(IdTK,IdBill)
   }
 
   return (

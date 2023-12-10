@@ -41,6 +41,7 @@ import {
 import Chart from "chart.js/auto";
 import { searchHoaDonByDateCoso } from "../controllers/CQuanLySan";
 import { faMagnifyingGlass, faXmark, faCheck, faClipboardCheck, faPiggyBank } from "@fortawesome/free-solid-svg-icons"
+import FormInfoCaNhan from './FormInfoCaNhan'
 
 
 
@@ -79,8 +80,6 @@ const FieldManage = () => {
   const [getIDSan, setIDSan] = useState(null);
   const [getBillForRefund, setBillForRefund] = useState([]);
   const [listBill, setlistBill] = useState([]);
-
-
 
   const Checklogin = () => {
     setCheckLogin(true);
@@ -828,9 +827,6 @@ const FieldManage = () => {
   const [rerunchart, setrerunchart] = useState(true);
   const [searchhdbydate, setsearchhdbydate] = useState('');
 
-
-
-
   const [years, setYears] = useState([]);
 
   useEffect(() => {
@@ -1037,8 +1033,6 @@ const FieldManage = () => {
 
   };
 
-
-
   const formatCurrency = (value) => {
     return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   };
@@ -1099,7 +1093,6 @@ const FieldManage = () => {
     }
   }
 
-
   //Doanh thu
 
   return (
@@ -1107,7 +1100,9 @@ const FieldManage = () => {
       {checklogin ? (
         <></>
       ) : (
+        
         <div className="landing-fAj" id="257:562">
+          <FormInfoCaNhan/>
           {showHoaDon === true ?
             <div class="fixed inset-0 z-50 flex bg-gray-800 bg-opacity-50">
               <div class="rounded w-[100%]">

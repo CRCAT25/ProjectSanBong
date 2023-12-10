@@ -365,10 +365,27 @@ app.post("/updateDoiThuInBill", (req, res) => {
   })
 })
 
+app.post("/RemoveDoiThuInBill", (req, res) => {
+  const sql = `UPDATE hoadon SET IDDoiThu is NULL WHERE hoadon.IDHoaDon = ?`;
+  db.query(sql, [req.body.IDHoaDon], (err, data) => {
+    res.json(data);
+  })
+})
+
 app.post("/getPersonalLichFromBillByIdTK", (req, res) => {
   const sql = `SELECT * FROM hoadon WHERE IDTaiKhoan= ? and GiaoHuu = ? and TrangThai = 'Completed'`;
   // console.log(req.body.IDTaiKhoan+"   "+ req.body.GiaoHuu)
   db.query(sql, [req.body.IDTaiKhoan, req.body.GiaoHuu], (err, data) => {
+    // console.log(data);
+    res.json(data);
+
+  })
+})
+
+app.post("/getPersonalGiaoHuuFromBillByIdTK", (req, res) => {
+  const sql = `SELECT * FROM hoadon WHERE (IDTaiKhoan= ?  OR IDDoiThu = ?) and GiaoHuu = ? and TrangThai = 'Completed'`;
+  // console.log(req.body.IDTaiKhoan+"   "+ req.body.GiaoHuu)
+  db.query(sql, [req.body.IDTaiKhoan,req.body.IDTaiKhoan, req.body.GiaoHuu], (err, data) => {
     // console.log(data);
     res.json(data);
 

@@ -21,6 +21,20 @@ const updateBillDoiThuByIdBill = async (idDoiThu,idBill) =>{
     getAllLichGiaoHuu()
 }
 
+const removeDoiThuByIdBill = async (idBill) =>{
+    const bill = new HoaDon()
+    console.log(idBill+"")
+    bill.RemoveDoiThuByIdBill(idBill);
+    getAllLichGiaoHuu()
+}
+
+const GetPersonalGiaoHuuFromBillByIdTK = async (idTk,giaoHuu) =>{
+    const bill = new HoaDon()
+    let list = await bill.getPersonalGiaoHuuFromBillByIdTK(idTk,giaoHuu)
+    // console.log(list)
+    return list
+}
+
 const GetPersonalLichFromBillByIdTK = async (idTk,giaoHuu) =>{
     const bill = new HoaDon()
     let list = await bill.getPersonalLichFromBillByIdTK(idTk,giaoHuu)
@@ -47,10 +61,12 @@ const GetAllBillByIDTk = async(IdTK) =>{
 
 export {
     getAllLichGiaoHuu,
-    updateBillDoiThuByIdBill,
     GetPersonalLichFromBillByIdTK,
+    GetPersonalGiaoHuuFromBillByIdTK,
     GetPersonalBillByIdAccount,
-    HuySanByIDHd,
     GetAllBillByIDTk,
-    GetBillById
+    GetBillById,
+    updateBillDoiThuByIdBill,
+    HuySanByIDHd,
+    removeDoiThuByIdBill
 }

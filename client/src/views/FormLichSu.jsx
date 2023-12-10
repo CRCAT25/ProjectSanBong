@@ -7,7 +7,9 @@ import {
   GetPersonalLichFromBillByIdTK,
   GetAllBillByIDTk,
   GetBillById,
-  HuySanByIDHd
+  GetPersonalGiaoHuuFromBillByIdTK,
+  HuySanByIDHd,
+  removeDoiThuByIdBill
 } from "../controllers/CQuanLyLich";
 import FormHoaDon from './FormHoaDon';
 
@@ -25,24 +27,24 @@ const FormLichSu = () => {
 
 
   useEffect( ()=>{
-    Checklogin();
+    // Checklogin();
     loadSelectedLich(0);
     },[])
 
-    const Checklogin=() =>{
-        if(localStorage.getItem("userID") == null || localStorage.getItem("userRole") !== "1" ){
-          Swal.fire({
-          icon: 'error',
-          text: 'Không đủ thẩm quyền để truy cập',
-        }).then(() => {
-          if(localStorage.getItem("userRole") === "3"){
-            window.location.href = "http://localhost:3000/admin"
-          } else{
-            window.location.href = "http://localhost:3000"
-          }
-        });
-      }
-  }
+  //   const Checklogin=() =>{
+  //       if(localStorage.getItem("userID") == null || localStorage.getItem("userRole") !== "1" ){
+  //         Swal.fire({
+  //         icon: 'error',
+  //         text: 'Không đủ thẩm quyền để truy cập',
+  //       }).then(() => {
+  //         if(localStorage.getItem("userRole") === "3"){
+  //           window.location.href = "http://localhost:3000/admin"
+  //         } else{
+  //           window.location.href = "http://localhost:3000"
+  //         }
+  //       });
+  //     }
+  // }
 
   const loadSelectedLich = async (idSelected)=>{
     let selected = idSelected
@@ -59,7 +61,7 @@ const FormLichSu = () => {
       // console.log("need"+list)
     }
     else if(selected == 1){
-     list = await GetPersonalLichFromBillByIdTK(idTK,selected)
+     list = await GetPersonalGiaoHuuFromBillByIdTK(idTK,selected)
     }
     else{
       list = await GetPersonalLichFromBillByIdTK(idTK,selected)
@@ -93,8 +95,10 @@ const FormLichSu = () => {
   const huyDatSanByID = async () =>{   
     // await HuySanByIDHd(idHD)
     let list = await GetBillById(getIdHD)
-    console.log("plapla"+list.TrangThai)
-    if(list.TrangThai === "Cancelled")
+    let date = dateFormatter (list);
+    let currentDate = new Date()
+    // console.log("plapla"+list.TrangThai)
+    if(list.TrangThai === "Cancelled" || new Date(date) <= currentDate)
     {
       Swal.fire({
         title: "Bạn không thể hủy trận đấu này !",
@@ -116,12 +120,20 @@ const FormLichSu = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            title:"Hủy sân thành công",
+            title:"Hủy trận thành công",
             icon: "success",
           });
-          await HuySanByIDHd(getIdHD);
-          setShowHoaDon(false)
-          getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+          if(idUser == list.DoiThu)
+          {
+            await removeDoiThuByIdBill(getIdHD)
+            setShowHoaDon(false)
+            getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+          }
+          else{
+            await HuySanByIDHd(getIdHD);
+            setShowHoaDon(false)
+            getPersonalLichFromBillByIdTK(idUser, getSelectedBtn)
+          }
         }
       });
     }
@@ -235,9 +247,6 @@ const FormLichSu = () => {
   }
   return (
   <div>
-    {localStorage.getItem("userRole") !== '1' ? (
-      <></>
-    ) : (
     <div className='w-[80%] mx-auto bg-[#FFF] border-[3px] border-[#379E13] pb-[3%] rounded-[10px]'>
       <div className='font-[600] text-[36px] text-center h-[50px] py-[5%] text-[#379E13]'>LỊCH SỬ CÁ NHÂN</div>
       <div className='flex flex-row my-[2%] mx-auto w-[90%]'>
@@ -262,8 +271,6 @@ const FormLichSu = () => {
             </div>
           </div>:""}
     </div>
-    )
-      }
       </div>
   )
 }

@@ -191,10 +191,35 @@ class HoaDon{
         });
     }
 
+    RemoveDoiThuByIdBill(IDHoaDon)
+    {
+        return axios.post("http://localhost:8081/RemoveDoiThuInBill",{IDHoaDon})
+        .then(response => {
+            return "yeah"
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }
+
     getPersonalLichFromBillByIdTK(IDTaiKhoan, GiaoHuu)
     {
         // console.log(IDTaiKhoan+"   "+ GiaoHuu)
         return axios.post("http://localhost:8081/getPersonalLichFromBillByIdTK",{IDTaiKhoan,GiaoHuu})
+        .then(response => {
+            // console.log(response.data)
+            const list = this.initBill(response.data);               
+            return list;
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }
+
+    getPersonalGiaoHuuFromBillByIdTK(IDTaiKhoan, GiaoHuu)
+    {
+        // console.log(IDTaiKhoan+"   "+ GiaoHuu)
+        return axios.post("http://localhost:8081/getPersonalGiaoHuuFromBillByIdTK",{IDTaiKhoan,IDTaiKhoan,GiaoHuu})
         .then(response => {
             // console.log(response.data)
             const list = this.initBill(response.data);               
