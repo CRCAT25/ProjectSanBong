@@ -33,7 +33,7 @@ class HoaDon{
         const resultList = [];
         list.forEach(bill => {
             const taiKhoan = (new TaiKhoan).getTKByID(bill.IDTaiKhoan)
-            const khungGio = (new KhungGio).getKhungGioById(bill.IDKhungGio)
+            const khungGio = (new KhungGio).GetShiftByID(bill.IDKhungGio)
             let doiThu=null
             if(bill.IDDoiThu){
                 doiThu = (new TaiKhoan).getTKByID(bill.IDDoiThu)

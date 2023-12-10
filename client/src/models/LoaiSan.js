@@ -15,18 +15,6 @@ class LoaiSan {
                 console.error(error);
             });
     }
-    GetLoaiSan(idLoaiSan) {
-        return axios.post("http://localhost:8081/getLoaiSanByID", {
-            IdLoaiSan : idLoaiSan
-        })
-            .then(loaisan => {
-                console.log(idLoaiSan)
-                const loaiSan = new LoaiSan(loaisan.data[0].IDLoaiSan, loaisan.data[0].TenLoaiSan, loaisan.data[0].GiaTien);
-                return loaiSan
-            }).catch(error => {
-                console.error(error);
-            });
-    }
 
     GetLoaiSanByID(IdLoaiSan) {
         return axios.post("http://localhost:8081/getLoaiSanByID", {IdLoaiSan})

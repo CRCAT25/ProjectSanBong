@@ -23,7 +23,7 @@ const updateBillDoiThuByIdBill = async (idDoiThu,idBill) =>{
 
 const removeDoiThuByIdBill = async (idBill) =>{
     const bill = new HoaDon()
-    console.log(idBill)
+    console.log(idBill+"")
     bill.RemoveDoiThuByIdBill(idBill);
     getAllLichGiaoHuu()
 }
