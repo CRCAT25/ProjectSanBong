@@ -281,7 +281,7 @@ export const OrderField = () => {
     const [tongTienText, setTongTienText] = useState("0")
     const [valueForHoaDon, setValueForHoaDon] = useState({})
     const DatSan = async () => {
-        
+        setIsDangNhap(checkDangNhap())
         if (isDangNhap == true) {
             const checkKhungGio = checkSelectKhungGio()
             if (!checkKhungGio) {
@@ -304,7 +304,6 @@ export const OrderField = () => {
     const [isDangNhap, setIsDangNhap] = useState(false)
     const checkDangNhap = async () => {
         if (localStorage.getItem('userName') != "") {
-
             setIsDangNhap(true)
         } else {
             setIsDangNhap(false)

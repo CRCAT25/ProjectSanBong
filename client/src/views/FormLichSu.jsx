@@ -95,7 +95,7 @@ const FormLichSu = () => {
   const huyDatSanByID = async () =>{   
     // await HuySanByIDHd(idHD)
     let list = await GetBillById(getIdHD)
-    let date = dateFormatter (hoaDon.Ngay);
+    let date = dateFormatter (list.Ngay);
     let currentDate = new Date()
     // console.log("plapla"+list.TrangThai)
     if(list.TrangThai === "Cancelled" || new Date(date) <= currentDate)
