@@ -145,7 +145,7 @@ class TaiKhoan {
         })  
     }
 
-    SearchEmailSdta = (phanquyen, search) =>{
+    SearchEmailSdt = (phanquyen, search) =>{
         return axios.post("http://localhost:8081/searchemailsdt",{phanquyen, search}
         ).then(response => {
             let list = []
