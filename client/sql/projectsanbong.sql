@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 19, 2023 at 05:29 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th12 11, 2023 lúc 03:54 AM
+-- Phiên bản máy phục vụ: 10.4.28-MariaDB
+-- Phiên bản PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,40 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `projectsanbong`
+-- Cơ sở dữ liệu: `projectsanbong`
 --
+
+DELIMITER $$
+--
+-- Thủ tục
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_passedhoadon_proc` (IN `p_IDHoaDon` INT)   BEGIN
+    DELETE FROM hoadon WHERE IDHoaDon = p_IDHoaDon AND TrangThai = 'Pending';
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertAndReturnHoaDon` (IN `p_IDTaiKhoan` INT, IN `p_IDSan` INT, IN `p_IDKhungGio` INT, IN `p_Ngay` DATE, IN `p_GiaoHuu` INT, IN `p_TongTien` DECIMAL(10,2))   BEGIN
+    DECLARE newHoaDonID INT;
+
+    -- Insert into hoadon table
+    INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat, TrangThai)
+    VALUES(p_IDTaiKhoan, p_IDSan, p_IDKhungGio, p_Ngay, p_GiaoHuu, p_TongTien, NOW(), 'Pending');
+
+    -- Get the ID of the last inserted row
+    SET newHoaDonID = LAST_INSERT_ID();
+
+    -- Select the newly inserted row
+    SELECT *
+    FROM hoadon
+    WHERE IDHoaDon = newHoaDonID;
+SET GLOBAL event_scheduler = 'ON';
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `anh`
+-- Cấu trúc bảng cho bảng `anh`
 --
 
 CREATE TABLE `anh` (
@@ -34,7 +61,7 @@ CREATE TABLE `anh` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `anh`
+-- Đang đổ dữ liệu cho bảng `anh`
 --
 
 INSERT INTO `anh` (`IDAnh`, `IDSan`, `Anh`) VALUES
@@ -51,7 +78,7 @@ INSERT INTO `anh` (`IDAnh`, `IDSan`, `Anh`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `hoadon`
+-- Cấu trúc bảng cho bảng `hoadon`
 --
 
 CREATE TABLE `hoadon` (
@@ -68,16 +95,26 @@ CREATE TABLE `hoadon` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `hoadon`
+-- Đang đổ dữ liệu cho bảng `hoadon`
 --
 
 INSERT INTO `hoadon` (`IDHoaDon`, `IDTaiKhoan`, `IDSan`, `IDKhungGio`, `Ngay`, `GiaoHuu`, `IDDoiThu`, `TongTien`, `ThoiGianDat`, `TrangThai`) VALUES
-(2, 3, 3, 4, '2023-11-30', 1, NULL, 180000, '2023-11-17 11:51:42', 'Completed');
+(2, 3, 3, 4, '2023-09-30', 1, NULL, 180000, '2023-11-17 11:51:42', 'Completed'),
+(4, 2, 3, 3, '2023-10-09', 0, NULL, 180000, '2023-11-18 13:39:35', 'Canceled'),
+(5, 3, 2, 5, '2023-11-17', 0, NULL, 180000, '2023-11-14 13:53:07', 'Completed'),
+(6, 3, 5, 5, '2023-11-17', 1, NULL, 180000, '2023-11-14 13:53:07', 'Completed'),
+(7, 3, 5, 4, '2023-11-30', 1, NULL, 180000, '2023-11-24 11:10:38', 'Completed'),
+(12, 18, 3, 5, '2023-12-01', 1, NULL, 180000, '2023-11-24 11:10:38', 'Completed'),
+(13, 2, 4, 2, '2023-12-27', 1, NULL, 180000, '2023-11-24 11:10:38', 'Cancelled'),
+(14, 3, 2, 5, '2022-05-24', 0, 7, 180000, '2023-11-14 13:53:07', 'Completed'),
+(15, 2, 3, 3, '2023-11-17', 0, NULL, 180000, '2023-11-18 13:39:35', 'Canceled'),
+(24, 18, 5, 4, '2022-01-10', 1, NULL, 180000, '2023-11-17 11:51:42', 'Completed'),
+(25, 18, 2, 4, '2022-01-10', 1, NULL, 180000, '2023-11-17 11:51:42', 'Completed');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `khunggio`
+-- Cấu trúc bảng cho bảng `khunggio`
 --
 
 CREATE TABLE `khunggio` (
@@ -87,7 +124,7 @@ CREATE TABLE `khunggio` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `khunggio`
+-- Đang đổ dữ liệu cho bảng `khunggio`
 --
 
 INSERT INTO `khunggio` (`IDKhungGio`, `ThoiGian`, `GiaTien`) VALUES
@@ -101,7 +138,7 @@ INSERT INTO `khunggio` (`IDKhungGio`, `ThoiGian`, `GiaTien`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `loaiphanquyen`
+-- Cấu trúc bảng cho bảng `loaiphanquyen`
 --
 
 CREATE TABLE `loaiphanquyen` (
@@ -110,7 +147,7 @@ CREATE TABLE `loaiphanquyen` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `loaiphanquyen`
+-- Đang đổ dữ liệu cho bảng `loaiphanquyen`
 --
 
 INSERT INTO `loaiphanquyen` (`IDPhanQuyen`, `TenPhanQuyen`) VALUES
@@ -121,7 +158,7 @@ INSERT INTO `loaiphanquyen` (`IDPhanQuyen`, `TenPhanQuyen`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `loaisan`
+-- Cấu trúc bảng cho bảng `loaisan`
 --
 
 CREATE TABLE `loaisan` (
@@ -131,7 +168,7 @@ CREATE TABLE `loaisan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `loaisan`
+-- Đang đổ dữ liệu cho bảng `loaisan`
 --
 
 INSERT INTO `loaisan` (`IDLoaiSan`, `TenLoaiSan`, `GiaTien`) VALUES
@@ -145,7 +182,7 @@ INSERT INTO `loaisan` (`IDLoaiSan`, `TenLoaiSan`, `GiaTien`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sanbong`
+-- Cấu trúc bảng cho bảng `sanbong`
 --
 
 CREATE TABLE `sanbong` (
@@ -157,7 +194,7 @@ CREATE TABLE `sanbong` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `sanbong`
+-- Đang đổ dữ liệu cho bảng `sanbong`
 --
 
 INSERT INTO `sanbong` (`IDSan`, `IDTaiKhoan`, `IDLoaiSan`, `TenSan`, `TrangThai`) VALUES
@@ -170,7 +207,7 @@ INSERT INTO `sanbong` (`IDSan`, `IDTaiKhoan`, `IDLoaiSan`, `TenSan`, `TrangThai`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `taikhoan`
+-- Cấu trúc bảng cho bảng `taikhoan`
 --
 
 CREATE TABLE `taikhoan` (
@@ -182,34 +219,43 @@ CREATE TABLE `taikhoan` (
   `DiaChiCoSo` varchar(500) DEFAULT NULL,
   `NganHang` varchar(20) DEFAULT NULL,
   `STK` varchar(20) DEFAULT NULL,
-  `Anh` varchar(200) NOT NULL,
+  `Anh` varchar(200) DEFAULT NULL,
   `MatKhau` varchar(30) NOT NULL,
-  `XacThuc` date DEFAULT NULL
+  `TrangThai` varchar(2) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `taikhoan`
+-- Đang đổ dữ liệu cho bảng `taikhoan`
 --
 
-INSERT INTO `taikhoan` (`IDTaiKhoan`, `IDPhanQuyen`, `Ten`, `Email`, `SoDienThoai`, `DiaChiCoSo`, `NganHang`, `STK`, `Anh`, `MatKhau`, `XacThuc`) VALUES
-(1, 2, 'Huy Hoàng', 'huyhoangct@gmail.com', '0913126754', '68 đường Lê Lợi, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh 700000', 'BIDV', '53458023523', 'coso1.jpg', '123123', '2023-11-16'),
-(2, 1, 'Đỗ Quốc Trí Tâm', 'TriTamtc30@gmail.com', '01256414127', NULL, NULL, NULL, '', '123123', '2023-11-15'),
-(3, 3, 'Lê Hữu Minh', 'lehuuminhtc30@gmail.com', '0855280747', NULL, NULL, NULL, '', '123123', '0000-00-00'),
-(7, 2, 'Đông Hùng', 'donghungct@gmail.com', '0284635732', '68 đường Lê Lợi, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh 700000', 'MBBank', '436326322', 'coso2.jpg', '123123', '2023-11-16');
+INSERT INTO `taikhoan` (`IDTaiKhoan`, `IDPhanQuyen`, `Ten`, `Email`, `SoDienThoai`, `DiaChiCoSo`, `NganHang`, `STK`, `Anh`, `MatKhau`, `TrangThai`) VALUES
+(1, 2, 'Huy Hoàng', 'huyhoangct@gmail.com', '0913126754', '68/ Lê Lợi, Phường 04, Quận Gò Vấp, Thành phố Hồ Chí Minh', 'BIDV', '53458023523', 'coso1.jpg', '123123', '0'),
+(2, 1, 'Đỗ Quốc Trí Tâm', 'TriTamtc30@gmail.com', '01256414127', '', 'ABBANK', '512784202454644', 'unknow.jpg', '123123', '1'),
+(3, 3, 'Lê Hữu Minh', 'lehuuminhtc30@gmail.com', '0855280747', NULL, NULL, NULL, '', '123123', '0'),
+(7, 2, 'Đông Hùng', 'donghungct@gmail.com', '0284635732', '123 đường Võ Tòng, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh', 'MBBank', '436326322', 'coso2.jpg', '123123', '1'),
+(10, 2, 'Đông Trùng', 'lehuuminhtc3@gmail.com', '08552807475', '265 / Nguyen Tri Phuong, Phường Long Thạnh, Thị xã Tân Châu, Tỉnh An Giang', 'IBKHCM', '54123123123', 'coso1.jpg', '123123', '0'),
+(11, 2, 'AAA', 'lehuumintc30@gmail.com', '0125415487', '285/Trần Văn Tông, Xã Vĩnh Mỹ A, Huyện Hoà Bình, Tỉnh Bạc Liêu', 'IBKHCM', '05485121', 'coso2.jpg', '123123', '0'),
+(18, 2, 'Tam Thien Mew', 'tamthienmew@gmail.com', '012556882712', '265/Nguyen Tri Phuong, Xã Lương Bằng, Huyện Chợ Đồn, Tỉnh Bắc Kạn', 'HDBank', '12312331132', 'coso2.jpg', '123123', '0'),
+(21, 1, 'Đỗ Quốc Trí Tâm', 'TriTamtc0@gmail.com', '012564141271', NULL, NULL, NULL, 'unknow.jpg', '123123', '1'),
+(25, 1, 'HuynhTan', 'sdfsdf', '091312675', '', '', '', 'unknow.jpg', '1312312', '1'),
+(26, 1, 'HuynhTan', 'fdwer', '0913126751', '', '', '', 'unknow.jpg', '132132', '0'),
+(27, 3, 'AAAA', 'lehuuminh@gmail.com', '08552807', '', '', '', NULL, '12331233', '1'),
+(49, 2, 'Hoàng Văn Thụ', 'hoangvanthutc@gmail.com', '091312674', '27/11/ Mai Văn Thụ, Xã Tân Thành, Thành phố Đồng Xoài, Tỉnh Bình Phước', 'BIDV', '0124346482', 'coso1.jpg', '123123123', '1'),
+(50, 1, 'LeeMinHo', 'leeminho@gmail.com', '01256578421', NULL, NULL, NULL, 'unknow.jpg', '123123', '0');
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `anh`
+-- Chỉ mục cho bảng `anh`
 --
 ALTER TABLE `anh`
   ADD PRIMARY KEY (`IDAnh`),
   ADD KEY `Anh_SanBong` (`IDSan`);
 
 --
--- Indexes for table `hoadon`
+-- Chỉ mục cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
   ADD PRIMARY KEY (`IDHoaDon`),
@@ -219,25 +265,25 @@ ALTER TABLE `hoadon`
   ADD KEY `HoaDon_DoiThu` (`IDDoiThu`);
 
 --
--- Indexes for table `khunggio`
+-- Chỉ mục cho bảng `khunggio`
 --
 ALTER TABLE `khunggio`
   ADD PRIMARY KEY (`IDKhungGio`);
 
 --
--- Indexes for table `loaiphanquyen`
+-- Chỉ mục cho bảng `loaiphanquyen`
 --
 ALTER TABLE `loaiphanquyen`
   ADD PRIMARY KEY (`IDPhanQuyen`);
 
 --
--- Indexes for table `loaisan`
+-- Chỉ mục cho bảng `loaisan`
 --
 ALTER TABLE `loaisan`
   ADD PRIMARY KEY (`IDLoaiSan`);
 
 --
--- Indexes for table `sanbong`
+-- Chỉ mục cho bảng `sanbong`
 --
 ALTER TABLE `sanbong`
   ADD PRIMARY KEY (`IDSan`),
@@ -245,70 +291,70 @@ ALTER TABLE `sanbong`
   ADD KEY `SanBong_TaiKhoan` (`IDTaiKhoan`);
 
 --
--- Indexes for table `taikhoan`
+-- Chỉ mục cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
   ADD PRIMARY KEY (`IDTaiKhoan`),
   ADD KEY `TaiKhoan_PhanQuyen` (`IDPhanQuyen`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `anh`
+-- AUTO_INCREMENT cho bảng `anh`
 --
 ALTER TABLE `anh`
   MODIFY `IDAnh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `hoadon`
+-- AUTO_INCREMENT cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
-  MODIFY `IDHoaDon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `IDHoaDon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
--- AUTO_INCREMENT for table `khunggio`
+-- AUTO_INCREMENT cho bảng `khunggio`
 --
 ALTER TABLE `khunggio`
   MODIFY `IDKhungGio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `loaiphanquyen`
+-- AUTO_INCREMENT cho bảng `loaiphanquyen`
 --
 ALTER TABLE `loaiphanquyen`
   MODIFY `IDPhanQuyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `loaisan`
+-- AUTO_INCREMENT cho bảng `loaisan`
 --
 ALTER TABLE `loaisan`
   MODIFY `IDLoaiSan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `sanbong`
+-- AUTO_INCREMENT cho bảng `sanbong`
 --
 ALTER TABLE `sanbong`
   MODIFY `IDSan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `taikhoan`
+-- AUTO_INCREMENT cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `IDTaiKhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `IDTaiKhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `anh`
+-- Các ràng buộc cho bảng `anh`
 --
 ALTER TABLE `anh`
   ADD CONSTRAINT `Anh_SanBong` FOREIGN KEY (`IDSan`) REFERENCES `sanbong` (`IDSan`);
 
 --
--- Constraints for table `hoadon`
+-- Các ràng buộc cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
   ADD CONSTRAINT `HoaDon_DoiThu` FOREIGN KEY (`IDDoiThu`) REFERENCES `taikhoan` (`IDTaiKhoan`),
@@ -317,14 +363,14 @@ ALTER TABLE `hoadon`
   ADD CONSTRAINT `HoaDon_TaiKhoan` FOREIGN KEY (`IDTaiKhoan`) REFERENCES `taikhoan` (`IDTaiKhoan`);
 
 --
--- Constraints for table `sanbong`
+-- Các ràng buộc cho bảng `sanbong`
 --
 ALTER TABLE `sanbong`
   ADD CONSTRAINT `SanBong_LoaiSan` FOREIGN KEY (`IDLoaiSan`) REFERENCES `loaisan` (`IDLoaiSan`),
   ADD CONSTRAINT `SanBong_TaiKhoan` FOREIGN KEY (`IDTaiKhoan`) REFERENCES `taikhoan` (`IDTaiKhoan`);
 
 --
--- Constraints for table `taikhoan`
+-- Các ràng buộc cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
   ADD CONSTRAINT `TaiKhoan_PhanQuyen` FOREIGN KEY (`IDPhanQuyen`) REFERENCES `loaiphanquyen` (`IDPhanQuyen`);
