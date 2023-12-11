@@ -14,15 +14,12 @@ const CGetAllCoSo = async () =>{
    let list = account.getTKByID(idTk)
    return list;
  }
- const CThemTaiKhoan = async (idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau) =>{
+ const CThemTaiKhoan = async (idphanquyen, ten, email, sdt, diachi, nganhang, stk, matkhau) =>{
    let account = new Account()
-   let result = await account.ThemTaiKhoan(idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau);
-   return ShowResultCheck(result)
+   let result = await account.ThemTaiKhoan(idphanquyen, ten, email, sdt, diachi, nganhang, stk, matkhau);
+   return result
 }
 
-const ShowResultCheck = async (ResultOfThem) =>{
-   return ResultOfThem;
-}
 
 const ShowImgCoSo = async (idtaikhoan) =>{
    let account = new Account();

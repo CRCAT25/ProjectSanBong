@@ -108,13 +108,11 @@ class TaiKhoan {
 
     
 
-    ThemTaiKhoan = async (idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau) => {
-        console.log(idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau);
-
+    ThemTaiKhoan = async (idphanquyen, ten, email, sdt, diachi, nganhang, stk, matkhau) => {
         try {
             const ResultCheck = await this.QLCheckEmailSdt(email, sdt);
             if (ResultCheck === "Ok") {
-                const response = await axios.post("http://localhost:8081/addtk", {idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau
+                const response = await axios.post("http://localhost:8081/addtk", {idphanquyen, ten, email, sdt, diachi, nganhang, stk, matkhau
                 });
                 return response.data;
             } else  {
