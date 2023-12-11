@@ -42,6 +42,7 @@ import Chart from "chart.js/auto";
 import { searchHoaDonByDateCoso } from "../controllers/CQuanLySan";
 import { faMagnifyingGlass, faXmark, faCheck, faClipboardCheck, faPiggyBank } from "@fortawesome/free-solid-svg-icons"
 import FormInfoCaNhan from './FormInfoCaNhan'
+import FormResPass from "./FormResPass";
 
 
 
@@ -1092,6 +1093,13 @@ const FieldManage = () => {
       });
     }
   }
+  
+  const [isOpenFormRes, setIsOpenFormRes] = useState(false);
+
+
+  const OpenFormResPass = () => {
+    setIsOpenFormRes(true);
+  }
 
   //Doanh thu
 
@@ -1102,7 +1110,8 @@ const FieldManage = () => {
       ) : (
         
         <div className="landing-fAj" id="257:562">
-          <FormInfoCaNhan/>
+           {isOpenFormRes == true ? (<div className='mx-[660px]'><FormResPass/></div>) : (<></>)}
+          <FormInfoCaNhan onOpenFormResPass={() => OpenFormResPass()}/>
           {showHoaDon === true ?
             <div class="fixed inset-0 z-50 flex bg-gray-800 bg-opacity-50">
               <div class="rounded w-[100%]">

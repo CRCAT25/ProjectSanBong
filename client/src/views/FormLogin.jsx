@@ -27,6 +27,7 @@ const FormLogin = () => {
     const [passWord, setpassWord] = useState("");
 
     const goAdmin = () => {window.location.href="http://localhost:3000/admin"};
+    const goFieldManage = () => {window.location.href="http://localhost:3000/fieldManage"};
 
     // Đăng nhập
     const DangNhap = async () => {
@@ -72,7 +73,10 @@ const FormLogin = () => {
             localStorage.setItem("userSDT", result.SoDienThoai);
             localStorage.setItem("userRole", result.PhanQuyen);
             if(result.PhanQuyen === 3){
-                window.location.href="http://localhost:3000/admin"
+                goAdmin();
+            }
+            else if(result.PhanQuyen === 2){
+                goFieldManage();
             } else {
                 setTimeout(() => {
                     Swal.close();

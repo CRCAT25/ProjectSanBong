@@ -237,7 +237,7 @@ export default function Header() {
                                 <Icon24px classIcon={faBell} color={"FFE500"} />
                             </li>
                             <li className='flex flex-col justify-center cursor-pointer'>
-                                <span className='text-[24px]'>{userName}</span>
+                                <span onClick={() => toggleDropdown()} className='text-[24px]'>{userName}</span>
                             </li>
                             <li className='flex flex-col justify-center cursor-pointer' onClick={() => toggleDropdown()}>
                                 <Icon24px classIcon={faAngleDown} />
