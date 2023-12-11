@@ -26,6 +26,9 @@ const FormLogin = () => {
     const [userName, setUserName] = useState("");
     const [passWord, setpassWord] = useState("");
 
+    const goAdmin = () => {window.location.href="http://localhost:3000/admin"};
+    const goFieldManage = () => {window.location.href="http://localhost:3000/fieldManage"};
+
     // Đăng nhập
     const DangNhap = async () => {
         let result = await (Login(userName, passWord))
@@ -49,6 +52,17 @@ const FormLogin = () => {
                 Swal.close();
             }, 1000);
         }
+        else if (result === "vohieu") {
+            Swal.fire({
+                title: "Tài khoản đã bị vô hiệu hóa",
+                icon: "error"
+            });
+            document.getElementsByClassName('inputUserName')[0].value = ""
+            document.getElementsByClassName('inputPassWord')[0].value = ""
+            setTimeout(() => {
+                Swal.close();
+            }, 1000);
+        }
         else {
             Swal.fire({
                 title: "Đăng nhập thành công",
@@ -59,7 +73,10 @@ const FormLogin = () => {
             localStorage.setItem("userSDT", result.SoDienThoai);
             localStorage.setItem("userRole", result.PhanQuyen);
             if(result.PhanQuyen === 3){
-                window.location.href="http://localhost:3000/admin";
+                goAdmin();
+            }
+            else if(result.PhanQuyen === 2){
+                goFieldManage();
             } else {
                 setTimeout(() => {
                     Swal.close();

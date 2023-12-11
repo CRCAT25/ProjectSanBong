@@ -2,11 +2,10 @@ import CoSoSan from '../models/CoSoSan'
 import HoaDon from '../models/HoaDon'
 import Account from '../models/TaiKhoan'
 
-const getAllCoSo = async () =>{
+const CGetAllCoSo = async () =>{
     const cosoSan = new CoSoSan()
     let listCoso
     listCoso = await cosoSan.GetAllCoSo()
-   //  console.log(listCoso)
     return listCoso
  }
 
@@ -15,15 +14,12 @@ const getAllCoSo = async () =>{
    let list = account.getTKByID(idTk)
    return list;
  }
- const CThemTaiKhoan = async (idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau) =>{
+ const CThemTaiKhoan = async (idphanquyen, ten, email, sdt, diachi, nganhang, stk, matkhau) =>{
    let account = new Account()
-   let result = await account.ThemTaiKhoan(idphanquyen, ten, email, sdt, diachics, nganhangcs, stkcs, matkhau);
-   return ShowResultCheck(result)
+   let result = await account.ThemTaiKhoan(idphanquyen, ten, email, sdt, diachi, nganhang, stk, matkhau);
+   return result
 }
 
-const ShowResultCheck = async (ResultOfThem) =>{
-   return ResultOfThem;
-}
 
 const ShowImgCoSo = async (idtaikhoan) =>{
    let account = new Account();
@@ -31,11 +27,11 @@ const ShowImgCoSo = async (idtaikhoan) =>{
    return result
 }
 
-const CSearchEmailSdt = async (phanquyen, search) =>{
-   if(phanquyen === 2){
+const CSearchEmailSdt = async (idphanquyen, stringsearch) =>{
+   if(idphanquyen === 2){
       let coso = new CoSoSan();
       let list = []
-      let result = await coso.SearchEmailSdt(phanquyen, search)
+      let result = await coso.SearchEmailSdt(idphanquyen, stringsearch)
       if(result){
          list.push(result)
       }
@@ -44,7 +40,7 @@ const CSearchEmailSdt = async (phanquyen, search) =>{
    } else {
       let account = new Account();
       let list = []
-      let result = await account.SearchEmailSdta(phanquyen, search)
+      let result = await account.SearchEmailSdt(idphanquyen, stringsearch)
    
       if(result){
          list.push(result)
@@ -91,15 +87,15 @@ const CSearchHoaDonByDateAdmin = async (search, date) =>{
 
 
  export {
-   getAllCoSo,
+   CGetAllCoSo,
+   CGetAllPlayer,
+   CGetAllAdmin,
    getPersonalInfoByIdTK,
    CThemTaiKhoan,
    ShowImgCoSo,
    CSearchEmailSdt,
    CDisableAcc,
    CEnableAcc,
-   CGetAllPlayer,
-   CGetAllAdmin,
    CGetAllBillComplete,
    CSearchHoaDonByDateAdmin,
 }

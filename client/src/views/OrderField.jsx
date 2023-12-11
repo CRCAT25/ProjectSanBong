@@ -130,6 +130,8 @@ export const OrderField = () => {
     const [tenCoSoInput, setTenCoSoInput] = useState("")
     const [diaDiemInput, setDiaDiemInput] = useState("")
     const selectLoaiBoxRef = useRef(null)
+    const [isDangNhap, setIsDangNhap] = useState(false)
+
     const trangChu = false;
     const TimKiemSanBong = async () => {
         setGotInfo(false)
@@ -280,9 +282,22 @@ export const OrderField = () => {
     const [tongTien, setTongTien] = useState(0)
     const [tongTienText, setTongTienText] = useState("0")
     const [valueForHoaDon, setValueForHoaDon] = useState({})
+
+    const checkDangNhap = async () => {
+        if (localStorage.getItem('userName') != null) {
+            setIsDangNhap(true)
+            return true
+        } else {
+            setIsDangNhap(false)
+            return false
+        }
+    }
+
     const DatSan = async () => {
-        
-        if (isDangNhap == true) {
+        let dangnhap = await checkDangNhap()
+        console.log(dangnhap)
+        setIsDangNhap(dangnhap)
+        if (isDangNhap) {
             const checkKhungGio = checkSelectKhungGio()
             if (!checkKhungGio) {
                 HienThiThongBaoChonKhungGio()
@@ -301,15 +316,7 @@ export const OrderField = () => {
     }
 
 
-    const [isDangNhap, setIsDangNhap] = useState(false)
-    const checkDangNhap = async () => {
-        if (localStorage.getItem('userName') != "") {
-
-            setIsDangNhap(true)
-        } else {
-            setIsDangNhap(false)
-        }
-    }
+    
 
     const checkSelectKhungGio = () => {
         if (selectedKhungGio.IdKhungGio == 0 || selectedKhungGio == "") {
