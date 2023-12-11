@@ -44,7 +44,7 @@ select{
   font-size: 18px;
   font-weight: 600;
 }
-.auto-group-1jl7-TBh, .auto-group-6ywm-4sd, .auto-group-veaw-32b, .auto-group-xznk-duu{
+.auto-group-1jl7-TBh, .auto-group-6ywm-4sd, .auto-group-veaw-32b, .auto-group-xznk-duu, .loaiSanLS, .tongTien{
   background-color: white;
   height: 72px;
   padding: 20px;
@@ -73,12 +73,19 @@ select{
 }
 .auto-group-bp27-YwD{
   width: 100%;
+  height: 340px;
   background-color: white;
+  
   border-radius: 10px; 
   border: 1px #52C41A solid;
   display: flex;
-  justify-content: center;
-  padding: 60px 0 60px 0;
+  justify-content: space-evenly;
+  padding: 40px 0 ;
+  text-align: center;
+  
+}
+#iconImg{
+  margin-top: 120px;
 }
 .auto-group-bp27-YwD:hover{
   cursor: pointer;
@@ -96,7 +103,7 @@ select{
 
 
 }
-.btnThemSan, .btnCapNhatSan, .btXoaSan, .btnThemLich, .btnCapNhatLich, .btnXoaLich{
+.btnThemSan, .btnCapNhatSan, .btXoaSan, .btnThemLich, .btnCapNhatLich, .btnHuyLich{
   width: 30%;
   background-color: #9BCE89;
   font-size: 20px;
@@ -106,7 +113,7 @@ select{
   border: #9BCE89 solid 1px;
 }
 .btnThemSan:hover, .btnCapNhatSan:hover, .btXoaSan:hover,
-.btnThemLich:hover, .btnCapNhatLich:hover, .btnXoaLich:hover{
+.btnThemLich:hover, .btnCapNhatLich:hover, .btnHuyLich:hover{
   background-color: #2B790F;
   color: white;
   cursor: pointer;
@@ -134,10 +141,6 @@ select{
   border-bottom: #52C41A solid 1px;
   padding: 40px 5% 40px 5%;
   display: flex;
-}
-.sn-XTh:hover{
-  cursor: pointer;
-background-color: lightcyan;
 }
 .auto-group-lo8w-E7D{
   display: flex;
@@ -171,6 +174,10 @@ background-color: lightcyan;
   width: 48%;
   border-radius: 30px;
 }
+.imgSanInput{
+  width: 400px;
+  height: 300px;
+}
 .auto-group-vqh9-B1m{
   width: 120px;
   display: flex;
@@ -183,6 +190,9 @@ background-color: lightcyan;
   height: 50px;
   border-radius: 6px;
   background-color: white;
+}
+.btnDetailSan{
+  cursor: pointer;
 }
 .main-advertise-letter-XHD{
   width: 100%;
@@ -218,13 +228,16 @@ background-color: lightcyan;
 .nhp-tn-sn-vKu{
   width: 50%;
 }
-.auto-group-veaw-32b, .auto-group-xznk-duu, .selectLoaiLS, .ngayLS, .selectTenLS{
+.auto-group-veaw-32b, .auto-group-xznk-duu, .selectLoaiLS, .ngayLS, .selectTenLS,.loaiSanLS, .tongTien{
   width: 100%;
+}
+.loaiSanLS, .tongTien{
+  text-align: center;
 }
 .selectKhungGio, .selectGH{
   width: 100%;
 }
-.tenKhach, .soDT{
+.tenKhach, .soDT, .tongTien, .loaiSanLS{
   color: gray;
 }
 
@@ -306,10 +319,6 @@ background-color: lightcyan;
   height: fit-content;
   padding: 20px 40px;
 }
-.rowSan:hover{
-  background-color: lightgrey;
-  cursor: pointer;
-}
 .tenSanLS{
   width: 12.5%;
   background-color: #52C41A;
@@ -334,17 +343,33 @@ background-color: lightcyan;
   left: 0;
   z-index: 9;
 }
-.date, .rectangle-4318-587, .rectangle-4319-kk3, .rectangle-4319-kk2, .rectangle-4319-kk4, .rectangle-4319-kk8{
+.shift, .rectangle-4318-587, .rectangle-4319-kk3, .rectangle-4319-kk2, .rectangle-4319-kk4, .rectangle-4319-kk8{
   position: relative;
-  background-color: gray;
   width: 44px;
   height: 44px;
   border-radius: 50%;
   z-index: 10;
 }
-.date:hover{
+.shift-clickable:hover{
   cursor: pointer;
+  outline: 1px solid #000;
 }
+.shift-Busy-Pass{
+  background-color: #9BCE89;
+}
+
+.shift-Empty-Future{
+  background-color: yellowgreen;
+}
+.shift-Busy-Future{
+  background-color: rgb(255, 139, 31);
+}
+
+
+.shift-Empty-Pass{
+  background-color: gray;
+}
+
 .item-4-cfD{
   font-size: 60px;
 }

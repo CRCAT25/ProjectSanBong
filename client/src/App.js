@@ -13,7 +13,8 @@ import {
   FormInfoCaNhan,
   FormLichSu,
   PersonalInfo,
-  FormSignUp
+  FormSignUp,
+  FormResPass
 } from "./views"
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/FormLichSu" element={<FormLichSu/>}/>
         <Route path="/PersonalInfo" element={<PersonalInfo/>}/>
         <Route path="/FormSignUp" element={<FormSignUp/>}/>
+        <Route path="/FormResPass" element={<FormResPass/>}/>
 
       </Routes>
     </BrowserRouter>

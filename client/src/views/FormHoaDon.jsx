@@ -1,25 +1,26 @@
 import React from 'react'
-
-const FormHoaDon = () => {
+import { OrderField } from './OrderField'
+const FormHoaDon = ({TenKH, SDTKH, KhungGio, NgayDat, TenSan, DiaDiem, SDTSan, MaSan, LoaiSan, GiaoHuu, TongTien, 
+    HienThiXacNhanDatSan, XacNhanDatSanV,isDatSan}) => {
   return (
-    <div className='w-[25%] bg-[#DDFCD2] h-[auto] mx-auto my-[10%] rounded-[5]'>
+    <div className='w-[25%] bg-slate-200 h-[auto] left-1/2 -translate-x-1/2 my-[10%] rounded-[5] absolute z-1005'>
         <div className='grid grid-cols-2 p-5'>
-            <div className="col-span-1 font-[650]">Nguyễn Xuân Lộc</div>
-            <div className="col-span-1 font-[650]">SĐT: 01234567890</div>
+            <div className="col-span-1 font-[650]">Tên KH: {TenKH}</div>
+            <div className="col-span-1 font-[650]">SĐT: {SDTKH}</div>
         </div>
         <div className='grid grid-cols-2 px-5'>
             <div className="col-span-1 ">Khung giờ đặt:</div>
             <div className="col-span-1 ">Ngày đặt:</div>
         </div>
         <div className='grid grid-cols-2 px-5'>
-            <div className="col-span-1 font-[650]">17:00 - 19:00</div>
-            <div className="col-span-1 font-[650]">T7 31/10/2023</div>
+            <div className="col-span-1 font-[650]">{KhungGio}</div>
+            <div className="col-span-1 font-[650]">{NgayDat}</div>
         </div>
         <div className='p-5'>
             <div className=''>Địa điểm:</div>
-            <div className='font-[650]'>Sân Huy Hoàng</div>
-            <div className=''>32 Nguyễn xuân khoát, Bình Hưng Hòa, Bình Tân</div>
-            <div className=''>SĐT sân: 1234567890 </div>
+            <div className='font-[650]'>{TenSan}</div>
+            <div className=''>{DiaDiem}</div>
+            <div className=''>SĐT sân: {SDTSan} </div>
         </div>
         
         <div className='grid grid-cols-2 px-5'>
@@ -27,26 +28,29 @@ const FormHoaDon = () => {
             <div className="col-span-1 ">Loại sân</div>
         </div>
         <div className='grid grid-cols-2 px-5'>
-            <div className="col-span-1 font-[650]">Sân số 01</div>
-            <div className="col-span-1 font-[650]">Cỏ nhân tạo</div>
+            <div className="col-span-1 font-[650]">{MaSan}</div>
+            <div className="col-span-1 font-[650]">{LoaiSan}</div>
         </div>
         <div className='p-5'>
             <div className=''>Khác:</div>
-            <div className='font-[650]'>Cho phép tham gia giao hữu</div>
+            <div className='font-[650]'>{GiaoHuu}</div>
         </div>
        
 
         <div className='grid grid-cols-2 px-5'>
             <div className="col-span-1 font-[650]">Tạm tính:</div>
-            <div className="col-span-1 font-[650]">90.000 VNĐ</div>
-        </div>
-
-        <div className='w-[90%] flex flex-auto justify-around p-10 mx-auto '>
-            <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000]" >Hủy</button>
-            <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff]" >Tiếp tục</button>
+            <div className="col-span-1 font-[650]">{TongTien}</div>
         </div>
         
-        
+        {isDatSan === true ? (
+            <div className='w-[90%] flex flex-auto justify-around p-10 mx-auto '>
+        <button class=" bg-[#379E13] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff]" onClick={XacNhanDatSanV} >Tiếp tục</button>
+        <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000]" onClick={HienThiXacNhanDatSan}>Hủy</button>
+            </div>) :(
+        <div className='w-[90%] flex flex-auto justify-around p-10 mx-auto '> 
+        <button class=" bg-[#D9D9D9] rounded-[5px] w-[150px] h-[50px] justify-center text-[#000] " onClick={HienThiXacNhanDatSan}>Xác nhận</button>
+        <button class=" bg-[#F00000] rounded-[5px] w-[150px] h-[50px] justify-center text-[#fff] " onClick={XacNhanDatSanV}>Hủy đặt sân</button>
+        </div>)  }
     </div>
   )
 }

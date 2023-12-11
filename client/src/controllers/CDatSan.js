@@ -1,30 +1,74 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
-import FootballField from "../models/FootballField";
+import SanBong from "../models/SanBong";
+import LoaiSan from "../models/LoaiSan";
+import KhungGio from "../models/KhungGio";
+import HoaDon from "../models/HoaDon";
+import CoSoSan from "../models/CoSoSan";
+import AnhSan from "../models/AnhSan";
 
-const GetInfoCoSo = (idCoSo) =>{
-    const[coSo, setCoSo] = useState('');
-        axios.post('',{
-            idCoSo: idCoSo
-        }).then(res => {
-            setCoSo(res.data)
-            return coSo
-        })
+const sanBong = new SanBong();
+const loaiSan = new LoaiSan();
+const khungGio = new KhungGio();
+const khungGioNotEmpty = new HoaDon();
+const anh = new AnhSan();
+
+const GetAllSanFromCoSo = async (idCoSo) =>{
+    let lstSanBong = await sanBong.GetAllSanByTaiKhoan(idCoSo)
+    return lstSanBong
+}
+const GetAllSanFromCoSoBySearch = async (idCoSo, loaiSan) =>{
+    let lstSanBong = await sanBong.FindSanByIDnCate(idCoSo, loaiSan)
+    return lstSanBong
+}
+const GetInfoSanBong = async (idSan) =>{
+    let result = await sanBong.getSanByID(idSan)
+    return result
 }
 
-const GetAllSanFromCoSo = (idCoSo) =>{
-    const[sanBongs, setSanBongs] = useState([]);
-    useEffect(() =>{
-        axios.post('',{
-            idCoSo: idCoSo
-        }).then(res => {
-            setSanBongs(res.data.map(sanbong => new FootballField(sanbong.idSan, sanbong.idTaiKhoan, sanbong.idLoaiSan, sanbong.tenSan, sanbong.giaTien, sanbong.trangThai)))
-            return sanBongs
-        })
-    })
+const GetTenLoaiSan = async (idLoaiSan) => {
+    let result
+    result = await loaiSan.GetLoaiSanByID(idLoaiSan)
+    return result.TenLoaiSan
+} 
+
+const getAllKhungGio = async () =>{
+    let list = await khungGio.GetAllKhungGio()
+    return list 
 }
 
-export{
-    GetInfoCoSo, 
-    GetAllSanFromCoSo
+const getAllOccuredKhungGio = async(idSan, date) =>{
+    let notEmptykhunggios = await khungGioNotEmpty.GetNotEmptyKhungGioByIDSanANDDate(idSan, date)
+    return notEmptykhunggios
+}
+
+const DatSanC = async (IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien) =>{
+    let newestHoaDon = await sanBong.DatSan(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien)
+    return newestHoaDon
+}
+
+const getAnhSanByID = async(idSan) =>{
+    let listAnh = await anh.GetAnhsByIDSan(idSan)
+    return listAnh
+}
+
+const HuyDatSan = async (IDHoaDon) =>{
+    await sanBong.HuyDatSan(IDHoaDon)
+}
+
+const DatCoc = async (IDHoaDon) =>{
+    await sanBong.DatCoc(IDHoaDon)
+}
+
+export{ 
+    GetAllSanFromCoSo,
+    GetInfoSanBong,
+    GetTenLoaiSan,
+    getAllKhungGio,
+    getAnhSanByID,
+    getAllOccuredKhungGio,
+    GetAllSanFromCoSoBySearch,
+    DatSanC,
+    HuyDatSan,
+    DatCoc
 } 

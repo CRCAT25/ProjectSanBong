@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 16, 2023 lúc 08:57 AM
+-- Thời gian đã tạo: Th12 11, 2023 lúc 03:54 AM
 -- Phiên bản máy phục vụ: 10.4.28-MariaDB
 -- Phiên bản PHP: 8.2.4
 
@@ -20,6 +20,33 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `projectsanbong`
 --
+
+DELIMITER $$
+--
+-- Thủ tục
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_passedhoadon_proc` (IN `p_IDHoaDon` INT)   BEGIN
+    DELETE FROM hoadon WHERE IDHoaDon = p_IDHoaDon AND TrangThai = 'Pending';
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertAndReturnHoaDon` (IN `p_IDTaiKhoan` INT, IN `p_IDSan` INT, IN `p_IDKhungGio` INT, IN `p_Ngay` DATE, IN `p_GiaoHuu` INT, IN `p_TongTien` DECIMAL(10,2))   BEGIN
+    DECLARE newHoaDonID INT;
+
+    -- Insert into hoadon table
+    INSERT INTO hoadon(IDTaiKhoan, IDSan, IDKhungGio, Ngay, GiaoHuu, TongTien, ThoiGianDat, TrangThai)
+    VALUES(p_IDTaiKhoan, p_IDSan, p_IDKhungGio, p_Ngay, p_GiaoHuu, p_TongTien, NOW(), 'Pending');
+
+    -- Get the ID of the last inserted row
+    SET newHoaDonID = LAST_INSERT_ID();
+
+    -- Select the newly inserted row
+    SELECT *
+    FROM hoadon
+    WHERE IDHoaDon = newHoaDonID;
+SET GLOBAL event_scheduler = 'ON';
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -66,6 +93,23 @@ CREATE TABLE `hoadon` (
   `ThoiGianDat` datetime DEFAULT NULL,
   `TrangThai` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `hoadon`
+--
+
+INSERT INTO `hoadon` (`IDHoaDon`, `IDTaiKhoan`, `IDSan`, `IDKhungGio`, `Ngay`, `GiaoHuu`, `IDDoiThu`, `TongTien`, `ThoiGianDat`, `TrangThai`) VALUES
+(2, 3, 3, 4, '2023-09-30', 1, NULL, 180000, '2023-11-17 11:51:42', 'Completed'),
+(4, 2, 3, 3, '2023-10-09', 0, NULL, 180000, '2023-11-18 13:39:35', 'Canceled'),
+(5, 3, 2, 5, '2023-11-17', 0, NULL, 180000, '2023-11-14 13:53:07', 'Completed'),
+(6, 3, 5, 5, '2023-11-17', 1, NULL, 180000, '2023-11-14 13:53:07', 'Completed'),
+(7, 3, 5, 4, '2023-11-30', 1, NULL, 180000, '2023-11-24 11:10:38', 'Completed'),
+(12, 18, 3, 5, '2023-12-01', 1, NULL, 180000, '2023-11-24 11:10:38', 'Completed'),
+(13, 2, 4, 2, '2023-12-27', 1, NULL, 180000, '2023-11-24 11:10:38', 'Cancelled'),
+(14, 3, 2, 5, '2022-05-24', 0, 7, 180000, '2023-11-14 13:53:07', 'Completed'),
+(15, 2, 3, 3, '2023-11-17', 0, NULL, 180000, '2023-11-18 13:39:35', 'Canceled'),
+(24, 18, 5, 4, '2022-01-10', 1, NULL, 180000, '2023-11-17 11:51:42', 'Completed'),
+(25, 18, 2, 4, '2022-01-10', 1, NULL, 180000, '2023-11-17 11:51:42', 'Completed');
 
 -- --------------------------------------------------------
 
@@ -175,20 +219,29 @@ CREATE TABLE `taikhoan` (
   `DiaChiCoSo` varchar(500) DEFAULT NULL,
   `NganHang` varchar(20) DEFAULT NULL,
   `STK` varchar(20) DEFAULT NULL,
-  `Anh` varchar(200) NOT NULL,
+  `Anh` varchar(200) DEFAULT NULL,
   `MatKhau` varchar(30) NOT NULL,
-  `XacThuc` date DEFAULT NULL
+  `TrangThai` varchar(2) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `taikhoan`
 --
 
-INSERT INTO `taikhoan` (`IDTaiKhoan`, `IDPhanQuyen`, `Ten`, `Email`, `SoDienThoai`, `DiaChiCoSo`, `NganHang`, `STK`, `Anh`, `MatKhau`, `XacThuc`) VALUES
-(1, 2, 'Huy Hoàng', 'huyhoangct@gmail.com', '0913126754', '68 đường Lê Lợi, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh 700000', 'BIDV', '53458023523', 'coso1.jpg', '123123', '2023-11-16'),
-(2, 1, 'Đỗ Quốc Trí Tâm', 'TriTamtc30@gmail.com', '01256414127', NULL, NULL, NULL, '', '123123', '2023-11-15'),
-(3, 3, 'Lê Hữu Minh', 'lehuuminhtc30@gmail.com', '0855280747', NULL, NULL, NULL, '', '123123', '0000-00-00'),
-(7, 2, 'Đông Hùng', 'donghungct@gmail.com', '0284635732', '68 đường Lê Lợi, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh 700000', 'MBBank', '436326322', 'coso2.jpg', '123123', '2023-11-16');
+INSERT INTO `taikhoan` (`IDTaiKhoan`, `IDPhanQuyen`, `Ten`, `Email`, `SoDienThoai`, `DiaChiCoSo`, `NganHang`, `STK`, `Anh`, `MatKhau`, `TrangThai`) VALUES
+(1, 2, 'Huy Hoàng', 'huyhoangct@gmail.com', '0913126754', '68/ Lê Lợi, Phường 04, Quận Gò Vấp, Thành phố Hồ Chí Minh', 'BIDV', '53458023523', 'coso1.jpg', '123123', '0'),
+(2, 1, 'Đỗ Quốc Trí Tâm', 'TriTamtc30@gmail.com', '01256414127', '', 'ABBANK', '512784202454644', 'unknow.jpg', '123123', '1'),
+(3, 3, 'Lê Hữu Minh', 'lehuuminhtc30@gmail.com', '0855280747', NULL, NULL, NULL, '', '123123', '0'),
+(7, 2, 'Đông Hùng', 'donghungct@gmail.com', '0284635732', '123 đường Võ Tòng, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh', 'MBBank', '436326322', 'coso2.jpg', '123123', '1'),
+(10, 2, 'Đông Trùng', 'lehuuminhtc3@gmail.com', '08552807475', '265 / Nguyen Tri Phuong, Phường Long Thạnh, Thị xã Tân Châu, Tỉnh An Giang', 'IBKHCM', '54123123123', 'coso1.jpg', '123123', '0'),
+(11, 2, 'AAA', 'lehuumintc30@gmail.com', '0125415487', '285/Trần Văn Tông, Xã Vĩnh Mỹ A, Huyện Hoà Bình, Tỉnh Bạc Liêu', 'IBKHCM', '05485121', 'coso2.jpg', '123123', '0'),
+(18, 2, 'Tam Thien Mew', 'tamthienmew@gmail.com', '012556882712', '265/Nguyen Tri Phuong, Xã Lương Bằng, Huyện Chợ Đồn, Tỉnh Bắc Kạn', 'HDBank', '12312331132', 'coso2.jpg', '123123', '0'),
+(21, 1, 'Đỗ Quốc Trí Tâm', 'TriTamtc0@gmail.com', '012564141271', NULL, NULL, NULL, 'unknow.jpg', '123123', '1'),
+(25, 1, 'HuynhTan', 'sdfsdf', '091312675', '', '', '', 'unknow.jpg', '1312312', '1'),
+(26, 1, 'HuynhTan', 'fdwer', '0913126751', '', '', '', 'unknow.jpg', '132132', '0'),
+(27, 3, 'AAAA', 'lehuuminh@gmail.com', '08552807', '', '', '', NULL, '12331233', '1'),
+(49, 2, 'Hoàng Văn Thụ', 'hoangvanthutc@gmail.com', '091312674', '27/11/ Mai Văn Thụ, Xã Tân Thành, Thành phố Đồng Xoài, Tỉnh Bình Phước', 'BIDV', '0124346482', 'coso1.jpg', '123123123', '1'),
+(50, 1, 'LeeMinHo', 'leeminho@gmail.com', '01256578421', NULL, NULL, NULL, 'unknow.jpg', '123123', '0');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -258,7 +311,7 @@ ALTER TABLE `anh`
 -- AUTO_INCREMENT cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
-  MODIFY `IDHoaDon` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IDHoaDon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT cho bảng `khunggio`
@@ -288,7 +341,7 @@ ALTER TABLE `sanbong`
 -- AUTO_INCREMENT cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `IDTaiKhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `IDTaiKhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
