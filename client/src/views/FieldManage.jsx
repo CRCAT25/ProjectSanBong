@@ -1067,7 +1067,7 @@ const FieldManage = () => {
       <span><FontAwesomeIcon icon={classIcon} style={iconSize} /></span>
     )
   }
-  const SearchHoaDonByDateAdmin = async () => {
+  const SearchHoaDonByDateAdmin = async (selectedYear, selectedMonth,selectedDay, searchhdbydate) => {
     if (selectedMonth !== "all" && selectedDay !== "all") {
       let stringdate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
       let result = await searchHoaDonByDateCoso(idTK, searchhdbydate, stringdate)
@@ -1509,7 +1509,7 @@ const FieldManage = () => {
               <h3 className="mt-[30px] ml-[75px] text-[19px]">Tìm email hoặc số điện thoại:</h3>
               <div className="col-span-1 flex mt-[10px]">
                 <input type="text" className="w-[87%] h-[40px] text-center border-[1px] grid grid-cols-12 border-[black]" id="rssearch" placeholder="" onChange={e => setsearchhdbydate(e.target.value)}></input>
-                <div className="ml-[-12px] mt-[8px] hover:cursor-pointer" onClick={SearchHoaDonByDateAdmin}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>
+                <div className="ml-[-12px] mt-[8px] hover:cursor-pointer" onClick={() => SearchHoaDonByDateAdmin(selectedYear, selectedMonth, selectedDay, searchhdbydate)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>
               </div>
             </div>
           </div>

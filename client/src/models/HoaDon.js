@@ -257,6 +257,7 @@ class HoaDon{
     }
 
     SearchHoaDonByDateAdmin(search, date) {
+        console.log(search,date)
         return axios.post("http://localhost:8081/searchemailsdthdadmin", {search, date})
             .then(response => {
                 const list = this.initBill(response.data);    

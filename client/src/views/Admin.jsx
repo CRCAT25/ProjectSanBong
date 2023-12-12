@@ -497,6 +497,16 @@ const Admin = () => {
       return false;
     }
 
+    const emailValue = eval("email");
+    if (!emailValue.includes("@")) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Thêm thất bại!',
+        text: 'Email không hợp lệ. Vui lòng thêm @',
+      });
+      return false;
+    }
+
     return true;
   };
 
@@ -516,22 +526,40 @@ const Admin = () => {
     }
   }
   const resetInputValues = () => {
-    // alert('a')
-    // document.getElementsByClassName('iptcs')[0].innerHTML = '';
-    // document.getElementsByClassName('ipsdtcs')[0].innerHTML = '';
-    // document.getElementsByClassName('ipmkcs')[0].innerHTML = '';
-    // document.getElementsByClassName('ipemailcs')[0].innerHTML = '';
-    // document.getElementsByClassName('iptinh')[0].value = '';
-    // document.getElementsByClassName('ipquan')[0].value = '';
-    // document.getElementsByClassName('ipphuong')[0].value = '';
-    // document.getElementsByClassName('ipnh')[0].value = '';
-    // document.getElementsByClassName('ipstk')[0].innerHTML = '';
-    // document.getElementsByClassName('ipsonha')[0].innerHTML = '';
+    document.getElementsByClassName('iptcs')[0].value = '';
+    document.getElementsByClassName('iptcs')[1].value = '';
+    document.getElementsByClassName('iptcs')[2].value = '';
+
+    document.getElementsByClassName('ipsdtcs')[0].value = '';
+    document.getElementsByClassName('ipsdtcs')[1].value = '';
+    document.getElementsByClassName('ipsdtcs')[2].value = '';
+
+    document.getElementsByClassName('ipmkcs')[0].value = '';
+    document.getElementsByClassName('ipmkcs')[1].value = '';
+    document.getElementsByClassName('ipmkcs')[2].value = '';
+
+    document.getElementsByClassName('ipemailcs')[0].value = '';
+    document.getElementsByClassName('ipemailcs')[1].value = '';
+    document.getElementsByClassName('ipemailcs')[2].value = '';
+
+    document.getElementsByClassName('iptinh')[0].value = '';
+    document.getElementsByClassName('ipquan')[0].value = '';
+    document.getElementsByClassName('ipphuong')[0].value = '';
+    document.getElementsByClassName('ipnh')[0].value = '';
+    document.getElementsByClassName('ipstk')[0].value = '';
+    document.getElementsByClassName('ipsonha')[0].value = '';
+    setten('');
+    setemail('');
+    setsdt('');
+    setduong('');
+    setnganhangcs('');
+    setstkcs('');
+    setmatkhau('');
   };
 
   const ShowResultThem = async (result) => {
     if (result === "Thêm thành công") {
-      // resetInputValues();
+      resetInputValues();
       Swal.fire({
         title: 'Thêm thành công!',
         text: '',
@@ -702,10 +730,19 @@ const Admin = () => {
     } else {
       Swal.fire({
         icon: 'error',
-        text: 'Vui lòng chọn đủ ngày, tháng năm',
+        text: 'Vui lòng chọn đủ ngày, tháng, năm',
       });
     }
   }
+  const handleLimit = (e) => {
+    const inputValue = e.target.value;
+    const maxLength = 12;
+  
+    if (/^\d*$/.test(inputValue) && inputValue.length <= maxLength) {
+      setsdt(inputValue);
+      e.target.value = inputValue;
+    }
+  };
 
 
 
@@ -765,7 +802,7 @@ const Admin = () => {
                       </div>
                       <div className="col-span-2 flex justify-between">
                         <div className="text-[20px] ">Số điện thoại:</div>
-                        <input type="number" class="ipsdtcs" onChange={e => setsdt(e.target.value)}></input>
+                        <input type="number" class="ipsdtcs" onChange={e => handleLimit(e)} value={sdt}></input>
                       </div>
                     </div>
 
@@ -855,7 +892,7 @@ const Admin = () => {
                       </div>
                       <div className="col-span-2 flex justify-between">
                         <div className="text-[20px] ">Số điện thoại:</div>
-                        <input type="number" class="ipsdtcs" onChange={e => setsdt(e.target.value)}></input>
+                        <input type="number" class="ipsdtcs" onChange={e => handleLimit(e)} value={sdt}></input>
                       </div>
                     </div>
 
@@ -909,7 +946,7 @@ const Admin = () => {
                       </div>
                       <div className="col-span-2 flex justify-between">
                         <div className="text-[20px] translate-x-[5px] ">Số tài khoản:</div>
-                        <input type="number" class="ipstk" onChange={e => setstkcs(e.target.value)}></input>
+                        <input type="number"  class="ipstk" onChange={e => setstkcs(e.target.value)}></input>
                       </div>
                     </div>
 
@@ -999,7 +1036,7 @@ const Admin = () => {
                       </div>
                       <div className="col-span-2 flex justify-between">
                         <div className="text-[20px] ">Số điện thoại:</div>
-                        <input type="number" class="ipsdtcs" onChange={e => setsdt(e.target.value)}></input>
+                        <input type="number" class="ipsdtcs" onChange={e => handleLimit(e)} value={sdt}></input>
                       </div>
                     </div>
 
@@ -1170,7 +1207,7 @@ const Admin = () => {
                       <h3 className="mt-[30px] ml-[30px] text-[19px]">Tìm email hoặc số điện thoại:</h3>
                       <div className="col-span-1 flex mt-[10px]">
                         <input type="text" className="w-[87%] h-[40px] text-center border-[1px] grid grid-cols-12 border-[black]" id="rssearch" placeholder="" onChange={e => setsearchhdbydate(e.target.value)}></input>
-                        <div className="ml-[-12px] mt-[8px] hover:cursor-pointer" onClick={() => SearchHoaDonByDateAdmin(selectedYear, selectedMonth, selectedDay)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>
+                        <div className="ml-[-12px] mt-[8px] hover:cursor-pointer" onClick={() => SearchHoaDonByDateAdmin(selectedYear, selectedMonth, selectedDay, searchhdbydate)}><Iconpx classIcon={faMagnifyingGlass} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"black"} /></div>
                       </div>
                     </div>
                   </div>

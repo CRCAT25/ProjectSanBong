@@ -653,6 +653,7 @@ app.post("/searchemailsdthdadmin", (req, res) => {
   AND hoadon.Ngay = ? AND hoadon.Ngay < CURRENT_DATE`;
   if (req.body.search !== "") {
     db.query(sql, [req.body.search, req.body.search, req.body.date], (err, data) => {
+      console.log(data)
       if (err) return res.json("Error");
       if (data.length > 0) {
         res.json(data);
