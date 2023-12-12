@@ -6,6 +6,10 @@ import Footer from './Footer';
 
 const Home = () => {
   useEffect(() => {
+    if(localStorage.getItem("userRole") == '2' || localStorage.getItem("userRole") == '3'){
+      localStorage.clear();
+      window.location.href="http://localhost:3000/*";
+    }
     const handleScroll = () => {
       const element = document.getElementsByClassName('orderField')[0];
 
