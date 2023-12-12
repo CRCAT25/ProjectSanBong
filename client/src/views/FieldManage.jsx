@@ -98,15 +98,16 @@ const FieldManage = () => {
   }
 
   const ShowHD = async () => {
-    if (showHoaDon == true) {
-      setShowHoaDon(false)
-      document.body.style.overflow = 'visible'
+    if(getIDLichSan){
+      if (showHoaDon == true) {
+        setShowHoaDon(false)
+        document.body.style.overflow = 'visible'
+      }
+      else {
+        setShowHoaDon(true)
+        document.body.style.overflow = 'hidden'
+      }
     }
-    else {
-      setShowHoaDon(true)
-      document.body.style.overflow = 'hidden'
-    }
-
   }
   const HuyLichSan = async () => {
     Swal.fire({
@@ -187,7 +188,7 @@ const FieldManage = () => {
     if (document.getElementsByClassName("selectLoaiS")[0].value == "none") {
       document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = "Đơn giá"
     } else {
-      document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = (await getLoaiSanByID(document.getElementsByClassName("selectLoaiS")[0].value)).GiaTien
+      document.getElementsByClassName("auto-group-6ywm-4sd")[0].innerHTML = formatCurrency((await getLoaiSanByID(document.getElementsByClassName("selectLoaiS")[0].value)).GiaTien)
     }
   }
   async function updateSchedule() {
@@ -230,7 +231,7 @@ const FieldManage = () => {
             //pass
             if (listHD.length > 0) {
               if (listHD[listHD.length - 1].TrangThai == "Completed" || listHD[listHD.length - 1].TrangThai == "Pending") {
-                htmlString += `<div class="shift shift-Busy-Pass shift-clickable" id="${listHD[listHD.length - 1].IDHoaDon}"></div>`;
+                htmlString += `<div class="shift shift-Busy-Pass shift-clickable" id="hd:${listHD[listHD.length - 1].IDHoaDon}"></div>`;
               } else {
                 htmlString += `<div class="shift shift-Empty-Pass"></div>`;
               }
@@ -270,7 +271,6 @@ const FieldManage = () => {
       IDLichSan = (element.id).split(":")[1]
       setIDLichSan((element.id).split(":")[1])
       var hoadon = await GetBillById(IDLichSan)
-      console.log(hoadon)
       document.getElementsByClassName("tenKhach")[0].innerHTML = await (await hoadon.TaiKhoan).Ten
       document.getElementsByClassName("soDT")[0].innerHTML = await (await hoadon.TaiKhoan).SoDienThoai
       console.log(await (await hoadon.KhungGio).IdKhungGio)
@@ -293,30 +293,47 @@ const FieldManage = () => {
     var idSan = document.getElementsByClassName("selectTenLS")[0].value
     var giaoHuu = document.getElementsByClassName("selectGH")[0].value
     var tongTien = (document.getElementsByClassName("tongTien")[0].innerHTML).substring(0, (document.getElementsByClassName("tongTien")[0].innerHTML).length - 3)
-    if (idKhungGio != "none") {
-      if (idSan != "none") {
-        if ((await getHoaDonByNgayKHIDSan(date, idKhungGio, idSan)).length == 0) {
-          Swal.fire({
-            title: "Bạn có chắc muốn thêm?",
-            showDenyButton: true,
-            confirmButtonText: "Có",
-            denyButtonText: `Không`
-          }).then((result) => {
-            if (result.isConfirmed) {
-              insertHoaDon(idTK, idSan, idKhungGio, date, giaoHuu, tongTien)
-
-              Swal.fire({
-                title: "Thêm thành công!"
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  resetLichSan()
-                }
-              });
-            }
-          });
+    var gioBatDau = "";
+    for (let index = 0; index < document.getElementsByClassName("selectKhungGio")[0].children.length; index++) {
+      const element = document.getElementsByClassName("selectKhungGio")[0].children[index];
+      if(element.value == idKhungGio){
+        gioBatDau = element.innerHTML.split("-")[0].split(":")[0]
+      }
+    }
+    if(new Number(gioBatDau) > new Number(new Date().toTimeString().slice(0, 8).replace(/:/g, '-').split("-")[0])){
+      if (idKhungGio != "none") {
+        if (idSan != "none") {
+          if ((await getHoaDonByNgayKHIDSan(date, idKhungGio, idSan)).length == 0) {
+            Swal.fire({
+              title: "Bạn có chắc muốn thêm?",
+              showDenyButton: true,
+              confirmButtonText: "Có",
+              denyButtonText: `Không`
+            }).then((result) => {
+              if (result.isConfirmed) {
+                insertHoaDon(idTK, idSan, idKhungGio, date, giaoHuu, tongTien)
+  
+                Swal.fire({
+                  title: "Thêm thành công!"
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    resetLichSan()
+                  }
+                });
+              }
+            });
+          } else {
+            Swal.fire({
+              title: "Sân đã được đặt trước!"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                document.getElementById("257:945").scrollIntoView({ behavior: 'smooth' });
+              }
+            });
+          }
         } else {
           Swal.fire({
-            title: "Sân đã được đặt trước!"
+            title: "Chọn sân!"
           }).then((result) => {
             if (result.isConfirmed) {
               document.getElementById("257:945").scrollIntoView({ behavior: 'smooth' });
@@ -325,22 +342,20 @@ const FieldManage = () => {
         }
       } else {
         Swal.fire({
-          title: "Chọn sân!"
+          title: "Chọn khung giờ!"
         }).then((result) => {
           if (result.isConfirmed) {
-            document.getElementsByClassName("selectTenLS")[0].scrollIntoView({ behavior: 'smooth' });
+            document.getElementById("257:945").scrollIntoView({ behavior: 'smooth' });
           }
         });
       }
-    } else {
+    }else{
       Swal.fire({
-        title: "Chọn khung giờ!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          document.getElementsByClassName("selectKhungGio")[0].scrollIntoView({ behavior: 'smooth' });
-        }
+        title: "Khung giờ đã qua không thể chọn!",
+        confirmButtonText: "OK",
       });
     }
+    
 
   }
   const updateLichSan = async () => {
@@ -384,7 +399,7 @@ const FieldManage = () => {
           title: "Chọn sân!"
         }).then((result) => {
           if (result.isConfirmed) {
-            document.getElementsByClassName("selectTenLS")[0].scrollIntoView({ behavior: 'smooth' });
+            document.getElementById("257:945").scrollIntoView({ behavior: 'smooth' });
           }
         });
       }
@@ -393,7 +408,7 @@ const FieldManage = () => {
         title: "Chọn khung giờ!"
       }).then((result) => {
         if (result.isConfirmed) {
-          document.getElementsByClassName("selectKhungGio")[0].scrollIntoView({ behavior: 'smooth' });
+          document.getElementById("257:945").scrollIntoView({ behavior: 'smooth' });
         }
       });
     }
@@ -412,7 +427,7 @@ const FieldManage = () => {
   function InsertSan() {
     let tenSan = document.getElementsByClassName("auto-group-1jl7-TBh")[0].value
     let loaiSan = document.getElementsByClassName("selectLoaiS")[0].value
-    let files = document.getElementById("inputAnh").files
+    let files = document.getElementById("inputAnhs").files
     let tenAnhs = []
     let anhs = []
     let addible = false
@@ -471,10 +486,10 @@ const FieldManage = () => {
       });
   }
   function chooseImage() {
-    document.getElementById("inputAnh").click()
+    document.getElementById("inputAnhs").click()
   }
   const readURL = async () => {
-    let files = await document.getElementById("inputAnh").files;
+    let files = await document.getElementById("inputAnhs").files;
     if (files.length > 0) {
       document.getElementsByClassName("auto-group-bp27-YwD")[0].innerHTML = ``
       if (files.length > 2) {
@@ -544,9 +559,11 @@ const FieldManage = () => {
       slect.removeChild(slect.firstChild);
     }
     slect.innerHTML = `<option value="none">--Khung giờ--</option>`
-      ; (await getAllKhungGio()).map((khunggio, i) => {
-        slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
-      })
+    ; (await getAllKhungGio()).map((khunggio, i) => {
+      slect.innerHTML += `<option value="${khunggio.IdKhungGio}" >${khunggio.ThoiGian}</option>`
+
+    })
+    setLoaiSanLS();
   }
 
   const GetLoaiSans = async () => {
@@ -566,18 +583,17 @@ const FieldManage = () => {
     setLoaiSanLS()
   }
   const setLoaiSanLS = async () => {
-    if (document.getElementsByClassName("selectTenLS")[0].value != "none") {
+    if (document.getElementsByClassName("selectTenLS")[0].value != "none" && document.getElementsByClassName("selectKhungGio")[0].value != "none") {
       document.getElementsByClassName("loaiSanLS")[0].innerHTML =
         (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).TenLoaiSan
       document.getElementsByClassName("loaiSanLS")[0].value =
         (await getLoaiSanByIdField(document.getElementsByClassName("selectTenLS")[0].value)).IdLoaiSan
-      document.getElementsByClassName("tongTien")[0].innerHTML =
-        await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value,
-          await document.getElementsByClassName("loaiSanLS")[0].value) + "VND"
+      document.getElementsByClassName("tongTien")[0].innerHTML =formatCurrency(await getCostByShiftnTypeField(await document.getElementsByClassName("selectKhungGio")[0].value,
+      await document.getElementsByClassName("loaiSanLS")[0].value))
     } else {
       document.getElementsByClassName("loaiSanLS")[0].innerHTML = "------"
       document.getElementsByClassName("loaiSanLS")[0].value = null
-      document.getElementsByClassName("tongTien")[0].innerHTML = "0.000 VND"
+      document.getElementsByClassName("tongTien")[0].innerHTML = "0.000 đ"
     }
   }
   function selectSan(element) {
@@ -610,7 +626,7 @@ const FieldManage = () => {
       let san = await getSanByID(getIDSan)
       let tenSan = document.getElementsByClassName("auto-group-1jl7-TBh")[0].value
       let loaiSan = document.getElementsByClassName("selectLoaiS")[0].value
-      let files = document.getElementById("inputAnh").files
+      let files = document.getElementById("inputAnhs").files
       let tenAnhs = []
       let anhs = []
       let perGranted = false
@@ -683,13 +699,13 @@ const FieldManage = () => {
     document.getElementsByClassName("selectLoaiS")[0].value = "none"
     var newInput = document.createElement('input');
     newInput.type = 'file';
-    newInput.id = 'inputAnh';
+    newInput.id = 'inputAnhs';
     newInput.name = 'files';
     newInput.accept = "image/*"
     newInput.style.opacity = 0;
     newInput.multiple = true;
     newInput.addEventListener("change", readURL)
-    var oldInput = document.getElementById('inputAnh');
+    var oldInput = document.getElementById('inputAnhs');
     oldInput.parentNode.replaceChild(newInput, oldInput);
     loadListFields()
   }
@@ -734,7 +750,7 @@ const FieldManage = () => {
               <div class="loaiSan" id="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
             </div>
             <div class="tn-sn-input-J91" id="257:855">
-              <div class="donGia">${san.LoaiSan.GiaTien}</div>
+              <div class="donGia">${formatCurrency(san.LoaiSan.GiaTien)}</div>
             </div>
           </div>
           <div class="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
@@ -763,7 +779,7 @@ const FieldManage = () => {
             <div class="loaiSan" id="${san.LoaiSan.IdLoaiSan}">${san.LoaiSan.TenLoaiSan}</div>
           </div>
           <div class="tn-sn-input-J91" id="257:855">
-            <div class="donGia">${san.LoaiSan.GiaTien}</div>
+            <div class="donGia">${formatCurrency(san.LoaiSan.GiaTien)}</div>
           </div>
         </div>
         <div class="auto-group-fmjy-Uhh" id="Wa17XhYoPc9NvvqEtVfmjy">
@@ -1112,13 +1128,13 @@ const FieldManage = () => {
         <div className="landing-fAj" id="257:562">
            {isOpenFormRes == true ? (<div className='mx-[660px]'><FormResPass/></div>) : (<></>)}
           <FormInfoCaNhan onOpenFormResPass={() => OpenFormResPass()}/>
-          {showHoaDon === true ?
-            <div class="fixed inset-0 z-50 flex bg-gray-800 bg-opacity-50">
-              <div class="rounded w-[100%]">
-                <FormHoanTien isDatCoc={false} idHD={getIDLichSan}
-                  tongTien={tongTienText} HuyDatCoc={ThoatHuyLichSan} DatCoc={HuyLichSan} />
-              </div>
-            </div> : ""}
+            {showHoaDon === true ?
+              <div class="fixed inset-0 z-50 flex bg-gray-800 bg-opacity-50">
+                <div class="rounded w-[100%]">
+                  <FormHoanTien isDatCoc={false} idHD={getIDLichSan}
+                    tongTien={tongTienText} HuyDatCoc={ThoatHuyLichSan} DatCoc={HuyLichSan} />
+                </div>
+              </div> : ""}
           <div className="qun-l-sn-dgX" id="257:798">
             <p className="main-advertise-letter-fNK" id="257:861">
               QUẢN LÝ SÂN
@@ -1164,7 +1180,7 @@ const FieldManage = () => {
                 <div className="auto-group-bp27-YwD" id="Wa16pPQJdzzne9yQzcbp27" onClick={() => chooseImage()}>
                   <i class="fa fa-image fa-2x" id="iconImg"></i>
                 </div>
-                <input type="file" id="inputAnh" name="files" accept="image/*" style={{ opacity: 0 }} multiple onChange={readURL} />
+                <input type="file" id="inputAnhs" name="files" accept="image/*" style={{ opacity: 0 }} multiple onChange={readURL} />
               </div>
               <div className="auto-group-hhjs-nKm" id="Wa16MefrYhWfBdYBexHhJs">
                 <button className="btnThemSan" id="257:815" onClick={InsertSan}>
@@ -1497,7 +1513,7 @@ const FieldManage = () => {
               </div>
             </div>
           </div>
-          <div className="w-full grid grid-cols-12 bg-[#256eb3] h-[60px] font-bold pr-[10px]">
+          <div className="w-full grid grid-cols-12 bg-[green] h-[60px] font-bold pr-[10px]">
             <div className="col-span-2 text-[white] text-center pt-[17px]">Họ tên</div>
             <div className="col-span-2 text-[white] text-center pt-[17px]">Số điện thoại</div>
             <div className="col-span-1 text-[white] text-center pt-[17px]">Tên sân</div>

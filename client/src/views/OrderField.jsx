@@ -533,7 +533,7 @@ export const OrderField = () => {
 
                                                 ChonLoaiSan(event.target.value)
                                             }}>
-                                                <option className="text-[19px]" value="">Lọc loại sân</option>
+                                                <option className="text-[19px]" value="">Chọn loại sân</option>
                                                 {loaiSans.map((data, i) => (<option className="text-[19px]" key={i} value={data.IdLoaiSan} >{data.TenLoaiSan}</option>))}
                                                 <Icon24px classIcon={faChevronDown} />
                                             </select>
