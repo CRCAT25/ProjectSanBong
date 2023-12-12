@@ -66,7 +66,6 @@ const formatTime = (timeInSeconds) => {
 
     useEffect(() => {
         let interval;
-
         if(isDatCoc){
             if (isActive) {
                 interval = setInterval(() => {
@@ -109,7 +108,9 @@ const formatTime = (timeInSeconds) => {
     document.getElementById("tenKhach").innerHTML= await khachHang.Ten
     document.getElementById("tienHoan").innerHTML=tienHoan
     if(await khachHang.STK){
+      setSelectedNganHang(khachHang.NganHang);
       document.getElementById("idBank").value= await khachHang.NganHang
+      setInputSTK(khachHang.STK)
       document.getElementById("stk").value= await khachHang.STK
     }
     if(document.getElementById("noiDung")){
@@ -143,7 +144,7 @@ const formatTime = (timeInSeconds) => {
         </div>
         <div className='w-[95%] mt-[20px] flex flex-row justify-around mx-auto '>
           <button class='bg-[#379E13] rounded-[5px] w-[45%] h-[50px]  text-[#fff]'
-                onClick={() => {DatCoc(selectedNganHang, inputSTK, tongTien);setIsActive(false);}}>Xác nhận</button>
+                onClick={() => {DatCoc(selectedNganHang, inputSTK, tongTien)}}>Xác nhận</button>
           <button class='bg-[#D9D9D9] rounded-[5px] w-[45%] h-[50px]  text-[#000]'
             onClick={() => {HuyDatCoc();setIsActive(false);}}>Hủy</button>
         </div>
