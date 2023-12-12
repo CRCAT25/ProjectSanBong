@@ -132,9 +132,6 @@ const Admin = () => {
     }
   }, [chartData]);
 
-  useEffect(() => {
-
-  }, []);
 
   const filterDataByYear = (data, year) => {
     if (year === "all") {
@@ -487,26 +484,17 @@ const Admin = () => {
     const checkcoso = index === 2 ? [...checkaccount, "duong", "tinh", "quan", "phuong", "nganhangcs", "stkcs"] : checkaccount;
 
     const checkfail = checkcoso.find(value => eval(value) === "");
-
-    if (checkfail) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Thêm thất bại!',
-        text: 'Vui lòng nhập đủ thông tin',
-      });
-      return false;
-    }
-
     const emailValue = eval("email");
-    if (!emailValue.includes("@")) {
+
+
+    if (checkfail || !emailValue.includes("@")) {
       Swal.fire({
         icon: 'error',
         title: 'Thêm thất bại!',
-        text: 'Email không hợp lệ. Vui lòng thêm @',
+        text: 'Vui lòng nhập đầy đủ hoặc kiểm tra Email "@"',
       });
       return false;
     }
-
     return true;
   };
 
