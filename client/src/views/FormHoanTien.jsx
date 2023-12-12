@@ -109,7 +109,9 @@ const formatTime = (timeInSeconds) => {
     document.getElementById("tenKhach").innerHTML= await khachHang.Ten
     document.getElementById("tienHoan").innerHTML=tienHoan
     if(await khachHang.STK){
+      setSelectedNganHang(khachHang.NganHang);
       document.getElementById("idBank").value= await khachHang.NganHang
+      setInputSTK(khachHang.STK)
       document.getElementById("stk").value= await khachHang.STK
     }
     if(document.getElementById("noiDung")){
