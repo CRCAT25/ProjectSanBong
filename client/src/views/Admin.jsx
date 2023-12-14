@@ -1080,16 +1080,10 @@ const Admin = () => {
                         {admin.TrangThai == 1 ? (
                           <div className="col-span-1 flex">
                             <div className="text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => GetStateTK(admin.TrangThai, admin.IdAccount)}><Iconpx classIcon={faXmark} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"red"} /></div>
-                            {admin.IdAccount == localStorage.getItem("userID") ? (
-                              <div className="pt-[30px] hover:text-[red] cursor-pointer underline">Chỉnh sửa</div>
-                            ) : (<></>)}
                           </div>
                         ) : (
                           <div className="col-span-1 flex">
                             <div className="text-[#000000] text-center pt-[30px] cursor-pointer" onClick={() => GetStateTK(admin.TrangThai, admin.IdAccount)}><Iconpx classIcon={faCheck} width={"23px"} height={"23px"} marginRight={"15px"} marginLeft={"-25px"} color={"green"} /></div>
-                            {admin.IdAccount == localStorage.getItem("userID") ? (
-                              <div className="pt-[30px] hover:text-[red] cursor-pointer underline">Chỉnh sửa</div>
-                            ) : (<></>)}
                           </div>
                         )}
 
