@@ -444,7 +444,7 @@ export const OrderField = () => {
         let currentDate = new Date()
 
         if (selectedDate.getDate() == currentDate.getDate()) {
-            if (currentDate.getHours() > time) {
+            if (currentDate.getHours() >= time) {
                 console.log(true)
                 return true
             } else {
